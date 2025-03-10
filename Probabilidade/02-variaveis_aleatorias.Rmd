@@ -1,0 +1,45 @@
+---
+title: "Notas de Aula - Capítulo 2"
+subtitle: "Probabilidade"
+author: "Caio Gomes Alves"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+header-includes:
+   - \usepackage{amsmath}
+   - \usepackage{tikz}
+   - \usepackage{pgfplots}
+   - \usepackage{caption}
+   - \usepackage{subcaption}
+   - \usepackage{cancel}
+   - \usepackage{mathtools}
+   - \usepackage{annotate-equations}
+output:
+  bookdown::pdf_document2:
+    toc: false
+---
+
+
+# Variáveis Aleatórias
+
+::: {.example}
+
+Considere um experimento em que uma moeda é lançada duas vezes. Seja $X =$ total de caras nos dois lançamentos. Denotemos o evento cara como $H$ e coroa como $T$. Logo:
+
+\begin{center}
+\begin{tabular}{|c|c|} \toprule
+Espaço Amostral ($\Omega$) & $X$ \\ \midrule
+HT & 1 \\
+TH & 1 \\
+HH & 2 \\
+TT & 0 \\ \bottomrule
+\end{tabular}
+\end{center}
+
+Logo, $X:\mathcal{F} \to \mathbb{R}$. Vale também que, $\forall x$ valor na imagem de $X$, $X^{-1}(x) \in \mathcal{F}$. Por exemplo:
+
+\begin{align*}
+x = 1 &\Rightarrow X^{-1}(1) = \{HT,TH\} \\
+x = 2 &\Rightarrow X^{-1}(2) = \{HH\} \\
+x = 0 &\Rightarrow X^{-1}(0) = \{TT\} \\
+\end{align*}
+
+:::
