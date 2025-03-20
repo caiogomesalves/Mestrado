@@ -487,7 +487,7 @@ Seja \(\Omega\) um conjunto não-vazio, \(\mathcal{A}\) uma \(\sigma\)-álgebra 
 A = \bigcup_{i=1}^{\infty}D_{i} \xRightarrow{Ax'_{3}(K)} P(A) &= \sum_{i=1}^{\infty}P(D_{i})\\
 &= \sum_{i=1}^{\infty}P(A_{i} - A_{i-1})\\
 &= \lim_{n \to \infty} \sum_{i=1}^{n} \left[P(A_{i}) - P(A_{i-1})\right] \\
-&= \lim_{n \to \infty} \left[P(A_{1}) - \cancelto{0}{P(A_{0})} + P(A_{2}) - P(A_{1}) + P(A_{3}) - P(A_{2}) + \dots\right]\\
+&= \lim_{n \to \infty} \left[P(A_{1}) - P(A_{0}) + P(A_{2}) - P(A_{1}) + P(A_{3}) - P(A_{2}) + \dots\right]\\
 &= \lim_{n \to \infty} P(A_{n})
 \end{align*}
 
@@ -1768,12 +1768,296 @@ P\left(B \; \Big{|} \bigcup_{n=1}^{k}A_{n}\right) &\ge c
 \end{align*}
 \end{proof}
 
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  O item \textbf{(a)} com ``\(=\)'' no lugar de ``\(\ge\)''.
+\end{enumerate}
+
+\begin{proof}
+Substituindo o sinal de \(\ge\) em \eqref{eq:pdebdadosans} por uma igualdade, a prova é igual ao já realizado no item anterior.
+\end{proof}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Se \(A_{n} \supset A_{n+1}\) e \(P(A_{n+1}|A_{n}) \le \frac{1}{2}\) para todo \(n\), então \(P(A_{n}) \to 0\) quando \(n \to \infty\).
+\end{enumerate}
+
+\begin{proof}
+Consideremos o caso inicial, com \(A_{1}\) e \(A_{2}\). Disso tem-se que:
+
+\begin{equation*}
+P(A_{2}|A_{1}) = \frac{P(A_{1} \cap A_{2})}{P(A_{1})} \le \frac{1}{2}
+\end{equation*}
+
+Como \(A_{1} \supset A_{2}\), \(P(A_{1} \cap A_{2}) = P(A_{2})\). Logo:
+
+\begin{equation*}
+\frac{P(A_{2})}{P(A_{1})} \le \frac{1}{2} \Rightarrow P(A_{2}) \le \frac{1}{2}P(A_{1})
+\end{equation*}
+
+Para o caso seguinte, com \(A_{2}\) e \(A_{3}\), temos que:
+
+\begin{align*}
+P(A_{3}|A_{2}) = \frac{P(A_{2} \cap A_{3})}{P(A_{2})} &\le \frac{1}{2} \\
+\frac{P(A_{3})}{P(A_{2})} &\le \frac{1}{2} \Rightarrow P(A_{3}) \le \frac{1}{2}P(A_{2})
+\end{align*}
+
+E como \(P(A_{2}) \le \frac{1}{2}P(A_{1})\), temos que \(P(A_{3}) \le \frac{1}{4}P(A_{1})\). Assim, já é possível identificar que, para qualquer \(n\) temos que:
+
+\begin{align*}
+P(A_{n}) &\le \frac{1}{2^{n-1}}P(A_{1}) \\
+\lim_{n \to \infty}P(A_{n}) &\le \lim_{n \to \infty}\frac{1}{2^{n-1}}P(A_{1}) = 0
+\end{align*}
+
+Assim, independentemente do valor de \(P(A_{1})\), o valor \(P(A_{n}) \to 0\) conforme \(n \to \infty\).
+\end{proof}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Se os \(A_{n}\) são disjuntos e \(P(B|A_{n}) = P(C|A_{n})\) para todo \(n\), então
+\end{enumerate}
+
+\begin{equation*}
+P(B|\cup A_{n}) = P(C|\cup A_{n})
+\end{equation*}
+
+\begin{proof}
+Como os \(A_{n}\)s são disjuntos, temos que:
+
+\begin{align*}
+P(B|A_{n}) &= \frac{P(B \cap (\cup A_{n}))}{P(\cup A_{n})} \\
+&= \frac{P((A_{1} \cap B) \cup (A_{2} \cap B) \cup \dots \cup (A_{n} \cap B))}{\sum P(A_{n})} \\
+&= \frac{\sum P(A_{n} \cap B)}{\sum P(A_{n})}
+\end{align*}
+
+Para \(C\) temos a mesma relação:
+
+\begin{equation*}
+P(C|A_{n}) = \frac{\sum P(A_{n} \cap C)}{\sum P(A_{n})}
+\end{equation*}
+
+E disso temos que:
+
+\begin{align*}
+P(B|A_{n}) = \frac{P(A_{n} \cap B)}{P(A_{n})}
+\end{align*}
+
+Como, por hipótese, temos que \(P(B|A_{n}) = P(C|A_{n}) \Rightarrow P(A_{n} \cap B) = P(A_{n} \cap C)\), de modo que, como os \(A_{n}\)s são disjuntos, \(\sum P(A_{n} \cap B) = \sum P(A_{n} \cap C)\), logo:
+
+\begin{equation*}
+\frac{\sum P(A_{n} \cap B)}{\sum P(A_{n})} = \frac{\sum P(A_{n} \cap C)}{\sum P(A_{n})}
+\end{equation*}
+\end{proof}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Se \(A_{1}, A_{2}, \ldots\) são disjuntos e \(\cup A_{n} = \Omega\), então:
+\end{enumerate}
+
+\begin{equation*}
+P(B|C) = \sum_{n}P(A_{n}|C)P(B|A_{n} \cap C)
+\end{equation*}
+
+\begin{proof}
+Pelo Teorema da Multiplicação, temos que \(P(A_{n} \cap B \cap C)\) pode ser escrito como:
+
+\begin{equation*}
+P(A_{n} \cap B \cap C) = P(B|A_{n} \cap C) P(A_{n} \cap C) P(C)
+\end{equation*}
+
+É importante notar que essa representação não é única, mas apenas conveniente para o problema em questão. Podemos então somar para todos os \(A_{n}\)s:
+
+\begin{equation*}
+\sum P(A_{n} \cap B \cap C) = \sum P(B|A_{n} \cap C) P(A_{n} \cap C) P(C) = P(C) \sum P(B|A_{n} \cap C) P(A_{n} \cap C)
+\end{equation*}
+
+Como os \(A_{n}\)s formam uma partição de \(\Omega\), \(\sum P(A_{n} \cap B \cap C) = P(B \cap C)\). Logo:
+
+\begin{align*}
+P(B|C) &= \frac{P(B \cap C)}{P(C)} \\
+&= \frac{P(C) \sum P(B|A_{n} \cap C) P(A_{n} \cap C)}{P(C)} \\
+&= \sum P(B|A_{n} \cap C) P(A_{n} \cap C)
+\end{align*}
+\end{proof}
+
+\end{exercise}
+
+\begin{exercise}[BJ17]
+
+Suponha que a ocorrência ou não de chuva dependa das condições do tempo no dia imediatamente anterior. Admita-se que se chove hoje, choverá amanhã com probabilidade de 0,7 e que se não chove hoje choverá amanhã com probabilidade 0,4. Sabendo-se que choveu hoje, calcule a probabilidade de que choverá depois de amanhã.
+
+\begin{proof}
+Sejam os eventos \(C_{n} =\) ``Choveu no dia de hoje'', \(NC_{n} =\) ``Não choveu no dia de hoje''. De maneira similar, \(C_{n+1}\) indica que choverá amanhã, \(C_{n+2}\) que choverá depois de amanhã e assim por diante. Sabemos pelo enunciado as seguintes probabilidades:
+
+\begin{align*}
+P(C_{n+1}|C_{n}) = 0,7 \; &, \; P(NC_{n+1}|C_{n}) = 0,3 \\
+P(C_{n+1}|NC_{n}) = 0,4 \; &, \; P(NC_{n+1}|NC_{n}) = 0,6
+\end{align*}
+
+Além disso, como os eventos Chover e Não-Chover formam uma partição (são eventos complementares), pelo Teorema da Probabilidade Total temos que a probabilidade de chover depois de amanhã é dada por:
+
+\begin{equation}
+P(C_{n+2}) = P(C_{n+2}|C_{n+1})P(C_{n+1}) + P(C_{n+2}|NC_{n+1})P(NC_{n+1})
+\label{eq:chuvadepoisdeamanha}
+\end{equation}
+
+É fácil perceber que \(P(C_{n+2}|C_{n+1}) = P(C_{n+1}|C_{n})\) e de maneira similar que \(P(C_{n+2}|NC_{n+1}) = P(C_{n+1}|NC_{n})\). Ainda assim, é necessário encontrar as probabilidades \(P(C_{n+1})\) e \(P(NC_{n+1})\). Como sabemos que choveu hoje, \(P(C_{n}) = 1\) e \(P(NC_{n}) = 0\), de modo que:
+
+\begin{align*}
+P(C_{n+1}) &= P(C_{n+1}|C_{n})P(C_{n}) + P(C_{n+1}|NC_{n})P(NC_{n}) \\
+&= 0,7 \times 1 + 0,4 \times 0 = 0,7 \\
+P(NC_{n+1}) &= P(NC_{n+1}|C_{n})P(C_{n}) + P(NC_{n+1}|NC_{n})P(NC_{n}) \\
+&= 0,3 \times 1 + 0,6 \times 0 = 0,3 \\
+\end{align*}
+
+Substituindo esses valores em \eqref{eq:chuvadepoisdeamanha}, temos:
+
+\begin{align*}
+P(C_{n+2}) &= P(C_{n+1}|C_{n}) \times 0,7 + P(C_{n+1}|NC_{n}) \times 0,3 \\
+&= 0,7 \times 0,7 + 0,4 \times 0,3 = 0,49 + 0,12 = 0,61
+\end{align*}
+\end{proof}
+
+\end{exercise}
+
+\begin{exercise}[BJ18]
+
+Certo experimento consiste em lançar um dado equilibrado duas vezes, independentemente. Dado que os dois números sejam diferentes, qual a probabilidade condicional de:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Pelo menos um dos números ser 6?
+\end{enumerate}
+
+\begin{proof}
+Sejam \(A_{1}\) e \(A_{2}\) os lançamentos do primeiro e do segundo dado, respectivamente. Sabemos que \(P(A_{1} = A_{2}) = 0\). Disso temos que:
+
+\begin{align*}
+P((A_{1} = 6) \cup (A_{2} = 6)) &= P(A_{1} = 6) + P(A_{2} = 6) - P((A_{1} = 6) \cap (A_{2} = 6)) \\
+&= \frac{1}{6} + \frac{1}{6} - 0 \\
+&= \frac{1}{3}
+\end{align*}
+\end{proof}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  A soma dos números ser 8?
+\end{enumerate}
+
+\begin{proof}
+Considere o evento \(S = x, x \in \{2,3,\ldots,12\}\) o resultado da soma dos lançamentos \(A_{1}\) e \(A_{2}\). Utilizando o Teorema da Probabilidade Total, podemos decompor a probabilidade da soma ser igual a 8 da seguinte forma:
+
+\begin{align*}
+P(S=8) &= P(S=8|A_{1} = 1)P(A_{1} = 1) + P(S=8|A_{1} = 2)P(A_{1} = 2) + \dots + P(S=8|A_{1} = 6)P(A_{1} = 6) \\
+&= 0 \times \frac{1}{6} + \frac{1}{5} \times \frac{1}{6} + \frac{1}{5} \times \frac{1}{6} + 0 \times \frac{1}{6} + \frac{1}{5} \times \frac{1}{6} + \frac{1}{5} \times \frac{1}{6} \\
+&= \frac{1}{30} + \frac{1}{30} + \frac{1}{30} + \frac{1}{30} \\
+&= \frac{4}{30}
+\end{align*}
+\end{proof}
+
+\end{exercise}
+
+\begin{exercise}[BJ19]
+
+Em teste de múltipla escolha, a probabilidade do aluno saber a resposta é \(p\). Havendo \(m\) escolhas, se ele sabe a resposta ele responde corretamente com probabilidade 1; se não sabe, ele responde corretamente com probabilidade \(\frac{1}{m}\). Qual a probabilidade de que ele soubesse a resposta dado que a pergunta foi respondida corretamente? Calcule o limite dessa probabilidade quando (i) \(m \to \infty\) com \(p\) fixo e (ii) \(p \to 0\) com \(m\) fixo.
+
+\begin{proof}
+Sejam: \(P(S) = p\) a probabilidade de saber a resposta, \(P(A|S) = 1\) a probabilidade de acertar, dado que sabia a resposta, \(P(A|NS) = \frac{1}{m}\) a probabilidade de acertar, dado que não sabia a resposta e \(P(NA|NS) = \frac{m-1}{m}\) a probabilidade de não acertar, dado que não sabe a resposta. Sabemos que os eventos \(S\) e \(NS\) são complementares, assim como \(A\) e \(NA\). Queremos encontrar \(P(S|A)\), que é dada por:
+
+\begin{align*}
+P(S|A) &= \frac{P(S \cap A)}{P(A)} \\
+&= \frac{P(A|S) P(S)}{P(A|S)P(S) + P(A|NS)P(NS)} \\
+&= \frac{1 \times p}{1 \times p + \frac{1}{m} \times (1-p)} \\
+&= \frac{p}{\frac{mp + 1 - p}{m}}
+\end{align*}
+
+De modo que, simplificando a última expressão:
+
+\begin{equation}
+P(S|A) = \frac{mp}{p(m-1)+1}
+\label{eq:pdesdadoa}
+\end{equation}
+
+Agora, calculando os limites temos:
+
+\begin{itemize}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\roman{enumi})}
+  \tightlist
+  \item
+    \begin{equation*}
+    \lim_{p \to 0} \frac{mp}{p(m-1)+1} = \frac{0}{1} = 0
+    \end{equation*}
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\roman{enumi})}
+  \setcounter{enumi}{1}
+  \tightlist
+  \item
+  \end{enumerate}
+\end{itemize}
+
+\begin{equation*}
+\lim_{m \to \infty} \frac{mp}{p(m-1)+1} \xRightarrow{\text{L'Hôpital}} \frac{\frac{\partial}{\partial m}mp}{\frac{\partial}{\partial m}p(m-1)+1} = \frac{p}{p} = 1
+\end{equation*}
+\end{proof}
+
+\end{exercise}
+
+\begin{exercise}[BJ20]
+
+Durante o mês de novembro a probabilidade de chuva é de 0,3. O Fluminense ganha um jogo em um dia de chuva com a probabilidade de 0,4; em um dia sem chuva com a probabilidade 0,6. Se ganhou um jogo em novembro, qual é a probabilidade de que choveu neste dia?
+
+\begin{proof}
+Sejam os seguintes eventos: \(P(C) = 0,3\) é a probabilidade de chover em novembro, \(P(NC) = 0,7\) é a probabilidade de não chover em novembro, \(P(V|C) = 0,4\) é a probabilidade de vitória, dado que choveu no dia, \(P(D|C) = 0,6\) é a probabilidade de derrota, dado que choveu no dia, \(P(V|NC) = 0,6\) é a probabilidade de vitória, dado que não choveu no dia e \(P(D|NC) = 0,4\) é a probabilidade de derrota, dado que não choveu no dia. Pelo Teorema da Probabilidade Total, temos que:
+
+\begin{align*}
+P(V) &= P(V|C)P(C) + P(V|NC)P(NC) \\
+&= 0,4 \times 0,3 + 0,6 \times 0,7 \\
+&= 0,54
+\end{align*}
+
+Além disso, temos que o evento \(P(C \cap V) = P(V|C)P(C)\), logo:
+
+\begin{equation*}
+P(C \cap V) = P(V|C)P(C) = 0,4 \times 0,3 = 0,12
+\end{equation*}
+
+Assim, temos que a probabilidade de ter chovido, dado que o Fluminense ganhou o jogo em novembro é de:
+
+\begin{equation*}
+P(C|V) = \frac{P(C \cap V)}{P(V)} = \frac{0,12}{0,54} = \frac{2}{9}
+\end{equation*}
+\end{proof}
+
 \end{exercise}
 
 \newpage
 
 \hypertarget{variuxe1veis-aleatuxf3rias}{%
 \section{Variáveis Aleatórias}\label{variuxe1veis-aleatuxf3rias}}
+
+\hypertarget{variuxe1veis-aleatuxf3rias-e-funuxe7uxf5es-de-distribuiuxe7uxe3o}{%
+\subsection{Variáveis aleatórias e funções de distribuição}\label{variuxe1veis-aleatuxf3rias-e-funuxe7uxf5es-de-distribuiuxe7uxe3o}}
 
 \begin{example}
 Considere um experimento em que uma moeda é lançada duas vezes. Seja \(X =\) total de caras nos dois lançamentos. Denotemos o evento cara como \(H\) e coroa como \(T\). Logo:
@@ -1795,6 +2079,349 @@ x = 1 &\Rightarrow X^{-1}(1) = \{HT,TH\} \\
 x = 2 &\Rightarrow X^{-1}(2) = \{HH\} \\
 x = 0 &\Rightarrow X^{-1}(0) = \{TT\} \\
 \end{align*}
+\end{example}
+
+\begin{definition}[Variável aleatória]
+Seja \((\Omega,\mathcal{F},P)\) um espaço de probabilidades. Uma função \(X:\mathcal{F} \to \mathbb{R}\) é variável aleatória se \([x \in I] \in \mathcal{F}, \; I \in \mathbb{R}\) (ou, equivalentemente, se \(\{\omega:X(\omega) \in I\} \in \mathcal{F}; \; X^{-1}(I) \in \mathcal{F}\)).
+\end{definition}
+
+\begin{definition}[Distribuição Acumulada]
+Considere um espaço de probabilidades \((\Omega,\mathcal{F},P)\) e \(X:\mathcal{F} \to \mathbb{R}\) uma variável aleatória, defina \(F(r) = P(X \le r) = P(\{\omega : X(\omega) \le r\})\).
+\end{definition}
+
+\begin{example}
+
+Seja \(X =\) número de caras em dois lançamentos de moeda (honesta). Temos que as probabilidades de \(X\) são dadas por:
+
+\begin{align*}
+P(X = 0) &= P(\{TT\}) = \frac{1}{4} \\
+P(X = 1) &= P(\{TH,HT\}) = \frac{2}{4} \\
+P(X = 2) &= P(\{HH\}) = \frac{1}{4}
+\end{align*}
+
+Para encontrarmos a função de distribuição acumulada, podemos particinar o espaço e ``acumular'' as probabilidades. Para \(r < 0\):
+
+\begin{equation*}
+F(r) = P([X \le r]) = P(\emptyset) = 0
+\end{equation*}
+
+Para \(r \in [0,1)\):
+
+\begin{equation*}
+F(r) = P([X \le r]) = P(X \le 0) = \frac{1}{4}
+\end{equation*}
+
+Para \(r \in [1,2)\):
+
+\begin{equation*}
+F(r) = P([X \le r]) = P(X \le 1) = P(X = 0) + P(X = 1) = \frac{3}{4}
+\end{equation*}
+
+Para \(r \ge 2\):
+
+\begin{equation*}
+F(r) = P([X \le r]) = P(X \le 2) = P(X = 0) + P(X = 1) + P(X = 2) = 1
+\end{equation*}
+
+Logo, \(F\) é dada por:
+
+\begin{equation*}
+F(r) = \begin{cases} 0, & r<0 \\ \frac{1}{4}, & r \in [0,1) \\ \frac{3}{4}, & r \in [1,2) \\ 1, & r \ge 2 \end{cases}
+\end{equation*}
+
+\pgfplotsset{
+  graf1/.style={
+    xlabel=$X$,
+    width=10cm, height=7cm,
+    mark=*,
+    nodes near coords,
+    point meta=explicit symbolic, % permite usar a 3 coluna como label.
+    every node near coord/.append style={font=\footnotesize},
+    nodes near coords align={vertical}
+  }
+}
+
+\pgfplotstableread{
+  i    x   px   PX   f  F
+  1    0 0.25 0.25 1/4 1/4
+  2    1 0.50 0.75 2/4 3/4
+  3    2 0.25 1.00 1/4 4/4
+}\distrprob
+
+\begin{center}
+\begin{tikzpicture}[domain=0:2]
+    \begin{axis}[
+      graf1,
+      grid=major,
+      ytick distance=0.25,
+      ymin=-0.1,
+      ymax=1.2,
+      ylabel={$P(X \le r)$},
+      title={Distribui\c{c}\~{a}o de probabilidades acumulada}]
+      \addplot[thick, black, const plot, jump mark left]
+      table[x=x, y=PX, meta=F] \distrprob;
+      \draw[black] (axis cs: -1, 0) -- (axis cs: 0, 0);
+      \draw[black] (axis cs: 2, 1) -- (axis cs: 3, 1);
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\end{example}
+
+\begin{theorem}[Propriedades da distribuição acumulada]
+
+Seja \(X\) uma variável aleatória definida em \((\Omega,\mathcal{F},P)\), então a f.d.a. de \(X\) (\(F_{X}\) ou \(F\)) verifica:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  \(F\) é monótona não decrescente;
+\item
+  \(F\) é contínua à direita;
+\item
+  \(\lim_{t \to - \infty}F(t) = 0\) e \(\lim_{t \to \infty}F(t) = 1\).
+\end{enumerate}
+
+\end{theorem}
+
+\begin{proof}
+\leavevmode
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Dados \(a,b \in \mathbb{R} : a \le b; \; [X \le a] \subseteq [X \le b] \Rightarrow P([X \le a]) \le P([X \le b]) \Rightarrow F(a) \le F(b)\).
+\item
+  Se \(X_{n}\downarrow x\), quando \(n \to \infty\), temos que \(\{[X \le x_{n}]\}_{n \ge 1}\) é tal que \(\bigcap_{n \ge 1}[X \le x_{n}] = [X \le x]\). Isso significa que \([X \le x]\) acontece se e somente se \([X \le x_{n}] \; \forall n\). Além disso, \([X \le x_{n}] \downarrow [X \le x]\) quando \(n \to \infty\), logo, pela continuidade da função de probabilidade \(P([X \le x_{n}]) \downarrow P([X \le x]), n \to \infty\).
+\item
+  Considere agora que \(x_{n} \downarrow -\infty \Rightarrow [X \le x_{n}] \downarrow \emptyset, \; n \to \infty \Rightarrow F(x_{n}) = P([X \le x_{n}]) \downarrow P(\emptyset) = 0, \; n \to \infty\).
+  Se \(x_{n} \uparrow \infty \Rightarrow [X \le x_{n}] \uparrow \Omega, \; n \to \infty \Rightarrow F(x_{n}) = P([X \le x_{n}]) \uparrow P(\Omega) = 1, \; n \to \infty\).
+\end{enumerate}
+
+\end{proof}
+
+\begin{theorem}
+
+Se \(F\) é a f.d.a. da variável aleatória \(X\), então:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Existem e são finitos os limites laterais \(\lim_{t \to r^{-}}F(t), \lim_{t \to r^{+}}F(t), \forall r \in \mathbb{R}\) e \(\lim_{t \to r^{-}}F(t) \le \lim_{t \to r^{+}}F(t)\);
+\item
+  \(\lim_{t \to r^{+}}F(t) = F(r), \forall r \in \mathbb{R}\);
+\item
+  \(F\) é descontínua em \(r, r \in \mathbb{R}\) se e somente se \(\lim_{t \to r^{-}}F(t) < F(r)\), com um salto de tamanho \(F(r) - \lim_{t \to r^{-}}F(t)\);
+\item
+  \(\forall r \in \mathbb{R}, P(X = r) = F(r) - \lim_{t \to r^{-}}F(t)\);
+\item
+  Existem no máximo um total enumerável de descontinuidades em \(F\).
+\end{enumerate}
+
+\end{theorem}
+
+\begin{proof}
+\leavevmode
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  \(F\) é monótona e limitada (\(0 \le F \le 1\)). Logo, os limites laterais existem e são limitados.
+\item
+  Como \(F\) é monótona não-decrescente, \(\forall x,y : x \le y \Rightarrow F(x) \le F(y)\). Logo \(\lim_{t \to r^{-}}F(t) \le \lim_{t \to r^{+}}F(t)\).
+\item
+  Como \(F\) é monótona não-decrescente, uma descontinuidade só ocorre se e somente se \(\lim_{t \to r^{-}}F(t) < \lim_{t \to r^{+}}F(t) = F(r)\).
+\item
+  Seja \(r \in \mathbb{R}. \; [X \le r] = \bigcap_{n=1}^{\infty}(r-\frac{1}{n} < x \le r)\), logo:
+\end{enumerate}
+
+\begin{align*}
+P([X = r]) &= P\left(\bigcap_{n=1}^{\infty}\left(r-\frac{1}{n} < x \le r\right)\right) \\
+&\Downarrow \text{(Teorema da continuidade)} \\
+&=\lim_{n \to \infty}P\left(\left(r - \frac{1}{n} < x \le r\right)\right) \\
+&= \lim_{n \to \infty} \left(F(r) - F\left(r - \frac{1}{n}\right)\right) \\
+&= F(r) - \lim_{n \to \infty}F\left(r - \frac{1}{n}\right) \\
+P([X = r]) &= F(r) - \lim_{t \to r^{-}}F(t)
+\end{align*}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Seja \(\mathcal{D}\) o conjunto de pontos de descontinuidades de \(F\), e seja \(\lim_{t \to x^{-}}F(t) = F(x^{-})\). Logo:
+\end{enumerate}
+
+\begin{equation*}
+\mathcal{D} = \{x \in \mathbb{R} : F(x) - F(x^{-}) > 0\}
+\end{equation*}
+
+Seja \(\mathcal{D}_{n}\) o conjunto de pontos para os quais a amplitude do salto é maior ou igual a \(\frac{1}{n}\). Logo:
+
+\begin{equation*}
+\mathcal{D}_{n} = \left\{x \in \mathbb{R}: F(x) - F(x^{-}) \ge \frac{1}{n}\right\} \Rightarrow \# D = |D| \le n
+\end{equation*}
+
+Se \(x \in \mathcal{D} \Rightarrow \exists n_{0} > 1 : F(x) - F(x^{-}) \ge \frac{1}{n_{0}} \Rightarrow x \in \bigcup_{n=1}^{\infty}\mathcal{D}_{n}\). Se \(x \in \bigcup_{n=1}^{\infty}\mathcal{D}_{n} \Rightarrow \exists n_{1} : x \in \mathcal{D}_{n} \Rightarrow x \in \mathcal{D}\). \(\mathcal{D}\) portanto é a união enumerável de conjuntos finitos, logo é enumerável.
+
+\end{proof}
+
+\hypertarget{natureza-das-variuxe1veis-aleatuxf3rias}{%
+\subsection{Natureza das variáveis aleatórias}\label{natureza-das-variuxe1veis-aleatuxf3rias}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  \(X\) é uma variável aleatória discreta se os valores que ela toma pertencem a um conjunto enumerável, logo \(X:\Omega \to \{x_{1},x_{2},\ldots\}\) (ou seja, \(X(\omega) \in \{x_{1},x_{2},\ldots\}, \forall \omega \in \Omega\)) e \(P: \{x_{1},x_{2},\ldots\} \to [0,1]\) é dado por \(P(x_{i}) = P\{\omega : \omega \in \Omega \text{ e } X(\omega) = x_{i}\} \forall i \ge 1\).
+\item
+  \(X\) é uma variável aleatória absolutamente contínua se \(\exists f\) (uma função) tal que \(f(x) \ge 0, \forall x \in \mathbb{R}\) e \(F_{X}(x) = \int_{-\infty}^{x}f(t) dt\) (onde \(f\) é chamada de densidade de \(X\)).
+\end{enumerate}
+
+Sob \textbf{(a)} temos que \([X \le x] = \bigcup_{i : x_{i} \le x} [X = x_{i}]\). Logo \(F_{x}(x) = \sum_{i : x_{i} \le x}P(x_{i})\).
+
+Sob \textbf{(b)} estamos afirmando que \(F_{X}\) é a integral de \(f\) (ou seja, \(f\) é a sua derivada) para todo \(x\) exceto em um conjunto de medida de Lebesgue nula, ou seja, se seu comprimento for zero (\(\int_{a}^{a}f(t) dt = 0\)). Ainda sob \textbf{(b)}, se \(f\) é uma função de densidade podemos definir \(F(x) = \int_{-\infty}^{x} f(t) dt\) e \(F\) verifica:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(x \le y \Rightarrow F(x) \le F(y)\);
+\item
+  Se \(x_{n} \downarrow x \Rightarrow F(x_{n}) \downarrow F(x)\);
+\item
+  Se \(x_{n} \downarrow -\infty \Rightarrow F(x_{n}) \downarrow 0\) e se \(x_{n}\uparrow \infty \Rightarrow F(x_{n}) \uparrow 1\).
+\end{enumerate}
+
+Dada uma variável aleatória com distribuição \(F_{X}\), \(X\) tem densidade se:
+
+\begin{enumerate}
+\def\labelenumi{(\roman{enumi})}
+\tightlist
+\item
+  \(F_{X}\) é contínua;
+\item
+  \(F_{X}\) é derivável por partes (ou derivável no interior de um número finito ou enumerável de intervalos fechados cuja união é igual a \(\mathbb{R}\)), ou derivável para todo \(x\) exceto um número finito (enumerável) de pontos.
+\end{enumerate}
+
+\begin{example}
+\leavevmode
+
+\pgfplotsset{
+  graf2/.style={
+    xlabel=$x$,
+    ylabel=$P(X \le x)$,
+    width=7cm, height=7cm,
+    ymin=-0.1,
+    ymax=1.2
+  }
+}
+
+\begin{center}
+\begin{tikzpicture}[domain=0:1.1]
+    \begin{axis}[
+        graf2,
+        grid = major,
+        ytick distance=0.25,
+        xtick distance=0.25]
+        \addplot[draw=none] {0};
+        \draw[black] (axis cs: -1, 0) -- (axis cs: 3, 0);
+        \draw[black] (axis cs: 0, -1) -- (axis cs: 0, 3);
+        \draw[very thick, black] (axis cs: -1, 0) -- (axis cs: 0, 0);
+        \draw[very thick, black] (axis cs: 0, 0) -- (axis cs: 1, 1) node[above left] {$F_{X}(x)$};
+        \draw[very thick, black] (axis cs: 1, 1) -- (axis cs: 1.5,1);
+    \end{axis}
+    \node [shape=rectangle, align=center](equation1) at (-5,2.5) {$F_{X}(x) = \begin{cases} 0, & x<0 \\ x, & x \in [0,1] \\ 1, & x > 1 \end{cases}$};
+\end{tikzpicture}
+\end{center}
+
+Notas:
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{X}\) é contínua;
+\item
+  \(\{0,1\}\) são pontos sem derivada;
+\item
+  Podemos definir os seguintes intervalos em que \(F_{X}\) é derivável: \((-\infty,0),(0,1),(1,\infty)\);
+\item
+  \(F_{X}'(x) = \begin{cases}1, & x \in (0,1) = f_{X}(x) \\ 0 , & c.c.\end{cases}\);
+\item
+  \(f(0)\) e \(f(1)\) podem ser definidos como zero ou um, já que tais definições não alteram \(F_{X}(x) = \int_{-\infty}^{x}f(t)dt\).
+\end{itemize}
+
+Em contrapartida, considere:
+
+\begin{center}
+\begin{tikzpicture}[domain=0:1.1]
+    \begin{axis}[
+        graf2,
+        grid = major,
+        ytick distance=0.25,
+        xtick distance=0.25]
+        \addplot[draw=none] {0};
+        \draw[black] (axis cs: -1, 0) -- (axis cs: 3, 0);
+        \draw[black] (axis cs: 0, -1) -- (axis cs: 0, 3);
+        \draw[very thick, black] (axis cs: -1, 0) -- (axis cs: 0, 0);
+        \draw[very thick, black] (axis cs: 0, 1) -- (axis cs: 1, 1) node[above left] {$F_{X}(x)$};
+        \draw[very thick, black] (axis cs: 1, 1) -- (axis cs: 1.5,1);
+        \node[circle,fill=black,scale=0.4] (PA) at (axis cs: 0,1) {};
+        \node[circle,fill=white,scale=0.4,draw] (P0) at (axis cs: 0,0) {};
+    \end{axis}
+    \node [shape=rectangle, align=center](equation1) at (-5,2.5) {$F_{X}(x) = \begin{cases} 0, & x<0 \\ 1, & x \ge 0 \end{cases}$};
+\end{tikzpicture}
+\end{center}
+
+Notas:
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{X}\) não é contínua;
+\item
+  \(P(X=0) = \lim_{x \to 0^{+}}F_{X}(x) - \lim_{x \to 0^{-}}F_{X}(x) = 1\).
+\end{itemize}
+
+\end{example}
+
+\begin{example}
+Considere a densidade triangular:
+
+\pgfplotsset{
+  graf3/.style={
+    xlabel=$x$,
+    width=10cm, height=6cm,
+    ymin=-0.1,
+    ymax=1.5
+  }
+}
+
+\begin{center}
+\begin{tikzpicture}[domain=0:2.5]
+  \begin{axis}[graf3, grid=major]
+  \addplot[draw=none] {0};
+  \draw[black] (axis cs: -1, 0) -- (axis cs: 3, 0);
+  \draw[black] (axis cs: 0, -1) -- (axis cs: 0, 3);
+  \draw[very thick, black] (axis cs: -1, 0) -- (axis cs: 0, 0);
+  \draw[very thick, black] (axis cs: 0, 0) -- (axis cs: 1, 1);
+  \draw[very thick, black] (axis cs: 1, 1) -- (axis cs: 2, 0) node[above right] {$f_{X}(x)$};
+  \draw[very thick, black] (axis cs: 2, 0) -- (axis cs: 3, 0);
+  \end{axis}
+  \node [shape=rectangle, align=center](equation1) at (-3.5,2.5) {$f_{X}(x) = \begin{cases} x, & \text{se } 0 \le x < 1 \\ 2-x, & \text{se } 1 \le x < 2 \\ 0 & c.c. \end{cases}$};
+\end{tikzpicture}
+\end{center}
+
+Por definição, \(f(x) \ge 0 \; \forall x\). Para verificarmos que a probabilidade total é igual a um, podemos realizar a seguinte integração por partes:
+
+\begin{align*}
+\int_{-\infty}^{x}f_{X}(x)\mathrm{d}x &= \int_{0}^{2}f_{X}(x)\mathrm{d}x \\
+&= \int_{0}^{1}x \mathrm{d}x + \int_{1}^{2}(2-x)\mathrm{d}x \\
+&= \frac{x^{2}}{2}\Big{|}_{0}^{1} + 2x \Big{|}_{1}^{2} - \frac{x^{2}}{2} \Big{|}_{1}^{2} \\
+&= 1
+\end{align*}
+
+O que demonstra que \(f_{X}(x)\) é densidade de probabilidade.
 \end{example}
 
 \end{document}

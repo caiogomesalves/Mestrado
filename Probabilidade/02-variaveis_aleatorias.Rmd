@@ -20,6 +20,8 @@ output:
 
 # Variáveis Aleatórias
 
+## Variáveis aleatórias e funções de distribuição
+
 ::: {.example}
 
 Considere um experimento em que uma moeda é lançada duas vezes. Seja $X =$ total de caras nos dois lançamentos. Denotemos o evento cara como $H$ e coroa como $T$. Logo:
@@ -41,5 +43,295 @@ x = 1 &\Rightarrow X^{-1}(1) = \{HT,TH\} \\
 x = 2 &\Rightarrow X^{-1}(2) = \{HH\} \\
 x = 0 &\Rightarrow X^{-1}(0) = \{TT\} \\
 \end{align*}
+
+:::
+
+::: {.definition name="Variável aleatória"}
+
+Seja $(\Omega,\mathcal{F},P)$ um espaço de probabilidades. Uma função $X:\mathcal{F} \to \mathbb{R}$ é variável aleatória se $[x \in I] \in \mathcal{F}, \; I \in \mathbb{R}$ (ou, equivalentemente, se $\{\omega:X(\omega) \in I\} \in \mathcal{F}; \; X^{-1}(I) \in \mathcal{F}$).
+
+:::
+
+::: {.definition name="Distribuição Acumulada"}
+
+Considere um espaço de probabilidades $(\Omega,\mathcal{F},P)$ e $X:\mathcal{F} \to \mathbb{R}$ uma variável aleatória, defina $F(r) = P(X \le r) = P(\{\omega : X(\omega) \le r\})$.
+
+:::
+
+::: {.example}
+
+Seja $X =$ número de caras em dois lançamentos de moeda (honesta). Temos que as probabilidades de $X$ são dadas por:
+
+\begin{align*}
+P(X = 0) &= P(\{TT\}) = \frac{1}{4} \\
+P(X = 1) &= P(\{TH,HT\}) = \frac{2}{4} \\
+P(X = 2) &= P(\{HH\}) = \frac{1}{4}
+\end{align*}
+
+Para encontrarmos a função de distribuição acumulada, podemos particinar o espaço e "acumular" as probabilidades. Para $r < 0$:
+
+\begin{equation*}
+F(r) = P([X \le r]) = P(\emptyset) = 0
+\end{equation*}
+
+Para $r \in [0,1)$:
+
+\begin{equation*}
+F(r) = P([X \le r]) = P(X \le 0) = \frac{1}{4}
+\end{equation*}
+
+Para $r \in [1,2)$:
+
+\begin{equation*}
+F(r) = P([X \le r]) = P(X \le 1) = P(X = 0) + P(X = 1) = \frac{3}{4}
+\end{equation*}
+
+Para $r \ge 2$:
+
+\begin{equation*}
+F(r) = P([X \le r]) = P(X \le 2) = P(X = 0) + P(X = 1) + P(X = 2) = 1
+\end{equation*}
+
+Logo, $F$ é dada por:
+
+\begin{equation*}
+F(r) = \begin{cases} 0, & r<0 \\ \frac{1}{4}, & r \in [0,1) \\ \frac{3}{4}, & r \in [1,2) \\ 1, & r \ge 2 \end{cases}
+\end{equation*}
+
+\pgfplotsset{
+  graf1/.style={
+    xlabel=$X$,
+    width=10cm, height=7cm,
+    mark=*,
+    nodes near coords,
+    point meta=explicit symbolic, % permite usar a 3 coluna como label.
+    every node near coord/.append style={font=\footnotesize},
+    nodes near coords align={vertical}
+  }
+}
+
+\pgfplotstableread{
+  i    x   px   PX   f  F
+  1    0 0.25 0.25 1/4 1/4
+  2    1 0.50 0.75 2/4 3/4
+  3    2 0.25 1.00 1/4 4/4
+}\distrprob
+
+\begin{center}
+\begin{tikzpicture}[domain=0:2]
+    \begin{axis}[
+      graf1,
+      grid=major,
+      ytick distance=0.25,
+      ymin=-0.1,
+      ymax=1.2,
+      ylabel={$P(X \le r)$},
+      title={Distribui\c{c}\~{a}o de probabilidades acumulada}]
+      \addplot[thick, black, const plot, jump mark left]
+      table[x=x, y=PX, meta=F] \distrprob;
+      \draw[black] (axis cs: -1, 0) -- (axis cs: 0, 0);
+      \draw[black] (axis cs: 2, 1) -- (axis cs: 3, 1);
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+:::
+
+::: {.theorem name="Propriedades da distribuição acumulada"}
+
+Seja $X$ uma variável aleatória definida em $(\Omega,\mathcal{F},P)$, então a f.d.a. de $X$ ($F_{X}$ ou $F$) verifica:
+
+a) $F$ é monótona não decrescente;
+b) $F$ é contínua à direita;
+c) $\lim_{t \to - \infty}F(t) = 0$ e $\lim_{t \to \infty}F(t) = 1$.
+
+:::
+
+::: {.proof}
+
+a) Dados $a,b \in \mathbb{R} : a \le b; \; [X \le a] \subseteq [X \le b] \Rightarrow P([X \le a]) \le P([X \le b]) \Rightarrow F(a) \le F(b)$.
+
+b) Se $X_{n}\downarrow x$, quando $n \to \infty$, temos que $\{[X \le x_{n}]\}_{n \ge 1}$ é tal que $\bigcap_{n \ge 1}[X \le x_{n}] = [X \le x]$. Isso significa que $[X \le x]$ acontece se e somente se $[X \le x_{n}] \; \forall n$. Além disso, $[X \le x_{n}] \downarrow [X \le x]$ quando $n \to \infty$, logo, pela continuidade da função de probabilidade $P([X \le x_{n}]) \downarrow P([X \le x]), n \to \infty$.
+
+c) Considere agora que $x_{n} \downarrow -\infty \Rightarrow [X \le x_{n}] \downarrow \emptyset, \; n \to \infty \Rightarrow F(x_{n}) = P([X \le x_{n}]) \downarrow P(\emptyset) = 0, \; n \to \infty$.
+Se $x_{n} \uparrow \infty \Rightarrow [X \le x_{n}] \uparrow \Omega, \; n \to \infty \Rightarrow F(x_{n}) = P([X \le x_{n}]) \uparrow P(\Omega) = 1, \; n \to \infty$.
+
+:::
+
+::: {.theorem}
+
+Se $F$ é a f.d.a. da variável aleatória $X$, então:
+
+a) Existem e são finitos os limites laterais $\lim_{t \to r^{-}}F(t), \lim_{t \to r^{+}}F(t), \forall r \in \mathbb{R}$ e $\lim_{t \to r^{-}}F(t) \le \lim_{t \to r^{+}}F(t)$;
+
+b) $\lim_{t \to r^{+}}F(t) = F(r), \forall r \in \mathbb{R}$;
+
+c) $F$ é descontínua em $r, r \in \mathbb{R}$ se e somente se $\lim_{t \to r^{-}}F(t) < F(r)$, com um salto de tamanho $F(r) - \lim_{t \to r^{-}}F(t)$;
+
+d) $\forall r \in \mathbb{R}, P(X = r) = F(r) - \lim_{t \to r^{-}}F(t)$;
+
+e) Existem no máximo um total enumerável de descontinuidades em $F$.
+
+:::
+
+::: {.proof}
+
+a) $F$ é monótona e limitada ($0 \le F \le 1$). Logo, os limites laterais existem e são limitados.
+
+b) Como $F$ é monótona não-decrescente, $\forall x,y : x \le y \Rightarrow F(x) \le F(y)$. Logo $\lim_{t \to r^{-}}F(t) \le \lim_{t \to r^{+}}F(t)$.
+
+c) Como $F$ é monótona não-decrescente, uma descontinuidade só ocorre se e somente se $\lim_{t \to r^{-}}F(t) < \lim_{t \to r^{+}}F(t) = F(r)$.
+
+d) Seja $r \in \mathbb{R}. \; [X \le r] = \bigcap_{n=1}^{\infty}(r-\frac{1}{n} < x \le r)$, logo:
+
+\begin{align*}
+P([X = r]) &= P\left(\bigcap_{n=1}^{\infty}\left(r-\frac{1}{n} < x \le r\right)\right) \\
+&\Downarrow \text{(Teorema da continuidade)} \\
+&=\lim_{n \to \infty}P\left(\left(r - \frac{1}{n} < x \le r\right)\right) \\
+&= \lim_{n \to \infty} \left(F(r) - F\left(r - \frac{1}{n}\right)\right) \\
+&= F(r) - \lim_{n \to \infty}F\left(r - \frac{1}{n}\right) \\
+P([X = r]) &= F(r) - \lim_{t \to r^{-}}F(t)
+\end{align*}
+
+e) Seja $\mathcal{D}$ o conjunto de pontos de descontinuidades de $F$, e seja $\lim_{t \to x^{-}}F(t) = F(x^{-})$. Logo:
+
+\begin{equation*}
+\mathcal{D} = \{x \in \mathbb{R} : F(x) - F(x^{-}) > 0\}
+\end{equation*}
+
+Seja $\mathcal{D}_{n}$ o conjunto de pontos para os quais a amplitude do salto é maior ou igual a $\frac{1}{n}$. Logo:
+
+\begin{equation*}
+\mathcal{D}_{n} = \left\{x \in \mathbb{R}: F(x) - F(x^{-}) \ge \frac{1}{n}\right\} \Rightarrow \# D = |D| \le n
+\end{equation*}
+
+Se $x \in \mathcal{D} \Rightarrow \exists n_{0} > 1 : F(x) - F(x^{-}) \ge \frac{1}{n_{0}} \Rightarrow x \in \bigcup_{n=1}^{\infty}\mathcal{D}_{n}$. Se $x \in \bigcup_{n=1}^{\infty}\mathcal{D}_{n} \Rightarrow \exists n_{1} : x \in \mathcal{D}_{n} \Rightarrow x \in \mathcal{D}$. $\mathcal{D}$ portanto é a união enumerável de conjuntos finitos, logo é enumerável.
+
+:::
+
+## Natureza das variáveis aleatórias
+
+a) $X$ é uma variável aleatória discreta se os valores que ela toma pertencem a um conjunto enumerável, logo $X:\Omega \to \{x_{1},x_{2},\ldots\}$ (ou seja, $X(\omega) \in \{x_{1},x_{2},\ldots\}, \forall \omega \in \Omega$) e $P: \{x_{1},x_{2},\ldots\} \to [0,1]$ é dado por $P(x_{i}) = P\{\omega : \omega \in \Omega \text{ e } X(\omega) = x_{i}\} \forall i \ge 1$.
+
+b) $X$ é uma variável aleatória absolutamente contínua se $\exists f$ (uma função) tal que $f(x) \ge 0, \forall x \in \mathbb{R}$ e $F_{X}(x) = \int_{-\infty}^{x}f(t) dt$ (onde $f$ é chamada de densidade de $X$).
+
+Sob **(a)** temos que $[X \le x] = \bigcup_{i : x_{i} \le x} [X = x_{i}]$. Logo $F_{x}(x) = \sum_{i : x_{i} \le x}P(x_{i})$.
+
+Sob **(b)** estamos afirmando que $F_{X}$ é a integral de $f$ (ou seja, $f$ é a sua derivada) para todo $x$ exceto em um conjunto de medida de Lebesgue nula, ou seja, se seu comprimento for zero ($\int_{a}^{a}f(t) dt = 0$). Ainda sob **(b)**, se $f$ é uma função de densidade podemos definir $F(x) = \int_{-\infty}^{x} f(t) dt$ e $F$ verifica:
+
+1. $x \le y \Rightarrow F(x) \le F(y)$;
+2. Se $x_{n} \downarrow x \Rightarrow F(x_{n}) \downarrow F(x)$;
+3. Se $x_{n} \downarrow -\infty \Rightarrow F(x_{n}) \downarrow 0$ e se $x_{n}\uparrow \infty \Rightarrow F(x_{n}) \uparrow 1$.
+
+Dada uma variável aleatória com distribuição $F_{X}$, $X$ tem densidade se:
+
+(i) $F_{X}$ é contínua;
+(ii) $F_{X}$ é derivável por partes (ou derivável no interior de um número finito ou enumerável de intervalos fechados cuja união é igual a $\mathbb{R}$), ou derivável para todo $x$ exceto um número finito (enumerável) de pontos.
+
+::: {.example}
+
+\pgfplotsset{
+  graf2/.style={
+    xlabel=$x$,
+    ylabel=$P(X \le x)$,
+    width=7cm, height=7cm,
+    ymin=-0.1,
+    ymax=1.2
+  }
+}
+
+\begin{center}
+\begin{tikzpicture}[domain=0:1.1]
+    \begin{axis}[
+        graf2,
+        grid = major,
+        ytick distance=0.25,
+        xtick distance=0.25]
+        \addplot[draw=none] {0};
+        \draw[black] (axis cs: -1, 0) -- (axis cs: 3, 0);
+        \draw[black] (axis cs: 0, -1) -- (axis cs: 0, 3);
+        \draw[very thick, black] (axis cs: -1, 0) -- (axis cs: 0, 0);
+        \draw[very thick, black] (axis cs: 0, 0) -- (axis cs: 1, 1) node[above left] {$F_{X}(x)$};
+        \draw[very thick, black] (axis cs: 1, 1) -- (axis cs: 1.5,1);
+    \end{axis}
+    \node [shape=rectangle, align=center](equation1) at (-5,2.5) {$F_{X}(x) = \begin{cases} 0, & x<0 \\ x, & x \in [0,1] \\ 1, & x > 1 \end{cases}$};
+\end{tikzpicture}
+\end{center}
+
+Notas:
+
+- $F_{X}$ é contínua;
+- $\{0,1\}$ são pontos sem derivada;
+- Podemos definir os seguintes intervalos em que $F_{X}$ é derivável: $(-\infty,0),(0,1),(1,\infty)$;
+- $F_{X}'(x) = \begin{cases}1, & x \in (0,1) = f_{X}(x) \\ 0 , & c.c.\end{cases}$;
+- $f(0)$ e $f(1)$ podem ser definidos como zero ou um, já que tais definições não alteram $F_{X}(x) = \int_{-\infty}^{x}f(t)dt$.
+
+Em contrapartida, considere:
+
+\begin{center}
+\begin{tikzpicture}[domain=0:1.1]
+    \begin{axis}[
+        graf2,
+        grid = major,
+        ytick distance=0.25,
+        xtick distance=0.25]
+        \addplot[draw=none] {0};
+        \draw[black] (axis cs: -1, 0) -- (axis cs: 3, 0);
+        \draw[black] (axis cs: 0, -1) -- (axis cs: 0, 3);
+        \draw[very thick, black] (axis cs: -1, 0) -- (axis cs: 0, 0);
+        \draw[very thick, black] (axis cs: 0, 1) -- (axis cs: 1, 1) node[above left] {$F_{X}(x)$};
+        \draw[very thick, black] (axis cs: 1, 1) -- (axis cs: 1.5,1);
+        \node[circle,fill=black,scale=0.4] (PA) at (axis cs: 0,1) {};
+        \node[circle,fill=white,scale=0.4,draw] (P0) at (axis cs: 0,0) {};
+    \end{axis}
+    \node [shape=rectangle, align=center](equation1) at (-5,2.5) {$F_{X}(x) = \begin{cases} 0, & x<0 \\ 1, & x \ge 0 \end{cases}$};
+\end{tikzpicture}
+\end{center}
+
+Notas:
+
+- $F_{X}$ não é contínua;
+- $P(X=0) = \lim_{x \to 0^{+}}F_{X}(x) - \lim_{x \to 0^{-}}F_{X}(x) = 1$.
+
+:::
+
+::: {.example}
+
+Considere a densidade triangular:
+
+\pgfplotsset{
+  graf3/.style={
+    xlabel=$x$,
+    width=10cm, height=6cm,
+    ymin=-0.1,
+    ymax=1.5
+  }
+}
+
+\begin{center}
+\begin{tikzpicture}[domain=0:2.5]
+  \begin{axis}[graf3, grid=major]
+  \addplot[draw=none] {0};
+  \draw[black] (axis cs: -1, 0) -- (axis cs: 3, 0);
+  \draw[black] (axis cs: 0, -1) -- (axis cs: 0, 3);
+  \draw[very thick, black] (axis cs: -1, 0) -- (axis cs: 0, 0);
+  \draw[very thick, black] (axis cs: 0, 0) -- (axis cs: 1, 1);
+  \draw[very thick, black] (axis cs: 1, 1) -- (axis cs: 2, 0) node[above right] {$f_{X}(x)$};
+  \draw[very thick, black] (axis cs: 2, 0) -- (axis cs: 3, 0);
+  \end{axis}
+  \node [shape=rectangle, align=center](equation1) at (-3.5,2.5) {$f_{X}(x) = \begin{cases} x, & \text{se } 0 \le x < 1 \\ 2-x, & \text{se } 1 \le x < 2 \\ 0 & c.c. \end{cases}$};
+\end{tikzpicture}
+\end{center}
+
+Por definição, $f(x) \ge 0 \; \forall x$. Para verificarmos que a probabilidade total é igual a um, podemos realizar a seguinte integração por partes:
+
+\begin{align*}
+\int_{-\infty}^{x}f_{X}(x)\mathrm{d}x &= \int_{0}^{2}f_{X}(x)\mathrm{d}x \\
+&= \int_{0}^{1}x \mathrm{d}x + \int_{1}^{2}(2-x)\mathrm{d}x \\
+&= \frac{x^{2}}{2}\Big{|}_{0}^{1} + 2x \Big{|}_{1}^{2} - \frac{x^{2}}{2} \Big{|}_{1}^{2} \\
+&= 1
+\end{align*}
+
+O que demonstra que $f_{X}(x)$ é densidade de probabilidade.
 
 :::
