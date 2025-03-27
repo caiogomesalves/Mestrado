@@ -335,3 +335,120 @@ Por definição, $f(x) \ge 0 \; \forall x$. Para verificarmos que a probabilidad
 O que demonstra que $f_{X}(x)$ é densidade de probabilidade.
 
 :::
+
+::: {.conjecture}
+
+Cada função de distribuição se corresponde com apenas uma distribuição? Não.
+
+:::
+
+::: {.proof}
+
+Considere, por exemplo, que a variável aleatória $X \sim N(0,1)$. Logo, a sua função distribuição de probabilidade é dada por $f_{X}(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}}$ e $\Phi(x)$ é sua acumulada. Vejamos que $X \sim N(0,1) \Longleftrightarrow -X \sim N(0,1)$:
+
+Seja $\omega$ um possível valor de $-X$, devemos calcular $P(-X \le \omega)$ e provar que $P(-X \le \omega) = \Phi(\omega)$:
+
+\begin{equation*}
+P(-X \le \omega) = P(X \ge -\omega) = 1 - P(X \le \omega) = 1 - \Phi(-\omega) = 1 - (1 - \Phi(\omega)) = \Phi(\omega)
+\end{equation*}
+
+:::
+
+## Variáveis aleatórias e $\sigma$-álgebra de Borel
+
+Se $X$ é uma variável aleatória em $(\Omega, \mathcal{A}, P)$, cada evento $[X \le x] \in \mathcal{A} \; \forall x \in \mathbb{R}$. Isto é, $[X \in \mathcal{B}]$, onde $[X \in \mathcal{B}] = [X \le x]$ é um evento e $P(X \in \mathcal{B})$ é bem definido. No entanto, a operacionalidade do sistema $(\Omega, \mathcal{A},P)$ pode ser estendido a todo boreliano (ou seja, a todos os elementos da $\sigma$-álgebra de Borel, que é a menor $\sigma$-álgebra contendo os intervalos cujos comprimentos estejam bem definidos).
+
+::: {.proposition}
+
+Se $X$ é uma variável aleatória em $(\Omega,\mathcal{A},P)$, então o evento $[x \in \mathcal{B}] = \{\omega : \omega \in \Omega \text{ e } X(\omega) \in \mathcal{B}\}$ é um evento aleatório para todo $\mathcal{B}$ boreliano (ou seja, $[x \in B] \in \mathcal{A} \; \forall B \in \mathcal{B}$).
+
+:::
+
+Podemos ver que diferentes tipos de intervalos (leia-se borelianos) podem ser mostrados como pertencentes à $\sigma$-álgebra, de modo que variáveis aleatórias que operam sobre esses intervalos estarão bem definidas:
+
+1. Se $B = (-\infty, b] \Rightarrow [X \in B] \in \mathcal{A}$ de acordo com a definição de variável aleatória;
+2. Se $B = (a, \infty)$, podemos fazer $B = (-\infty, a]^{c}$. Como o evento $[X \le a] \in \mathcal{A}$ por definição, sendo $\mathcal{A}$ uma $\sigma$-álgebra, deve ocorrer que $[X \le a]^{c} = B \in \mathcal{A}$, ou seja, $B \in \mathcal{A}$;
+3. Se $B = (a, b] \Rightarrow [X \in B] = [X \in (a,b]] = [X \le b] - [X \le a]$. Como $[X \le b] \in \mathcal{A}$ e $[X \le a] \in \mathcal{A}$, então $P(X \in B) = P(X \le b) - P(x \le a) = F_{X}(b) - F_{X}(a)$;
+4. Se $B = (a,b) \Rightarrow B = \bigcup_{n=1}^{\infty}\left(a,b-\frac{1}{n}\right]$ Sabemos que os eventos $\left(a < X \le b - \frac{1}{n}\right] \in \mathcal{A}$ e as suas uniões também pertencem à $\mathcal{A}$. Quanto à probabilidade, temos $P(X \in B) = P\left(\bigcup_{n=1}^{\infty}\left(a < X \le b - \frac{1}{n}\right]\right) = \lim_{n \to \infty}P\left(\left(a < X \le b - \frac{1}{n}\right]\right) = \lim_{n \to \infty}F_{X}\left(b - \frac{1}{n}\right) - F_{X}(a) = F_{X}(b^{-}) - F_{X}(a)$;
+5. Se $B = \bigcup_{i = 1}^{n}B_{i}:B_{i} \in \mathcal{A}\; \forall i$, e sendo os $B_{i}$'s disjuntos, temos que $[X \in B] = \bigcup_{i=1}^{n}[X \in B_{i}] \Rightarrow P([X \in B]) = \sum_{i=1}^{n}P(X \in B_{i})$.
+
+Podemos assim reformular os axiomas de Kolmogorov:
+
+- $Ax_{1}(K)$: $P_{X}(B) = P(X \in B) \ge 0$;
+- $Ax_{2}(K)$: $P_{X}(\mathbb{R}) = P(X \in \mathbb{R}) = 1$;
+- $Ax_{3}(K)$: Se $B_{1}, \ldots, B_{n} \in \mathcal{B}$, com $B_{i} \cap B_{j} = \emptyset \; \forall i \neq j \Rightarrow P_{X}(\bigcup B_{n}) = P(X \in \bigcup_{n}B_{n}) = P(\bigcup_{n}[X \in B_{n}]) = \sum_{n}P(X \in B_{n})$.
+
+::: {.definition}
+
+A probabilidade $P_{X}$ definida na $\sigma$-álgebra de Borel por $P_{X}(B) = P(X \in B)$ é a distribuição de $X$.
+
+:::
+
+::: {.proposition}
+
+a) Se $X$ é uma variável aleatória discreta com valores em $\{x_{1},x_{2},\ldots\} \Rightarrow P_{X}(B) = \sum_{i:x_{i} \in B}P(x_{i})$;
+b) Se $X$ é absolutamente contínua com densidade $f \Rightarrow P_{X}(B) = \int_{B}f_{X}dx$.
+
+:::
+
+## Variáveis contínuas
+
+::: {.proposition}
+
+Se $X \sim f_{X}, \; y = bx+c, \; b>0$ e $c \in \mathbb{R} \Rightarrow Y \sim f_{Y}$ onde $f_{Y}(y) = \frac{1}{b}f_{X}(\frac{y-c}{b}); y \in \mathbb{R}$, onde $c$ é dito um parâmetro de posição (muitas vezes de posição central) e $b$ um parâmetro de escala.
+
+:::
+
+### Exemplos
+
+::: {.example name="Distribuição Normal"}
+
+\begin{equation*}
+f(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}} \Longrightarrow f_{\mu,\sigma}(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(x-\mu)^{2}}{2 \sigma^{2}}}
+\end{equation*}
+
+Aqui, $\mu$ representa a média (posição central) da distribuição e $\sigma^{2}$ a sua variância.
+
+:::
+
+::: {.example name="Distribuição Cauchy"}
+
+\begin{equation*}
+f(x) = \frac{1}{\pi(1 + x^{2})} \Longrightarrow f_{b,M}(x) = \frac{1}{b}\frac{1}{\pi\left(1+\left(\frac{x-M}{b}\right)^{2}\right)} = \frac{b}{\pi(b^{2}+(x-M)^2)}
+\end{equation*}
+
+Neste caso, $M$ é a mediana da distribuição e $b$ representa a distância entre $M$ e o 1º quartil da distribuição.
+
+:::
+
+::: {.example name="Distribuições Exponencial e Gamma"}
+
+Considere $g(x) = e^{-x} I_{0,\infty}(x)$. Sabemos que $g$ é uma distribuição de probabilidade pois:
+
+\begin{equation*}
+\begin{cases*}
+g(x) \ge 0 \;\forall x \in (0,\infty) \\
+\int_{0}^{\infty}e^{-x}dx = 1
+\end{cases*}
+\end{equation*}
+
+Vamos agora incluir no formato do tipo exponencial um componente polinomial. Dado $\alpha > 0$, defina $g(x) = x^{\alpha - 1}e^{-x}$. Podemos ver que $g$ é integrável, de modo que:
+
+\begin{align*}
+\int_{0}^{\infty}g(x)dx &= \int_{0}^{\infty}x^{\alpha - 1}e^{-x}dx = \Gamma(\alpha) \\
+f_{X}(x) &= \begin{cases}\frac{1}{\Gamma(\alpha)}x^{\alpha - 1}e^{-x} & x>0 \\ 0 & c.c.\end{cases}
+\end{align*}
+
+Defina agora $y = \frac{X}{\beta}$ onde $X \sim \text{Gamma}(\alpha,1)$ e $\beta > 0$. A densidade de $Y$ pode ser encontrada por meio de:
+
+\begin{align*}
+P(Y \le y) &= P\left(\frac{X}{\beta} \le y\right) = P(X \le \beta y) \Rightarrow F_{Y}(y) = F_{X}(\beta y) \\
+f_{Y}(y) &= \beta f_{X}(\beta y) = \beta\frac{(\beta y)^{\alpha - 1}}{\Gamma(\alpha)}e^{-\beta y} = \frac{\beta^{\alpha}}{\Gamma(\alpha)}y^{\alpha - 1}e^{-\beta y}
+\end{align*}
+
+Nesse caso (conhecido como distribuição Gama) $\frac{1}{\beta}$ é um parâmetro de escala e $\alpha$ é um parâmetro de forma. Temos alguns casos especiais, como:
+
+- Se $\alpha = 1\; : Y \sim \text{Exp}(\beta)$;
+- Se $\alpha = \frac{n}{2}$, com $n$ inteiro e $\beta = \frac{1}{2} \;: Y \sim \chi^{2}(n)$
+
+:::

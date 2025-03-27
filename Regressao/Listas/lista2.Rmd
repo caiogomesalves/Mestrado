@@ -1,0 +1,338 @@
+---
+title: "Lista 2"
+subtitle: "MI406-Regressão"
+author: "Caio Gomes Alves"
+output:
+  bookdown::pdf_document2:
+    toc: false
+---
+
+```{r setup, echo=F, warning=F, message=F}
+# Pacotes necessários:
+library(tidyverse)
+library(formatR)
+library(ggpubr)
+
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+```
+
+# Questão 1:
+
+## Pergunta
+
+Considere os pontos $x_{1} = 1, x_{2} = 2, . . . , x_{10} = 10$. Gere 10.000 (dez mil) simulações das variáveis
+respostas $Y_{i}$ para o modelo descrito acima. Para cada simulação gerada, registre os seguintes valores:
+
+- Estimativas de Mínimos Quadrados $\beta_{0}$ e $\beta_{1}$.
+- Intervalo de confiança de 95% para $\beta_{0}$ e $\beta_{1}$.
+- Estatística do teste para as hipóteses $\beta_{0} = 5$ vs $\beta_{0} \neq 5$.
+- Estatística do teste para as hipóteses $\beta_{1} = 2$ vs $\beta_{1} \neq 2$.
+- Estatística do teste para as hipóteses $\beta_{1} = 1.8$ vs $\beta_{1} \neq 1.8$.
+
+## Resposta
+
+Inicialmente é preciso gerar os dados:
+
+```{r geracao_dados, cache=T}
+# Seed para reprodutibilidade:
+set.seed(5050)
+
+# Valores dos x:
+x <- 1:10
+
+# 10.000 simulações dos Y_i:
+y_sim <- replicate(10000, 5 + 2 * x + rnorm(10, 0, 1))
+```
+
+O resultado é uma matriz com 10 linhas e 10.000 colunas. Para nos auxiliar, iremos criar alguns objetos intermediários para armazenar as informações de maneira eficiente:
+
+```{r informacoes}
+# Vetores para as estimativas pontuais dos betas:
+beta_0 <- vector(mode = "numeric", 10000)
+beta_1 <- vector(mode = "numeric", 10000)
+sigma_2 <- vector(mode = "numeric", 10000)
+
+# Listas para os intervalos de confiança:
+ic_beta_0 <- vector(mode = "list", 10000)
+ic_beta_1 <- vector(mode = "list", 10000)
+
+# Vetores para as estatísticas para os testes de hipótese:
+estat_teste_beta_0 <- vector(mode = "numeric", 10000)
+estat_teste_beta_1_2 <- vector(mode = "numeric", 10000)
+estat_teste_beta_1_1.8 <- vector(mode = "numeric", 10000)
+```
+
+Para além disso, iremos utilizar a seguinte função para calcular as somas dos produtos corrigidos pela média:
+
+```{r func_aux}
+func_soma <- function(a, b) {
+    sum((a - mean(a)) * (b - mean(b)))
+}
+```
+
+Agora, podemos utilizar um loop para a estimação dos $\beta_{0}$ e $\beta_{1}$, além das demais informações solicitadas:
+
+```{r loop, cache=T}
+# Loop para fazer os ajustes e popular os vetores e listas:
+for (i in 1:10000) {
+    # Estimativas pontuais dos Betas:
+    beta_1[i] <- func_soma(y_sim[, i], x)/func_soma(x, x)
+    beta_0[i] <- mean(y_sim[, i]) - beta_1[i] * mean(x)
+    # Estimativa da variância pelos resíduos:
+    sigma_2[i] <- sum((y_sim[, i] - (beta_0[i] +
+                                     beta_1[i] * x))^(2))/(length(x) - 2)
+    # Valor da distribuição t para criação dos intervalos de confiança:
+    t_alpha <- qt(1 - 0.05/2, length(x) - 2)
+    # Calcula os intervalos de confiança dos betas:
+    ic_beta_0[[i]] <- c(`2.5 %` = beta_0[i] -
+                            (sqrt((sigma_2[i] * sum(x^(2)))/
+                                  (length(x) * func_soma(x, x))) * t_alpha),
+                        `97.5 %` = beta_0[i] +
+                            (sqrt((sigma_2[i] * sum(x^(2)))/
+                                  (length(x) * func_soma(x, x))) * t_alpha))
+    ic_beta_1[[i]] <- c(`2.5 %` = beta_1[i] -
+                            sqrt((sigma_2[i])/
+                                 (func_soma(x, x))) * t_alpha,
+                        `97.5 %` = beta_1[i] +
+                            sqrt((sigma_2[i])/
+                                 (func_soma(x, x))) * t_alpha)
+    # Estatística de teste para Beta_0 = 5:
+    estat_teste_beta_0[i] <- (beta_0[i] - 5)/sqrt((sigma_2[i] * sum(x^(2)))/
+                                                  (length(x) * func_soma(x, x)))
+    # Estatística de teste para Beta_1 = 2:
+    estat_teste_beta_1_2[i] <- (beta_1[i] - 2)/sqrt(sigma_2[i]/func_soma(x, x))
+    # Estatística de teste para Beta_1 = 1.8:
+    estat_teste_beta_1_1.8[i] <- (beta_1[i] - 1.8)/sqrt(sigma_2[i]/func_soma(x, x))
+}
+```
+
+Por fim, transformemos as listas que armazenam os valores inferiores e superiores dos intervalos de confiança em matrizes, para que a manipulação seja mais direta:
+
+```{r lista_ic}
+ic_beta_0 <- do.call(rbind, ic_beta_0)
+ic_beta_1 <- do.call(rbind, ic_beta_1)
+```
+
+# Questão 2:
+
+## Pergunta
+
+Gere um gráfico para visualizar a distribuição de $\beta_{0}$ e $\beta_{1}$ ao longo das simulações e apresente a média e
+variância dessas estatísticas. Que valores de média e variância você esperaria obter?
+
+## Resposta
+
+### Para $\hat{\beta}_{0}$:
+
+Temos que $\mathbb{E}(\hat{\beta}_{0}) = \beta_{0} = 5$ e a variância desse estimador é dado por:
+
+\begin{align*}
+\text{Var}(\hat{\beta}_{0}) &= \frac{\sigma^{2} \sum_{i=1}^{n}(x_{i}^{2})}{n \sum_{i=1}^{n}(x_{i} - \bar{x})^{2}} \\
+&= \frac{1 \times 385}{10 \times 82.5} \\
+&= 0.4\bar{6}
+\end{align*}
+
+Podemos ver se os valores dos betas ajustados se aproximam disso:
+
+```{r valores_beta0}
+# Média das estimativas:
+mean(beta_0)
+
+# Variância das estimativas:
+var(beta_0)
+```
+
+Os valores estão bem próximos dos valores exatos. Podemos ver a distribuição das estimativas ao longo das simulações a partir de dois gráficos: o primeiro indica a posição pontual de cada uma das 10.000 simulações e o segundo é um histograma de todas as estimativas em conjunto. Em ambos a linha em vermelho indica o verdadeiro valor de $\beta_{0}$:
+
+```{r graf_beta_0, echo=F, message=F, cache=T, warning=F, fig.fullwidth=T, fig.height=4}
+# Gráfico das estimativas pontuais de Beta_0 ao longo das simulações:
+g1_beta_0 <- data.frame(x = 1:10000, y = beta_0) %>%
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    geom_hline(yintercept = 5, colour = "red") +
+    labs(x = "Simulação", y = expression(hat(beta)[0]))
+
+g2_beta_0 <- data.frame(x = 1:10000, y = beta_0) %>%
+    ggplot(aes(y = y)) +
+    geom_histogram() +
+    geom_hline(yintercept = 5, colour = "red") +
+    labs(x = "Contagem", y = expression(hat(beta)[0]))
+
+ggarrange(g1_beta_0, g2_beta_0)
+```
+
+### Para $\hat{\beta}_{1}$:
+
+Temos que $\mathbb{E}(\hat{\beta}_{1}) = \beta_{1} = 2$ e a variância desse estimador é dado por:
+
+\begin{align*}
+\text{Var}(\hat{\beta}_{1}) &= \frac{\sigma^{2}}{\sum_{i=1}^{n}(x_{i} - \bar{x})^{2}} \\
+&= \frac{1}{82.5} \\
+&= 0.0\bar{12}
+\end{align*}
+
+Podemos ver se os valores dos betas ajustados se aproximam disso:
+
+```{r valores_beta_1}
+# Média das estimativas:
+mean(beta_1)
+
+# Variância das estimativas:
+var(beta_1)
+```
+
+Os valores estão bem próximos dos valores exatos. Podemos ver a distribuição das estimativas ao longo das simulações a partir de dois gráficos: o primeiro indica a posição pontual de cada uma das 10.000 simulações e o segundo é um histograma de todas as estimativas em conjunto. Em ambos a linha em vermelho indica o verdadeiro valor de $\beta_{1}$:
+
+```{r graf_beta_1, echo=F, message=F, cache=T, warning=F, fig.fullwidth=T, fig.height=4}
+# Gráfico das estimativas pontuais de Beta_0 ao longo das simulações:
+g1_beta_1 <- data.frame(x = 1:10000, y = beta_1) %>%
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    geom_hline(yintercept = 2, colour = "red") +
+    labs(x = "Simulação", y = expression(hat(beta)[1]))
+
+g2_beta_1 <- data.frame(x = 1:10000, y = beta_1) %>%
+    ggplot(aes(y = y)) +
+    geom_histogram() +
+    geom_hline(yintercept = 2, colour = "red") +
+    labs(x = "Contagem", y = expression(hat(beta)[1]))
+
+ggarrange(g1_beta_1, g2_beta_1)
+```
+
+# Questão 3:
+
+## Pergunta
+
+Em quantas simulações o valor verdadeiro esteve dentro do intervalo de confiança para $\beta_{0}$ e $\beta_{1}$, isoladamente? Em quantas simulações ambos os intervalos continham o valor verdadeiro? Que quantidades você esperaria em cada um dos casos?
+
+## Resposta
+
+### Para $\hat{\beta}_{0}$:
+
+Podemos encontrar em quantos intervalos de confiança o valor verdadeiro de $\beta_{0}$ a partir do seguinte código:
+
+```{r valores_ic_beta_0}
+10000 - sum(ic_beta_0[, 1] > 5 | ic_beta_0[, 2] < 5)
+```
+
+Assim, a quantidade de intervalos que não contém é de `r sum(ic_beta_0[, 1] > 5 | ic_beta_0[, 2] < 5)`, aproximadamente 5% (que era o valor esperado, já que o intervalo é construído utilizando o valor de $\alpha = 0.05$ para a distribuição t). Podemos, a título de exemplo, mostrar os intervalos construídos para as 200 primeiras simulações:
+
+```{r graf_ic_beta_0, echo=F}
+# Podemos visualizar os 200 primeiros intervalos
+# a fim de verificar quantos contém o verdadeiro valor de Beta_0:
+as.data.frame(ic_beta_0) %>%
+    rownames_to_column() %>%
+    mutate(rowname = as.numeric(rowname),
+           Intervalo = ifelse(`2.5 %` > 5 | `97.5 %` < 5, "Não Contém", "Contém")) %>%
+    filter(rowname <= 200) %>%
+    ggplot(aes(x = rowname, y = `2.5 %`)) +
+    geom_segment(aes(yend = `97.5 %`, colour = Intervalo)) +
+    geom_hline(yintercept = 5, colour = "blue") +
+    labs(x = "Simulação", y = expression(hat(beta)[0])) +
+    scale_colour_manual(values = c("black", "red")) +
+    theme_bw()
+```
+
+Dos 200 primeiros intervalos, apenas `r sum(ic_beta_0[1:200, 1] > 5 | ic_beta_0[1:200, 2] < 5)` não contém o verdadeiro valor de $\beta_{0}$ (o esperado eram 10, o que é bem próximo do observado).
+
+### Para $\hat{\beta}_{1}$:
+
+Podemos encontrar em quantos intervalos de confiança o valor verdadeiro de $\beta_{1}$ a partir do seguinte código:
+
+```{r valores_ic_beta_1}
+10000 - sum(ic_beta_1[, 1] > 2 | ic_beta_1[, 2] < 2)
+```
+
+Assim, a quantidade de intervalos que não contém é de `r sum(ic_beta_1[, 1] > 2 | ic_beta_1[, 2] < 2)`, aproximadamente 5% (que era o valor esperado, já que o intervalo é construído utilizando o valor de $\alpha = 0.05$ para a distribuição t). Podemos, a título de exemplo, mostrar os intervalos construídos para as 200 primeiras simulações:
+
+```{r graf_ic_beta_1, echo=F}
+# Podemos visualizar os 200 primeiros intervalos
+# a fim de verificar quantos contém o verdadeiro valor de Beta_0:
+as.data.frame(ic_beta_1) %>%
+    rownames_to_column() %>%
+    mutate(rowname = as.numeric(rowname),
+           Intervalo = ifelse(`2.5 %` > 2 | `97.5 %` < 2, "Não Contém", "Contém")) %>%
+    filter(rowname <= 200) %>%
+    ggplot(aes(x = rowname, y = `2.5 %`)) +
+    geom_segment(aes(yend = `97.5 %`, colour = Intervalo)) +
+    geom_hline(yintercept = 2, colour = "blue") +
+    labs(x = "Simulação", y = expression(hat(beta)[0])) +
+    scale_colour_manual(values = c("black", "red")) +
+    theme_bw()
+```
+
+Dos 200 primeiros intervalos, apenas `r sum(ic_beta_1[1:200, 1] > 2 | ic_beta_1[1:200, 2] < 2)` não contém o verdadeiro valor de $\beta_{1}$ (o esperado eram 10, o que é bem próximo do observado).
+
+# Questão 4
+
+## Pergunta:
+
+Considerando um nível de significância $\alpha = 0.05$, em quantas simulações a hipótese $\beta_{0} = 5$ seria rejeitada? Que número você esperaria?
+
+## Resposta:
+
+Podemos encontrar a quantidade de simulações em que rejeitam a hipótese $\beta_{0} = 5$ comparando o valor absoluto da estatística de teste obtida com a distribuição $t(8)$:
+
+```{r estat_teste_beta_0}
+sum(abs(estat_teste_beta_0) > qt(1 - 0.05/2, length(x) - 2))
+```
+
+O valor esperado é de 5% das simulações (ou seja, 500 das 10.000). Essa quantidade coincide com quantos intervalos contém o verdadeiro valor de $\beta_{0}$, visto que ambos são calculados com o mesmo quantil da distribuição $t(8)$, considerando um $\alpha = 0.05$.
+
+# Questão 5
+
+## Pergunta:
+
+Considerando um nível de significância $\alpha = 0.05$, em quantas simulações a hipótese $\beta_{1} = 2$ seria rejeitada? Que número você esperaria?
+
+## Resposta:
+
+Podemos encontrar a quantidade de simulações em que rejeitam a hipótese $\beta_{1} = 2$ comparando o valor absoluto da estatística de teste obtida com a distribuição $t(8)$:
+
+```{r estat_teste_beta_1_2}
+sum(abs(estat_teste_beta_1_2) > qt(1 - 0.05/2, length(x) - 2))
+```
+
+O valor esperado é de 5% das simulações (ou seja, 500 das 10.000). Essa quantidade coincide com quantos intervalos contém o verdadeiro valor de $\beta_{1}$, visto que ambos são calculados com o mesmo quantil da distribuição $t(8)$, considerando um $\alpha = 0.05$.
+
+# Questão 6
+
+## Pergunta:
+
+Considerando um nível de significância $\alpha = 0.05$, em quantas simulações a hipótese $\beta_{1} = 1.8$ seria rejeitada? Que número você esperaria?
+
+## Resposta:
+
+Podemos encontrar a quantidade de simulações em que rejeitam a hipótese $\beta_{1} = 1.8$ comparando o valor absoluto da estatística de teste obtida com a distribuição $t(8)$:
+
+```{r estat_teste_beta_1_1.8}
+sum(abs(estat_teste_beta_1_1.8) > qt(1 - 0.05/2, length(x) - 2))
+```
+
+Aqui, como o valor da hipótese está mais "longe" do verdadeiro valor que gera os dados (que conhecemos, neste caso), esperávamos que a quantidade de simulações que rejeitariam a hipótese nula aumentasse, o que realmente ocorreu.
+
+# Questão 7
+
+## Pergunta:
+
+Considerando um nível de significância $\alpha = 0.05$, em quantas simulações pelo menos uma das hipóteses $\beta_{0} = 5$ ou $\beta_{1} = 2$ seria rejeitada? Que número você esperaria? O que você pode concluir a partir disso?
+
+## Resposta:
+
+A quantidade de simulações em que, pelo menos uma das duas hipóteses seria rejeitada é dada por:
+
+```{r estat_teste_betas}
+sum((abs(estat_teste_beta_1_2) > qt(1 - 0.05/2, length(x) - 2)) |
+    (abs(estat_teste_beta_0) > qt(1 - 0.05/2, length(x) - 2)))
+```
+
+Caso as estimativas $\hat{\beta}_{0}$ e $\hat{\beta}_{1}$ fossem independentes, esperávamos que a seguinte proporção fosse dada pela seguinte expressão:
+
+\begin{align*}
+P\left(\hat{\beta}_{0} \neq 5,\hat{\beta}_{1} = 2|\hat{\beta}_{0} = 5,\hat{\beta}_{1} = 2\right) &+ P\left(\hat{\beta}_{0} = 5,\hat{\beta}_{1} \neq 2|\hat{\beta}_{0} = 5,\hat{\beta}_{1} = 2\right) + P\left(\hat{\beta}_{0} \neq 5,\hat{\beta}_{1} \neq 2|\hat{\beta}_{0} = 5,\hat{\beta}_{1} = 2\right) \\
+&= 0.05 \times 0.95 + 0.05 \times 0.95 + 0.05 \times 0.05 \\
+&= 0.0975
+\end{align*}
+
+Porém, como as estimativas não são independentes, esses intervalos não serão ortogonais e a quantidade de simulações em que pelo menos uma das hipóteses será rejeitada é menor do que caso elas fossem independentes.

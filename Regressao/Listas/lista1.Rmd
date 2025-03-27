@@ -63,7 +63,7 @@ Assim, podemos ver que o estimador para o $\beta_{1}$ não será alterado, caso 
 
 ```{r ajustes}
 # Seed para reprodutibilidade:
-set.seed(2001)
+set.seed(42)
 
 # Considere os valores de x vindos de uma normal N(10, 2):
 df <- data.frame(
@@ -82,7 +82,7 @@ df$y <- (3 * x + rnorm(10, 0, 1.5))
 # Considere agora uma nova observação, no ponto (x_barra, 17):
 df2 <- data.frame(
     x = c(df$x, x_barra),
-    y = c(df$y, 0)
+    y = c(df$y, 12)
 )
 
 # Verifique que a estimativa de Beta_0 foi alterada,
@@ -104,7 +104,7 @@ g1 <- df %>%
 g2 <- df2 %>%
     ggplot(aes(x = x, y = y)) +
     geom_point() +
-    geom_point(data = data.frame(x = x_barra, y = 0), colour = "red") +
+    geom_point(data = data.frame(x = x_barra, y = 12), colour = "red") +
     geom_smooth(method = "lm", se = F) +
     lims(y = c(0, NA)) +
     ggpubr::theme_classic2()
