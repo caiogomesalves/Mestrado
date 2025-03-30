@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  24 MAR 2025 22:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  30 MAR 2025 01:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -870,26 +870,78 @@ Missing character: There is no t in font nullfont!
 [6]
 
 [7]
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no t in font nullfont!
 
-[8] (./02-variaveis_aleatorias.aux)
+
+[8]
+Overfull \hbox (51.73302pt too wide) in paragraph at lines 736--737
+[]\T1/lmr/bx/n/10 b) \T1/lmr/m/n/10 Se para o ve-tor aleatório $\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 X[]; [] ; X[]\OT1/lmr/m/n/10 )$\T1/lmr/m/n/10 , $\OML/lmm/m/it/10 F$ \T1/lmr/m/n/10 é dada pela forma $\OML/lmm/m/it/10 F\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) = [][] [] [][] \OML/lmm/m/it/10 f\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 t[]; [] ; t[]\OT1/lmr/m/n/10 )\OML/lmm/m/it/10 dt[] [] dt[]; [] 
+ []
+
+
+Overfull \hbox (20.81908pt too wide) in paragraph at lines 753--754
+[]\T1/lmr/bx/it/10 b) \T1/lmr/m/it/10 Se $[]$ é ab-so-lu-ta-mente con-tínuo com den-si-dade $\OML/lmm/m/it/10 f$\T1/lmr/m/it/10 , $\OML/lmm/m/it/10 P[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 B\OT1/lmr/m/n/10 ) = \OML/lmm/m/it/10 P\OT1/lmr/m/n/10 ([] \OMS/lmsy/m/n/10 2 \OML/lmm/m/it/10 B\OT1/lmr/m/n/10 ) = [] [] [][] \OML/lmm/m/it/10 f\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 )\OML/lmm/m/it/10 dx[] [] dx[]$\T1/lmr/m/it/10 . 
+ []
+
+
+
+[9]
+Underfull \hbox (badness 1442) in paragraph at lines 782--783
+[]\T1/lmr/bx/it/10 b) \T1/lmr/m/it/10 Se ex-is-tem funções $\OML/lmm/m/it/10 F[]; [] ; F[]$ \T1/lmr/m/it/10 tais que $[][] \OML/lmm/m/it/10 F[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x\OT1/lmr/m/n/10 ) = 1\OML/lmm/m/it/10 ; \OMS/lmsy/m/n/10 8\OML/lmm/m/it/10 i$ \T1/lmr/m/it/10 e $\OML/lmm/m/it/10 F[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) =
+ []
+
+
+
+[10]
+Overfull \hbox (47.4337pt too wide) in paragraph at lines 838--839
+[]\T1/lmr/bx/it/10 b) \T1/lmr/m/it/10 Se $\OML/lmm/m/it/10 X[]; [] ; X[]$ \T1/lmr/m/it/10 tem den-si-dade con-junta $\OML/lmm/m/it/10 f[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) : \OML/lmm/m/it/10 f[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) = [][] \OML/lmm/m/it/10 f[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]\OT1/lmr/m/n/10 ) \OMS/lmsy/m/n/10 8\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) \OMS/lmsy/m/n/10 2
+ []
+
+
+Overfull \hbox (6.07722pt too wide) in paragraph at lines 849--850
+[]\T1/lmr/bx/n/10 a) \T1/lmr/m/n/10 Como con-se-quên-cia da proposição []1.5[], temos que: $\OML/lmm/m/it/10 F[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) = [][] \OML/lmm/m/it/10 F[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]\OT1/lmr/m/n/10 )\OML/lmm/m/it/10 ; \OMS/lmsy/m/n/10 8\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 )$\T1/lmr/m/n/10 .
+ []
+
+
+Underfull \hbox (badness 1635) in paragraph at lines 886--888
+[]\T1/lmr/bx/n/10 a) \T1/lmr/m/n/10 Se $\OML/lmm/m/it/10 F\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x; y\OT1/lmr/m/n/10 )$ \T1/lmr/m/n/10 é a função de dis-tribuição acu-mu-lada con-junta de $\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 X; Y\OT1/lmr/m/n/10 )$\T1/lmr/m/n/10 , en-tão $\OML/lmm/m/it/10 F[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x\OT1/lmr/m/n/10 ) =
+ []
+
+
+
+[11]
+
+[12]
+Missing character: There is no . in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no t in font nullfont!
+
+
+[13] (./02-variaveis_aleatorias.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 37151 strings out of 475172
- 878764 string characters out of 5765189
- 1358851 words of memory out of 5000000
- 59459 multiletter control sequences out of 15000+600000
- 627014 words of font info for 82 fonts, out of 8000000 for 9000
+ 37235 strings out of 475172
+ 880256 string characters out of 5765189
+ 1359237 words of memory out of 5000000
+ 59512 multiletter control sequences out of 15000+600000
+ 631285 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  89i,14n,93p,739b,2361s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on 02-variaveis_aleatorias.pdf (8 pages, 313139 bytes).
+</home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on 02-variaveis_aleatorias.pdf (13 pages, 361738 bytes).
 PDF statistics:
- 240 PDF objects out of 1000 (max. 8388607)
- 190 compressed objects within 2 object streams
- 67 named destinations out of 1000 (max. 500000)
- 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 318 PDF objects out of 1000 (max. 8388607)
+ 260 compressed objects within 3 object streams
+ 97 named destinations out of 1000 (max. 500000)
+ 109 words of extra memory for PDF output out of 10000 (max. 10000000)
 

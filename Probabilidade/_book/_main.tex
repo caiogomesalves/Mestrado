@@ -127,7 +127,7 @@
 
 Este ``livro'' consiste de notas de aulas da matéria MI401 - Probabilidade, do Programa de Mestrado em Estatística, do Instituto de Matemática, Estatística e Computação Científica (IMECC), da Universidade Estadual de Campinas - UNICAMP.
 
-Os seus conteúdos são baseados nas notas tomadas durante as aulas e o livro ``Probabilidade: um curso em nível intermediário'', do autor Barry R. James, 5ª edição.
+Os seus conteúdos são baseados nas notas tomadas durante as aulas, do livro ``Probabilidade e Variáveis Aleatórias'', do autor Marcos Nascimento Magalhães, 3ª edição, e do livro ``Probabilidade: um curso em nível intermediário'', do autor Barry R. James, 5ª edição.
 
 \newpage
 
@@ -2422,6 +2422,536 @@ Por definição, \(f(x) \ge 0 \; \forall x\). Para verificarmos que a probabilid
 \end{align*}
 
 O que demonstra que \(f_{X}(x)\) é densidade de probabilidade.
+\end{example}
+
+\begin{conjecture}
+Cada função de distribuição se corresponde com apenas uma distribuição? Não.
+\end{conjecture}
+
+\begin{proof}
+Considere, por exemplo, que a variável aleatória \(X \sim N(0,1)\). Logo, a sua função distribuição de probabilidade é dada por \(f_{X}(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}}\) e \(\Phi(x)\) é sua acumulada. Vejamos que \(X \sim N(0,1) \Longleftrightarrow -X \sim N(0,1)\):
+
+Seja \(\omega\) um possível valor de \(-X\), devemos calcular \(P(-X \le \omega)\) e provar que \(P(-X \le \omega) = \Phi(\omega)\):
+
+\begin{equation*}
+P(-X \le \omega) = P(X \ge -\omega) = 1 - P(X \le \omega) = 1 - \Phi(-\omega) = 1 - (1 - \Phi(\omega)) = \Phi(\omega)
+\end{equation*}
+\end{proof}
+
+\hypertarget{variuxe1veis-aleatuxf3rias-e-sigma-uxe1lgebra-de-borel}{%
+\subsection{\texorpdfstring{Variáveis aleatórias e \(\sigma\)-álgebra de Borel}{Variáveis aleatórias e \textbackslash sigma-álgebra de Borel}}\label{variuxe1veis-aleatuxf3rias-e-sigma-uxe1lgebra-de-borel}}
+
+Se \(X\) é uma variável aleatória em \((\Omega, \mathcal{A}, P)\), cada evento \([X \le x] \in \mathcal{A} \; \forall x \in \mathbb{R}\). Isto é, \([X \in \mathcal{B}]\), onde \([X \in \mathcal{B}] = [X \le x]\) é um evento e \(P(X \in \mathcal{B})\) é bem definido. No entanto, a operacionalidade do sistema \((\Omega, \mathcal{A},P)\) pode ser estendido a todo boreliano (ou seja, a todos os elementos da \(\sigma\)-álgebra de Borel, que é a menor \(\sigma\)-álgebra contendo os intervalos cujos comprimentos estejam bem definidos).
+
+\begin{proposition}
+Se \(X\) é uma variável aleatória em \((\Omega,\mathcal{A},P)\), então o evento \([x \in \mathcal{B}] = \{\omega : \omega \in \Omega \text{ e } X(\omega) \in \mathcal{B}\}\) é um evento aleatório para todo \(\mathcal{B}\) boreliano (ou seja, \([x \in B] \in \mathcal{A} \; \forall B \in \mathcal{B}\)).
+\end{proposition}
+
+Podemos ver que diferentes tipos de intervalos (leia-se borelianos) podem ser mostrados como pertencentes à \(\sigma\)-álgebra, de modo que variáveis aleatórias que operam sobre esses intervalos estarão bem definidas:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Se \(B = (-\infty, b] \Rightarrow [X \in B] \in \mathcal{A}\) de acordo com a definição de variável aleatória;
+\item
+  Se \(B = (a, \infty)\), podemos fazer \(B = (-\infty, a]^{c}\). Como o evento \([X \le a] \in \mathcal{A}\) por definição, sendo \(\mathcal{A}\) uma \(\sigma\)-álgebra, deve ocorrer que \([X \le a]^{c} = B \in \mathcal{A}\), ou seja, \(B \in \mathcal{A}\);
+\item
+  Se \(B = (a, b] \Rightarrow [X \in B] = [X \in (a,b]] = [X \le b] - [X \le a]\). Como \([X \le b] \in \mathcal{A}\) e \([X \le a] \in \mathcal{A}\), então \(P(X \in B) = P(X \le b) - P(x \le a) = F_{X}(b) - F_{X}(a)\);
+\item
+  Se \(B = (a,b) \Rightarrow B = \bigcup_{n=1}^{\infty}\left(a,b-\frac{1}{n}\right]\) Sabemos que os eventos \(\left(a < X \le b - \frac{1}{n}\right] \in \mathcal{A}\) e as suas uniões também pertencem à \(\mathcal{A}\). Quanto à probabilidade, temos \(P(X \in B) = P\left(\bigcup_{n=1}^{\infty}\left(a < X \le b - \frac{1}{n}\right]\right) = \lim_{n \to \infty}P\left(\left(a < X \le b - \frac{1}{n}\right]\right) = \lim_{n \to \infty}F_{X}\left(b - \frac{1}{n}\right) - F_{X}(a) = F_{X}(b^{-}) - F_{X}(a)\);
+\item
+  Se \(B = \bigcup_{i = 1}^{n}B_{i}:B_{i} \in \mathcal{A}\; \forall i\), e sendo os \(B_{i}\)'s disjuntos, temos que \([X \in B] = \bigcup_{i=1}^{n}[X \in B_{i}] \Rightarrow P([X \in B]) = \sum_{i=1}^{n}P(X \in B_{i})\).
+\end{enumerate}
+
+Podemos assim reformular os axiomas de Kolmogorov:
+
+\begin{itemize}
+\tightlist
+\item
+  \(Ax_{1}(K)\): \(P_{X}(B) = P(X \in B) \ge 0\);
+\item
+  \(Ax_{2}(K)\): \(P_{X}(\mathbb{R}) = P(X \in \mathbb{R}) = 1\);
+\item
+  \(Ax_{3}(K)\): Se \(B_{1}, \ldots, B_{n} \in \mathcal{B}\), com \(B_{i} \cap B_{j} = \emptyset \; \forall i \neq j \Rightarrow P_{X}(\bigcup B_{n}) = P(X \in \bigcup_{n}B_{n}) = P(\bigcup_{n}[X \in B_{n}]) = \sum_{n}P(X \in B_{n})\).
+\end{itemize}
+
+\begin{definition}
+A probabilidade \(P_{X}\) definida na \(\sigma\)-álgebra de Borel por \(P_{X}(B) = P(X \in B)\) é a distribuição de \(X\).
+\end{definition}
+
+\begin{proposition}
+\leavevmode
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Se \(X\) é uma variável aleatória discreta com valores em \(\{x_{1},x_{2},\ldots\} \Rightarrow P_{X}(B) = \sum_{i:x_{i} \in B}P(x_{i})\);
+\item
+  Se \(X\) é absolutamente contínua com densidade \(f \Rightarrow P_{X}(B) = \int_{B}f_{X}dx\).
+\end{enumerate}
+
+\end{proposition}
+
+\hypertarget{variuxe1veis-contuxednuas}{%
+\subsection{Variáveis contínuas}\label{variuxe1veis-contuxednuas}}
+
+\begin{proposition}
+Se \(X \sim f_{X}, \; y = bx+c, \; b>0\) e \(c \in \mathbb{R} \Rightarrow Y \sim f_{Y}\) onde \(f_{Y}(y) = \frac{1}{b}f_{X}(\frac{y-c}{b}); y \in \mathbb{R}\), onde \(c\) é dito um parâmetro de posição (muitas vezes de posição central) e \(b\) um parâmetro de escala.
+\end{proposition}
+
+\hypertarget{exemplos}{%
+\subsubsection{Exemplos}\label{exemplos}}
+
+\begin{example}[Distribuição Normal]
+\begin{equation*}
+f(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}} \Longrightarrow f_{\mu,\sigma}(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(x-\mu)^{2}}{2 \sigma^{2}}}
+\end{equation*}
+
+Aqui, \(\mu\) representa a média (posição central) da distribuição e \(\sigma^{2}\) a sua variância.
+\end{example}
+
+\begin{example}[Distribuição Cauchy]
+\begin{equation*}
+f(x) = \frac{1}{\pi(1 + x^{2})} \Longrightarrow f_{b,M}(x) = \frac{1}{b}\frac{1}{\pi\left(1+\left(\frac{x-M}{b}\right)^{2}\right)} = \frac{b}{\pi(b^{2}+(x-M)^2)}
+\end{equation*}
+
+Neste caso, \(M\) é a mediana da distribuição e \(b\) representa a distância entre \(M\) e o 1º quartil da distribuição.
+\end{example}
+
+\begin{example}[Distribuições Exponencial e Gamma]
+
+Considere \(g(x) = e^{-x} I_{0,\infty}(x)\). Sabemos que \(g\) é uma distribuição de probabilidade pois:
+
+\begin{equation*}
+\begin{cases*}
+g(x) \ge 0 \;\forall x \in (0,\infty) \\
+\int_{0}^{\infty}e^{-x}dx = 1
+\end{cases*}
+\end{equation*}
+
+Vamos agora incluir no formato do tipo exponencial um componente polinomial. Dado \(\alpha > 0\), defina \(g(x) = x^{\alpha - 1}e^{-x}\). Podemos ver que \(g\) é integrável, de modo que:
+
+\begin{align*}
+\int_{0}^{\infty}g(x)dx &= \int_{0}^{\infty}x^{\alpha - 1}e^{-x}dx = \Gamma(\alpha) \\
+f_{X}(x) &= \begin{cases}\frac{1}{\Gamma(\alpha)}x^{\alpha - 1}e^{-x} & x>0 \\ 0 & c.c.\end{cases}
+\end{align*}
+
+Defina agora \(y = \frac{X}{\beta}\) onde \(X \sim \text{Gamma}(\alpha,1)\) e \(\beta > 0\). A densidade de \(Y\) pode ser encontrada por meio de:
+
+\begin{align*}
+P(Y \le y) &= P\left(\frac{X}{\beta} \le y\right) = P(X \le \beta y) \Rightarrow F_{Y}(y) = F_{X}(\beta y) \\
+f_{Y}(y) &= \beta f_{X}(\beta y) = \beta\frac{(\beta y)^{\alpha - 1}}{\Gamma(\alpha)}e^{-\beta y} = \frac{\beta^{\alpha}}{\Gamma(\alpha)}y^{\alpha - 1}e^{-\beta y}
+\end{align*}
+
+Nesse caso (conhecido como distribuição Gama) \(\frac{1}{\beta}\) é um parâmetro de escala e \(\alpha\) é um parâmetro de forma. Temos alguns casos especiais, como:
+
+\begin{itemize}
+\tightlist
+\item
+  Se \(\alpha = 1\; : Y \sim \text{Exp}(\beta)\);
+\item
+  Se \(\alpha = \frac{n}{2}\), com \(n\) inteiro e \(\beta = \frac{1}{2} \;: Y \sim \chi^{2}(n)\)
+\end{itemize}
+
+\end{example}
+
+\hypertarget{variuxe1veis-aleatuxf3rias-multidimensionais}{%
+\subsection{Variáveis aleatórias multidimensionais}\label{variuxe1veis-aleatuxf3rias-multidimensionais}}
+
+\begin{definition}
+A distribuição de probabilidades do vetor aleatório dado por \((x_{1},\ldots,x_{n})\) é uma tabela que associa a cada valor \((x_{1},\ldots,x_{n})\) sua probabilidade \(P(x_{1},\ldots,x_{n}) = P(X_{1} = x_{1}, \ldots,X_{n}=x_{n})\), onde \(p\) é a distribuição conjunta.
+\end{definition}
+
+\begin{example}
+Considere o conjunto de 32 cartas para poker: 7,8,9,10,J,Q,K,A, dos 4 naipes. Duas cartas são retiradas aleatoriamente, sem reposição, e \(X =\) número de ases que a pessoa recebe e \(Y =\) número de cartas de copas que a pessoa recebe. Qual a probabilidade \(P(X=0,Y=0)\)?
+
+\begin{equation*}
+P(X=0,Y=0) = \frac{\binom{21}{2}}{\binom{32}{2}} = \frac{210}{496}
+\end{equation*}
+\end{example}
+
+\begin{definition}
+A função de distribuição acumulada do par de variáve aleatórias \((X,Y)\) é dada por:
+
+\begin{equation*}
+F(X,Y) = P(X \le x, Y \le y) = \sum_{\{i:x_{i} \le x\}}\sum_{\{j: y_{j} \le y\}}P(X = x_{i}, Y = y_{i})
+\end{equation*}
+\end{definition}
+
+Seja \(\underbar{X} = (X_{1}, \ldots, X_{n})\) tal que \(X_{i}\) é variável aleatória definida em \((\Omega, \mathcal{A}, P) \; \forall i\). Então \(F\), a acumulada de \(\underbar{X}\) verifica:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\(F_{1}\)}: \(F\) é não decrescente em cada uma das coordenadas;
+\item
+  \textbf{\(F_{2}\)}: \(F\) é contínua à direita em cada uma das coordenadas;
+\item
+  \textbf{\(F_{3}\)}: \(\lim_{x_{i} \to -\infty}F(x_{1}, \ldots, x_{n}) = 0\) e \(\lim_{x_{i} \to \infty \forall i}F(x_{1}, \ldots, x_{n}) = 1\).
+\end{itemize}
+
+As provas de \(F_{1}\) e \(F_{2}\) são de simples construção. Para \(F_{3}\) temos:
+
+\begin{proof}
+Considere \(i\) fixo e o evento \([X_{1} \le x_{1}, \ldots, X_{i-1} \le x_{i-1}, X_{i} \le -m, X_{i+1} \le x_{i+1}, \ldots, X_{n} \le x_{n}]\). Logo, \(F(x_{1},\ldots,x_{i-1},-m,x_{i+1},\ldots,x_{n}) \xrightarrow[m \to \infty]{} 0\).
+
+Por outro lado, note que \([X_{1} \le x_{1}, \ldots, X_{i-1} \le x_{i-1}, X_{i} \le m, X_{i+1} \le x_{i+1}, \ldots, X_{n} \le x_{n}] \xrightarrow[m \to \infty]{} [X_{1} \le x_{1}, \ldots, X_{i-1} \le x_{i-1}, X_{i+1} \le x_{i+1}, \ldots, X_{n} \le x_{n}]\) (que é o evento marginal sem o \(X_{i}\)). Já se \(x_{i} \to \infty \; \forall i : \bigcap_{i=1}^{n}[X_{i} \le x_{i}] \uparrow \Omega \Rightarrow F(x_{1}, \ldots, x_{n}) = P\left(\bigcap_{i=1}^{n}[X_{i} \le x_{i}]\right) \uparrow 1, x_{i} \to \infty \; \forall i\).
+\end{proof}
+
+\(F_{1},F_{2}\) e \(F_{3}\) não são condições suficientes para que \(F\) seja uma função de distribuição acumulada. Vejamos um exemplo que segue \(F_{1},F_{2}\) e \(F_{3}\) e que não é função de distribuição acumulada:
+
+Seja \(F_{0}(x,y) = \begin{cases}1 & \text{se }x \ge 0, y \ge 0, x + y \ge 1 \\ 0 & \text{c.c.} \end{cases}\). Graficamente, temos:
+
+\pgfplotsset{
+  graf4/.style={
+    xlabel=$x$,
+    ylabel=$y$,
+    width=7cm, height=7cm,
+    ymin=-0.1,
+    ymax=1.3
+  }
+}
+
+\begin{center}
+\begin{tikzpicture}[domain=0:1.1]
+    \begin{axis}[
+        graf4,
+        grid = major,
+        ytick distance=0.5,
+        xtick distance=0.5]
+        \addplot[draw=none] {0};
+        \draw[very thick, black] (axis cs: 0, 1) -- (axis cs: 1, 0);
+        \draw[very thick, black] (axis cs: 0, 1) -- (axis cs: 0, 3);
+        \draw[very thick, black] (axis cs: 1, 0) -- (axis cs: 3,0);
+        \draw[thin, black] (axis cs: 0, 0) -- (axis cs: 0, 1);
+        \draw[thin, black] (axis cs: 0, 0) -- (axis cs: 1, 0);
+        \fill[fill=black!40!white, opacity=0.5] (axis cs: 0, 5) -- (axis cs: 0, 1) -- (axis cs: 1, 0) -- (axis cs: 5, 0);
+        \fill[fill=black!20!white, opacity=0.5] (axis cs: 0, 0) -- (axis cs: 0, 1) -- (axis cs: 1, 0);
+        \node at (axis cs: 0.25, 0.25) {$F(x,y) = 0$};
+        \node at (axis cs: 0.75, 0.75) {$F(x,y) = 1$};
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+É fácil ver que \(F_{0}\) segue \(F_{1}, F_{2}\) e \(F_{3}\), mas vejamos que \(F_{0}\) atribui probabilidade negativa a certos eventos, a ver \([0 \le X \le 1, 0 \le Y \le 1]\):
+
+\begin{align*}
+F_{0}(0,0) &= P(X \le 0, Y \le 0) \\
+F_{0}(1,1) &= P(X \le 1, Y \le 1) \\
+F_{0}(1,1) - F_{0}(1,0) &= P(X \le 1, Y \le 1) - P(X \le 1, Y \le 0) = P(X \le 1, 0 \le Y \le 1)\\
+F_{0}(0,1) - F_{0}(0,0) &= P(X \le 0, Y \le 1) - P(X \le 0, Y \le 0) = P(X \le 0, 0 \le Y \le 1)\\
+F_{0}(1,1) - F_{0}(1,0) - F_{0}(0,1) - F_{0}(0,0) &= P(X \le 1, 0 \le Y \le 1) - P(X \le 0, 0 \le Y \le 1) \\
+&= P(0 \le X \le 1, 0 \le Y \le 1) = -1
+\end{align*}
+
+Defina \(\Delta_{k,I}(g(x_{1},\ldots,x_{k})) = g(x_{1}, \ldots, x_{k-1},b) - g(x_{1}, \ldots, x_{k-1},a)\) onde \(g:\mathbb{R}^{k} \to \mathbb{R}; I = (a,b], a \le b\). Logo, se \(I_{1} = (a_{1},b_{1}]\) e \(I_{2} = (a_{2},b_{2}], F:\mathbb{R}^{2} \to \mathbb{R}\). Então:
+
+\begin{align*}
+\Delta_{1,I_{1}}(\Delta_{2,I_{2}}(F(x,y))) &= \Delta_{1,I_{1}}(F(x, b_{2}) - F(x, a_{2})) \\
+&= F(b_{1}, b_{2}) + F(a_{1}, a_{2}) - F(a_{1}, b_{2}) - F(b_{1}, a_{2}) \ge 0 \\
+&= P(a_{1} < X \le b_{1}, a_{2} < Y \le b_{2}) \ge 0
+\end{align*}
+
+No geral:
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{4}\): \(\Delta_{1,I_{1}}\Delta_{2,I_{2}}\ldots\Delta_{n,I_{n}}(F(x_{1},\ldots,x_{n})) \ge 0 \; \forall I_{k} = (a_{k}, b_{k}]; a_{k} \le b_{k}, k=1,\ldots,n\).
+\end{itemize}
+
+\begin{definition}
+
+Seja \(F:\mathbb{R}^{n} \to \mathbb{R}\) seguindo \(F_{1}, F_{2}, F_{3}\) e \(F_{4}\), logo \(F\) é uma função de distribuição acumulada n-dimensional (ou n-variada).
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{a)} Se o vetor aleatório \((X_{1},\ldots,X_{n})\) toma valores em um conjunto discreto, o vetor é discreto;
+\item
+  \textbf{b)} Se para o vetor aleatório \((X_{1},\ldots,X_{n})\), \(F\) é dada pela forma \(F(x_{1}, \ldots, x_{n}) = \int_{-\infty}^{x_{n}} \ldots \int_{-\infty}^{x_{1}}f(t_{1}, \ldots, t_{n}) dt_{n} \ldots dt_{1}, \\ \forall (x_{1},\ldots, x_{n})\) onde \(f(t_{1}, \ldots, t_{n}) \ge 0 \; \forall (t_{1},\ldots,t_{n}) \in \mathbb{R}^{n}\) então \((X_{1},\ldots,X_{n})\) é um vetor absolutamente contínuo com densidade \(f\) (densidade conjunta).
+\end{itemize}
+
+\end{definition}
+
+\begin{definition}
+A probabilidade definida em \(\mathcal{B}^{n}\) (borelianos em \(\mathbb{R}^{n}\)) por \(P(\underbar{X} \in B)\) (com \(B \in \mathcal{B}^{n}\)) é chamada de distribuição conjunta de \(\underbar{X} = (X_{1},\ldots,X_{n})\), com notação: \(P_{\underbar{X}}(B) = P(\underbar{X} \in B)\).
+\end{definition}
+
+\begin{proposition}
+\leavevmode
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{a)} Se o vetor aleatório \(\underbar{X}\) é discreto, \(P_{\underbar{X}}(B) = \sum_{\{i:x_{i} \in B\}}P(X_{i} = x_{i}) \; \forall B \in \mathcal{B}^{n}\);
+\item
+  \textbf{b)} Se \(\underbar{X}\) é absolutamente contínuo com densidade \(f\), \(P_{\underbar{X}}(B) = P(\underbar{X} \in B) = \int \ldots \int_{B} f(x_{1}, \ldots, x_{n}) dx_{n} \ldots dx_{1}\).
+\end{itemize}
+
+\end{proposition}
+
+\hypertarget{independuxeancia}{%
+\subsection{Independência}\label{independuxeancia}}
+
+\begin{definition}
+As variáveis aleatórias são (coletivamente) independentes se:
+
+\begin{equation*}
+P(X_{1} \in B_{1}, \ldots, X_{n} \in B_{n}) = \prod_{i=1}^{n}P(X_{i} \in B_{i}), \; \forall B_{i} \in \mathcal{B}^{n}, \forall i = 1, \ldots, n
+\end{equation*}
+\end{definition}
+
+Se \(X_{1},\ldots,X_{n}\) são coletivamente independentes, então \(X_{i1},\ldots,X_{ik}\) são coletivamente independentes \(\forall k\).
+
+\hypertarget{crituxe9rios-ou-consequuxeancias}{%
+\subsubsection{Critérios ou consequências}\label{crituxe9rios-ou-consequuxeancias}}
+
+\begin{proposition}
+\protect\hypertarget{prp:propacumulada}{}\label{prp:propacumulada}\leavevmode
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{a)} Se \(X_{1},\ldots,X_{n}\) são independentes, então \(F_{X_{1} \ldots X_{n}}(x_{1},\ldots,x_{n}) = \prod_{i=1}^{n}F_{X_{i}}(x_{i}),\forall (x_{1},\ldots,x_{n}) \in \mathbb{R}^{n}\);
+\item
+  \textbf{b)} Se existem funções \(F_{1},\ldots,F_{n}\) tais que \(\lim_{n \to \infty}F_{i}(x) = 1, \forall i\) e \(F_{X_{1},\ldots,X_{n}}(x_{1},\ldots,x_{n}) = \prod_{i=1}^{n}F_{i}(x_{i}), \forall (x_{1},\ldots,x_{n}) \in \mathbb{R}^{n} \Rightarrow X_{1},\ldots, X_{n}\) são independentes e \(F_{i} = F_{X_{i}}, \forall i\).
+\end{itemize}
+
+\end{proposition}
+
+\begin{proof}
+\leavevmode
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{a)} Se \(X_{1},\ldots,X_{n}\) são coletivamente independentes e tomamos \([X_{i} \le x_{i}] = (-\infty, x_{i}] = B_{i}\). Então:
+\end{itemize}
+
+\begin{align*}
+F_{X_{1} \ldots X_{n}}(x_{1},\ldots,x_{n}) &= P(X_{1} \le x_{1}, \ldots, X_{n} \le x_{n}) \\
+&= P(X_{1} \in B_{1},\ldots, X_{n} \in B_{n}) \\
+&\stackrel{Ind}{=} \prod_{i=1}^{n}P(X_{i} \in B_{i}) \\
+&= \prod_{i=1}^{n}P(X_{i} \le x_{i}) = \prod_{i=1}^{n}F_{X_{i}}(x_{i}) \; \forall (x_{1},\ldots,x_{n})
+\end{align*}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{b)} Para cada \(i\), \(F_{X_{i}}(x_{i}) = P(X_{i} \le x_{i}) = \lim_{m \to \infty}P(X_{1} \le m, \ldots, X_{i-1} \le m, X_{i} \le x_{i}, X_{i+1} \le m, \ldots, X_{n} \le m)\), de modo que:
+\end{itemize}
+
+\begin{align*}
+F_{X_{i}}(x_{i}) &= \lim_{m \to \infty}F_{X_{1}\ldots X_{n}}(m,\ldots,m,x_{i},m,\ldots,m) \\
+&\stackrel{Hip}{=} \lim_{m \to \infty}\left(\prod_{j=1}^{i-1}F_{j}(m) \times F_{i}(x_{i}) \times \prod_{j=i+1}^{n}F_{j}(m)\right) \\
+&= F_{i}(x_i)
+\end{align*}
+
+Logo, a marginal de \(X_{i}\) é precisamente \(F_{i}, \forall i\). Devemos ainda verificar que \(P(X_{1} \in B_{1}, \ldots, X_{n} \in B_{n}) = \prod_{i=1}^{n}P(X_{i} \in B_{i}) \; \forall B_{i} \in \mathcal{B}^{n}\). Considere \(B_{i} = (a_{i},b_{i}], a_{i} \le b_{i}, a_{i}, b_{i} \in \mathbb{R}\). Temos que:
+
+\begin{align*}
+P(X_{1} \in B_{1}, \ldots, X_{n} \in B_{n}) &= P(a_{1} < X_{1} \le b_{1}, \ldots, a_{n} < X_{n} \le b_{n}) \\
+&= \Delta_{1,I_{1}} \ldots \Delta_{n,I_{n}}\left(F_{X_{1} \ldots X_{n}}(x_{1},\ldots,x_{n})\right) \\
+&\stackrel{Ind}{=} \Delta_{1,I_{1}} \ldots \Delta_{n,I_{n}}(F_{X_{1}}(x_{1})\ldots F_{X_{n}}(x_{n})) \\
+&= [F_{X_{1}}(b_{1}) - F_{X_{1}}(a_{1})] \times \ldots \times [F_{X_{n}}(b_{n}) - F_{X_{n}}(a_{n})] \\
+&= \prod_{i=1}^{n}P(a_{i} < X_{i} \le b_{i}) = \prod_{i=1}^{n}P(X_{i} \in B_{i})
+\end{align*}
+
+\end{proof}
+
+\hypertarget{caso-contuxednuo}{%
+\subsubsection{Caso contínuo}\label{caso-contuxednuo}}
+
+\begin{proposition}
+\leavevmode
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{a)} Se \(X_{1},\ldots,X_{n}\) são independentes e possuem densidades \(f_{X_{1}}, \ldots, f_{X_{n}}\), respectivamente, então \(f_{X_{1}\ldots X_{n}}(x_{1},\ldots,x_{n}) = \prod_{i=1}^{n}f_{X_{i}}(x_{i}) \; \forall (x_{1},\ldots,x_{n}) \in \mathbb{R}^{n}\) é a densidade conjunta de \(X_{1},\ldots,X_{n}\);
+\item
+  \textbf{b)} Se \(X_{1},\ldots,X_{n}\) tem densidade conjunta \(f_{X_{1}\ldots X_{n}}(x_{1},\ldots,x_{n}) : f_{X_{1}\ldots X_{n}}(x_{1},\ldots,x_{n}) = \prod_{i=1}^{n}f_{i}(x_{i}) \; \forall (x_{1},\ldots,x_{n}) \in \mathbb{R}^{n}\), onde \(f_{i}(x) \ge 0 \; \forall x : \int_{-\infty}^{\infty}f_{i}(x)dx = 1 \; \forall i\), então \(X_{1},\ldots,X_{n}\) são independentes e \(f_{i}\) é a densidade marginal de \(X_{i} \; \forall i\).
+\end{itemize}
+
+\end{proposition}
+
+\begin{proof}
+\leavevmode
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{a)} Como consequência da proposição \ref{prp:propacumulada}, temos que: \(F_{X_{1}\ldots X_{n}}(x_{1},\ldots,x_{n}) = \prod_{i=1}^{n}F_{X_{i}}(x_{i}), \forall (x_{1},\ldots,x_{n})\). Logo, por definição temos:
+\end{itemize}
+
+\begin{equation*}
+\prod_{i=1}^{n}F_{X_{i}}(x_{i}) = \prod_{i=1}^{n}\int_{-\infty}^{x_{i}}f_{X_{i}}(t)dt = \int_{-\infty}^{x_{1}}\dots\int_{-\infty}^{x_{n}}f_{X_{1}}(t_{1})\ldots f_{X_{n}}(t_{n}) dt_{n} \ldots dt_{1}
+\end{equation*}
+
+Assim, \(f_{X_{1}},\ldots,f_{X_{n}}\) é a densidade conjunta.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{b)} Considere:
+\end{itemize}
+
+\begin{align*}
+F_{X_{1}\ldots X_{n}}(x_{1},\ldots,x_{n}) &= \int_{-\infty}^{x_{1}} \dots \int_{-\infty}^{x_{n}}f_{X_{1}\ldots X_{n}}(t_{1},\ldots,t_{n})dt_{n}\ldots dt_{1} \\
+&= \int_{-\infty}^{x_{1}} \dots \int_{-\infty}^{x_{n}}f_{1}(t_{1}) \ldots f_{n}(t_{n}) dt_{n} \ldots dt_{1} \\
+&= \prod_{i=1}^{n}\int_{-\infty}^{x_{i}}f_{i}(t_{i})dt_{i}
+\end{align*}
+
+Defina \(F_{i}(x) = \int_{-\infty}^{x_{i}}f_{i}(t)dt\). Sendo assim:
+
+\begin{equation*}
+\prod_{i=1}^{n} \int_{-\infty}^{x_{i}}f_{i}(t_{i})dt_{i} = \prod_{i=1}^{n}F_{i}(x_{i})
+\end{equation*}
+
+Note que, pela hipótese nas \(f_{i}\)'s, as \(F_{i}\)'s são acumuladas em particular, e \(F_{i}(x) \to 1, x \to \infty\), e pela proposição \ref{prp:propacumulada}: \(F_{i}(x) = F_{X_{i}}(x_{i})\), logo \(f_{X_{i}} = f_{i}\).
+
+\end{proof}
+
+\hypertarget{propriedades}{%
+\subsubsection{Propriedades}\label{propriedades}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{a)} Se \(F(x,y)\) é a função de distribuição acumulada conjunta de \((X,Y)\), então \(F_{X}(x) = \lim_{y \to \infty}F(x,y) = F(x,\infty)\) é a função de distribuição acumulada marginal de \(X\);
+\item
+  \textbf{b)} Se \(f(x,y)\) é a função de densidade conjunta de \((X,Y)\), então \(f_{X}(x) = \int_{-\infty}^{\infty}f(x,y)dy\) é a densidade marginal de \(X\).
+\end{itemize}
+
+\begin{example}
+\begin{equation*}
+f_{XY}(x,y) = \frac{1}{2\pi \sigma_{1}\sigma_{2}\sqrt{1-\rho^{2}}}\exp\left\{-\frac{1}{2(1-\rho^{2})}\left[\left(\frac{x-\mu_{1}}{\sigma_{1}}\right)^{2} + \left(\frac{y-\mu_{2}}{\sigma_{2}}\right)^{2} - 2\rho \left(\frac{x-\mu_{1}}{\sigma_{1}}\right)\left(\frac{y-\mu_{2}}{\sigma_{2}}\right)\right]\right\}
+\end{equation*}
+
+Sendo \(\sigma_{i} > 0, i = 1,2; -1 < \rho < 1; \mu_{i} \in \mathbb{R}, i = 1,2\). Logo, \((X,Y) \sim N_{2}\left(\binom{\mu_{1}}{\mu_{2}},\begin{bmatrix}\sigma_{1} & \rho \\ \rho & \sigma_{2}\end{bmatrix}\right)\), onde, caso \(\rho = 0, X\) e \(Y\) são independentes.
+\end{example}
+
+\hypertarget{distribuiuxe7uxf5es-de-funuxe7uxf5es-de-vetores}{%
+\subsection{Distribuições de funções de vetores}\label{distribuiuxe7uxf5es-de-funuxe7uxf5es-de-vetores}}
+
+Seja \(\underbar{X} = (X_{1},\ldots,X_{n})\) um vetor aleatório em \((\Omega, \mathcal{A},P)\). Seja \(Y = g(X_{1},\ldots,X_{n})\). Qual a distribuição de \(Y\)?
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Nota 1}: Para que \(Y\) seja variável aleatória cada \(B \in \mathcal{B}\) é necessário que \(g^{-1}(B)\) seja mensurável, ou seja:
+\end{itemize}
+
+\begin{align*}
+g^{-1}(B) &= \{x:g(x) \in B\} \\
+&\Downarrow \\
+F_{Y}(y) &= P(g(x) \le y)
+\end{align*}
+
+Generalizando, se \(Y = g(X_{1},\ldots,X_{n})\):
+
+\begin{equation*}
+F_{Y}(y) = P(g(X_{1},\ldots,X_{n}) \le y) = P((X_{1},\ldots,X_{n}) \in B_{y}) = P_{\underbar{X}}(B_{y})
+\end{equation*}
+
+Onde \(B_{y} = \{(x_{1},\ldots,x_{n}):g(x_{1},\ldots,x_{n}) \le y\}\).
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Nota 2}: Se \(\underbar{X}\) for discreto:
+\end{itemize}
+
+\begin{equation*}
+P_{Y}(y_{j}) = \sum_{\{i:g(x_{i}) = y_{j}\}}P_{\underbar{X}}(x_{i})
+\end{equation*}
+
+\begin{example}
+Sejam \(X \sim U(0,1)\) e \(Y = -\ln(x)\). Temos que \(\forall x\) valor de \(X:x \in (-\infty,0] \cup [1,\infty)\) o valor de \(f_{X}(x) = 0\). Seja \(x \in (0,1) \Leftrightarrow -\ln(x) \in (0,\infty)\), logo \(\forall y\) valor de \(Y:y \in (0,\infty)\). Calculemos \(F_{Y}(y) = P(Y \le y)\):
+
+\begin{align*}
+F_{Y}(y) &= P(Y \le y) = P(-\ln(X) \le y) \\
+&= P(\ln(X) \ge -y) \\
+&= P(X \ge e^{-y}) \\
+&= 1-P(X < e^{-y}) = 1-e^{-y}
+\end{align*}
+
+Assim, temos que \(Y \sim Exp(1)\).
+\end{example}
+
+\begin{example}
+Sejam \(X \perp Y; X \sim U(0,1); Y \sim U(0,1); Z = \frac{X}{Y}\). Determinar a distribuição de \(Z\):
+
+Os valores que geram indefinição de \(Z\) são: \(X=Y=0\) e \(Y=0,X>0\), assim a boa definição de \(Z\) é no espaço \([0 < X \le 1, 0 < Y \le 1]\). Vejamos se esse intervalo contém toda a massa de probabilidade:
+
+\begin{equation*}
+P([0 < X \le 1, 0 < Y \le 1]) = P(0 < X \le 1) \times P(0 < Y \le 1) = 1 \times 1 = 1
+\end{equation*}
+
+Logo, basta avaliar o conjunto \([0 < X \le 1, 0 < Y \le 1] \Rightarrow [Z \in (0, \infty)]\). Assim, calculemos \(F_{Z}(z)\):
+
+\begin{equation*}
+F_{Z}(z) = P(Z \le z) = P\left(\frac{X}{Y} \le z\right) \Rightarrow \left[\frac{X}{Y} \le z\right] = \left[X \le zY\right] = \left[\frac{X}{z} \le Y\right]
+\end{equation*}
+
+Sabemos que \(X\) e \(Y\) pertencem ao intervalo \((0,1] \times (0,1]\), de modo que temos duas regiões genéricas para explorar: \(z<1\) e \(z>1\). De maneira gráfica, temos as seguintes regiões (considere \(c > 1\)):
+
+\begin{center}
+\begin{tikzpicture}[domain=0:1.2]
+    \begin{axis}[
+        graf4,
+        grid = major,
+        ytick distance=0.5,
+        xtick distance=0.5]
+        \addplot[draw=none] {0};
+        \draw[very thick, black] (axis cs: 0, 0) -- (axis cs: 2, 2);
+        \draw[very thick, black] (axis cs: 0, 0) -- (axis cs: 2, 1);
+        \draw[very thick, black] (axis cs: 0, 0) -- (axis cs: 1, 2);
+        \draw[thick, black] (axis cs: 0, 0) -- (axis cs: 2, 0);
+        \draw[thick, black] (axis cs: 0, 0) -- (axis cs: 0, 2);
+        \draw[thick, black] (axis cs: 1, 0) -- (axis cs: 1, 1);
+        \draw[thick, black] (axis cs: 0, 1) -- (axis cs: 1, 1);
+        \fill[fill=black!60!blue, opacity=0.5] (axis cs: 0, 0) -- (axis cs: 1, 1) -- (axis cs: 1, 0);
+        \fill[fill=black!60!green, opacity=0.5] (axis cs: 0, 0) -- (axis cs: 1, 1) -- (axis cs: 0, 1);
+        \node at (axis cs: 1, 1.15) {$y=x$};
+        \node at (axis cs: 1.15, 0.4) {$y = \frac{x}{c}$};
+        \node at (axis cs: 0.4, 1.15) {$y = cx$};
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+Podemos ver que a região azul corresponde aos casos onde \(z > 1\) e a região verde corresponde aos casos onde \(z < 1\). Assim:
+
+\begin{itemize}
+\tightlist
+\item
+  \(z<1\): \begin{equation*}F_{Z}(z) = \int_{0}^{z}\int_{0}^{\frac{x}{z}}dydx = \int_{0}^{z}y\big{|}_{0}^{\frac{x}{z}}dx = \int_{0}^{z}\frac{x}{z}dx = \frac{1}{z} \times \frac{x^{2}}{2}\bigg{|}_{0}^{z} = \frac{z^{2}}{2z} = \frac{z}{2}\end{equation*}
+\item
+  \(z>1\): \begin{equation*}F_{Z}(z) = 1 - \frac{1}{2z}\end{equation*}
+\end{itemize}
+
+De modo que a distribuição acumulada de \(Z\) é dada por:
+
+\begin{equation*}
+F_{Z}(z) = \begin{cases}
+0 & ,z \in (-\infty,0] \\
+\frac{z}{2} & ,z \in (0,1) \\
+1-\frac{1}{2z} & ,z \in [1,\infty)
+\end{cases}
+\end{equation*}
+
+Assim, \(F_{Z}(z) = P\left(\frac{X}{Y} \le z \right) = P((X,Y) \in B_{z})\), onde os conjuntos \(B_{z}\) podem ter formatos diferentes dependendo de \(z\). A densidade será dada pela derivada de \(F_{Z}(z)\) com relação a \(z\):
+
+\begin{equation*}
+f_{Z}(z) = \begin{cases}
+0 & ,z \le 0 \\
+\frac{1}{2} & ,z \in (0,1) \\
+\frac{1}{2z^{2}} & ,z \ge 1
+\end{cases}
+\end{equation*}
 \end{example}
 
 \end{document}

@@ -25,6 +25,6 @@ header-includes:
 
 Este "livro" consiste de notas de aulas da matéria MI401 - Probabilidade, do Programa de Mestrado em Estatística, do Instituto de Matemática, Estatística e Computação Científica (IMECC), da Universidade Estadual de Campinas - UNICAMP.
 
-Os seus conteúdos são baseados nas notas tomadas durante as aulas e o livro "Probabilidade: um curso em nível intermediário", do autor Barry R. James, 5ª edição.
+Os seus conteúdos são baseados nas notas tomadas durante as aulas, do livro "Probabilidade e Variáveis Aleatórias", do autor Marcos Nascimento Magalhães, 3ª edição, e do livro "Probabilidade: um curso em nível intermediário", do autor Barry R. James, 5ª edição.
 
 \newpage
