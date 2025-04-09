@@ -2,20 +2,150 @@
 title: "Lista 1"
 subtitle: "Regressão"
 author: "Caio Gomes Alves"
+header-includes:
+    - \usepackage{amsmath}
 output:
   bookdown::pdf_document2:
     toc: false
 ---
 
-```{r setup, echo=F}
+```{r setup, echo=F, warning=F, message=F}
 library(tidyverse)
 ```
 
-## Questão 5
+# Questão 1
+
+## Pergunta
+
+Sejam $\hat{\epsilon}_{i} = \left(Y_{i} - \hat{Y}_{i}\right)$. Mostre que:
+
+- **(a)** $\sum_{i=1}^{n}\hat{\epsilon}_{i} = 0$.
+- **(b)** $\sum_{i=1}^{n}\hat{\epsilon}_{i}x_{i} = 0$.
+
+## Resposta
+
+### a)
+
+\begin{align*}
+\sum_{i=1}^{n}\left(Y_{i} - \hat{Y}_{i}\right) &= \sum_{i=1}^{n}\left(Y_{i} - \left(\hat{\beta}_{0} + \hat{\beta}_{1}x_{i}\right)\right) \\
+&= \sum_{i=1}^{n}\left(Y_{i}\right) - \sum_{i=1}^{n}\left(\hat{\beta}_{0} + \hat{\beta}_{1}x_{i}\right) \\
+&= n\bar{Y} - n \hat{\beta}_{0} - \hat{\beta}_{1}\sum_{i=1}^{n}x_{i} \\
+&= n\bar{Y} - n \hat{\beta}_{0} - n\hat{\beta}_{1}\bar{x} \\
+&= n\left(\bar{Y} - \hat{\beta}_{1}\bar{x} - \hat{\beta}_{0}\right) \\
+&= n\left(\hat{\beta}_{0} - \hat{\beta}_{0}\right) = 0
+\end{align*}
+
+\newpage
+
+### b)
+
+Temos que:
+
+\begin{align}
+\sum_{i=1}^{n}\left(Y_{i} - \hat{Y}_{i}\right)x_{i} &= \sum_{i=1}^{n}\left(Y_{i} - \left(\hat{\beta}_{0} +  \hat{\beta}_{1}x_{i}\right)\right)x_{i} \notag \\
+&= \sum_{i=1}^{n}\left(Y_{i} - \bar{Y} + \hat{\beta}_{1}\bar{x} - \hat{\beta}_{1}x_{i}\right)x_{i} \notag \\
+&= \sum_{i=1}^{n}\left[\left(Y_{i} - \bar{Y}\right)x_{i} + \hat{\beta}_{1}x_{i}\left(\bar{x} - x_{i}\right)\right] \notag \\
+&= \sum_{i=1}^{n}\left[\left(Y_{i} - \bar{Y}\right)x_{i}\right] + \hat{\beta}_{1}\sum_{i=1}^{n}\left[\left(\bar{x} - x_{i}\right)x_{i}\right]
+(\#eq:eqinicial)
+\end{align}
+
+Demonstremos agora as partes que compõe a equação \@ref(eq:eqinicial). Primeiramente:
+
+\begin{align}
+\sum_{i=1}^{n}\left[\left(Y_{i} - \bar{Y}\right)x_{i}\right] &= \sum_{i=1}^{n}\left(Y_{i}x_{i} - \bar{Y}x_{i}\right) \notag \\
+&= \sum_{i=1}^{n}\left(Y_{i}x_{i}\right) - n\bar{Y}\bar{x} \notag \\
+&= \sum_{i=1}^{n}\left[\left(Y_{i} - \bar{Y}\right)\left(x_{i} - \bar{x}\right)\right]
+(\#eq:eq1)
+\end{align}
+
+E a segunda parte:
+
+\begin{align}
+\hat{\beta}_{1}\sum_{i=1}^{n}\left[\left(\bar{x} - x_{i}\right)x_{i}\right] &= \frac{\sum_{i=1}^{n}\left(Y_{i} - \bar{Y}\right)(x_{i} - \bar{x})}{\sum_{i=1}^{n}(x_{i} - \bar{x})^{2}}\sum_{i=1}^{n}\left[\left(\bar{x} - x_{i}\right)x_{i}\right] \notag \\
+&= \frac{\sum_{i=1}^{n}\left(Y_{i} - \bar{Y}\right)(x_{i} - \bar{x})}{\sum_{i=1}^{n}(x_{i} - \bar{x})x_{i} - \bar{x}\sum_{i=1}^{n}(x_{i} - \bar{x})}\sum_{i=1}^{n}\left[\left(\bar{x} - x_{i}\right)x_{i}\right] \notag \\
+&= \frac{\sum_{i=1}^{n}\left(Y_{i} - \bar{Y}\right)(x_{i} - \bar{x})}{-\sum_{i=1}^{n}(\bar{x} - x_{i})x_{i}}\sum_{i=1}^{n}\left[\left(\bar{x} - x_{i}\right)x_{i}\right] \notag \\
+&= -\sum_{i=1}^{n}\left(Y_{i} - \bar{Y}\right)(x_{i} - \bar{x})
+(\#eq:eq2)
+\end{align}
+
+Agora, juntando \@ref(eq:eq1) e \@ref(eq:eq2) em \@ref(eq:eqinicial), temos:
+
+\begin{align*}
+\sum_{i=1}^{n}\left(Y_{i} - \hat{Y}\right)x_{i} &= \sum_{i=1}^{n}\left[\left(Y_{i} - \bar{Y}\right)(x_{i} - \bar{x})\right] - \sum_{i=1}^{n}\left[\left(Y_{i} - \bar{Y}\right)(x_{i} - \bar{x})\right] \\
+&= 0
+\end{align*}
+
+# Questão 2
+
+## Pergunta
+
+Mostre que:
+
+\begin{equation*}
+\sum_{i=1}^{n}\left(Y_{i}-\bar{Y}\right)^{2} = \sum_{i=1}^{n}\left(Y_{i} - \hat{Y}_{i}\right)^{2} + \sum_{i=1}^{n}\left(\hat{Y}_{i} - \bar{Y}\right)^{2}
+\end{equation*}
+
+## Resposta
+
+Vejamos que:
+
+\begin{align*}
+\sum_{i=1}^{n}\left(Y_{i}-\bar{Y}\right)^{2} &= \sum_{i=1}^{n}\left[\left(Y_{i} - \hat{Y}_{i}\right) + \left(\hat{Y}_{i} - \bar{Y}\right)\right]^{2} \\
+&= \sum_{i=1}^{n}\left(Y_{i} - \hat{Y}_{i}\right)^{2} + \sum_{i=1}^{n}\left(\hat{Y}_{i} - \bar{Y}\right)^{2} + 2 \sum_{i=1}^{n}\left(Y_{i} - \hat{Y}_{i}\right)\left(\hat{Y}_{i} - \bar{Y}\right)
+\end{align*}
+
+Portanto, precisamos mostrar que $\sum_{i=1}^{n}\left(Y_{i} - \hat{Y}_{i}\right)\left(\hat{Y}_{i} - \bar{Y}\right) = 0$:
+
+\begin{align*}
+\sum_{i=1}^{n}\left(Y_{i} - \hat{Y}_{i}\right)\left(\hat{Y}_{i} - \bar{Y}\right) &= \sum_{i=1}^{n}\left(Y_{i} - \hat{\beta}_{0} - \hat{\beta}_{1}x_{i}\right)\left(\hat{\beta}_{0} + \hat{\beta}_{1}x_{i} - \bar{Y}\right) \\
+&= \sum_{i=1}^{n}\left(Y_{i} - \bar{Y} + \hat{\beta}_{1}\bar{x} - \hat{\beta}_{1}x_{i}\right)\left(\bar{Y} - \hat{\beta}_{1}\bar{x} + \hat{\beta}_{1}x_{i} - \bar{Y}\right) \\
+&= \sum_{i=1}^{n}\left(\left(Y_{i} - \bar{Y}\right) + \hat{\beta}_{1}(\bar{x} - x_{i})\right)\hat{\beta}_{1}(x_{i} - \bar{x}) \\
+&= \sum_{i=1}^{n}\left(\left(Y_{i} - \bar{Y}\right)\hat{\beta}_{1}(x_{i} - \bar{x})\right) + \sum_{i=1}^{n}\left(\hat{\beta}_{1}(\bar{x} - x_{i})\hat{\beta}_{1}(x_{i} - \bar{x})\right) \\
+&= \hat{\beta}_{1}\sum_{i=1}^{n}\left(\left(Y_{i} - \bar{Y}\right)(x_{i} - \bar{x})\right) - \hat{\beta}_{1}^{2}\sum_{i=1}^{n}(x_{i} - \bar{x})^{2} \\
+&= \hat{\beta}_{1}\hat{\beta}_{1}\sum_{i=1}^{n}(x_{i} - \bar{x})^{2} - \hat{\beta}_{1}^{2}\sum_{i=1}^{n}(x_{i} - \bar{x})^{2} \\
+&= 0
+\end{align*}
+
+# Questão 3
+
+## Pergunta
+
+Encontre $\mathbb{E}(\hat{\beta}_{0})$.
+
+## Resposta
+
+\begin{align*}
+\mathbb{E}\left(\hat{\beta}_{0}\right) &= \mathbb{E}\left(\bar{Y} - \hat{\beta}_{1}\bar{x}\right) \\
+&= \mathbb{E}\left(\bar{Y}\right) - \bar{x}\mathbb{E}\left(\hat{\beta}_{1}\right) \\
+&= \frac{1}{n}\mathbb{E}\left(\sum_{i=1}^{n}y_{i}\right) - \bar{x}\beta_{1} \\
+&= \frac{1}{n}\sum_{i=1}^{n}(\beta_{0} + \beta_{1}x_{i}) - \bar{x}\beta_{1} \\
+&= \beta_{0} + \beta_{1}\bar{x} - \bar{x}\beta_{1} \\
+&= \beta_{0}
+\end{align*}
+
+# Questão 4
+
+## Pergunta
+
+Encontre $\text{Var}(\hat{\beta}_{1})$.
+
+## Resposta
+
+\begin{align*}
+\text{Var}\left(\hat{\beta}_{1}\right) &= \text{Var}\left[\frac{1}{\sum_{i=1}^{n}(x_{i} - \bar{x})^{2}}\left(\sum_{i=1}^{n}Y_{i}(x_{i} - \bar{x}) - \sum_{i=1}^{n}\bar{Y}(x_{i} - \bar{x})\right)\right] \\
+&= \frac{1}{\sum_{i=1}^{n}(x_{i} - \bar{x})^{2}}\text{Var}\left(\sum_{i=1}^{n}Y_{i}(x_{i} - \bar{x}) - \sum_{i=1}^{n}\bar{Y}(x_{i} - \bar{x})\right) \\
+&= \frac{1}{\sum_{i=1}^{n}(x_{i} - \bar{x})^{2}}\text{Var}\left(\sum_{i=1}^{n}Y_{i}(x_{i} - \bar{x})\right) \\
+&= \frac{1}{\sum_{i=1}^{n}(x_{i} - \bar{x})^{2}} \sum_{i=1}^{n}(x_{i} - \bar{x}) \text{Var}\left(Y_{i}\right) \\
+&= \frac{\sigma^{2}}{\sum_{i=1}^{n}(x_{i} - \bar{x})}
+\end{align*}
+
+# Questão 5
+
+## Pergunta
 
 Mostre que a reta de regressão obtida pelo método de mínimos quadrados passa pelo ponto $(\bar{x},\bar{Y})$.
 
-::: {.proof}
+## Resposta
 
 Como a reta de regressão é definida para todo $x \in \mathbb{R}$, e como sabemos que $\bar{x} \in \mathbb{R}$, o valor de $\bar{x}$ pertencerá à reta de regresão.
 
@@ -29,9 +159,72 @@ Para encontrar o $\hat{Y}$ associado a $\bar{x}$, substituemos na equação da r
 
 Assim, para o valor de $x = \bar{x}$, temos que o $\hat{Y}$ é igual a $\bar{Y}$. Assim, o ponto $(\bar{x},\bar{Y})$ pertence à reta de regressão.
 
-:::
+# Questão 6
 
-## Questão 8
+## Pergunta
+
+Mostre que os estimadores de máxima verossimilhança e mínimos quadrados para $\beta_{0}$ e $\beta_{1}$ são equivalentes.
+
+## Resposta
+
+Os estimadores de mínimos quadrados para $\beta_{0}$ e $\beta_{1}$ são dados por meio da minimização do quadrado do erro estimado, ou seja:
+
+\begin{equation*}
+\left(\hat{\beta}_{0},\hat{\beta}_{1}\right) = \underset{\beta_{0},\beta_{1}}{\text{argmin}}\sum_{i=1}^{n}\left(Y_{1} - \beta_{0} - \beta_{1}x_{i}\right)^{2}
+\end{equation*}
+
+Para a estimação por máxima verossimilhança, temos que encontrar o valor que maximiza o valor da verossimilhança, dada por:
+
+\begin{align*}
+\mathcal{L}(\beta_{0},\beta{1}|Y_{i}) &= \prod_{i=1}^{n}\frac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left\{-\frac{(Y_{i} - \beta_{0} - \beta_{1})^{2}}{2\sigma^{2}}\right\} \\
+&= \left(\frac{1}{\sqrt{2\pi\sigma^{2}}}\right)^{n}\exp\left\{-\frac{\sum_{i=1}^{n}(Y_{i} - \beta_{0} - \beta_{1})^{2}}{2\sigma^{2}}\right\}
+\end{align*}
+
+É fácil ver que o termo $\left(\frac{1}{\sqrt{2\pi\sigma^{2}}}\right)^{n}$ não depende de $\beta_{0}$ nem de $\beta_{1}$, por isso no processo de maximização ele será apenas uma constante. Usualmente trabalha-se com o logaritmo natural da verossimilhança, que não altera o valor que maximiza a função, e que trata as multiplicações para que se tornem somas, como segue:
+
+\begin{equation}
+l(\mathcal{L}(\beta_{0},\beta_{1},\sigma^{2}|Y_{i})) = n\log\left(\frac{1}{\sqrt{2\pi\sigma^{2}}}\right) -\frac{\sum_{i=1}^{n}(Y_{i} - \beta_{0} - \beta_{1})^{2}}{2\sigma^{2}}
+(\#eq:logvero)
+\end{equation}
+
+Novamente, o denominador $2\sigma^{2}$ não depende de $\beta_{0}$ nem de $\beta_{1}$, então para encontrar o valor que maximiza a log-verossimilhança, derivamos com relação à esses parâmetros, e encontramos que o estimador é dado por:
+
+\begin{equation*}
+\left(\hat{\beta}_{0},\hat{\beta}_{1}\right) = \underset{\beta_{0},\beta_{1}}{\text{argmax}}\left(-\sum_{i=1}^{n}\left(Y_{1} - \beta_{0} - \beta_{1}x_{i}\right)^{2}\right) = \underset{\beta_{0},\beta_{1}}{\text{argmin}}\sum_{i=1}^{n}\left(Y_{1} - \beta_{0} - \beta_{1}x_{i}\right)^{2}
+\end{equation*}
+
+# Questão 7
+
+## Pergunta
+
+Encontre o estimador de máxima verossimilhança para $\sigma^{2}$.
+
+## Resposta
+
+Vejamos que, em \@ref(eq:logvero), o termo $\frac{1}{\sqrt{2\pi}}$ não altera o ponto de maximização para $\sigma^{2}$, de modo que podemos reescrever a log-verossimilhança como:
+
+\begin{equation*}
+l(\mathcal{L}(\beta_{0},\beta_{1},\sigma^{2}|Y_{i})) = -\frac{n}{2}\log(\sigma^{2}) -\frac{\sum_{i=1}^{n}(Y_{i} - \beta_{0} - \beta_{1})^{2}}{2\sigma^{2}}
+\end{equation*}
+
+Agora, podemos derivar com relação a $\sigma^{2}$ para encontrar o ponto de máximo:
+
+\begin{equation*}
+\frac{\partial}{\partial \sigma^{2}}l(\mathcal{L}(\beta_{0},\beta_{1},\sigma^{2}|Y_{i})) = -\frac{n}{2\sigma^{2}} + \frac{\sum_{i=1}^{n}(Y_{i} - \beta_{0} - \beta_{1})^{2}}{2\left(\sigma^{2}\right)^{2}}
+\end{equation*}
+
+E igualando a 0, temos:
+
+\begin{align*}
+\frac{-n\hat{\sigma}^{2} + \sum_{i=1}^{n}(Y_{i} - \beta_{0} - \beta_{1})^{2}}{2\left(\hat{\sigma}^{2}\right)^{2}} &= 0 \\
+n\hat{\sigma}^{2} &= \sum_{i=1}^{n}(Y_{i} - \beta_{0} - \beta_{1})^{2} \\
+\hat{\sigma}^{2} &= \frac{\sum_{i=1}^{n}(Y_{i} - \beta_{0} - \beta_{1})^{2}}{n} \\
+\hat{\sigma}^{2} &= \frac{\sum_{i=1}^{n}(Y_{i} - \hat{Y})^{2}}{n}
+\end{align*}
+
+# Questão 8
+
+## Pergunta
 
 Considere uma nova observação $(x_{n+1},Y_{n+1})$, com $x_{n+1} = \bar{x}$. Sejam $\hat{\beta}_{0}^{n+1}$ e $\hat{\beta}_{1}^{n+1}$ os estimadores de mínimos quadrados obtidos utilizando todas as $n+1$ amostras. Mostre que
 
@@ -41,7 +234,7 @@ Considere uma nova observação $(x_{n+1},Y_{n+1})$, com $x_{n+1} = \bar{x}$. Se
 
 Interprete esse resultado e esboce um gráfico que represente essa propriedade.
 
-::: {.proof}
+## Resposta
 
 Sabemos que o estimador de mínimos quadrados para $\beta_{1}$ é dado por:
 
@@ -111,5 +304,3 @@ g2 <- df2 %>%
 
 ggpubr::ggarrange(g1,g2)
 ```
-
-:::

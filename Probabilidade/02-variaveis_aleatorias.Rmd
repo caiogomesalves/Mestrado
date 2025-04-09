@@ -17,7 +17,6 @@ output:
     toc: false
 ---
 
-
 # Variáveis Aleatórias
 
 ## Variáveis aleatórias e funções de distribuição
@@ -792,3 +791,46 @@ f_{Z}(z) = \begin{cases}
 \end{equation*}
 
 :::
+
+## Casos clássicos
+
+### Soma
+
+::: {.proposition #denssoma}
+
+- **a)** Se $X$ e $Y$ tem densidade conjunta $f(x,y) \Rightarrow f_{X+Y}(z) = \int_{-\infty}^{\infty}f(z-t,t)dt = \int_{-\infty}^{\infty}f(t,z-t)dt$;
+- **b)** Se $X \perp Y$ e $f_{X}$ e $f_{Y}$ são suas marginais, então $f_{X+Y}(z) = \int_{-\infty}^{\infty}f_{X}(z-t)f_{Y}(t)dt = \int_{-\infty}^{\infty}f_{X}(t)f_{Y}(z-t)dt$.
+
+:::
+
+::: {.proof}
+
+Seja $Z = X+Y \Rightarrow [Z \le z] = [X+Y \le z] = [(x,y) \in B_{z}]$. Considerando $B_{z} = \{(x,y):x+y \le z\} = \{(x,y):x \le z-y\}$, temos que:
+
+\begin{equation*}
+F_{Z}(z) = \int\int_{B_{z}}f(x,y)dxdy = \int_{-\infty}^{\infty}\int_{-\infty}^{z-y}f(x,y)dxdy
+\end{equation*}
+
+Seja $y$ um valor fixo e defina $s=x+y, ds = dx$. Quando $x=z-y \Rightarrow s=z$, temos:
+
+\begin{equation*}
+F_{Z}(z) = \int_{-\infty}^{\infty}\int_{-\infty}^{z}f(s-y,y)dsdy = \int_{-\infty}^{z}\int_{-\infty}^{\infty}f(s-y,y)dyds = \int_{-\infty}^{z}g(s)ds
+\end{equation*}
+
+E $g$ é a densidade de $X+Y$, ou seja, $g(s) = f_{X+Y}(s)$.
+
+:::
+
+### Convolução
+
+Se $f_{1}$ e $f_{2}$ são densidades de variáveis aleatórias, sua convolução $f_{1}*f_{2}$ é:
+
+\begin{equation*}
+f_{1}*f_{2}(x) = \int_{-\infty}^{\infty}f_{1}(x-t)f_{2}(t)dt
+\end{equation*}
+
+Assim, no caso da soma da proposição \@ref(prp:denssoma), podemos ver que:
+
+\begin{equation*}
+f_{X+Y}(z) = f_{X}*f_{Y}(z)
+\end{equation*}

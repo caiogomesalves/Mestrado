@@ -1,0 +1,351 @@
+---
+title: "Lista 3"
+subtitle: "MI406-Regressão"
+author: "Caio Gomes Alves"
+output:
+  bookdown::pdf_document2:
+    toc: false
+---
+
+# Questão 1
+
+## Pergunta
+
+Considere o modelo definido por
+
+\begin{equation*}
+\mathbf{Y_{i} = \mu + \epsilon_{i}}, \;\;\; i = 1,\ldots,n
+\end{equation*}
+
+onde $\mu \in \mathbb{R}$ é uma constante e $\epsilon_{i} \sim N(0,\sigma^{2})$, com $\epsilon_{i} \perp \epsilon_{j}$ para todo $i \neq j$.
+
+- **a.** Escreva o modelo descrito em forma matricial. Isto é, $\mathbf{Y = X \beta + \epsilon}$, e descreva os vetores e matrizes envolvidos.
+- **b.** Sabendo que o Estimador de Máxima-Verossimilhança (MV) de $\mu$ é $\bar{Y}$, mostre que o estimador de Mínimos-Quadrados $(\mathbf{X}^{\top}\mathbf{X})^{-1}\mathbf{X}^{\top}\mathbf{Y}$ coincide com o estimador de MV.
+- **c.** Descreva qual a forma da matriz de projeção $\mathbf{X(X^{\top}X)^{-1}X^{\top}}$ e interprete.
+
+## Resposta
+
+### a)
+
+Temos que o modelo, em forma matricial é dado da seguinte forma:
+
+\begin{align*}
+Y =
+\begin{bmatrix}
+y_{1} \\
+y_{2} \\
+\vdots \\
+y_{n}
+\end{bmatrix}_{n \times 1} \;\;\;\;
+X =
+\begin{bmatrix}
+1 \\
+1 \\
+\vdots \\
+1 \\
+\end{bmatrix}_{n \times 1} \;\;\;\;
+\beta =
+\begin{bmatrix}
+\mu \\
+\end{bmatrix}_{1 \times 1} \;\;\;\;
+\epsilon =
+\begin{bmatrix}
+\epsilon_{1} \\
+\epsilon_{2} \\
+\vdots \\
+\epsilon_{n}
+\end{bmatrix}_{n \times 1}
+\end{align*}
+
+Aqui, a matriz $Y$ representa o vetor de observações, onde cada observação corresponde à uma amostra da variável resposta. A matriz $X$ indica a estrutura do modelo, que neste caso é apenas o modelo com intercepto.
+
+A matriz $\beta$ indica o vetor de parâmetros da regressão, que minimizam a soma de quadrados do modelo especificado pela matriz $X$ (que neste caso é denotada somente por um parâmetro, $\mu$). Por fim, a matriz $\epsilon$ indica os erros (leia-se desvios) de cada uma das observações em $Y$, seguindo uma distribuição Normal com média 0 e variância $\sigma^{2}$ (aqui, assume-se que as observações são não-correlacionadas e que essa parcela de "erro" não é explicada pelo modelo de maneira estrutural).
+
+### b)
+
+Considerando a matriz $X$ denotada anteriormente, temos que:
+
+\begin{align*}
+(X^{\top}X) &=
+\begin{bmatrix}
+1 & 1 & \hdots & 1 \\
+\end{bmatrix} \times
+\begin{bmatrix}
+1 \\
+1 \\
+\vdots \\
+1 \\
+\end{bmatrix} = \begin{bmatrix}
+n
+\end{bmatrix} \\ \\
+(X^{\top}X)^{-1} &= \begin{bmatrix}
+\frac{1}{n}
+\end{bmatrix} \\ \\
+(X^{\top}X)^{-1}X^{\top} &= \begin{bmatrix}
+\frac{1}{n}
+\end{bmatrix} \times \begin{bmatrix}
+1 & 1 & \hdots & 1 \\
+\end{bmatrix} = \begin{bmatrix}
+\frac{1}{n} & \frac{1}{n} & \hdots & \frac{1}{n}
+\end{bmatrix} \\ \\
+(X^{\top}X)^{-1}X^{\top}Y &= \begin{bmatrix}
+\frac{1}{n} & \frac{1}{n} & \hdots & \frac{1}{n}
+\end{bmatrix} \times \begin{bmatrix}
+y_{1} \\
+y_{2} \\
+\vdots \\
+y_{n}
+\end{bmatrix} = \begin{bmatrix}
+\frac{\sum_{i=1}^{n}y_{i}}{n}
+\end{bmatrix} = \begin{bmatrix}
+\bar{Y}
+\end{bmatrix}
+\end{align*}
+
+Assim, vemos que o estimador de mínimos quadrados coincide com o estimador de máxima verossimilhança.
+
+### c)
+
+Temos que:
+
+\begin{align*}
+X(X^{\top}X)^{-1} &= \begin{bmatrix}
+1 \\
+1 \\
+\vdots \\
+1 \\
+\end{bmatrix} \times \begin{bmatrix}
+\frac{1}{n}
+\end{bmatrix} = \begin{bmatrix}
+1/n \\
+1/n \\
+\vdots \\
+1/n
+\end{bmatrix} \\ \\
+X(X^{\top}X)^{-1}X^{\top} &= \begin{bmatrix}
+1/n \\
+1/n \\
+\vdots \\
+1/n
+\end{bmatrix} \times \begin{bmatrix}
+1 & 1 & \hdots & 1 \\
+\end{bmatrix} = \begin{bmatrix}
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n}
+\end{bmatrix} = H
+\end{align*}
+
+Assim, a matriz de projeção $H$ é tal que estima cada um dos valores de $Y_{i}$ na sua média $\bar{Y}$, ou seja, $\hat{Y}_{i} = \bar{Y}, \forall i \in \{1,\ldots,n\}$.
+
+# Questão 2
+
+## Pergunta
+
+Seja $J_{n}$ uma matriz de dimensões $n \times n$ com o valor 1 em todas as entradas e $H$ a matriz de projeção $H = \mathbf{X(X^{\top}X)^{-1}X^{\top}}$.
+
+- **a.** Mostre (ou justifique que) $\frac{1}{n}J_{n}$ é simétrica e idempotente.
+- **b.** Mostre (ou justifique que)\begin{equation*}\mathbf{Y^{\top}\left(I - \frac{1}{n}J_{n}\right)Y = Y^{\top}\left(H - \frac{1}{n}J_{n}\right)Y + Y^{\top}(I-H)Y},\end{equation*}
+
+Interprete esse resultado.
+
+## Resposta
+
+### a)
+
+Sabemos que:
+
+\begin{equation*}
+J_{n} = \begin{bmatrix}
+1 & 1 & \dots & 1 \\
+1 & 1 & \dots & 1 \\
+\vdots & \vdots & \ddots & \vdots \\
+1 & 1 & \dots & 1 \\
+\end{bmatrix}_{n \times n} \Longrightarrow
+\frac{1}{n}J_{n} = \begin{bmatrix}
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\end{bmatrix}_{n \times n}
+\end{equation*}
+
+A simetria dessas matrizes é de fácil verificação, já que todos os elementos dela são iguais. Para ser idempotente, além de ser simétrica é necessário que as potências da matriz resultem nela mesma. Vejamos que:
+
+\begin{align*}
+\left(\frac{1}{n}J_{n}\right) \times \left(\frac{1}{n}J_{n}\right) &= \begin{bmatrix}
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\end{bmatrix} \times \begin{bmatrix}
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\end{bmatrix} \\
+&= \begin{bmatrix}
+n\left(\frac{1}{n}\right)^{2} & n\left(\frac{1}{n}\right)^{2} & \dots & n\left(\frac{1}{n}\right)^{2} \\
+n\left(\frac{1}{n}\right)^{2} & n\left(\frac{1}{n}\right)^{2} & \dots & n\left(\frac{1}{n}\right)^{2} \\
+\vdots & \vdots & \ddots & \vdots \\
+n\left(\frac{1}{n}\right)^{2} & n\left(\frac{1}{n}\right)^{2} & \dots & n\left(\frac{1}{n}\right)^{2}
+\end{bmatrix} \\
+&= \begin{bmatrix}
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+\end{bmatrix} \\
+&= \frac{1}{n}J_{n}
+\end{align*}
+
+Assim, a matriz $\frac{1}{n}J_{n}$ é idempotente.
+
+### b)
+
+Temos que a decomposição da soma de quadrados total de um modelo é dada por:
+
+\begin{equation*}
+SQT = SQReg + SQRes
+\end{equation*}
+
+E que, cada componente tem a seguinte forma quadrática matricial:
+
+\begin{align*}
+SQT &= \left(Y-\bar{Y}\right)^{\top}\left(Y-\bar{Y}\right) \\
+SQRes &= \left(Y-\hat{Y}\right)^{\top}\left(Y-\hat{Y}\right) \\
+SQReg &= \left(\hat{Y}-\bar{Y}\right)^{\top}\left(\hat{Y}-\bar{Y}\right)
+\end{align*}
+
+E agora, desenvolvendo a álgebra matricial necessária, chegamos em:
+
+\begin{align}
+\left(Y-\bar{Y}\right)^{\top}\left(Y-\bar{Y}\right) &= \left(\hat{Y}-\bar{Y}\right)^{\top}\left(\hat{Y}-\bar{Y}\right) + \left(Y-\hat{Y}\right)^{\top}\left(Y-\hat{Y}\right) \notag \\
+\left(Y-\frac{1}{n}J_{n}Y\right)^{\top}\left(Y-\frac{1}{n}J_{n}Y\right) &= \left(HY-\frac{1}{n}J_{n}Y\right)^{\top}\left(HY-\frac{1}{n}J_{n}Y\right) + \left(Y-HY\right)^{\top}\left(Y-HY\right) \notag \\
+\left(\left(I-\frac{1}{n}J_{n}\right)Y\right)^{\top}\left(\left(I-\frac{1}{n}J_{n}\right)Y\right) &= \left(\left(H-\frac{1}{n}J_{n}\right)Y\right)^{\top}\left(\left(H-\frac{1}{n}J_{n}\right)Y\right) + \left((I-H)Y\right)^{\top}\left((I-H)Y\right) \notag \\
+Y^{\top}\left(I-\frac{1}{n}J_{n}\right)^{\top}\left(I-\frac{1}{n}J_{n}\right)Y &= Y^{\top}\left(H-\frac{1}{n}J_{n}\right)^{\top}\left(H-\frac{1}{n}J_{n}\right)Y + Y^{\top}\left(I-H\right)^{\top}\left(I-H\right)Y
+(\#eq:somadequadrados)
+\end{align}
+
+E como vimos na questão anterior, temos que $\frac{1}{n}J_{n}$ é idempontente, assim como serão as matrizes $\left(I - \frac{1}{n}J_{n}\right) , \left(H - \frac{1}{n}J_{n}\right)$ e $\left(I-H\right)$, de modo que a expressão \@ref(eq:somadequadrados) fica:
+
+\begin{equation*}
+Y^{\top}\left(I - \frac{1}{n}J_{n}\right)Y = Y^{\top}\left(H - \frac{1}{n}J_{n}\right)Y + Y^{\top}(I-H)Y
+\end{equation*}
+
+# Questão 3
+
+## Pergunta
+
+Seja $\mathbf{\hat{Y} = X \hat{\beta}}$.
+
+- **a.** Mostre que\begin{equation*}\mathbf{\hat{Y}} \sim N_{n}(X\beta,\sigma^{2}H)\end{equation*}.
+- **b.** Compare as distribuições de $\mathbf{Y}$ e $\mathbf{\hat{Y}}$. Interprete.
+- **c.** Como podemos interpretar a entrada $h_{ii}$ da matriz $H$?
+
+## Resposta
+
+### a)
+
+Temos que:
+
+\begin{align*}
+\hat{\beta} &= \left(X^{\top}X\right)^{-1}X^{\top}Y \\ \\
+\mathbb{E}(\hat{\beta}) &= \mathbb{E}((X^{\top}X)^{-1}X^{\top}Y) \\
+&= (X^{\top}X)^{-1}X^{\top}\mathbb{E}(Y) \\
+&= (X^{\top}X)^{-1}X^{\top}X\beta \\
+&= \beta \\ \\
+Var(\hat{\beta}) &= Var((X^{\top}X)^{-1}X^{\top}Y) \\
+&= (X^{\top}X)^{-1}X^{\top} Var(Y)((X^{\top}X)^{-1}X^{\top})^{\top} \\
+&= \sigma^{2}I(X^{\top}X)^{-1}X^{\top}X(X^{\top}X)^{-1} \\
+&= \sigma^{2}(X^{\top}X)^{-1}
+\end{align*}
+
+Aqui, vale notar que $\beta$ é um vetor $(p+1) \times 1$ e $\sigma^{2}(X^{\top}X)^{-1}$ é uma matriz $(p+1) \times (p+1)$, de modo que a distribuição de $\hat{\beta}$ é:
+
+\begin{equation*}
+\hat{\beta} \sim N_{p+1}\left(\beta,\sigma^{2}(X^{\top}X)^{-1}\right)
+\end{equation*}
+
+Disso, como $\hat{Y} = X\hat{\beta}$, temos que:
+
+\begin{align*}
+\mathbb{E}(X\hat{\beta}) &= X\mathbb{E}(\hat{\beta}) \\
+&= X\beta \\ \\
+Var(X\hat{\beta}) &= XVar(\hat{\beta})X^{\top} \\
+&= \sigma^{2}X(X^{\top}X)^{-1}X^{\top} \\
+&= \sigma^{2}H
+\end{align*}
+
+Neste caso, vale notar que $X\beta$ é um vetor $n \times 1$ e $\sigma^{2}H$ é uma matriz $n \times n$, e assim, a distribuição de $\hat{Y} = X\hat{\beta}$ é:
+
+\begin{equation*}
+\hat{Y} \sim N_{n}(X\beta, \sigma^{2}H)
+\end{equation*}
+
+### b)
+
+A distribuição de $Y$ é condicional (assim como no modelo de regressão linear simples), dada por:
+
+\begin{equation*}
+Y|X \sim N_{n}(X\beta,\sigma^{2}I_{n})
+\end{equation*}
+
+Que é definida pela suposição de normalidade, independência e homocedasticidade dos $\epsilon_{i}$'s. Dessa forma, as médias (condicionais) são as mesmas para ambas as distribuições, mas as variâncias diferem. Enquanto que $Y|X$ possui variância constante, a variância de $\hat{Y}$ depende do valor da matriz de projeção $H$. Assim, a estimação de $Y$ será mais incerta para pontos que estão distantes de $\bar{X}$, e mais precisa em pontos próximos de $\bar{X}$.
+
+### c)
+
+Cada entrada $h_{ii}$ da diagonal principal da matriz $H$ pode ser vista como a influência que um ponto $Y_{i}$ terá na sua própria estimação $\hat{Y}_{i}$, visto que ela é a matriz de projeção das observações $Y_{i}$ no espaço gerado pelas combinações lineares das colunas de $X$.
+
+Por ser uma matriz de projeção, os elementos da diagnoal principal de $H$ estarão entre 0 e 1, e quanto mais próximo de 0 um elemento $h_{ii}$ estiver, menos influente é a observação $Y_{i}$ na estimação de $\hat{Y}$, e quanto mais próximo de 1, mais influente ele será, e será um ponto que "domina" a estimação de $\hat{Y}$. Isso leva a uma outra definição da matriz $H$, que também é conhecida como a matriz de alavancagem do modelo.
+
+Para além disso, cada elemento $h_{ii}$ também mostra o quão influente um ponto será na variância da estimação naquele ponto.
+
+# Questão 4
+
+## Pergunta
+
+Sabendo que a existência dos estimadores de Mínimos Quadrados e da Matriz de Projeção dependem da inversa $\mathbf{(X^{\top}X)^{-1}}$.
+
+- **a.** Apresente a forma geral da matriz $\mathbf{X^{\top}X}$ no contexto de regressão linear simples e descreva as condições necessárias para a existência de sua inversa.
+- **b.** Dê um exemplo de valores das variáveis $x_{1},x_{2},\ldots,x_{n}$ para os quais a inversa não existe.
+- **c.** Do ponto de vista da interpretação dos parâmetros, explique o motivo pelo qual o cenário do exemplo do item b não nos permite ter estimadores únicos para $\beta_{0}$ e $\beta_{1}$.
+
+## Resposta
+
+### a)
+
+Sendo o modelo $Y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i}$, ou de maneira matricial $Y = X\beta + \epsilon$, temos que:
+
+\begin{align*}
+X &= \begin{bmatrix}1 & x_{1} \\ 1 & x_{2} \\ \vdots & \vdots \\ 1 & x_{n}\end{bmatrix}_{n \times 2} \;\; X^{\top} = \begin{bmatrix}1 & 1 & \hdots & 1 \\ x_{1} & x_{2} & \hdots & x_{n}\end{bmatrix}_{2 \times n} \\ \\
+(X^{\top}X) &= \begin{bmatrix}n & \sum_{i=1}^{n}x_{i} \\ \\ \sum_{i=1}^{n}x_{i} & \sum_{i=1}^{n}x_{i}^{2} \end{bmatrix} = \begin{bmatrix}n & n\bar{x} \\ \\ n\bar{x} & \sum_{i=1}^{n}x_{i}^{2} \end{bmatrix}
+\end{align*}
+
+Neste caso, para que $(X^{\top}X)$ seja inversível, é necessário que o determinante dessa matriz não seja igual a 0, ou seja:
+
+\begin{align*}
+n\sum_{i=1}^{n}x_{i}^{2} - n^{2}\bar{x}^{2} &\neq 0 \\
+n\left(\sum_{i=1}^{n}x_{i}^{2} - \bar{x}^{2}\right) &\neq 0 \\
+\sum_{i=1}^{n}(x_{i} - \bar{x})^{2} &\neq 0
+\end{align*}
+
+Assim, para o caso da regressão linear simples, não pode ocorrer da soma de quadrados total do modelo ser 0, e isso só irá ocorrer se todos os valores dos $x_{i}$'s forem iguais.
+
+### b)
+
+Para o caso de regressão linear simples, a matriz $X^{\top}X$ não terá inversa quando todos os valores de $x$ forem iguais. Ou seja, considere por exemplo que $x_{i} = k,\;\forall i \in \{1,\ldots,n\} \Rightarrow \bar{x} = k \Rightarrow \sum_{i=1}^{n}(x_{i} - \bar{x})^{2} = 0$. Nesse caso, não haverá inversa para a matriz $X^{\top}X$, de modo que não será possível ajustar um modelo de regressão linear simples por meio do método de mínimos quadrados.
+
+Caso considerem-se modelos com mais de uma covariável (digamos que $X$ seja uma matriz com $p$ covariáveis), a matriz $X^{\top}X$ não terá inversa em casos onde o seu determinante seja igual a zero, como por exemplo:
+
+1. Caso $X$ tenha mais covariáveis do que observações ($n < p$);
+2. Caso $X$ tenha colunas que sejam combinações lineares de outras colunas (i.e. colunas linearmente dependentes);
+3. Colunas ou linhas em que todas as entradas sejam iguais a zero;
+4. Dentre outras.
+
+### c)
+
+Para o caso de regressão linear simples, caso todos os valores de $x$ sejam iguais (diga $x_{i} = k \; \forall i$), então temos que o modelo pode ser escrito como $Y_{i} = \beta_{0} + \beta_{1}k + \epsilon_{i}$. Como o ponto $(\bar{x},\bar{Y})$ pertence à reta de regressão, existirão infinitas retas que passam por esse ponto (já que $x_{i} = \bar{x}, \; \forall i$ e $\bar{Y}$ não depende de $x$) e nenhuma delas pode ser dita como a que minimiza a soma de quadrados.
+
+Dessa forma, se todos os valores de um parâmetro forem iguais não há como explicar como o aumento/diminuição dele afeta a resposta, visto que não há variação no valor dos parâmetros.
