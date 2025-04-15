@@ -792,9 +792,7 @@ f_{Z}(z) = \begin{cases}
 
 :::
 
-## Casos clássicos
-
-### Soma
+### Distribuição da Soma
 
 ::: {.proposition #denssoma}
 
@@ -834,3 +832,337 @@ Assim, no caso da soma da proposição \@ref(prp:denssoma), podemos ver que:
 \begin{equation*}
 f_{X+Y}(z) = f_{X}*f_{Y}(z)
 \end{equation*}
+
+### Independência
+
+::: {.proposition}
+
+Se $X_{1}, \ldots, X_{n}$ são variáveis aleatórias independentes, então funções de famílias disjuntas de $\{X_{i}\}_{i \ge 1}$ também são independentes.
+
+:::
+
+::: {.proof name="Prova: Caso especial"}
+
+Considere $Y_{i} = g_{i}(X_{i})$. É necessário provar que $F_{Y_{1} \ldots Y_{n}}(y_{1},\ldots,y_{n}) = \prod_{i=1}^{n}F_{Y_{i}}(y_{i})$:
+
+\begin{align*}
+F_{Y_{1} \ldots Y_{n}}(y_{1},\ldots,y_{n}) &= P(g_{1}(x_{1}) \le y_{1}, \ldots, g_{n}(x_{n}) \le y_{n}) \\
+&= P\left(X_{1} \in g_{1}^{-1}((-\infty, y_{1}]),\ldots,X_{n} \in g_{n}^{-1}((-\infty, y_{n}])\right) \\
+&= \prod_{i=1}^{n}P\left(X_{i} \in g_{i}^{-1}((-\infty,y_{i}])\right) \\
+&= \prod_{i=1}^{n}P\left(g_{i}(X_{i}) \in (-\infty,y_{i}]\right) = \prod_{i=1}^{n}F_{Y_{i}}(y_{i})
+\end{align*}
+
+:::
+
+::: {.example #motivacaoexponencial}
+
+Considere $X \perp Y, \; X \sim Exp(1)$ e $Y \sim Exp(1)$. Determine:
+
+- a) A distribuição de $Z = X + Y$ e $W = \frac{X}{Y}$;
+- b) Mostrar que $Z \perp W$.
+
+**a)**
+
+Como os valores de $X$ e $Y$ são sempre positivos, os valores de $Z$ e $W$ também o serão. Verifiquemos que $F_{ZW}(z,w) = F_{Z}(z)F_{W}(w)$:
+
+\begin{align*}
+P[Z \le z, W \le w] &= F_{ZW}(z,w) \\
+&= \left[X+Y \le z, \frac{X}{Y} \le w\right] \\
+&= \left[Y \le z - X, \frac{X}{w} \le Y\right]
+\end{align*}
+
+Vejamos que temos que considerar que $Y \le z-X$ e que $\frac{X}{w} \le Y$, ou seja, temos que avaliar as variáveis no seguinte boreliano:
+
+\begin{center}
+\begin{tikzpicture}
+  \draw[very thick, ->] (-1,0) -- (4,0);
+  \draw[very thick, ->] (0,-1) -- (0,4);
+  \node at (4,-0.2) {x};
+  \node at (-0.2,4) {y};
+  \node at (3,-0.2) {z};
+  \node at (-0.2,3) {z};
+  \draw[thick] (0,3) -- (3,0);
+  \fill[fill=black!60!white, opacity=0.5] (0, 0) -- (3, 0) -- (0, 3);
+  \draw[thick] (0,0) -- (4,4);
+  \node at (4.2,4.2) {$\frac{X}{w}$};
+  \fill[fill=white!60!blue, opacity=0.5] (0, 0) -- (4, 4) -- (0, 4);
+  \node at (-1.9,1.5) {$\mathcal{B}_{z,w}$};
+  \draw[thick, <-] (0.75,1.5) -- (-1.5,1.5);
+  \node at (1.5,-0.2) {p};
+  \draw[thick,dotted] (1.5,0) -- (1.5,1.5);
+\end{tikzpicture}
+\end{center}
+
+Onde a região em azul claro são os valores onde $Y \ge \frac{X}{w}$, e a região cinza são os valores em que $Y \le z - X$, o ponto $p$ é dado por:
+
+\begin{align*}
+\frac{X}{w} = z - X \Rightarrow z &= X \left(\frac{1}{w} +1\right) \\
+z &= X\left(\frac{w+1}{w}\right) \\
+X &= \frac{zw}{w+1}
+\end{align*}
+
+Assim, estamos interessados em encontrar $P((X,Y) \in \mathcal{B}_{z,w})$, que será:
+
+\begin{align*}
+P((X,Y) \in \mathcal{B}_{z,w}) &= \int_{0}^{p}\int_{\frac{x}{w}}^{z-x}e^{-x}e^{-y}dydx \\
+&= \int_{0}^{\frac{zw}{w+1}}e^{-x}\left[-e^{-y}\big{|}_{\frac{x}{w}}^{z-x}\right]dx \\
+&= \int_{0}^{\frac{zw}{w+1}}e^{-x}\left[e^{-\frac{x}{w}-e^{-z+x}}\right]dx \\
+&= \int_{0}^{\frac{zw}{w+1}}e^{-x\left(\frac{1 + w}{w}\right)}-e^{-z}dx \\
+&= -\frac{w}{(1+w)}e^{-x\left(\frac{1 + w}{w}\right)}\bigg{|}_{0}^{\frac{zw}{w+1}}-e^{-z}x\bigg{|}_{0}^{\frac{zw}{w+1}} \\
+&= \frac{w}{1+w}\left(1-e^{-z}-ze^{-z}\right)
+\end{align*}
+
+Assim, temos que a distribuição de $Z$ e $W$ será dada por:
+
+\begin{equation*}
+F_{ZW}(z,w) = \begin{cases}
+0 & ,z \le 0, w \le 0 \\
+\frac{w}{1+w}\left(1-e^{-z}-ze^{-z}\right) & ,z > 0, w > 0
+\end{cases}
+\end{equation*}
+
+Que é uma distribuição de probabilidade, pois é absolutamente contínua (e por consequência, contínua à direita) e os seguintes limites são bem definidos:
+
+\begin{align*}
+\lim_{w \to 0}F_{ZW}(z,w) &= 0 \\
+\lim_{z \to 0}F_{ZW}(z,w) &= 0 \\
+\lim_{z \to \infty, w \to \infty}F_{ZW}(z,w) &= 1
+\end{align*}
+
+**b)**
+
+Temos que as distribuições marginais de $Z$ e $W$ serão:
+
+\begin{align*}
+F_{Z}(z) &= \lim_{w \to \infty}F_{ZW}(z,w) = 1-e^{-z}-ze^{-z} \\
+F_{W}(w) &= \lim_{z \to \infty}F_{ZW}(z,w) = \frac{w}{1+w}
+\end{align*}
+
+E como a distribuição conjunta é o produto das marginais, temos que $Z \perp W$. As densidades serão dadas pelas derivadas da distribuição acumulada conjunta, ou seja:
+
+\begin{align*}
+f_{ZW}(z,w) &= \frac{\partial}{\partial z}\frac{\partial}{\partial w}\left(\frac{w}{1+w}\left(1-e^{-z}-ze^{-z}\right)\right) \\
+&= \frac{1}{(1+w)^{2}}ze^{-z}I_{(0,\infty)}(z)I_{(0,\infty)}(w)
+\end{align*}
+
+:::
+
+## Método do Jacobiano
+
+Seja $g:G_{0} \to G$, com $G,G_{0} \subseteq \mathbb{R}^{n}$ e ambos abertos. Então $g(x_{1},\ldots,x_{n}) = \left(g_{1}(x_{1},\ldots,x_{n}),\ldots,g_{n}(x_{1},\ldots,x_{n})\right) = (y_{1},\ldots,y_{n})$, com $g$ sendo bijetiva, ou seja, para todo $y$ valor de $Y$, existe $\underbar{x}$ valor de $X$ tal que $g(\underbar{x}) = y$.
+
+Logo $g$ admite inversa usual $g^{-1} = h$, com $h = (h_{1}, \ldots, h_{n})$:
+
+\begin{align*}
+&x_{1} = h_{1}(y_{1},\ldots,y_{n}) \\
+&\vdots \\
+&x_{n} = h_{n}(y_{1},\ldots,y_{n})
+\end{align*}
+
+Vamos supor que existem as derivadas parciais $\frac{\partial x_{i}}{\partial y_{j}}, \forall i, \forall j$, e que elas são contínuas em $G$. Desejamos computar: $\int \ldots \int_{C}f_{Y}(y)dy$ ,em termos de $\int \ldots \int_{D}f_{X}(x)dx$.
+
+::: {.example}
+
+Sejam $Y = (Y_{1},Y_{2}) = \left(X_{1} + X_{2}, \frac{X_{1}}{X_{2}}\right)$. Teremos então que: $y_{1} = g_{1}(x_{1},x_{2}) = x_{1} + x_{2}$ e $y_{2} = g_{2}(x_{1},x_{2}) = \frac{x_{1}}{x_{2}}$. Temos assim os valores dos $y$'s em termos dos $x$'s, e desejamos encontrar o contrário:
+
+\begin{align*}
+y_{1} &= x_{1} + x_{2} \Rightarrow x_{1} = y_{1} - x_{2} \\
+y_{2} &= \frac{y_{1}-x_{2}}{x_{2}} \Rightarrow x_{2} = \frac{y_{1}}{y_{2}+1} \Rightarrow x_{1} = \frac{y_{1}y_{2}}{y_{2} + 1}
+\end{align*}
+
+Agora que temos os valores de $X_{1}$ e $X_{2}$ em função de $Y_{1}$ e $Y_{2}$. Agora, podemos calcular as derivadas parciais de $x$ com relação a $y$:
+
+\begin{align*}
+\frac{\partial x_{1}}{\partial y_{1}} &= y_{2}(y_{2} + 1)^{-1} \\
+\frac{\partial x_{1}}{\partial y_{2}} &= y_{1}(y_{2} + 1)^{-2} \\
+\frac{\partial x_{2}}{\partial y_{1}} &= (y_{2} + 1)^{-1} \\
+\frac{\partial x_{2}}{\partial y_{2}} &= -y_{1}(y_{2} + 1)^{-2}
+\end{align*}
+
+Definimos agora o Jacobiano:
+
+\begin{equation}
+J(\underbar{x},\underbar{y}) = \det \begin{bmatrix}
+\frac{\partial x_{1}}{\partial y_{1}} & \frac{\partial x_{1}}{\partial y_{2}} & \hdots & \frac{\partial x_{1}}{\partial y_{n}} \\
+\frac{\partial x_{2}}{\partial y_{1}} & \frac{\partial x_{2}}{\partial y_{2}} & \hdots & \frac{\partial x_{2}}{\partial y_{n}} \\
+\vdots & \vdots  & \ddots & \vdots \\
+\frac{\partial x_{n}}{\partial y_{1}} & \frac{\partial x_{n}}{\partial y_{2}} & \hdots & \frac{\partial x_{n}}{\partial y_{n}}
+\end{bmatrix}
+(\#eq:jacobiano)
+\end{equation}
+
+Dessa forma, o Jacobiano da transformação será:
+
+\begin{align*}
+J(\underbar{x},\underbar{y}) &= \det \begin{bmatrix}
+y_{2}(y_{2} + 1)^{-1} & y_{1}(y_{2} + 1)^{-2} \\
+(y_{2} + 1)^{-1} & -y_{1}(y_{2} + 1)^{-2}
+\end{bmatrix} \\
+&= [y_{2}(y_{2} +1)^{-1}].[-y_{1}(y_{2}+1)^{-2}] - [y_{1}(y_{2} + 1)^{-2}].[(y_{2} + 1)^{-1}] \\
+&= -y_{1}(y_{2} + 1)^{-2}
+\end{align*}
+
+Pelo teorema do Jacobiano, temos que:
+
+\begin{equation*}
+\int \ldots \int_{A}f(x_{1}, \ldots, x_{n})dx_{1} \ldots dx_{n} = \int \ldots \int_{g(A)}f(h_{1}(y_{1}, \ldots, y_{n}), \ldots , h_{n}(y_{1}, \ldots, y_{n}))|J(\underbar{x}, \underbar{y})|dy_{1} \ldots dy_{n}
+\end{equation*}
+
+Se $f$ é integrável em $A$, com $A \subseteq G_{0}$ e $h = g^{-1}$. Assim, usando os valores do exemplo \@ref(exm:motivacaoexponencial), temos que $X_{1} \sim exp(1), X_{2} \sim exp(1), X_{1} \perp X_{2}$, com densidade conjunta dada por $ f_{X_{1}X_{2}}(x_{1},x_{2}) = e^{-x_{1} + x_{2}}$, de modo que:
+
+\begin{align*}
+f(h_{1}(y_{1},y_{2}),h_{2}(y_{1},y_{2}))|J(\underbar{x},\underbar{y})| &= f\left(\frac{y_{1}y_{2}}{y_{2} + 1},\frac{y_{1}}{y_{2} + 1}\right)\big{|}-y_{1}(y_{2} + 1)^{-2}\big{|} \\
+&= \exp\left(-\left[\frac{y_{1}y_{2}}{y_{2} + 1}+\frac{y_{1}}{y_{2} + 1}\right]\right)y_{1}(y_{2} + 1)^{-2} \\
+&= e^{-y_{1}}y_{1}(y_{2} + 1)^{-2}
+\end{align*}
+
+Que é a mesma densidade conjunta encontrada para $Z$ e $W$ no exemplo \@ref(exm:motivacaoexponencial).
+
+:::
+
+### Notas
+
+1. Sendo $f$ a densidade de $X_{1}, \ldots, X_{n}$ e $P((X_{1}, \ldots, X_{n}) \in G_{0}) = 1$, se $Y_{i} = g_{i}(x_{1}, \ldots, x_{n}); i = 1, \ldots, n$, e $\mathcal{B} \subseteq G$, com $\mathcal{B}$ boreliano. Então:
+
+\begin{align*}
+P((Y_{1},\ldots,Y_{n}) \in \mathcal{B}) &= P((X_{1}, \ldots, X_{n}) \in h(\mathcal{B})) \\
+&= \int \dots \int_{h(\mathcal{B})}f(x_{1},\ldots,x_{n})dx_{1} \ldots dx_{n} \\
+&= \int \dots \int_{\mathcal{B}}f(h_{1}(x_{1}, \ldots, x_{n}),\ldots,h_{n}(x_{1},\ldots,x_{n}))\big{|}J(\underbar{x},\underbar{y})\big{|}dy_{1} \ldots dy_{n}
+\end{align*}
+
+2. $P((Y_{1},\ldots,Y_{n}) \in G) = P((X_{1}, \ldots, X_{n}) \in h(G)) = P((X_{1}, \ldots, X_{n}) \in G_{0}) = 1$. De modo análogo:
+
+\begin{align*}
+P((Y_{1}, \ldots, Y_{n}) \in \mathcal{B}) &= P((Y_{1}, \ldots, Y_{n}) \in \mathcal{B} \cap G) \\
+&= \int \dots \int_{\mathcal{B} \cap G}f(h(y))\big{|}J(\underbar{x},\underbar{y})\big{|}dy_{1} \ldots dy_{n}
+\end{align*}
+
+::: {.theorem}
+
+Sob as condições impostas no início da seção, a densidade conjunta de $(Y_{1}, \ldots, Y_{n})$ é dada por:
+
+\begin{equation*}
+f_{Y_{1}\ldots Y_{n}} = \begin{cases}
+f_{X}(h_{1}(y_{1},\ldots,y_{n}), \ldots, h_{n}(y_{1},\ldots,y_{n}))\big{|}J(\underbar{x},\underbar{y})\big{|} & ,y \in G \\
+0 & ,c.c.
+\end{cases}
+\end{equation*}
+
+:::
+
+### Propriedades do Jacobiano
+
+Podemos inverter a ordem das variáveis no Jacobiano, seguindo a seguinte propriedade:
+
+\begin{equation}
+J(\underbar{x},\underbar{y}) = \left(J(\underbar{y},\underbar{x})\right)^{-1}\big{|}_{\underbar{x} = h(y)}
+(\#eq:inversajacobiano)
+\end{equation}
+
+::: {.example}
+
+Retornando ao problema apresentado no exemplo \@ref(exm:motivacaoexponencial):
+
+\begin{align*}
+y_{1} = x_{1} + x_{2} \; \; &\; \; \; y_{2} = x_{1}x_{2}^{-1} \\
+\frac{\partial y_{1}}{\partial x_{1}} = 1 \; \; &\; \; \; \frac{\partial y_{1}}{\partial x_{2}} = 1 \\
+\frac{\partial y_{2}}{\partial x_{1}} = x_{2}^{-1} \; \; &\; \; \; \frac{\partial y_{2}}{\partial x_{2}} = -x_{1}(x_{2})^{-2}
+\end{align*}
+
+De modo que podemos agora encontrar o Jacobiano com relação aos valores das derivadas parciais dos $y$'s, e invertê-lo para encontrar o Jacobiano dos $x$'s:
+
+\begin{align*}
+J(\underbar{y},\underbar{x}) = \det \begin{bmatrix}
+1 & 1 \\
+x_{2}^{-1} & -x_{1}(x_{2})^{-2}
+\end{bmatrix} &= (x_{2})^{-2}(x_{2} + x_{1})(-1) \\
+&= \left(\frac{y_{2} + 1}{y_{1}}\right)^{2}\left(\frac{y_{1}}{y_{2} + 1} + \frac{y_{1}y_{2}}{y_{2} + 1}\right)(-1) \\
+&= \frac{(y_{2} + 1)^{2}}{(y_{1})^{2}}\frac{y_{1}(y_{2} + 1)}{y_{2} + 1}(-1) \\
+&= -\frac{(y_{2} + 1)^{2}}{y_{1}} = -y_{1}^{-1}(y_{2} + 1)^{2} = \frac{1}{J(\underbar{x},\underbar{y})}
+\end{align*}
+
+:::
+
+Temos que, se $g:G_{0} \to G$, com $G_{0},G \subseteq \mathbb{R}^{n}$ abertos, se $g(x_{1}, \ldots, x_{n}) = (y_{1}, \ldots, y_{n})$, então $g$ é bijetiva e $h = g^{-1}$.
+
+::: {.example}
+
+Seja $X \sim U(0,1)$ e $Y = -ln(X)$. Temos que $G_{0} = (0,1)$, e $g(x) = -ln(x)$, de modo que $G = (0, \infty)$. Então:
+
+\begin{align*}
+g^{-1}(y) &= h(y) = \exp(-y) = e^{-y} \\
+\frac{\partial}{\partial y}(g^{-1}(y)) &= -e^{-y} = J(x,y)
+\end{align*}
+
+Assim, para encontrar $P(Y \le y)$, teremos:
+
+\begin{align*}
+P(Y \le y) &= P(-\ln(X) \le y) \\
+&= P(\ln(X) \ge -y) \\
+&= P(X \ge e^{-y}) \\
+&= 1 - P(X \le e^{-y}) \\
+&= 1 - e^{-y} = F_{Y}(y) \Longrightarrow f_{Y}(y) = e^{-y}
+\end{align*}
+
+Pelo Jacobiano, teremos:
+
+\begin{equation*}
+f_{Y}(y) = f_{X}(h(y)).|J| = 1 . e^{-y}
+\end{equation*}
+
+:::
+
+::: {.theorem}
+
+Sejam $G_{1}, G_{2}, \ldots, G_{k}$ disjuntos tais que $P\left(\underbar{X} \in \bigcup_{i=1}^{k}G_{i}\right) = 1$, tal que $g\big{|}_{G_{l}}$ é 1:1 para todo $l = 1, \ldots, k$. Denotamos por $h^{(l)}$ a inversa de $g$ em $G_{l}$, e definimos assim o Jacobiano local $J_{l}(\underbar{x},\underbar{y})$ como:
+
+\begin{equation*}
+f_{Y}(\underbar{y}) = \begin{cases}
+\sum_{l=1}^{k}f\left(h^{(l)}(y)\right)|J_{l}(\underbar{x},\underbar{y})| & ;\underbar{y} \in G_{l} \\
+0 & c.c.
+\end{cases}
+\end{equation*}
+
+:::
+
+::: {.example}
+
+Sejam $X \sim N(0,1)$ e $Y = X^{2}$. Sabemos que $y = x^{2}$ não é bijetiva, mas podemos considerar a seguinte partição em que essa função seja localmente bijetiva: $G_{1} = (-\infty, 0)$ e $G_{2} = (0, \infty)$. Então, em $G_{1}, h^{(1)}(y) = -\sqrt{y}$, e em $G_{2}, h^{(2)}(y) = \sqrt{y}$, de modo que os jacobianos locais serão:
+
+\begin{align*}
+J_{1}(x,y) &= \frac{\partial}{\partial y}h^{(1)}(y) = - \frac{1}{2\sqrt{y}} \\
+J_{2}(x,y) &= \frac{\partial}{\partial y}h^{(2)}(y) = \frac{1}{2\sqrt{y}}
+\end{align*}
+
+Assim, a densidade de $Y$ será dada por:
+
+\begin{align*}
+f_{Y}(y) &= f_{X}\left(h^{(1)}(y)\right)\big{|}J_{1}(x,y)\big{|} + f_{X}\left(h^{(2)}(y)\right)\big{|}J_{2}(x,y)\big{|} \\
+&= \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}y\right)\frac{1}{2\sqrt{y}} + \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}y\right)\frac{1}{2\sqrt{y}} \\
+&= \begin{cases}
+\frac{1}{\sqrt{2\pi}}y^{-\frac{1}{2}}e^{-\frac{1}{2}y} & ,y>0 \\
+0 & ,c.c.
+\end{cases}
+\end{align*}
+
+Ou seja, $Y \sim Gama\left(\frac{1}{2}, \frac{1}{2}\right)$, ou $Y \sim \chi^{2}(1)$.
+
+:::
+
+**Notas**:
+
+- Se $X_{1}, \ldots, X_{n}$ são iid, com $X_{i} \sim N(0,1) \Rightarrow X_{1}^{2} + \ldots + X_{n}^{2} \sim \chi^{2}(n)$;
+- Se $X \sim N(0,1), Y \sim \chi^{2}(n)$, com $X \perp Y \Rightarrow \frac{x}{\sqrt{y/n}} \sim t(n)$;
+- Sejam $X_{1}, \ldots, X_{n}$, iid, com $X_{i} \sim N(0,1)$, com $\bar{x} = \frac{\sum_{i=1}^{n}x_{i}}{n}, s^{2} = \frac{1}{n-1}\sum_{i=1}^{n}(x_{i} - \bar{x})^{2}$:
+  1. $\frac{\bar{x}\sqrt{n}}{\sigma} \sim N(0,1)$;
+  2. $\frac{(n-1)s^{2}}{\sigma^{2}} \sim \chi^{2}(n-1)$;
+  3. $\frac{\bar{x}\sqrt{n}}{s} \sim t(n-1)$;
+  4. $\bar{x} \perp s^{2}$.
+- Se $X \sim \chi^{2}(k), Y \sim \chi^{2}(n), X \perp Y \Rightarrow \frac{X/k}{Y/n} \sim F(k,n)$;
+- Se $T \sim t(n) \Rightarrow T^{2} \sim F(1,n)$.
+
+\newpage
+
+## Exercícios
+
+TODO

@@ -1,0 +1,37 @@
+---
+title: "Notas de Aula - Capítulo 3"
+subtitle: "Probabilidade"
+author: "Caio Gomes Alves"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+header-includes:
+  - \usepackage{amsmath}
+  - \usepackage{tikz}
+  - \usepackage{pgfplots}
+  - \usepackage{caption}
+  - \usepackage{subcaption}
+  - \usepackage{cancel}
+  - \usepackage{mathtools}
+  - \usepackage{annotate-equations}
+output:
+  bookdown::pdf_document2:
+    toc: false
+---
+
+# Esperança
+
+## Definição
+
+::: {.definition}
+
+Se $X$ é uma variável aleatória com distribuição $F$, a esperança de $X$ é definida por $E(X = \int_{-\infty}^{\infty}x dF(x)$, sempre que a integral estiver bem definida.
+
+:::
+
+**Convenção**: Se $E(X) < \infty$, então $X$ é integrável.
+
+**Nota**: $\int_{-\infty}^{\infty}xdF(x)$ é bem definida se $\int_{0}^{\infty}xdF(x)$ ou $\int_{-\infty}^{0}xdF(x)$ for finita, já que $\int_{-\infty}^{\infty}xdF(x) = \underbrace{\int_{-\infty}^{0}xdF(x)}_{\mathclap{\mathbf{I} \le 0}} + \underbrace{\int_{0}^{\infty}xdF(x)}_{\mathclap{\mathbf{II} \ge 0}}$. Assim, podemos separar em quatro casos:
+
+1. Se **I** e **II** são finitos, então $X$ é integrável;
+2. Se **I** é finito e $\mathbf{II} = +\infty$, então $E(X) = +\infty$;
+3. Se **II** é finito e $\mathbf{I} = -\infty$, então $E(X) = -\infty$;
+3. Se $\mathbf{I} = -\infty$ e $\mathbf{II} = +\infty$, então $E(X)$ é indefinida.

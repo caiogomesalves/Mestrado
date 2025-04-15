@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  30 MAR 2025 01:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.2.25)  14 APR 2025 18:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1037,25 +1037,44 @@ Missing character: There is no t in font nullfont!
 
 [39]
 
-[40] (./_main.aux)
+[40]
+
+[41]
+
+[42]
+Underfull \hbox (badness 6032) in paragraph at lines 3131--3132
+\T1/lmr/m/n/10 Seja $\OML/lmm/m/it/10 g \OT1/lmr/m/n/10 : \OML/lmm/m/it/10 G[] \OMS/lmsy/m/n/10 ! \OML/lmm/m/it/10 G$\T1/lmr/m/n/10 , com $\OML/lmm/m/it/10 G; G[] \OMS/lmsy/m/n/10 ^^R \U/msb/m/n/10 R[]$ \T1/lmr/m/n/10 e am-bos aber-tos. En-tão $\OML/lmm/m/it/10 g\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) =
+ []
+
+
+
+[43]
+
+[44]
+
+[45]
+
+[46]
+
+[47] (./_main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 37884 strings out of 475172
- 890521 string characters out of 5765189
- 1373911 words of memory out of 5000000
- 59986 multiletter control sequences out of 15000+600000
+ 37955 strings out of 475172
+ 891589 string characters out of 5765189
+ 1374414 words of memory out of 5000000
+ 60015 multiletter control sequences out of 15000+600000
  637562 words of font info for 87 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  89i,19n,93p,721b,2357s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on _main.pdf (40 pages, 489482 bytes).
+Output written on _main.pdf (47 pages, 520135 bytes).
 PDF statistics:
- 684 PDF objects out of 1000 (max. 8388607)
- 591 compressed objects within 6 object streams
- 262 named destinations out of 1000 (max. 500000)
- 157 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 769 PDF objects out of 1000 (max. 8388607)
+ 668 compressed objects within 7 object streams
+ 304 named destinations out of 1000 (max. 500000)
+ 173 words of extra memory for PDF output out of 10000 (max. 10000000)
 
