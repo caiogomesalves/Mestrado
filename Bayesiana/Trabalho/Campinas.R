@@ -38,10 +38,10 @@ func_carregamento <- function(string) {
 }
 
 # Nomes das bases para função:
-nomes_bases <- c("CelularesSubtraidos_2017.xlsx", "CelularesSubtraidos_2018.xlsx",
-                 "CelularesSubtraidos_2019.xlsx", "CelularesSubtraidos_2020.xlsx",
-                 "CelularesSubtraidos_2021.xlsx", "CelularesSubtraidos_2022.xlsx",
-                 "CelularesSubtraidos_2023.xlsx", "CelularesSubtraidos_2024.xlsx")
+nomes_bases <- paste0("~Downloads/Bases/Bayesiana/", c("CelularesSubtraidos_2017.xlsx", "CelularesSubtraidos_2018.xlsx",
+                                                       "CelularesSubtraidos_2019.xlsx", "CelularesSubtraidos_2020.xlsx",
+                                                       "CelularesSubtraidos_2021.xlsx", "CelularesSubtraidos_2022.xlsx",
+                                                       "CelularesSubtraidos_2023.xlsx", "CelularesSubtraidos_2024.xlsx"))
 
 # Lista com roubos em Campinas, por ano:
 lista_roubos <- map(nomes_bases, func_carregamento)

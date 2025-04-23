@@ -21,7 +21,7 @@ library(INLA)
 #----Manipulação dos dados----
 
 # Carregamento dos dados:
-celulares_2023 <- read_xlsx("CelularesSubtraidos_2023.xlsx") %>%
+celulares_2023 <- read_xlsx("~Downloads/Bases/Bayesiana/CelularesSubtraidos_2023.xlsx") %>%
     select(NOME_DELEGACIA, NUM_BO, NOME_MUNICIPIO,
            LATITUDE, LONGITUDE, MES)
 
