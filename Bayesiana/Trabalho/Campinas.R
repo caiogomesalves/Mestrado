@@ -38,10 +38,10 @@ func_carregamento <- function(string) {
 }
 
 # Nomes das bases para função:
-nomes_bases <- paste0("~Downloads/Bases/Bayesiana/", c("CelularesSubtraidos_2017.xlsx", "CelularesSubtraidos_2018.xlsx",
-                                                       "CelularesSubtraidos_2019.xlsx", "CelularesSubtraidos_2020.xlsx",
-                                                       "CelularesSubtraidos_2021.xlsx", "CelularesSubtraidos_2022.xlsx",
-                                                       "CelularesSubtraidos_2023.xlsx", "CelularesSubtraidos_2024.xlsx"))
+nomes_bases <- paste0("~/Downloads/Bases/Bayesiana/", c("CelularesSubtraidos_2017.xlsx", "CelularesSubtraidos_2018.xlsx",
+                                                        "CelularesSubtraidos_2019.xlsx", "CelularesSubtraidos_2020.xlsx",
+                                                        "CelularesSubtraidos_2021.xlsx", "CelularesSubtraidos_2022.xlsx",
+                                                        "CelularesSubtraidos_2023.xlsx", "CelularesSubtraidos_2024.xlsx"))
 
 # Lista com roubos em Campinas, por ano:
 lista_roubos <- map(nomes_bases, func_carregamento)
@@ -121,7 +121,8 @@ modelo_completo <- inla(Roubos ~ 1 +
                             f(ea_u, model = "bym", graph = mat_adj,
                               group = Ano2, control.group = list(model = "ar1")),
                         data = contagem_campinas, E = E_campinas, family = "nbinomial",
-                        control.predictor = list(compute = TRUE, link = 1))
+                        control.predictor = list(compute = TRUE, link = 1),
+                        control.compute = list(return.marginals.predictor = T))
 
 # Valores ajustados para cada bairro e ano:
 modelo_completo$summary.fitted.values
@@ -147,6 +148,25 @@ contagem_campinas %>%
     geom_line(aes(y = RRAPriori, colour = "Posteriori")) +
     scale_colour_manual(values = c("darkgreen", "tomato")) +
     labs(x = "Anos", y = "Risco Relativo")
+
+# Predição a Posteriori:
+
+# Densidades marginais do risco relativo a posteriori para Barão Geraldo:
+marginais_bg <- list()
+
+for (i in 1:8) {
+    marginais_bg[[i]] <- inla.smarginal(modelo_completo$marginals.fitted.values[[3 + 17 * (i - 1)]]) %>%
+        data.frame() %>%
+        mutate(Ano = 2017 + (i - 1))
+}
+
+marginais_bg <- do.call(rbind, marginais_bg)
+
+# Mudança no risco relativo a posteriori para Barão Geraldo:
+marginais_bg %>%
+    ggplot(aes(x = x, y = y)) +
+    geom_line() +
+    facet_wrap(~Ano)
 
 #----Mapa Animado----
 

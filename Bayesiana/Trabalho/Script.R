@@ -21,7 +21,7 @@ library(INLA)
 #----Manipulação dos dados----
 
 # Carregamento dos dados:
-celulares_2023 <- read_xlsx("~Downloads/Bases/Bayesiana/CelularesSubtraidos_2023.xlsx") %>%
+celulares_2023 <- read_xlsx("~/Downloads/Bases/Bayesiana/CelularesSubtraidos_2023.xlsx") %>%
     select(NOME_DELEGACIA, NUM_BO, NOME_MUNICIPIO,
            LATITUDE, LONGITUDE, MES)
 
@@ -184,60 +184,3 @@ marginal_bg %>%
 
 # Probabilidade de Barão Geraldo ter um risco de assalto maior que 1.2:
 1 - inla.pmarginal(1.2, modelo_campinas$marginals.fitted.values[[3]])
-
-#----Espaço-temporal----
-
-library("DClusterm")
-data(brainNM)
-
-brainst@data
-
-celulares_2024 <- read_xlsx("CelularesSubtraidos_2024.xlsx") %>%
-    dplyr::select(NOME_DELEGACIA, NUM_BO, NOME_MUNICIPIO,
-                  LATITUDE, LONGITUDE, MES)
-
-celulares_2024$LATITUDE <- as.numeric(celulares_2024$LATITUDE, digits = 10)
-celulares_2024$LONGITUDE <- as.numeric(celulares_2024$LONGITUDE, digits = 10)
-
-campinas_2024 <- subset(celulares_2024, NOME_MUNICIPIO == "CAMPINAS" & LATITUDE != 0)
-
-roubos_campinas_2024 <- campinas_2024 %>%
-    dplyr::select(LATITUDE, LONGITUDE) %>%
-    st_as_sf(coords = c("LONGITUDE", "LATITUDE"),
-             crs = 4326)
-
-roubos_campinas_2024 <- st_transform(roubos_campinas_2024, crs = 31983)
-
-contagem_2024 <- malhas %>%
-    mutate(roubos = lengths(st_intersects(malhas, roubos_campinas_2024)),
-           Ano = 2024)
-
-plot(contagem_2024["roubos"])
-
-contagem_2024$ea_u <- 1:nrow(contagem)
-contagem_2024$ea_v <- 1:nrow(contagem)
-
-E_campinas_2024 <- expected(contagem_2024$POP_2022, contagem_2024$roubos, 1)
-
-E_completo <- c(E_campinas_2023, E_campinas_2024)
-
-matriz_nb_campinas <- as(nb2mat(nb_campinas, style = "B"), "Matrix")
-
-contagem_completa <- rbind(contagem_2023, contagem_2024)
-
-formula_completa <- roubos ~ 1 + f(Ano, model = "ar1", hyper = list(prec = list(param = c(0.001, 0.001)))) +
-    f(ea_u, model = "besag", graph = matriz_nb_campinas, hyper = list(prec = list(param = c(0.001, 0.001))))
-
-modelo_completo <- inla(formula_completa, family = "poisson", data = contagem_completa, E = E_completo,
-                        control.predictor = list(compute = T),
-                        control.compute = list(return.marginals.predictor = T))
-
-summary(modelo_completo)
-
-contagem_completa$RAP <- modelo_completo$summary.fitted.values[, "mean"]
-
-contagem_completa %>%
-    ggplot(aes(fill = RAP)) +
-    geom_sf() +
-    geom_sf_label(aes(label = round(RAP, 1))) +
-    facet_wrap(~Ano)
