@@ -146,8 +146,9 @@ contagem_campinas %>%
     geom_point() +
     geom_point(aes(y = RRAPriori, colour = "Posteriori")) +
     geom_line(aes(y = RRAPriori, colour = "Posteriori")) +
+    scale_y_continuous(breaks = seq(0.5, 1.5, by = 0.25)) +
     scale_colour_manual(values = c("darkgreen", "tomato")) +
-    labs(x = "Anos", y = "Risco Relativo")
+    labs(x = "Anos", y = "Risco Relativo", colour = "Risco")
 
 # Predição a Posteriori:
 
@@ -166,7 +167,9 @@ marginais_bg <- do.call(rbind, marginais_bg)
 marginais_bg %>%
     ggplot(aes(x = x, y = y)) +
     geom_line() +
-    facet_wrap(~Ano)
+    facet_wrap(~Ano) +
+    labs(x = "Risco a posteriori", y = "Densidade") +
+    theme_bw()
 
 #----Mapa Animado----
 

@@ -273,7 +273,7 @@ E pela extenção indutiva em \(n\) do axioma \(Ax_{2}\), temos que se \(A_{i}^{
 
 Assim provamos o axioma \(A_{5}\) como extensão indutiva dos axiomas anteriores, indicando que tanto a união quanto a interseção dos \(A_{i}\) pertencem à \(\mathcal{A}\). Podemos também mostrar que a álgebra \(\mathcal{A}\) é fechada também para a operação de diferença entre conjuntos: \(A \in \mathcal{A}, B \in \mathcal{A}, A-B = A \cap B^{c} \in \mathcal{A}\).
 
-\begin{proof}
+\begin{proof}[Prova]
 Considerando que os conjuntos \(A\) e \$B pertencem à \(\mathcal{A}\), podemos utilizar o axioma \(Ax_{2}\) para mostrar que \(A^{c} \in \mathcal{A}\) e \(B^{c} \in \mathcal{A}\). A partir disso, por meio do axioma \(Ax_{5}\) temos que os seguintes conjuntos também pertencem à \(\mathcal{A}\): \(A \cup B, A \cup B^{c}, A^{c} \cup B, A^{c} \cup B^{c}, A \cap B, A \cap B^{c}, A^{c} \cap B, A^{c} \cap B^{c}\). E como temos que \(A \cap B^{c} = A-B\), temos a prova de que \(A-B \in \mathcal{A}\). Além disso, essa prova mostra que a diferença contrária (\(B - A = A^{c} \cap B\)) também pertence à algebra \(\mathcal{A}\).
 \end{proof}
 
@@ -473,7 +473,7 @@ Seja \(\Omega\) um conjunto não-vazio, \(\mathcal{A}\) uma \(\sigma\)-álgebra 
 
 \end{proposition}
 
-\begin{proof}
+\begin{proof}[Prova]
 \leavevmode
 
 \begin{enumerate}
@@ -858,7 +858,7 @@ P\left(\bigcap_{i=1}^{n}A_{i}\right) = P(A_{1})P(A_{2}|A_{1})P(A_{3}|A_{1} \cap 
 \end{equation*}
 \end{lemma}
 
-\begin{proof}
+\begin{proof}[Prova]
 Suponha a validade do lema anterior. Logo, seja \(D = (\bigcap_{i=1}^{n}A_{i})\):
 
 \begin{align*}
@@ -912,7 +912,7 @@ A partir dos axiomas, prove a propriedade \(P5\):
 P\left(\bigcup_{n=i}^{\infty}A_{n}\right) \le \sum_{n=1}^{\infty}P(A_{n})
 \]
 
-\begin{proof}
+\begin{proof}[Resposta]
 Consideremos uma prova por indução para \(n \to \infty\):
 
 Para \(n=2\):
@@ -964,7 +964,7 @@ Sejam \(A_{1}, A_{2},\dots\) eventos aleatórios. Mostre que:
   \(P\left(\bigcap_{k=1}^{n}A_{k}\right) \ge 1 - \sum_{k=1}^{n}P(A_{k}^{c})\)
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Por De Morgan temos que \(\bigcap_{k=1}^{n}A_{k} = \left(\bigcup_{k=1}^{n}A_{k}^{c}\right)^{c}\), de modo que:
 
 \begin{align*}
@@ -982,7 +982,7 @@ P\left(\bigcap_{k=1}^{n}A_{k}\right) &= P\left(\bigcup_{k=1}^{n}A_{k}^{c}\right)
   Se \(P(A_{k}) \ge 1 - \epsilon\) para \(k = 1,2,\dots,n\), então \(P(\bigcap_{k=1}^{n}A_{k}) \ge 1 - n\epsilon\)
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 É fácil ver que:
 
 \[
@@ -1007,7 +1007,7 @@ P\left(\bigcap_{k=1}^{n}A_{k}\right) = P\left(\bigcup_{k=1}^{n}A_{k}^{c}\right)^
   \(P\left(\bigcap_{k=1}^{\infty}A_{k}\right) \ge 1 - \sum_{k=1}^{\infty}P(A_{k}^{c})\)
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 De maneira semelhante ao que foi visto na prova da letra \textbf{a}, temos que:
 
 \begin{align*}
@@ -1032,7 +1032,7 @@ Demonstre as seguintes propriedades:
   Se \(P(A_{n}) = 0\) para \(n = 1,2,\dots\), então \(P\left(\bigcup_{n=1}^{\infty}A_{n}\right) = 0\).
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Utilizando a propriedade \(P5\), temos que:
 
 \begin{align*}
@@ -1052,7 +1052,7 @@ P\left(\bigcup_{n=1}^{\infty} A_{n}\right) &= 0
   Se \(P(A_{n}) = 1\) para \(n = 1,2,\dots\), então \(P\left(\bigcap_{n=1}^{\infty}A_{n}\right) = 1\).
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Levando em consideração que se \(P(A_{n}) = 1 \Rightarrow P(A_{n}^{c}) = 0\) (pela propriedade \(P1\)), utilizando De Morgan e a prova da letra \textbf{c} do exercício \ref{exr:exbj3}, temos que:
 
 \begin{align*}
@@ -1078,7 +1078,7 @@ Seja \(\Omega\) um conjunto não-vazio.
   Prove: se \(\mathcal{A}\) e \(\mathcal{B}\) são \(\sigma\)-álgebras de subconjuntos de \(\Omega\), então \((\mathcal{A} \cap \mathcal{B})\) também é uma \(\sigma\)-álgebra.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Para que \(\mathcal{A} \cap \mathcal{B}\) seja uma \(\sigma\)-álgebra, é necessário que cumpram-se os axiomas \(Ax_{1}, Ax_{2}\) e \(Ax_{3}\):
 
 \begin{itemize}
@@ -1102,7 +1102,7 @@ Como os três axiomas foram cumpridos, temos que \((\mathcal{A} \cap \mathcal{B}
   Generalize o item (a): se \(\mathcal{A}_{i}, i \in \mathcal{I}\), são \(\sigma\)-álgebras de partes de \(\Omega\), onde \(\mathcal{I}\) é um conjunto não-vazio de índices, então \(\bigcap_{i \in \mathcal{I}}\mathcal{A}_{i}\) também é uma \(\sigma\)-álgebra.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Como anteriormente, temos que mostrar que \(\bigcap_{i \in \mathcal{I}}\mathcal{A}_{i}\) cumpre os axiomas \(Ax_{1}, Ax_{2}\) e \(Ax_{3}\):
 
 \begin{itemize}
@@ -1126,7 +1126,7 @@ Vemos portanto que, por cumprir os axiomas \(Ax_{1}, Ax_{2}\) e \(Ax_{3}\), \(\b
   Seja \(\mathbb{C}\) uma classe de subconjuntos de \(\Omega\). Mostre que existe \emph{pelo menos uma} \(\sigma\)-álgebra que contém \(\mathbb{C}\).
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 É fácil ver que a maior classe de subconjuntos de \(\Omega\) é o conjunto das partes de \(\Omega\), denotado como \(\mathcal{P}(\Omega)\) (definido no exemplo \ref{exm:powerset}). Assim, temos que \(\mathbb{C} \subseteq \mathcal{P}(\Omega)\), de modo que, pelo menos a \(\sigma\)-álgebra formada por \(\mathcal{P}(\Omega)\) contém \(\mathbb{C}\).
 \end{proof}
 
@@ -1138,7 +1138,7 @@ Vemos portanto que, por cumprir os axiomas \(Ax_{1}, Ax_{2}\) e \(Ax_{3}\), \(\b
   Visando a plena utilização dos itens (b) e (c), como você definiria ``a menor \(\sigma\)-álgebra contendo \(\mathbb{C}\)'', onde \(\mathcal{C}\) é uma classe de subconjuntos de \(\Omega\)?
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Considere que temos \(\sigma\)-álgebras de partes de \(\Omega\), \(\mathcal{A}_{i}\) com \(i \in \mathbb{I}\) (sendo \(\mathbb{I}\) um conjunto não-vazio de índices), tais que \(\mathbb{C} \in \mathcal{A}_{i}: \; \forall i \in \mathbb{I}\). Assim, sabemos que algum dos \(\mathcal{A}_{i}\) é a menor \(\sigma\)-álgebra que contém \(\mathbb{C}\), de modo que \(\bigcap_{i \in \mathbb{I}}A_{i}\) será a menor \(\sigma\)-álgebra que contém \(\mathbb{C}\).
 \end{proof}
 
@@ -1148,7 +1148,7 @@ Considere que temos \(\sigma\)-álgebras de partes de \(\Omega\), \(\mathcal{A}_
 
 Uma caixa contém \(2n\) sorvetes, \(n\) do sabor \(A\) e \(n\) do sabor \(B\). De um grupo de \(2n\) pessoas, \(a < n\) preferem o sabor \(A\), \(b < n\) o sabor \(B\) e \(2n-(a+b)\) não tem preferência. Demonstre: se os sorvetes são distribuídos ao acaso, a probabilidade de que a preferência de todas as pessoas seja respeitada é de \(\binom{2n-a-b}{n-a}/\binom{2n}{n}\).
 
-\begin{proof}
+\begin{proof}[Resposta]
 Sabendo que a ordem de entrega dos \(n\) sorvetes de cada sabor, para as \(2n\) pessoas não importa, temos que a quantidade possível de entregas diferentes é:
 
 \begin{equation*}
@@ -1188,7 +1188,7 @@ P(R) = \frac{|R|}{|\Omega|} = \frac{\binom{2n-a-b}{n-a}}{\binom{2n}{n}}
 
 Suponhamos que dez cartas estejam numeradas de 1 até 10. Das dez cartas, retira-se uma de cada vez, ao acaso e sem reposição, até retirar-se o primeiro número par. Conta-se o número de retiradas necessárias. Exiba um bom modelo probabilístico para esse experimento.
 
-\begin{proof}
+\begin{proof}[Resposta]
 Dada essa formulação, temos que 5 cartas são pares e 5 são ímpares. Assim, considere o evento \(\{Y_{k} \;: 1 \le k \le 6 ; k \in \mathbb{Z}\}\) em que \(k\) indica que a \(k\)-ésima retirada contém a primeira carta par. Assim, por exemplo, \(Y_{1}\) indica o evento em que a primeira carta retirada é par, \(Y_{2}\) o evento em que a segunda carta retirada é par, e assim por diante.
 
 O nosso espaço amostral é (visto que o número da carta não importa, apenas se é \(P = "\text{par}"\) ou \(I = "\text{ímpar}"\)):
@@ -1235,7 +1235,7 @@ Para cada um dos seguintes experimentos, descreva um espaço de probabilidade qu
 \{(x,y) : 0 \le x \le 1, 0 \le y \le 1\}
 \end{equation*}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Temos que:
 
 \begin{equation*}
@@ -1253,7 +1253,7 @@ Pela continuidade no vazio, é necessário que a probabilidade de ocorrência de
   Retiram-se cartas sucessivamente de um baralho de 52 cartas, ao acaso e \emph{com} reposição, até retirar-se o primeiro rei. Registra-se o número total de retiradas.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Considere que \(\{Y: Y \in \{1,2,\dots\}\}\) indica a quantidade de retiradas necessárias até o primeiro rei. O espaço amostral é dado diretamente: \(\Omega = \{1,2,3,\dots\}\). Temos que, para cada retirada, a probabilidade da carta ser um rei é \(4/52 = 1/13\) (considerando que temos 4 reis no baralho), e a probabilidade de não ser é de \(48/52 = 12/13\). Assim, a probabilidade de que a primeira retirada seja um rei é de:
 
 \begin{equation*}
@@ -1283,7 +1283,7 @@ Esse modelo de probabilidade é denotado modelo geométrico.
   Quinze bolas são retiradas, ao acaso e \emph{com} reposição, de uma urna contendo 5 bolas vermelhas, 9 bolas pretas e uma bola branca. Observa-se o número que ocorre cada cor.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Sejam os eventos \(V, P \text{ e } B\) o número de vezes que as retiradas foram de bolas vermelhas, pretas e brancas, respectivamente. É necessário (pela definição do modelo) que \(V + P + B = 15\), mas consideremos o caso em que o número de retiradas seja \(n\). Assim, para \(n = 1\), o espaço amostral \(\Omega\) é:
 
 \begin{equation*}
@@ -1343,7 +1343,7 @@ Em que verifica-se facilmente que é válido para os casos em que \(n=1\) e \(n=
   O experimento (\textbf{c}) é realizado \emph{sem} reposição.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Como temos 15 bolas que serão retiradas \emph{sem} reposição, o único evento possível após as 15 serem retiradas é:
 
 \begin{equation*}
@@ -1372,7 +1372,7 @@ Retiram-se 4 cartas, ao acaso, de um baralho de 52 cartas. Registra-se o número
   As retiradas são feitas \emph{sem} reposição.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Considerando que em um baralho usual tem 52 cartas, e que a ordem com que cada uma das 4 cartas retiradas da amostra não importa (apenas importa a quantidade de reis na amostra), a quantidade total de amostras possíveis é \(\binom{52}{4}\).
 
 Como temos 4 reis no baralho, isso implica que há 48 cartas que são ``não-reis''. Dessa forma, se na amostra forem coletados \(k\) reis, serão coletados também \(4-k\) ``não-reis'', com os \(k\) reis podendo aparecer de \(\binom{4}{k}\) maneiras diferentes (não importa qual o rei foi registrado) e os \(4-k\) ``não-reis'' podem aparecer de \(\binom{48}{4-k}\) maneiras diferentes.
@@ -1395,7 +1395,7 @@ Esse modelo é chamado de hipergeométrico, que vale quando sabemos a quantidade
   As retiradas são feitas \emph{com} reposição.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Se as retiradas são feitas com reposição, a probabilidade de registrar um rei em cada retirada é de \(4/52\) e a probabilidade de registrar um ``não-rei'' é de \(48/52\). Como a ordem das retiradas não importa, podemos ver que em uma amostra de tamanho 4, os \(k\) reis podem aparecer de \(\binom{4}{k}\) maneiras diferentes. Além disso, podemos ver que, como irão aparecer \(k\) reis na amostra, consequentemente irão aparecer \(4-k\) ``não-reis''.
 
 Assim, seja \(K\) o evento registrar \(k\) reis na amostra, a probabilidade \(P(K=k)\) é dada por:
@@ -1416,7 +1416,7 @@ Esse modelo é chamado de binomial, e vale quando queremos encontrar a probabili
   Determine em que caso, (a) ou (b), é mais provável obter 4 reis.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Substituindo os valores de \(k\) em \eqref{eq:hgeomex} e \eqref{eq:binomex} para 4, podemos calcular as probabilidades em cada caso. Assim:
 
 \begin{align*}
@@ -1449,7 +1449,7 @@ e
 P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)
 \end{equation*}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Podemos escrever os eventos \(A\) e \(B\) como as seguintes uniões de eventos disjuntos:
 
 \begin{align*}
@@ -1578,7 +1578,7 @@ P(A \cup B \cup C) = &P(A \cap B \cap C^{c}) + P(A \cap B^{c} \cap C) + P(A^{c} 
   Enuncie a generalização do item \textbf{(a)} para o caso da união de \(n\) eventos aleatórios.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Podemos ver que as demonstrações anteriores podem ser escritas como:
 
 \begin{equation}
@@ -1604,7 +1604,7 @@ Esse é chamado de princípio de inclusão-exclusão.
 (i) \; \sum_{i=1}^{n}P(A_{i}) - \sum_{1 \le i < j \le n} P(A_{i} \cap A_{j}) \le P\left(\bigcup_{i=1}^{n} A_{n}\right) \le \sum_{i=1}^{n}P(A_{i}) - \sum_{1 \le i < j \le n} P(A_{i} \cap A_{j}) + \sum_{1 \le i < j < k \le n} P(A_{i} \cap A_{j} \cap A_{k})
 \end{equation*}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Podemos demonstrar a primeira desigualdade utilizando a equação \eqref{eq:princincexc}:
 
 \begin{equation}
@@ -1640,7 +1640,7 @@ P\left(\bigcup_{i=1}^{n} A_{i}\right) \le &\sum_{i=1}^{n}P(A_{n}) - \sum_{1 \le 
 
 se \(k\) é par, \(k \le n\), vale \(\ge\) nesta última desigualdade.
 
-\begin{proof}
+\begin{proof}[Resposta]
 Como \(k \le n\), podemos separar a desigualdade em dois casos:
 
 \begin{enumerate}
@@ -1692,7 +1692,7 @@ Se \(k\) for par, o termo \(k\) será negativo e o termo \(k+1\) será positivo,
 
 Suponha que \(n\) cartas numeradas de 1 até \(n\) sejam embaralhadas e retiradas uma por uma, sem reposição, até todas as cartas serem retiradas. Qual a probabilidade de que para pelo menos uma carta, o número da carta coincida com o número da retirada?
 
-\begin{proof}
+\begin{proof}[Resposta]
 Seja \(A_{i}\) o evento em que o número da carta \(i\) coincidiu com o número da retirada. Podemos ver que, o caso em que para pelo menos uma delas coincida é equivalente a \(\bigcup_{i=1}^{n}A_{i}\). Dessa maneira, podemos ver que a probabilidade de isso ocorrer é:
 
 \begin{align*}
@@ -1739,7 +1739,7 @@ Seja \((\Omega, \mathcal{A},P)\) um espaço de probabilidade e suponha que todos
   Se os \(A_{n}\) são disjuntos e \(P(B|A_{n}) \ge c\) para todo \(n\), então \(P(B|\bigcup_{n=1}^{k}A_{n}) \ge c\) (pode supor \(P(A_{n}) > 0\) para todo \(n\)).
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Sabemos que \(A_{i} \cap A_{j} = \emptyset, \; \forall i,j\). Dito isso, podemos ver que a seguinte relação é válida:
 
 \begin{align}
@@ -1776,7 +1776,7 @@ P\left(B \; \Big{|} \bigcup_{n=1}^{k}A_{n}\right) &\ge c
   O item \textbf{(a)} com ``\(=\)'' no lugar de ``\(\ge\)''.
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Substituindo o sinal de \(\ge\) em \eqref{eq:pdebdadosans} por uma igualdade, a prova é igual ao já realizado no item anterior.
 \end{proof}
 
@@ -1788,7 +1788,7 @@ Substituindo o sinal de \(\ge\) em \eqref{eq:pdebdadosans} por uma igualdade, a 
   Se \(A_{n} \supset A_{n+1}\) e \(P(A_{n+1}|A_{n}) \le \frac{1}{2}\) para todo \(n\), então \(P(A_{n}) \to 0\) quando \(n \to \infty\).
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Consideremos o caso inicial, com \(A_{1}\) e \(A_{2}\). Disso tem-se que:
 
 \begin{equation*}
@@ -1830,7 +1830,7 @@ Assim, independentemente do valor de \(P(A_{1})\), o valor \(P(A_{n}) \to 0\) co
 P(B|\cup A_{n}) = P(C|\cup A_{n})
 \end{equation*}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Como os \(A_{n}\)s são disjuntos, temos que:
 
 \begin{align*}
@@ -1870,7 +1870,7 @@ Como, por hipótese, temos que \(P(B|A_{n}) = P(C|A_{n}) \Rightarrow P(A_{n} \ca
 P(B|C) = \sum_{n}P(A_{n}|C)P(B|A_{n} \cap C)
 \end{equation*}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Pelo Teorema da Multiplicação, temos que \(P(A_{n} \cap B \cap C)\) pode ser escrito como:
 
 \begin{equation*}
@@ -1898,7 +1898,7 @@ P(B|C) &= \frac{P(B \cap C)}{P(C)} \\
 
 Suponha que a ocorrência ou não de chuva dependa das condições do tempo no dia imediatamente anterior. Admita-se que se chove hoje, choverá amanhã com probabilidade de 0,7 e que se não chove hoje choverá amanhã com probabilidade 0,4. Sabendo-se que choveu hoje, calcule a probabilidade de que choverá depois de amanhã.
 
-\begin{proof}
+\begin{proof}[Resposta]
 Sejam os eventos \(C_{n} =\) ``Choveu no dia de hoje'', \(NC_{n} =\) ``Não choveu no dia de hoje''. De maneira similar, \(C_{n+1}\) indica que choverá amanhã, \(C_{n+2}\) que choverá depois de amanhã e assim por diante. Sabemos pelo enunciado as seguintes probabilidades:
 
 \begin{align*}
@@ -1943,7 +1943,7 @@ Certo experimento consiste em lançar um dado equilibrado duas vezes, independen
   Pelo menos um dos números ser 6?
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Sejam \(A_{1}\) e \(A_{2}\) os lançamentos do primeiro e do segundo dado, respectivamente. Sabemos que \(P(A_{1} = A_{2}) = 0\). Disso temos que:
 
 \begin{align*}
@@ -1961,7 +1961,7 @@ P((A_{1} = 6) \cup (A_{2} = 6)) &= P(A_{1} = 6) + P(A_{2} = 6) - P((A_{1} = 6) \
   A soma dos números ser 8?
 \end{enumerate}
 
-\begin{proof}
+\begin{proof}[Resposta]
 Considere o evento \(S = x, x \in \{2,3,\ldots,12\}\) o resultado da soma dos lançamentos \(A_{1}\) e \(A_{2}\). Utilizando o Teorema da Probabilidade Total, podemos decompor a probabilidade da soma ser igual a 8 da seguinte forma:
 
 \begin{align*}
@@ -1978,7 +1978,7 @@ P(S=8) &= P(S=8|A_{1} = 1)P(A_{1} = 1) + P(S=8|A_{1} = 2)P(A_{1} = 2) + \dots + 
 
 Em teste de múltipla escolha, a probabilidade do aluno saber a resposta é \(p\). Havendo \(m\) escolhas, se ele sabe a resposta ele responde corretamente com probabilidade 1; se não sabe, ele responde corretamente com probabilidade \(\frac{1}{m}\). Qual a probabilidade de que ele soubesse a resposta dado que a pergunta foi respondida corretamente? Calcule o limite dessa probabilidade quando (i) \(m \to \infty\) com \(p\) fixo e (ii) \(p \to 0\) com \(m\) fixo.
 
-\begin{proof}
+\begin{proof}[Resposta]
 Sejam: \(P(S) = p\) a probabilidade de saber a resposta, \(P(A|S) = 1\) a probabilidade de acertar, dado que sabia a resposta, \(P(A|NS) = \frac{1}{m}\) a probabilidade de acertar, dado que não sabia a resposta e \(P(NA|NS) = \frac{m-1}{m}\) a probabilidade de não acertar, dado que não sabe a resposta. Sabemos que os eventos \(S\) e \(NS\) são complementares, assim como \(A\) e \(NA\). Queremos encontrar \(P(S|A)\), que é dada por:
 
 \begin{align*}
@@ -2027,7 +2027,7 @@ Agora, calculando os limites temos:
 
 Durante o mês de novembro a probabilidade de chuva é de 0,3. O Fluminense ganha um jogo em um dia de chuva com a probabilidade de 0,4; em um dia sem chuva com a probabilidade 0,6. Se ganhou um jogo em novembro, qual é a probabilidade de que choveu neste dia?
 
-\begin{proof}
+\begin{proof}[Resposta]
 Sejam os seguintes eventos: \(P(C) = 0,3\) é a probabilidade de chover em novembro, \(P(NC) = 0,7\) é a probabilidade de não chover em novembro, \(P(V|C) = 0,4\) é a probabilidade de vitória, dado que choveu no dia, \(P(D|C) = 0,6\) é a probabilidade de derrota, dado que choveu no dia, \(P(V|NC) = 0,6\) é a probabilidade de vitória, dado que não choveu no dia e \(P(D|NC) = 0,4\) é a probabilidade de derrota, dado que não choveu no dia. Pelo Teorema da Probabilidade Total, temos que:
 
 \begin{align*}
@@ -2185,7 +2185,7 @@ Seja \(X\) uma variável aleatória definida em \((\Omega,\mathcal{F},P)\), ent�
 
 \end{theorem}
 
-\begin{proof}
+\begin{proof}[Prova]
 \leavevmode
 
 \begin{enumerate}
@@ -2221,7 +2221,7 @@ Se \(F\) é a f.d.a. da variável aleatória \(X\), então:
 
 \end{theorem}
 
-\begin{proof}
+\begin{proof}[Prova]
 \leavevmode
 
 \begin{enumerate}
@@ -2428,7 +2428,7 @@ O que demonstra que \(f_{X}(x)\) é densidade de probabilidade.
 Cada função de distribuição se corresponde com apenas uma distribuição? Não.
 \end{conjecture}
 
-\begin{proof}
+\begin{proof}[Prova]
 Considere, por exemplo, que a variável aleatória \(X \sim N(0,1)\). Logo, a sua função distribuição de probabilidade é dada por \(f_{X}(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}}\) e \(\Phi(x)\) é sua acumulada. Vejamos que \(X \sim N(0,1) \Longleftrightarrow -X \sim N(0,1)\):
 
 Seja \(\omega\) um possível valor de \(-X\), devemos calcular \(P(-X \le \omega)\) e provar que \(P(-X \le \omega) = \Phi(\omega)\):
@@ -2594,7 +2594,7 @@ Seja \(\underbar{X} = (X_{1}, \ldots, X_{n})\) tal que \(X_{i}\) é variável al
 
 As provas de \(F_{1}\) e \(F_{2}\) são de simples construção. Para \(F_{3}\) temos:
 
-\begin{proof}
+\begin{proof}[Prova]
 Considere \(i\) fixo e o evento \([X_{1} \le x_{1}, \ldots, X_{i-1} \le x_{i-1}, X_{i} \le -m, X_{i+1} \le x_{i+1}, \ldots, X_{n} \le x_{n}]\). Logo, \(F(x_{1},\ldots,x_{i-1},-m,x_{i+1},\ldots,x_{n}) \xrightarrow[m \to \infty]{} 0\).
 
 Por outro lado, note que \([X_{1} \le x_{1}, \ldots, X_{i-1} \le x_{i-1}, X_{i} \le m, X_{i+1} \le x_{i+1}, \ldots, X_{n} \le x_{n}] \xrightarrow[m \to \infty]{} [X_{1} \le x_{1}, \ldots, X_{i-1} \le x_{i-1}, X_{i+1} \le x_{i+1}, \ldots, X_{n} \le x_{n}]\) (que é o evento marginal sem o \(X_{i}\)). Já se \(x_{i} \to \infty \; \forall i : \bigcap_{i=1}^{n}[X_{i} \le x_{i}] \uparrow \Omega \Rightarrow F(x_{1}, \ldots, x_{n}) = P\left(\bigcap_{i=1}^{n}[X_{i} \le x_{i}]\right) \uparrow 1, x_{i} \to \infty \; \forall i\).
@@ -2722,7 +2722,7 @@ Se \(X_{1},\ldots,X_{n}\) são coletivamente independentes, então \(X_{i1},\ldo
 
 \end{proposition}
 
-\begin{proof}
+\begin{proof}[Prova]
 \leavevmode
 
 \begin{itemize}
@@ -2778,7 +2778,7 @@ P(X_{1} \in B_{1}, \ldots, X_{n} \in B_{n}) &= P(a_{1} < X_{1} \le b_{1}, \ldots
 
 \end{proposition}
 
-\begin{proof}
+\begin{proof}[Prova]
 \leavevmode
 
 \begin{itemize}
@@ -2970,7 +2970,7 @@ f_{Z}(z) = \begin{cases}
 
 \end{proposition}
 
-\begin{proof}
+\begin{proof}[Prova]
 Seja \(Z = X+Y \Rightarrow [Z \le z] = [X+Y \le z] = [(x,y) \in B_{z}]\). Considerando \(B_{z} = \{(x,y):x+y \le z\} = \{(x,y):x \le z-y\}\), temos que:
 
 \begin{equation*}
@@ -3364,5 +3364,69 @@ Ou seja, \(Y \sim Gama\left(\frac{1}{2}, \frac{1}{2}\right)\), ou \(Y \sim \chi^
 \subsection{Exercícios}\label{exercuxedcios-1}}
 
 TODO
+
+\newpage
+
+\hypertarget{esperanuxe7a}{%
+\section{Esperança}\label{esperanuxe7a}}
+
+\hypertarget{definiuxe7uxe3o}{%
+\subsection{Definição}\label{definiuxe7uxe3o}}
+
+\begin{definition}
+Se \(X\) é uma variável aleatória com distribuição \(F\), a esperança de \(X\) é definida por \(E(X = \int_{-\infty}^{\infty}x dF(x)\), sempre que a integral estiver bem definida.
+\end{definition}
+
+\textbf{Convenção}: Se \(E(X) < \infty\), então \(X\) é integrável.
+
+\textbf{Nota}: \(\int_{-\infty}^{\infty}xdF(x)\) é bem definida se \(\int_{0}^{\infty}xdF(x)\) ou \(\int_{-\infty}^{0}xdF(x)\) for finita, já que \(\int_{-\infty}^{\infty}xdF(x) = \underbrace{\int_{-\infty}^{0}xdF(x)}_{\mathclap{\mathbf{I} \le 0}} + \underbrace{\int_{0}^{\infty}xdF(x)}_{\mathclap{\mathbf{II} \ge 0}}\). Assim, podemos separar em quatro casos:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Se \textbf{I} e \textbf{II} são finitos, então \(X\) é integrável;
+\item
+  Se \textbf{I} é finito e \(\mathbf{II} = +\infty\), então \(E(X) = +\infty\);
+\item
+  Se \textbf{II} é finito e \(\mathbf{I} = -\infty\), então \(E(X) = -\infty\);
+\item
+  Se \(\mathbf{I} = -\infty\) e \(\mathbf{II} = +\infty\), então \(E(X)\) é indefinida.
+\end{enumerate}
+
+\textbf{Propriedade}: \(E(|X|) = \int |x| dF(x)\). Logo, \(X\) é integrável se e somente se \(E(|X|) < \infty\).
+
+\begin{example}
+\(X \sim U(0,1),\; Y = \min\left(X,\frac{1}{2}\right)\):
+
+\begin{align*}
+P\left(Y = \frac{1}{2}\right) &= P\left(X > \frac{1}{2}\right) = 1 - F_{X}\left(\frac{1}{2}\right) = 1 - \frac{1}{2} = \frac{1}{2} = P_{Y}\left(Y = \frac{1}{2}\right)\\
+E(Y) = \int_{-\infty}^{\infty}ydF(y) &= \int_{0}^{1/2}y.1dy + \frac{1}{2}P_{Y}\left(Y=\frac{1}{2}\right) \\
+&= \frac{y^{2}}{2}\bigg{|}_{0}^{1/2} + \frac{1}{4} \\
+&= \frac{1}{8} + \frac{1}{2} = \frac{3}{8}
+\end{align*}
+\end{example}
+
+\begin{proposition}
+
+\(E(X) = \int_{0}^{\infty}(1 - F(x))dx - \int_{-\infty}^{0}F(x)dx\). Disso, temos que:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{a)} \(\int_{0}^{\infty}xdF(x) = \int_{0}^{\infty}(1 - F(x))dx\);
+\item
+  \textbf{b)} \(\int_{-\infty}^{0}xdF(x) = - \int_{-\infty}^{0}F(x)dx\);
+\end{itemize}
+
+\end{proposition}
+
+\begin{proof}[Prova]
+Vejamos \textbf{(a)}: considere que \(d(xF(x)) = F(x)dx + xd(F(x)) \Rightarrow xd(F(x)) = d(xF(x)) - F(x)dx\). Seja um \(b > 0\):
+
+\begin{align*}
+X=x
+\end{align*}
+\end{proof}
 
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.14)  14 APR 2025 23:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.18)  23 APR 2025 22:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -831,29 +831,34 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 125.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 125.
-
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 165.
+(/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
 
 [1
 
-{/home/caiogomesalves/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}] (./03-esperanca.aux)
+{/home/caiogomesalves/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
+
+[2] (./03-esperanca.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-03-26>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 36411 strings out of 471607
- 859314 string characters out of 5521273
- 1327316 words of memory out of 5000000
- 62343 multiletter control sequences out of 15000+600000
- 681694 words of font info for 82 fonts, out of 8000000 for 9000
+ 36461 strings out of 471607
+ 860476 string characters out of 5520537
+ 1339316 words of memory out of 5000000
+ 62385 multiletter control sequences out of 15000+600000
+ 690593 words of font info for 85 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 89i,9n,93p,728b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
-Output written on 03-esperanca.pdf (1 page, 180875 bytes).
+ 89i,12n,93p,728b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
+Output written on 03-esperanca.pdf (2 pages, 224914 bytes).
 PDF statistics:
- 100 PDF objects out of 1000 (max. 8388607)
- 72 compressed objects within 1 object stream
- 11 named destinations out of 1000 (max. 500000)
+ 126 PDF objects out of 1000 (max. 8388607)
+ 90 compressed objects within 1 object stream
+ 14 named destinations out of 1000 (max. 500000)
  29 words of extra memory for PDF output out of 10000 (max. 10000000)
 

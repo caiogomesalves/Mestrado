@@ -146,7 +146,7 @@ c) $\lim_{t \to - \infty}F(t) = 0$ e $\lim_{t \to \infty}F(t) = 1$.
 
 :::
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 a) Dados $a,b \in \mathbb{R} : a \le b; \; [X \le a] \subseteq [X \le b] \Rightarrow P([X \le a]) \le P([X \le b]) \Rightarrow F(a) \le F(b)$.
 
@@ -173,7 +173,7 @@ e) Existem no máximo um total enumerável de descontinuidades em $F$.
 
 :::
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 a) $F$ é monótona e limitada ($0 \le F \le 1$). Logo, os limites laterais existem e são limitados.
 
@@ -341,7 +341,7 @@ Cada função de distribuição se corresponde com apenas uma distribuição? N�
 
 :::
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 Considere, por exemplo, que a variável aleatória $X \sim N(0,1)$. Logo, a sua função distribuição de probabilidade é dada por $f_{X}(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}}$ e $\Phi(x)$ é sua acumulada. Vejamos que $X \sim N(0,1) \Longleftrightarrow -X \sim N(0,1)$:
 
@@ -488,7 +488,7 @@ Seja $\underbar{X} = (X_{1}, \ldots, X_{n})$ tal que $X_{i}$ é variável aleat�
 
 As provas de $F_{1}$ e $F_{2}$ são de simples construção. Para $F_{3}$ temos:
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 Considere $i$ fixo e o evento $[X_{1} \le x_{1}, \ldots, X_{i-1} \le x_{i-1}, X_{i} \le -m, X_{i+1} \le x_{i+1}, \ldots, X_{n} \le x_{n}]$. Logo, $F(x_{1},\ldots,x_{i-1},-m,x_{i+1},\ldots,x_{n}) \xrightarrow[m \to \infty]{} 0$.
 
@@ -599,7 +599,7 @@ Se $X_{1},\ldots,X_{n}$ são coletivamente independentes, então $X_{i1},\ldots,
 
 :::
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 - **a)** Se $X_{1},\ldots,X_{n}$ são coletivamente independentes e tomamos $[X_{i} \le x_{i}] = (-\infty, x_{i}] = B_{i}$. Então:
 
@@ -639,7 +639,7 @@ P(X_{1} \in B_{1}, \ldots, X_{n} \in B_{n}) &= P(a_{1} < X_{1} \le b_{1}, \ldots
 
 :::
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 - **a)** Como consequência da proposição \@ref(prp:propacumulada), temos que: $F_{X_{1}\ldots X_{n}}(x_{1},\ldots,x_{n}) = \prod_{i=1}^{n}F_{X_{i}}(x_{i}), \forall (x_{1},\ldots,x_{n})$. Logo, por definição temos:
 
@@ -801,7 +801,7 @@ f_{Z}(z) = \begin{cases}
 
 :::
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 Seja $Z = X+Y \Rightarrow [Z \le z] = [X+Y \le z] = [(x,y) \in B_{z}]$. Considerando $B_{z} = \{(x,y):x+y \le z\} = \{(x,y):x \le z-y\}$, temos que:
 
@@ -1166,3 +1166,5 @@ Ou seja, $Y \sim Gama\left(\frac{1}{2}, \frac{1}{2}\right)$, ou $Y \sim \chi^{2}
 ## Exercícios
 
 TODO
+
+\newpage

@@ -34,4 +34,39 @@ Se $X$ é uma variável aleatória com distribuição $F$, a esperança de $X$ �
 1. Se **I** e **II** são finitos, então $X$ é integrável;
 2. Se **I** é finito e $\mathbf{II} = +\infty$, então $E(X) = +\infty$;
 3. Se **II** é finito e $\mathbf{I} = -\infty$, então $E(X) = -\infty$;
-3. Se $\mathbf{I} = -\infty$ e $\mathbf{II} = +\infty$, então $E(X)$ é indefinida.
+4. Se $\mathbf{I} = -\infty$ e $\mathbf{II} = +\infty$, então $E(X)$ é indefinida.
+
+**Propriedade**: $E(|X|) = \int |x| dF(x)$. Logo, $X$ é integrável se e somente se $E(|X|) < \infty$.
+
+::: {.example}
+
+$X \sim U(0,1),\; Y = \min\left(X,\frac{1}{2}\right)$:
+
+\begin{align*}
+P\left(Y = \frac{1}{2}\right) &= P\left(X > \frac{1}{2}\right) = 1 - F_{X}\left(\frac{1}{2}\right) = 1 - \frac{1}{2} = \frac{1}{2} = P_{Y}\left(Y = \frac{1}{2}\right)\\
+E(Y) = \int_{-\infty}^{\infty}ydF(y) &= \int_{0}^{1/2}y.1dy + \frac{1}{2}P_{Y}\left(Y=\frac{1}{2}\right) \\
+&= \frac{y^{2}}{2}\bigg{|}_{0}^{1/2} + \frac{1}{4} \\
+&= \frac{1}{8} + \frac{1}{2} = \frac{3}{8}
+\end{align*}
+
+:::
+
+::: {.proposition}
+
+$E(X) = \int_{0}^{\infty}(1 - F(x))dx - \int_{-\infty}^{0}F(x)dx$. Disso, temos que:
+
+- **a)** $\int_{0}^{\infty}xdF(x) = \int_{0}^{\infty}(1 - F(x))dx$;
+- **b)** $\int_{-\infty}^{0}xdF(x) = - \int_{-\infty}^{0}F(x)dx$;
+
+:::
+
+
+::: {.proof name="Prova"}
+
+Vejamos **(a)**: considere que $d(xF(x)) = F(x)dx + xd(F(x)) \Rightarrow xd(F(x)) = d(xF(x)) - F(x)dx$. Seja um $b > 0$:
+
+\begin{align*}
+X=x
+\end{align*}
+
+:::

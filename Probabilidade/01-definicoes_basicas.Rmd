@@ -1,5 +1,5 @@
 ---
-title: "Notas de Aulas"
+title: "Notas de Aulas - Capítulo 1"
 subtitle: "Probabilidade"
 author: "Caio Gomes Alves"
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
@@ -131,7 +131,7 @@ E pela extenção indutiva em $n$ do axioma $Ax_{2}$, temos que se $A_{i}^{c} \i
 
 Assim provamos o axioma $A_{5}$ como extensão indutiva dos axiomas anteriores, indicando que tanto a união quanto a interseção dos $A_{i}$ pertencem à $\mathcal{A}$. Podemos também mostrar que a álgebra $\mathcal{A}$ é fechada também para a operação de diferença entre conjuntos: $A \in \mathcal{A}, B \in \mathcal{A}, A-B = A \cap B^{c} \in \mathcal{A}$.
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 Considerando que os conjuntos $A$ e $B pertencem à $\mathcal{A}$, podemos utilizar o axioma $Ax_{2}$ para mostrar que $A^{c} \in \mathcal{A}$ e $B^{c} \in \mathcal{A}$. A partir disso, por meio do axioma $Ax_{5}$ temos que os seguintes conjuntos também pertencem à $\mathcal{A}$: $A \cup B, A \cup B^{c}, A^{c} \cup B, A^{c} \cup B^{c}, A \cap B, A \cap B^{c}, A^{c} \cap B, A^{c} \cap B^{c}$. E como temos que $A \cap B^{c} = A-B$, temos a prova de que $A-B \in \mathcal{A}$. Além disso, essa prova mostra que a diferença contrária ($B - A = A^{c} \cap B$) também pertence à algebra $\mathcal{A}$.
 
@@ -314,7 +314,7 @@ $P$ definida em uma $\sigma$-álgebra $\mathcal{A}$, satisfazendo os axiomas de 
 
 :::
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 1. Note que, sendo $A_{0} = \emptyset$, tem-se que $A = (A_{1} - A_{0}) \cup (A_{2} - A_{1}) \cup (A_{3} - A_{2}) \cup \dots$, ou seja, $A$ é união disjunta de eventos $D_{i} = A_{i} - A_{i-1}$, de forma que $A_{i-1} \subseteq A_{i} \Rightarrow P(A_{i}) = P(A_{i-1}) + P(A_{i} - A_{i-1}) \Rightarrow P(A_{i} - A_{i-1}) = P(A_{i}) - P(A_{i-1})$. Logo, temos que:
 
@@ -621,7 +621,7 @@ P\left(\bigcap_{i=1}^{n}A_{i}\right) = P(A_{1})P(A_{2}|A_{1})P(A_{3}|A_{1} \cap 
 
 :::
 
-::: {.proof}
+::: {.proof name="Prova"}
 
 Suponha a validade do lema anterior. Logo, seja $D = (\bigcap_{i=1}^{n}A_{i})$:
 
@@ -674,7 +674,7 @@ $$
 P\left(\bigcup_{n=i}^{\infty}A_{n}\right) \le \sum_{n=1}^{\infty}P(A_{n})
 $$
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Consideremos uma prova por indução para $n \to \infty$:
 
@@ -722,7 +722,7 @@ Sejam $A_{1}, A_{2},\dots$ eventos aleatórios. Mostre que:
 
 a) $P\left(\bigcap_{k=1}^{n}A_{k}\right) \ge 1 - \sum_{k=1}^{n}P(A_{k}^{c})$
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Por De Morgan temos que $\bigcap_{k=1}^{n}A_{k} = \left(\bigcup_{k=1}^{n}A_{k}^{c}\right)^{c}$, de modo que:
 
@@ -736,7 +736,7 @@ P\left(\bigcap_{k=1}^{n}A_{k}\right) &= P\left(\bigcup_{k=1}^{n}A_{k}^{c}\right)
 
 b) Se $P(A_{k}) \ge 1 - \epsilon$ para $k = 1,2,\dots,n$, então $P(\bigcap_{k=1}^{n}A_{k}) \ge 1 - n\epsilon$
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 É fácil ver que:
 
@@ -757,7 +757,7 @@ P\left(\bigcap_{k=1}^{n}A_{k}\right) = P\left(\bigcup_{k=1}^{n}A_{k}^{c}\right)^
 
 c) $P\left(\bigcap_{k=1}^{\infty}A_{k}\right) \ge 1 - \sum_{k=1}^{\infty}P(A_{k}^{c})$
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 De maneira semelhante ao que foi visto na prova da letra **a**, temos que:
 
@@ -779,7 +779,7 @@ Demonstre as seguintes propriedades:
 
 a) Se $P(A_{n}) = 0$ para $n = 1,2,\dots$, então $P\left(\bigcup_{n=1}^{\infty}A_{n}\right) = 0$.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Utilizando a propriedade $P5$, temos que:
 
@@ -795,7 +795,7 @@ P\left(\bigcup_{n=1}^{\infty} A_{n}\right) &= 0
 
 b) Se $P(A_{n}) = 1$ para $n = 1,2,\dots$, então $P\left(\bigcap_{n=1}^{\infty}A_{n}\right) = 1$.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Levando em consideração que se $P(A_{n}) = 1 \Rightarrow P(A_{n}^{c}) = 0$ (pela propriedade $P1$), utilizando De Morgan e a prova da letra **c** do exercício \@ref(exr:exbj3), temos que:
 
@@ -818,7 +818,7 @@ Seja $\Omega$ um conjunto não-vazio.
 
 a) Prove: se $\mathcal{A}$ e $\mathcal{B}$ são $\sigma$-álgebras de subconjuntos de $\Omega$, então $(\mathcal{A} \cap \mathcal{B})$ também é uma $\sigma$-álgebra.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Para que $\mathcal{A} \cap \mathcal{B}$ seja uma $\sigma$-álgebra, é necessário que cumpram-se os axiomas $Ax_{1}, Ax_{2}$ e $Ax_{3}$:
 
@@ -832,7 +832,7 @@ Como os três axiomas foram cumpridos, temos que $(\mathcal{A} \cap \mathcal{B})
 
 b) Generalize o item (a): se $\mathcal{A}_{i}, i \in \mathcal{I}$, são $\sigma$-álgebras de partes de $\Omega$, onde $\mathcal{I}$ é um conjunto não-vazio de índices, então $\bigcap_{i \in \mathcal{I}}\mathcal{A}_{i}$ também é uma $\sigma$-álgebra.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Como anteriormente, temos que mostrar que $\bigcap_{i \in \mathcal{I}}\mathcal{A}_{i}$ cumpre os axiomas $Ax_{1}, Ax_{2}$ e $Ax_{3}$:
 
@@ -846,7 +846,7 @@ Vemos portanto que, por cumprir os axiomas $Ax_{1}, Ax_{2}$ e $Ax_{3}$, $\bigcap
 
 c) Seja $\mathbb{C}$ uma classe de subconjuntos de $\Omega$. Mostre que existe *pelo menos uma* $\sigma$-álgebra que contém $\mathbb{C}$.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 É fácil ver que a maior classe de subconjuntos de $\Omega$ é o conjunto das partes de $\Omega$, denotado como $\mathcal{P}(\Omega)$ (definido no exemplo \@ref(exm:powerset)). Assim, temos que $\mathbb{C} \subseteq \mathcal{P}(\Omega)$, de modo que, pelo menos a $\sigma$-álgebra formada por $\mathcal{P}(\Omega)$ contém $\mathbb{C}$.
 
@@ -854,7 +854,7 @@ c) Seja $\mathbb{C}$ uma classe de subconjuntos de $\Omega$. Mostre que existe *
 
 d) Visando a plena utilização dos itens (b) e (c), como você definiria "a menor $\sigma$-álgebra contendo $\mathbb{C}$", onde $\mathcal{C}$ é uma classe de subconjuntos de $\Omega$?
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Considere que temos $\sigma$-álgebras de partes de $\Omega$, $\mathcal{A}_{i}$ com $i \in \mathbb{I}$ (sendo $\mathbb{I}$ um conjunto não-vazio de índices), tais que $\mathbb{C} \in \mathcal{A}_{i}: \; \forall i \in \mathbb{I}$. Assim, sabemos que algum dos $\mathcal{A}_{i}$ é a menor $\sigma$-álgebra que contém $\mathbb{C}$, de modo que $\bigcap_{i \in \mathbb{I}}A_{i}$ será a menor $\sigma$-álgebra que contém $\mathbb{C}$.
 
@@ -866,7 +866,7 @@ Considere que temos $\sigma$-álgebras de partes de $\Omega$, $\mathcal{A}_{i}$ 
 
 Uma caixa contém $2n$ sorvetes, $n$ do sabor $A$ e $n$ do sabor $B$. De um grupo de $2n$ pessoas, $a < n$ preferem o sabor $A$, $b < n$ o sabor $B$ e $2n-(a+b)$ não tem preferência. Demonstre: se os sorvetes são distribuídos ao acaso, a probabilidade de que a preferência de todas as pessoas seja respeitada é de $\binom{2n-a-b}{n-a}/\binom{2n}{n}$.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Sabendo que a ordem de entrega dos $n$ sorvetes de cada sabor, para as $2n$ pessoas não importa, temos que a quantidade possível de entregas diferentes é:
 
@@ -908,7 +908,7 @@ P(R) = \frac{|R|}{|\Omega|} = \frac{\binom{2n-a-b}{n-a}}{\binom{2n}{n}}
 
 Suponhamos que dez cartas estejam numeradas de 1 até 10. Das dez cartas, retira-se uma de cada vez, ao acaso e sem reposição, até retirar-se o primeiro número par. Conta-se o número de retiradas necessárias. Exiba um bom modelo probabilístico para esse experimento.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Dada essa formulação, temos que 5 cartas são pares e 5 são ímpares. Assim, considere o evento $\{Y_{k} \;: 1 \le k \le 6 ; k \in \mathbb{Z}\}$ em que $k$ indica que a $k$-ésima retirada contém a primeira carta par. Assim, por exemplo, $Y_{1}$ indica o evento em que a primeira carta retirada é par, $Y_{2}$ o evento em que a segunda carta retirada é par, e assim por diante.
 
@@ -952,7 +952,7 @@ a) Seleciona-se um ponto, ao acaso, do quadrado unitário
 \{(x,y) : 0 \le x \le 1, 0 \le y \le 1\}
 \end{equation*}
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Temos que:
 
@@ -966,7 +966,7 @@ Pela continuidade no vazio, é necessário que a probabilidade de ocorrência de
 
 b) Retiram-se cartas sucessivamente de um baralho de 52 cartas, ao acaso e *com* reposição, até retirar-se o primeiro rei. Registra-se o número total de retiradas.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Considere que $\{Y: Y \in \{1,2,\dots\}\}$ indica a quantidade de retiradas necessárias até o primeiro rei. O espaço amostral é dado diretamente: $\Omega = \{1,2,3,\dots\}$. Temos que, para cada retirada, a probabilidade da carta ser um rei é $4/52 = 1/13$ (considerando que temos 4 reis no baralho), e a probabilidade de não ser é de $48/52 = 12/13$. Assim, a probabilidade de que a primeira retirada seja um rei é de:
 
@@ -992,7 +992,7 @@ Esse modelo de probabilidade é denotado modelo geométrico.
 
 c) Quinze bolas são retiradas, ao acaso e *com* reposição, de uma urna contendo 5 bolas vermelhas, 9 bolas pretas e uma bola branca. Observa-se o número que ocorre cada cor.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Sejam os eventos $V, P \text{ e } B$ o número de vezes que as retiradas foram de bolas vermelhas, pretas e brancas, respectivamente. É necessário (pela definição do modelo) que $V + P + B = 15$, mas consideremos o caso em que o número de retiradas seja $n$. Assim, para $n = 1$, o espaço amostral $\Omega$ é:
 
@@ -1048,7 +1048,7 @@ Em que verifica-se facilmente que é válido para os casos em que $n=1$ e $n=2$ 
 
 d) O experimento (**c**) é realizado *sem* reposição.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Como temos 15 bolas que serão retiradas *sem* reposição, o único evento possível após as 15 serem retiradas é:
 
@@ -1074,7 +1074,7 @@ Retiram-se 4 cartas, ao acaso, de um baralho de 52 cartas. Registra-se o número
 
 a) As retiradas são feitas *sem* reposição.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Considerando que em um baralho usual tem 52 cartas, e que a ordem com que cada uma das 4 cartas retiradas da amostra não importa (apenas importa a quantidade de reis na amostra), a quantidade total de amostras possíveis é $\binom{52}{4}$.
 
@@ -1094,7 +1094,7 @@ Esse modelo é chamado de hipergeométrico, que vale quando sabemos a quantidade
 
 b) As retiradas são feitas *com* reposição.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Se as retiradas são feitas com reposição, a probabilidade de registrar um rei em cada retirada é de $4/52$ e a probabilidade de registrar um "não-rei" é de $48/52$. Como a ordem das retiradas não importa, podemos ver que em uma amostra de tamanho 4, os $k$ reis podem aparecer de $\binom{4}{k}$ maneiras diferentes. Além disso, podemos ver que, como irão aparecer $k$ reis na amostra, consequentemente irão aparecer $4-k$ "não-reis".
 
@@ -1111,7 +1111,7 @@ Esse modelo é chamado de binomial, e vale quando queremos encontrar a probabili
 
 c) Determine em que caso, (a) ou (b), é mais provável obter 4 reis.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Substituindo os valores de $k$ em \@ref(eq:hgeomex) e \@ref(eq:binomex) para 4, podemos calcular as probabilidades em cada caso. Assim:
 
@@ -1140,7 +1140,7 @@ e
 P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)
 \end{equation*}
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Podemos escrever os eventos $A$ e $B$ como as seguintes uniões de eventos disjuntos:
 
@@ -1265,7 +1265,7 @@ P(A \cup B \cup C) = &P(A \cap B \cap C^{c}) + P(A \cap B^{c} \cap C) + P(A^{c} 
 
 b) Enuncie a generalização do item **(a)** para o caso da união de $n$ eventos aleatórios.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Podemos ver que as demonstrações anteriores podem ser escritas como:
 
@@ -1287,7 +1287,7 @@ c) Prove as seguintes *desigualdades de Bonferroni*:
 (i) \; \sum_{i=1}^{n}P(A_{i}) - \sum_{1 \le i < j \le n} P(A_{i} \cap A_{j}) \le P\left(\bigcup_{i=1}^{n} A_{n}\right) \le \sum_{i=1}^{n}P(A_{i}) - \sum_{1 \le i < j \le n} P(A_{i} \cap A_{j}) + \sum_{1 \le i < j < k \le n} P(A_{i} \cap A_{j} \cap A_{k})
 \end{equation*}
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Podemos demonstrar a primeira desigualdade utilizando a equação \@ref(eq:princincexc):
 
@@ -1325,7 +1325,7 @@ P\left(\bigcup_{i=1}^{n} A_{i}\right) \le &\sum_{i=1}^{n}P(A_{n}) - \sum_{1 \le 
 
 se $k$ é par, $k \le n$, vale $\ge$ nesta última desigualdade.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Como $k \le n$, podemos separar a desigualdade em dois casos:
 
@@ -1373,7 +1373,7 @@ Se $k$ for par, o termo $k$ será negativo e o termo $k+1$ será positivo, de mo
 
 Suponha que $n$ cartas numeradas de 1 até $n$ sejam embaralhadas e retiradas uma por uma, sem reposição, até todas as cartas serem retiradas. Qual a probabilidade de que para pelo menos uma carta, o número da carta coincida com o número da retirada?
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Seja $A_{i}$ o evento em que o número da carta $i$ coincidiu com o número da retirada. Podemos ver que, o caso em que para pelo menos uma delas coincida é equivalente a $\bigcup_{i=1}^{n}A_{i}$. Dessa maneira, podemos ver que a probabilidade de isso ocorrer é:
 
@@ -1418,7 +1418,7 @@ Seja $(\Omega, \mathcal{A},P)$ um espaço de probabilidade e suponha que todos o
 
 a) Se os $A_{n}$ são disjuntos e $P(B|A_{n}) \ge c$ para todo $n$, então $P(B|\bigcup_{n=1}^{k}A_{n}) \ge c$ (pode supor $P(A_{n}) > 0$ para todo $n$).
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Sabemos que $A_{i} \cap A_{j} = \emptyset, \; \forall i,j$. Dito isso, podemos ver que a seguinte relação é válida:
 
@@ -1452,7 +1452,7 @@ P\left(B \; \Big{|} \bigcup_{n=1}^{k}A_{n}\right) &\ge c
 
 b) O item **(a)** com "$=$" no lugar de "$\ge$".
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Substituindo o sinal de $\ge$ em \@ref(eq:pdebdadosans) por uma igualdade, a prova é igual ao já realizado no item anterior.
 
@@ -1460,7 +1460,7 @@ Substituindo o sinal de $\ge$ em \@ref(eq:pdebdadosans) por uma igualdade, a pro
 
 c) Se $A_{n} \supset A_{n+1}$ e $P(A_{n+1}|A_{n}) \le \frac{1}{2}$ para todo $n$, então $P(A_{n}) \to 0$ quando $n \to \infty$.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Consideremos o caso inicial, com $A_{1}$ e $A_{2}$. Disso tem-se que:
 
@@ -1498,7 +1498,7 @@ d) Se os $A_{n}$ são disjuntos e $P(B|A_{n}) = P(C|A_{n})$ para todo $n$, entã
 P(B|\cup A_{n}) = P(C|\cup A_{n})
 \end{equation*}
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Como os $A_{n}$s são disjuntos, temos que:
 
@@ -1534,7 +1534,7 @@ e) Se $A_{1}, A_{2}, \ldots$ são disjuntos e $\cup A_{n} = \Omega$, então:
 P(B|C) = \sum_{n}P(A_{n}|C)P(B|A_{n} \cap C)
 \end{equation*}
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Pelo Teorema da Multiplicação, temos que $P(A_{n} \cap B \cap C)$ pode ser escrito como:
 
@@ -1564,7 +1564,7 @@ P(B|C) &= \frac{P(B \cap C)}{P(C)} \\
 
 Suponha que a ocorrência ou não de chuva dependa das condições do tempo no dia imediatamente anterior. Admita-se que se chove hoje, choverá amanhã com probabilidade de 0,7 e que se não chove hoje choverá amanhã com probabilidade 0,4. Sabendo-se que choveu hoje, calcule a probabilidade de que choverá depois de amanhã.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Sejam os eventos $C_{n} =$ "Choveu no dia de hoje", $NC_{n} =$ "Não choveu no dia de hoje". De maneira similar, $C_{n+1}$ indica que choverá amanhã, $C_{n+2}$ que choverá depois de amanhã e assim por diante. Sabemos pelo enunciado as seguintes probabilidades:
 
@@ -1607,7 +1607,7 @@ Certo experimento consiste em lançar um dado equilibrado duas vezes, independen
 
 a) Pelo menos um dos números ser 6?
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Sejam $A_{1}$ e $A_{2}$ os lançamentos do primeiro e do segundo dado, respectivamente. Sabemos que $P(A_{1} = A_{2}) = 0$. Disso temos que:
 
@@ -1621,7 +1621,7 @@ P((A_{1} = 6) \cup (A_{2} = 6)) &= P(A_{1} = 6) + P(A_{2} = 6) - P((A_{1} = 6) \
 
 b) A soma dos números ser 8?
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Considere o evento $S = x, x \in \{2,3,\ldots,12\}$ o resultado da soma dos lançamentos $A_{1}$ e $A_{2}$. Utilizando o Teorema da Probabilidade Total, podemos decompor a probabilidade da soma ser igual a 8 da seguinte forma:
 
@@ -1640,7 +1640,7 @@ P(S=8) &= P(S=8|A_{1} = 1)P(A_{1} = 1) + P(S=8|A_{1} = 2)P(A_{1} = 2) + \dots + 
 
 Em teste de múltipla escolha, a probabilidade do aluno saber a resposta é $p$. Havendo $m$ escolhas, se ele sabe a resposta ele responde corretamente com probabilidade 1; se não sabe, ele responde corretamente com probabilidade $\frac{1}{m}$. Qual a probabilidade de que ele soubesse a resposta dado que a pergunta foi respondida corretamente? Calcule o limite dessa probabilidade quando (i) $m \to \infty$ com $p$ fixo e (ii) $p \to 0$ com $m$ fixo.
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Sejam: $P(S) = p$ a probabilidade de saber a resposta, $P(A|S) = 1$ a probabilidade de acertar, dado que sabia a resposta, $P(A|NS) = \frac{1}{m}$ a probabilidade de acertar, dado que não sabia a resposta e $P(NA|NS) = \frac{m-1}{m}$ a probabilidade de não acertar, dado que não sabe a resposta. Sabemos que os eventos $S$ e $NS$ são complementares, assim como $A$ e $NA$. Queremos encontrar $P(S|A)$, que é dada por:
 
@@ -1679,7 +1679,7 @@ Agora, calculando os limites temos:
 
 Durante o mês de novembro a probabilidade de chuva é de 0,3. O Fluminense ganha um jogo em um dia de chuva com a probabilidade de 0,4; em um dia sem chuva com a probabilidade 0,6. Se ganhou um jogo em novembro, qual é a probabilidade de que choveu neste dia?
 
-::: {.proof}
+::: {.proof name="Resposta"}
 
 Sejam os seguintes eventos: $P(C) = 0,3$ é a probabilidade de chover em novembro, $P(NC) = 0,7$ é a probabilidade de não chover em novembro, $P(V|C) = 0,4$ é a probabilidade de vitória, dado que choveu no dia, $P(D|C) = 0,6$ é a probabilidade de derrota, dado que choveu no dia, $P(V|NC) = 0,6$ é a probabilidade de vitória, dado que não choveu no dia e $P(D|NC) = 0,4$ é a probabilidade de derrota, dado que não choveu no dia. Pelo Teorema da Probabilidade Total, temos que:
 
