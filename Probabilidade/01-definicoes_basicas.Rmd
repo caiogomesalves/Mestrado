@@ -409,6 +409,7 @@ Seja $B_{k} = \bigcup_{n=k+1}^{\infty}A_{n}$. Note que $B_{k} \downarrow \emptys
 \end{equation*}
 
 ::: {.corollary}
+
 Os seguintes sistemas são equivalentes:
 
 \begin{equation*}

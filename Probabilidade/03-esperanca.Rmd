@@ -51,7 +51,7 @@ E(Y) = \int_{-\infty}^{\infty}ydF(y) &= \int_{0}^{1/2}y.1dy + \frac{1}{2}P_{Y}\l
 
 :::
 
-::: {.proposition}
+::: {.proposition #separespe}
 
 $E(X) = \int_{0}^{\infty}(1 - F(x))dx - \int_{-\infty}^{0}F(x)dx$. Disso, temos que:
 
@@ -66,7 +66,272 @@ $E(X) = \int_{0}^{\infty}(1 - F(x))dx - \int_{-\infty}^{0}F(x)dx$. Disso, temos 
 Vejamos **(a)**: considere que $d(xF(x)) = F(x)dx + xd(F(x)) \Rightarrow xd(F(x)) = d(xF(x)) - F(x)dx$. Seja um $b > 0$:
 
 \begin{align*}
-X=x
+\int_{0}^{b}xdF(x) &= \int_{0}^{b}d(xF(x)) - \int_{0}^{b}F(x)dx \\
+&= xF(x)\bigg{|}_{0}^{b} - \int_{0}^{b}F(x)dx \\
+&= bF(b) - \int_{0}^{b}F(x)dx \\
+&= \int_{0}^{b}[F(b) - F(x)]dx
 \end{align*}
+
+Note que $\int_{0}^{b}xdF(x) \le \int_{0}^{\infty}[1 - F(x)]dx, \; \forall b>0$. Basta notar que $F(b) - F(x) \le 1 - F(x)$ e que $\int_{0}^{b}[1 - F(x)]dx \le \int_{0}^{\infty}[1 - F(x)]dx$. Logo:
+
+\begin{equation*}
+\int_{0}^{\infty}xdF(x) = \lim_{b \to \infty}\int_{0}^{b}xdF(x) \le \int_{0}^{\infty}[1 - F(x)]dx \Rightarrow \int_{0}^{\infty}xdF(x) \le \int_{0}^{\infty}[1 - F(x)]dx
+\end{equation*}
+
+Considere $\lambda > 0$ e $b > 0$, tais que:
+
+\begin{align*}
+\int_{0}^{b}[F(b) - F(x)]dx \ge \int_{0}^{\lambda}[1 - F(x)]dx &= \int_{0}^{\lambda}[F(b) - 1]dx + \int_{0}^{\lambda}[1 - F(x)]dx \\
+&= \lambda[F(b) - 1] + \int_{0}^{\lambda}[1 - F(x)]dx \\
+\int_{0}^{b}[F(b) - F(x)]dx &\ge \lambda[F(b) - 1] + \int_{0}^{\lambda}[1 - F(x)]dx
+\end{align*}
+
+Logo, como $\int_{0}^{\infty}xdF(x) = \lim_{b \to \infty}\int_{0}^{b}[F(b) - F(x)]dx \ge \lim_{b \to \infty}\{\lambda[F(b) - 1] + \int_{0}^{\lambda}[1 - F(x)]dx\} = \int_{0}^{\lambda}[1 - F(x)]dx$. Assim:
+
+\begin{equation*}
+\int_{0}^{\infty}xdF(x) \ge \lim_{\lambda \to \infty}\int_{0}^{\lambda}[1 - F(x)]dx = \int_{0}^{\infty}[1 - F(x)]dx
+\end{equation*}
+
+E como $\int_{0}^{\infty}xdF(x) \le \int_{0}^{\infty}[1 - F(x)]dx$, temos que $\int_{0}^{\infty}xdF(x) = \int_{0}^{\infty}[1 - F(x)]dx$
+
+:::
+
+::: {.corollary #esppositiva}
+
+Se $X$ é tal que $X(\omega) \ge 0 \; \forall \omega \in \mathbb{R} \Rightarrow E(X) = \int_{0}^{\infty}[1 - F(x)]dx = \int_{0}^{\infty}P(X \ge x)dx$.
+
+:::
+
+::: {.example}
+
+Seja $X \sim Exp(\lambda)$, qual a $E(X)$? Como o suporte de $X$ é $(0,\infty)$, aplica-se o corolário anterior, de modo que:
+
+\begin{align*}
+F_{X}(x) &= 1 - e^{-\lambda x} \Leftrightarrow P(X > x) = e^{-\lambda x} \\
+E(X) &= \int_{0}^{\infty}e^{-\lambda x}dx = -\frac{1}{\lambda}e^{-\lambda x}\bigg{|}_{0}^{\infty} = \frac{1}{\lambda}
+\end{align*}
+
+:::
+
+**Nota**: Suponha $X$ discreta e $X(\omega) \ge 0 \; \forall \omega$. Então:
+
+\begin{align*}
+E(X) = \sum_{n=0}^{\infty}P(X > n) &= \sum_{n=0}^{\infty}P(X \ge n+1) \\
+&= \sum_{n=1}^{\infty}P(X \ge n)
+\end{align*}
+
+::: {.example}
+
+Considere o lançamento de uma moeda até a 1ª cara. Suponha $p=$ probabilidade de cara e $(1 - p) =$ probabilidade de coroa, e $X =$ número de lançamentos até a primeira cara. Tome o evento $[X \ge n]$, logo:
+
+\begin{equation*}
+E(X) = \sum_{n=1}^{\infty}(1 - p)^{n-1} = \sum_{n=0}^{\infty}(1 - p)^{n} = \frac{1}{p}
+\end{equation*}
+
+:::
+
+**Nota**: Sendo $X$ uma variável aleatória, temos pelo corolário \@ref(cor:esppositiva) que:
+
+\begin{align*}
+E(|X|) &= \int_{0}^{\infty}P(|X| > x)dx \\
+&= \int_{0}^{\infty}\big[P(X > x) + P(X < -x)\big]dx \\
+&= \int_{0}^{\infty}P(X > x)dx + \int_{0}^{\infty}P(X < -x)dx \\
+&= \int_{0}^{\infty}(1-F(x))dx + \int_{0}^{\infty}F((-x)^{-})dx
+\end{align*}
+
+Onde $F((-x)^{-}) = \lim_{u \uparrow -x}F(u)$, que caso $F$ seja contínua, coincide com $F(-x)$. Logo:
+
+\begin{equation*}
+E(|X|) = \int_{0}^{\infty}(1 - F(x))dx + \int_{0}^{\infty}F(-x)dx
+\end{equation*}
+
+Já que $F$ pode ser descontínua em uma coleção enumerável de pontos. Agora, tomando a transformação de variável $y = -x \Leftrightarrow dy = -dx$:
+
+\begin{align*}
+E(|X|) &= \int_{0}^{\infty}(1 - F(x))dx + \int_{-\infty}^{0}F(y)dy \\
+&= \int_{0}^{\infty}(1 - F(x))dx + \int_{-\infty}^{0}F(x)dx
+\end{align*}
+
+Utilizando os resultados **a** e **b** da proposição \@ref(prp:separespe), temos que:
+
+\begin{align*}
+E(|X|) &= \int_{0}^{\infty}xdF(x) - \int_{-\infty}^{0}xdF(x) \\
+&= \int_{0}^{\infty}|x|dF(x) + \int_{-\infty}^{0}|x|dF(x) \\
+&= \int_{-\infty}^{\infty}|x|dF(x)
+\end{align*}
+
+Onde $F$ é a acumulada de $X$, ao invés de $|X|$. Assim, a integrabilidade de $X$ depende da finitude de $\int_{0}^{\infty}xdF(x)$ e $\int_{-\infty}^{0}xdF(x)$, logo $X$ é integrável se $E(|X|) < \infty$.
+
+## Propriedades da esperança
+
+- $\mathbf{E_{1}}$: Se $X = c$, com $c$ uma constante, $E(X) = c$;
+- $\mathbf{E_{2}}$**(monotonia)**: Se $X$ e $Y$ são variáveis aleatórias, com $X \le Y \Rightarrow E(X) \le E(Y)$, caso ambas as esperanças estejam bem definidas;
+
+::: {.proof name="Prova"}
+
+Seja $z$ um valor fixo. Se $Y \le z \Rightarrow X \le z$, logo $[Y \le z] \subseteq [X \le z]$, assim:
+
+\begin{align*}
+P(Y \le z) &\le P(X \le z) \\
+F_{Y}(z) &\le F_{X}(z) \Longleftrightarrow 1 - F_{Y}(z) \ge 1 - F_{X}(z)
+\end{align*}
+
+E pela proposição \@ref(prp:separespe), temos que:
+
+\begin{align*}
+E(Y) = \int_{0}^{\infty}\big{[}1 - F_{Y}(z)\big{]}dz - \int_{-\infty}^{0}F_{Y}(z)dz &\ge \int_{0}^{\infty}\big{[}1 - F_{X}(z)\big{]}dz - \int_{-\infty}^{0}F_{X}(z)dz = E(X) \\
+E(Y) &\ge E(X)
+\end{align*}
+
+:::
+
+- $\mathbf{E_{3}}$**(linearidade)**:
+  - **(i)** Se $E(X)$ é bem definida, $a,b \in \mathbb{R}$, então $E(aX + b) = aE(X) + b$;
+  - **(ii)** $E(aX + bY) = aE(X) + bE(Y)$, caso o termo $aE(X) + bE(Y)$ esteja bem definido;
+  - Note que se $E(X) = \infty \Rightarrow E(X - X) \neq E(X) - E(X)$.
+
+::: {.proof name="Prova"}
+
+Quando $a = 0; E(aX + b) = E(b) = b = 0E(X) + b$.
+
+Quando $a > 0, b > 0; F_{aX + b}(x) = P(aX+b \le x) = P\left(X \le \frac{x-b}{a}\right) = F_{X}\left(\frac{x-b}{a}\right)$. Logo:
+
+\begin{align*}
+E(aX + b) &= \int_{0}^{\infty}\big{[}1 - F_{aX + b}(x)\big{]}dx - \int_{-\infty}^{0}F_{aX + b}(x)dx \\
+&= \int_{0}^{\infty}\left[1 - F_{X}\left(\frac{x-b}{a}\right)\right]dx - \int_{-\infty}^{0}F_{X}\left(\frac{x-b}{a}\right)dx
+\end{align*}
+
+Tome $y = \frac{x-b}{a} \Rightarrow dy = \frac{1}{a}dx$. Então:
+
+\begin{align*}
+E(aX+b) &= \int_{-b/a}^{\infty}a\big{[}1 - F_{X}(y)\big{]}dy - \int_{-\infty}^{-b/a}aF_{X}(y)dy \\
+&= a\left\{\int_{-b/a}^{\infty}\big{[}1 - F_{X}(y)\big{]}dy - \int_{-\infty}^{-b/a}F_{X}(y)dy\right\} \\
+&= a\int_{0}^{\infty}\big{[}1 - F_{X}(y)\big{]}dy - a\int_{-\infty}^{0}F_{X}(y)dy + a\int_{-b/a}^{0}\big{[}1 - F_{X}(y)\big{]}dy + a\int_{-b/a}^{0}F_{X}(y)dy \\
+&= aE(X) + a \int_{-b/a}^{0}dy \\
+&= aE(X) + a \frac{b}{a} \\
+&= aE(X) + b
+\end{align*}
+
+:::
+
+- $\mathbf{E_{4}}$**(Desigualdade de Jansen)**: Seja $\varphi$ uma função convexa, definida na reta, com $X$ integrável, então:
+
+\begin{equation}
+E(\varphi(X)) \ge \varphi(E(X))
+(\#eq:desigjansen)
+\end{equation}
+
+**Nota**: Caso $\varphi$ seja côncava:
+
+\begin{equation*}
+E(\varphi(X)) \le \varphi(E(X))
+\end{equation*}
+
+::: {.proof name="Prova para convexa"}
+
+Tome $x_{0}$ e $\varphi(x_{0})$. Então existe uma reta $L$ tal que $L$ passe por $\varphi(x_{0})$ e $\varphi$ fica por cima de $L$. Logo temos a seguinte equação da reta:
+
+\begin{equation*}
+L(x) = \varphi(x_{0}) + \lambda(x - x_{0})
+\end{equation*}
+
+Onde $\lambda$ é alguma constante apropriada. Então para todo $x$ temos:
+
+\begin{align*}
+\varphi(x) &\ge L(x) = \varphi(x_{0}) + \lambda(x - x_{0}) \\
+&\big{\Downarrow} \;\mathbf{E_{2}} \\
+E(\varphi(x)) &\ge E(L(x)) \stackrel{\mathbf{E_{1},E_{3}}}{=} \varphi(x_{0}) + \lambda\left[E(x) - x_{0}\right]
+\end{align*}
+
+Que vale para $x_{0} = E(x)$, de modo que $E(\varphi(x)) \ge \varphi(E(x)) + \lambda\left[E(x) - E(x)\right]$, então:
+
+\begin{equation*}
+E(\varphi(x)) \ge \varphi(E(x))
+\end{equation*}
+
+A prova para funções côncavas segue a mesma metodologia, com a inversão da desigualdade.
+
+:::
+
+### Critério de integrabilidade
+
+Suponha que $X$ é uma variável aleatória dominada por $Y$ (ou seja, $X \le Y$), sendo $Y$ uma variável aleatória integrável. $X$ é integrável? Temos que:
+
+\begin{equation*}
+X \le Y \Rightarrow E(X) \le E(Y)
+\end{equation*}
+
+Se $X$ e $Y$ são tais que $Y \ge 0$ e $Y$ é integrável e $|X| \le Y \Rightarrow 0 \le |X| \le Y$, e como consequência:
+
+\begin{equation*}
+0 \le E(X) \le E(Y) < \infty \Longrightarrow X \text{ é integrável}
+\end{equation*}
+
+De maneira similar, seja $X$ uma variável aleatória qualquer. Então:
+
+\begin{equation*}
+\sum_{n=1}^{\infty}P(|X| \ge n) \le E(|X|) \le 1 + \sum_{n=1}^{\infty}P(|X| \ge n)
+\end{equation*}
+
+Assim, $X$ é integrável se e somente se $\sum_{n=1}^{\infty}P(|X| \ge n) < \infty$.
+
+::: {.proof name="Prova"}
+
+Seja $x \ge 0$. Tome $[x]$ como a parte inteira de $x$. Então $[|x|] = k$ se $k \le |x| < k+1$. Então:
+
+\begin{align*}
+0 \le [|x|] &\le |x| \le [|x|] + 1 \\
+&\Downarrow \; \mathbf{E_{2},E_{3}} \\
+0 \le E([|x|]) &\le E(|x|) \le E([|x|]) + 1
+\end{align*}
+
+Pelo corolário \@ref(cor:esppositiva), como $[|x|]$ é discreta e não-negativa, temos que:
+
+\begin{align*}
+E([|x|]) &= \sum_{n=1}^{\infty}P([|x|] \ge n) \\
+&= \sum_{n=1}^{\infty}P(|x| \ge n) \le E(|x|) \le \sum_{n=1}^{\infty}P(|x| \ge n) + 1
+\end{align*}
+
+:::
+
+### Casos de interesse
+
+**a) (Consistência absoluta)** $\varphi(X) = |X|$:
+
+\begin{equation*}
+E(|X|) \ge |E(X)|
+\end{equation*}
+
+**b) (Consistência quadrática)** $\varphi(X) = X^{2}$:
+
+\begin{equation*}
+E(X^{2}) \ge [E(X)]^{2}
+\end{equation*}
+
+**c)** $\varphi(X) = |X|^{p}, p \ge 1$:
+
+\begin{equation*}
+E(|X|^{p}) \ge |E(X)|^{p}
+\end{equation*}
+
+**Nota**: $\varphi$ só precisa ser convexa (ou côncava) em uma região de probabilidade 1. Por exemplo, se $X$ é uma variável aleatória, tal que $P(X > 0) = 1$, ou o suporte da distribuição de $X$ é $(0, \infty), \varphi(X) = \frac{1}{X}$ é convexa em $(0,\infty) \Rightarrow E\left(\frac{1}{X}\right) \ge \frac{1}{E(X)}$. De modo análogo, se $P(X > 0) = 1$ e $\varphi(X) = \ln(X), \varphi$ é côncava em $(0,\infty)$ logo $E(\ln(X)) \le \ln(E(X))$.
+
+## Esperança de funções de variáveis aleatórias
+
+Seja $X$ uma variável aleatória, $\varphi$ uma função mensurável e $Y = \varphi(X)$. Assim, $Y$ é uma variável aleatória, cuja esperança é $E(Y) = \int ydF_{\varphi(X)}(y) = \int_{0}^{\infty}[1 - F_{\varphi(X)}(y)]dy - \int_{-\infty}^{0}F_{\varphi(X)}(y)dy$.
+
+::: {.theorem}
+
+Se $X$ é uma variável aleatória e $\varphi$ uma função mensurável, com $Y = \varphi(X)$:
+
+\begin{equation*}
+E(Y) = E(\varphi(X)) = \int\varphi(x)dF_{X}(x)
+\end{equation*}
+
+:::
+
+::: {.proof name="Prova para caso $\varphi(x) = x^{k}$"}
+
+Note que a prova já foi feita para $\varphi(x) = |x|$. Vejamos que a prova é válida para $\varphi(x) = x^{k}$, com $k = 1,2,\ldots$, em 2 casos: $k$ par e $k$ ímpar:
 
 :::
