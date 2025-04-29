@@ -308,7 +308,7 @@ E(|X|) \ge |E(X)|
 E(X^{2}) \ge [E(X)]^{2}
 \end{equation*}
 
-**c)** $\varphi(X) = |X|^{p}, p \ge 1$:
+**c) (Consistência absoluta de ordem p)** $\varphi(X) = |X|^{p}, p \ge 1$:
 
 \begin{equation*}
 E(|X|^{p}) \ge |E(X)|^{p}
@@ -333,5 +333,193 @@ E(Y) = E(\varphi(X)) = \int\varphi(x)dF_{X}(x)
 ::: {.proof name="Prova para caso $\varphi(x) = x^{k}$"}
 
 Note que a prova já foi feita para $\varphi(x) = |x|$. Vejamos que a prova é válida para $\varphi(x) = x^{k}$, com $k = 1,2,\ldots$, em 2 casos: $k$ par e $k$ ímpar:
+
+**$\mathbf{k}$ par:**
+
+\begin{align*}
+E(X^{k}) &= \int_{0}^{\infty}P\left(X^{k} > t\right)dt \\
+&= \int_{0}^{\infty}P\left(X > \sqrt[k]{t}\right)dt + \int_{0}^{\infty}P\left(X < - \sqrt[k]{t}\right)dt \\
+&= \int_{0}^{\infty}\left[1 - F_{X}\left(\sqrt[k]{t}\right)\right]dt + \int_{0}^{\infty}F_{X}\left(-\sqrt[k]{t}^{\;-}\right)dt
+\end{align*}
+
+Apliquemos as seguintes mudanças de variáveis: $s = t^{\frac{1}{k}}, ds = \frac{1}{k}t^{\frac{1}{k} - 1}dt, dt = \frac{(ds)ks^{k}}{s}, u = -s, du = -ds$:
+
+\begin{align*}
+E(X^{k}) &= \int_{0}^{\infty}\left[1-F_{X}(s)\right]ks^{k-1}ds + \int_{0}^{\infty}F_{X}(-s)ks^{k-1}ds \\
+&= \int_{0}^{\infty}\left[1-F_{X}(s)\right]ks^{k-1}ds - \int_{-\infty}^{0}F_{X}(u)ku^{k-1}du \\
+&= k\left\{\int_{0}^{\infty}[1 - F_{X}(s)]s^{k-1}ds - \int_{-\infty}^{0}F_{X}(u)u^{k-1}du\right\}
+\end{align*}
+
+Agora, mostremos que $E(X^{k}) = \int x^{k}dF_{X}(x)$:
+
+\begin{align*}
+\int_{-\infty}^{\infty}x^{k}dF_{X}(x) &\stackrel{Def}{=} \int_{0}^{\infty}\left[1 - F_{X}(x)\right]d(x^{k}) - \int_{-\infty}^{0}F_{X}(x)d(x^{k}) \\
+&= k\left\{\int_{0}^{\infty}[1 - F_{X}(x)]x^{k-1}dx - \int_{-\infty}^{0}F_{X}(x)x^{k-1}dx\right\} \\
+&= E(X^{k})
+\end{align*}
+
+:::
+
+**Nota**: A propriedade é também válida para polinômios, visto que a esperança opera de maneira linear.
+
+::: {.example}
+
+Seja $X \sim Exp(\lambda)$, vimos que $E(X) = \frac{1}{\lambda}$:
+
+Calcular $E(X^{2})$:
+
+\begin{align*}
+E(X^{2}) = 2\int_{0}^{\infty}xe^{-\lambda x}dx &= \frac{2}{\lambda}\int_{0}^{\infty}x\lambda e^{-\lambda x}dx \\
+&= \frac{2}{\lambda}E(X) = \frac{2}{\lambda^{2}}
+\end{align*}
+
+Calcular $E(X^{3})$:
+
+\begin{align*}
+E(X^{3}) = 3\int_{0}^{\infty}x^{2}e^{-\lambda x}dx &= \frac{3}{\lambda}\int_{0}^{\infty}x^{2}\lambda e^{-\lambda x}dx \\
+&= \frac{3}{\lambda}E(X^{2}) = \frac{3}{\lambda^{3}}
+\end{align*}
+
+De modo que podemos observar o padrão emergente, e definir $E(X^{k}) = \frac{k!}{\lambda^{k}}$.
+
+:::
+
+## Momentos de uma variável aleatória
+
+**a)** $E\left(\left[X - b\right]^{k}\right)$: $k-$ésimo momento de $X$ em torno de $b$;
+
+**b)** $E\left(X^{k}\right)$: $k-$ésimo momento em torno de 0;
+
+**c)** Se em **(a)**, $b = E(X)$, o momento é central;
+
+**d)** $t>0,E\left(|X|^{t}\right)$: $t-$ésimo momento absoluto de $X$.
+
+::: {.definition #Variancia name="Variância de uma variável aleatória"}
+
+\begin{equation*}
+Var(X) = E\left\{(X - E(X))^{2}\right\} \Longleftrightarrow Var(X) = E\left(X^{2}\right) - \big{(}E(X)\big{)}^{2}
+\end{equation*}
+
+:::
+
+::: {.proposition}
+
+Se $X$ é uma variável aleatória, $f(t) = \left[E(|X|^{t})\right]^{\frac{1}{t}}$ é não-decrescente em $t, t >0$.
+
+:::
+
+::: {.proof name="Prova"}
+
+Devemos provar que, se $0 < s < t, f(s) \le f(t)$ (ou $\left\{E(|X|^{s})\right\}^{\frac{1}{s}} \le \left\{E(|X|^{t})\right\}^{\frac{1}{t}}$). Para tanto, consideremos dois casos: **a)** $E(|X|^{s})<\infty$, **b)** $E(|X|^{s})=\infty$:
+
+**a)** Defina $\varphi(y) = |y|^{\frac{t}{s}}$ (caso $\frac{t}{s} > 1, \varphi$ será convexa). Pela Desigualdade de Jansen:
+
+\begin{align*}
+E(\varphi(Y)) &\ge \varphi(E(Y)) \\
+E\left(|Y|^{\frac{t}{s}}\right) &\ge \left|E(Y)\right|^{\frac{t}{s}}
+\end{align*}
+
+Tome $Y = |X|^{s}$. Substituindo temos:
+
+\begin{align*}
+E\left((|X|^{s})^{\frac{t}{s}}\right) &\ge \left|E(|X|^{s})\right|^{\frac{t}{s}} \\
+E\left(|X|^{t}\right) &\ge \left\{E(|X|^{s})\right\}^{\frac{t}{s}} \\
+\left\{E(|X|^{t})\right\}^{\frac{1}{t}} &\ge \left\{E(|X|^{s})\right\}^{\frac{1}{s}}
+\end{align*}
+
+**b)** Como $t > s > 0$, sabemos que $|X|^{s} \le 1 + |X|^{t}$. Como $E(|X|^{s}) = \infty$, então:
+
+\begin{equation*}
+\infty = E(|X|^{s}) \le 1 + E(|X|^{t}) = \infty
+\end{equation*}
+
+:::
+
+::: {.corollary}
+
+Se $E(|X|^{t}) < \infty \; \forall t \in (0,\infty) \Rightarrow E(|X|^{s}) < \infty \; \forall s$, com $0 < s < t$.
+
+:::
+
+### Propriedades
+
+
+- $\mathbf{E_{5}}$: Se $X = c$, com $c$ uma constante, $Var(X) = 0$;
+- $\mathbf{E_{6}}$: $Var(X+b) = Var(X), Var(aX + b) = a^{2}Var(X)$, com $a,b \in \mathbb{R}$;
+
+::: {.proof name="Prova"}
+
+\begin{align*}
+Var(aX + b) &= E\left\{\left[aX + b - E(aX + b)\right]^{2}\right\} \\
+&= E\left\{\left[aX + b - aE(X) - b\right]^{2}\right\} \\
+&= E\left\{a^{2}\left[X - E(X)\right]^{2}\right\} \\
+&= a^{2}E\left\{\left[X - E(X)\right]^{2}\right\} = a^{2}Var(X)
+\end{align*}
+
+:::
+
+- $\mathbf{E_{7}}$**(Desigualdade de Tchebychev)**: Seja $X$ uma variável aleatória, com $X \ge 0$. Para todo $\lambda > 0$:
+
+\begin{equation}
+P(X \ge \lambda) \le \frac{E(X)}{\lambda}
+(\#eq:desigcheby)
+\end{equation}
+
+::: {.proof name="Prova"}
+
+Seja $Y = I_{[X \ge \lambda]}\lambda = \begin{cases}\lambda &,X \ge \lambda \\ 0 &,c.c.\end{cases}$. Por definição, $0 \le Y \le X \Rightarrow E(Y) \le E(X)$ e $E(Y) = \lambda P(X \ge \lambda)$, de modo que:
+
+\begin{equation*}
+\lambda P(X \ge \lambda) \le E(X) \Leftrightarrow P(X \ge \lambda) \le \frac{E(X)}{\lambda}
+\end{equation*}
+
+:::
+
+### Consequências
+
+**a)** Para todo $\lambda>0$:
+
+\begin{equation*}
+P(|X - E(X)| \ge \lambda) \le \frac{Var(X)}{\lambda^{2}}
+\end{equation*}
+
+**b) (Desigualdade de Markov)** Seja $X$ uma variável aleatória, para todo $t$:
+
+\begin{equation}
+P(|X| \ge \lambda) \le \frac{E\left(|X|^{t}\right)}{\lambda^{t}}
+(\#eq:desigmarkov)
+\end{equation}
+
+**c)** Se $Z$ é uma variável aleatória, com $Z \ge 0$ e $E(Z) = 0$:
+
+\begin{equation*}
+P(Z=0) = 1 \;\;\;\;(\text{i.e., }Z=0\text{ quase certamente})
+\end{equation*}
+
+::: {.proof name="Provas"}
+
+**a)** Se $Y = [X - E(X)]^{2}$, aplicamos $\mathbf{E_{7}}$ usando $\lambda^{2}: P(Y \ge \lambda^{2}) \le \frac{E(Y)}{\lambda^{2}}$. Note que $E(Y) = E([X - E(X)]^{2}) = Var(X)$. Logo:
+
+\begin{equation*}
+P\left(|X - E(X)| \ge \lambda\right) = P(|X - E(X)|^{2} \ge \lambda^{2}) = P(Y \ge \lambda^{2}) \le \frac{E(Y)}{\lambda^{2}} = \frac{Var(X)}{\lambda^{2}}
+\end{equation*}
+
+**b)** Seja $Y = |X|^{t}$, aplicamos $\mathbf{E_{7}}$ a $Y$ e $\lambda^{t}: P(Y \ge \lambda^{t}) \le \frac{E(Y)}{\lambda^{t}}$. Note que $E(Y) = E(|X|^{t})$ e que $P(Y \ge \lambda^{t}) = P(|X|^{t} \ge \lambda^{t}) = P(|X| > \lambda)$. Logo:
+
+\begin{equation*}
+P(|X| \ge \lambda) \le \frac{E(|X|^{t})}{\lambda^{t}}
+\end{equation*}
+
+**c)** $Z = 0$ quase certamente, usamos $\mathbf{E_{7}}$ na variável $Z$ e em $\lambda = \frac{1}{n}$, então:
+
+\begin{equation*}
+P\left(Z \ge \frac{1}{n}\right) \le E(Z).n \stackrel{Hip}{=}0
+\end{equation*}
+
+Temos que $[Z > 0] = \bigcup_{n}\left[Z \ge \frac{1}{n}\right]$, de modo que:
+
+\begin{equation*}
+P(Z > 0) = P\left(\bigcup_{n}\left[Z \ge \frac{1}{n}\right]\right) = \lim_{n \to \infty}P\left(Z \ge \frac{1}{n}\right) = 0 \Rightarrow P(Z = 0) = 1 - P(Z > 0) = 1
+\end{equation*}
 
 :::

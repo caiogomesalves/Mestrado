@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.18)  27 APR 2025 14:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.4.18)  29 APR 2025 00:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -848,25 +848,31 @@ File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 
 [5]
 
-[6] (./03-esperanca.aux)
+[6]
+
+[7]
+
+[8]
+
+[9] (./03-esperanca.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-03-26>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 36504 strings out of 471607
- 861294 string characters out of 5520537
- 1341681 words of memory out of 5000000
- 62407 multiletter control sequences out of 15000+600000
+ 36532 strings out of 471607
+ 861718 string characters out of 5520537
+ 1341988 words of memory out of 5000000
+ 62419 multiletter control sequences out of 15000+600000
  696566 words of font info for 87 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 89i,13n,93p,728b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on 03-esperanca.pdf (6 pages, 283445 bytes).
+ 89i,14n,93p,728b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on 03-esperanca.pdf (9 pages, 330320 bytes).
 PDF statistics:
- 187 PDF objects out of 1000 (max. 8388607)
- 142 compressed objects within 2 object streams
- 33 named destinations out of 1000 (max. 500000)
- 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 238 PDF objects out of 1000 (max. 8388607)
+ 186 compressed objects within 2 object streams
+ 49 named destinations out of 1000 (max. 500000)
+ 85 words of extra memory for PDF output out of 10000 (max. 10000000)
 
