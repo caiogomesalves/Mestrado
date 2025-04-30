@@ -22,7 +22,7 @@ library(INLA)
 
 # Malha de regiões de Campinas:
 malha_campinas <- read_sf("Malha/Campinas2.shp") %>%
-    select(APG, POP_2022)
+    select(APG, POP_2022, POP_2010)
 
 # Função para carregamento e tratamento das bases de dados:
 func_carregamento <- function(string) {
@@ -73,6 +73,10 @@ contagem_campinas <- map(locais_roubos, func_contagem, malha = malha_campinas)
 # Transformação em um data.frame unificado:
 contagem_campinas <- do.call(rbind, contagem_campinas)
 
+# Interpolação da população para cada ano, com base nas populações censitárias de 2010 e 2022:
+contagem_campinas <- contagem_campinas %>%
+    mutate(Populacao = ceiling(POP_2010 + (Ano - 2010)/12 * (POP_2022 - POP_2010)))
+
 # Gráfico com a evolução de roubos ao longo dos anos:
 contagem_campinas %>%
     ggplot(aes(fill = Roubos)) +
@@ -85,7 +89,7 @@ contagem_campinas %>%
 
 # Função para calcular a expectativa de roubos:
 func_expect <- function(df){
-    expected(df$POP_2022, df$Roubos, 1)
+    expected(df$Populacao, df$Roubos, 1)
 }
 
 E_campinas <- numeric()
@@ -230,12 +234,17 @@ contagem_campinas %>%
 campinas_2025 <- data.frame(
     APG = contagem_campinas$APG[1:17],
     POP_2022 = contagem_campinas$POP_2022[1:17],
+    POP_2010 = contagem_campinas$POP_2010[1:17],
     geometry = contagem_campinas$geometry[1:17],
     Roubos = NA,
     Ano = rep(2025, 17),
+    Populacao = ceiling(contagem_campinas$POP_2010[1:17] +
+                        (2025 - 2010)/12 *
+                        (contagem_campinas$POP_2022[1:17] - contagem_campinas$POP_2010[1:17])),
     RRAPriori = NA,
     Ano2 = rep(9, 17),
-    ea_u = 1:17
+    ea_u = 1:17,
+    RRAP = NA
 ) %>%
     st_as_sf()
 
@@ -288,6 +297,7 @@ contagem_campinas_pred %>%
     ggplot(aes(fill = RRAP)) +
     geom_sf() +
     scale_fill_distiller(palette = "Spectral") +
+    ggpubr::theme_classic2() +
     facet_wrap(~Ano)
 
 # Diferença no risco relativo a priori e posteriori para os bairros:

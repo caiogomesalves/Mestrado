@@ -20,167 +20,204 @@ library(INLA)
 
 #----Manipulação dos dados----
 
-# Carregamento dos dados:
-celulares_2023 <- read_xlsx("~/Downloads/Bases/Bayesiana/CelularesSubtraidos_2023.xlsx") %>%
-    select(NOME_DELEGACIA, NUM_BO, NOME_MUNICIPIO,
-           LATITUDE, LONGITUDE, MES)
+# Função para carregamento e tratamento das bases de dados:
+func_carregamento_sp <- function(string) {
+    df <- read_xlsx(string) %>%
+        select(NOME_DELEGACIA, NUM_BO, NOME_MUNICIPIO,
+               LATITUDE, LONGITUDE, ANO) %>%
+        mutate(ID = str_c(NOME_DELEGACIA, NUM_BO)) %>%
+        distinct(ID, .keep_all = T) %>%
+        group_by(NOME_MUNICIPIO) %>%
+        summarise(Total = n(),
+                  Ano = mean(ANO))
+}
 
-# Criar coluna para identificação de observações duplicadas,
-# conforme a metodologia no dicionário dos dados:
-celulares_2023 <- celulares_2023 %>%
-    mutate(ID = str_c(NOME_DELEGACIA, NUM_BO))
+# Nomes das bases para função:
+nomes_bases <- paste0("~/Downloads/Bases/Bayesiana/", c("CelularesSubtraidos_2017.xlsx", "CelularesSubtraidos_2018.xlsx",
+                                                        "CelularesSubtraidos_2019.xlsx", "CelularesSubtraidos_2020.xlsx",
+                                                        "CelularesSubtraidos_2021.xlsx", "CelularesSubtraidos_2022.xlsx",
+                                                        "CelularesSubtraidos_2023.xlsx", "CelularesSubtraidos_2024.xlsx"))
 
-# Manter as observações únicas:
-celulares_2023 <- celulares_2023 %>%
-    distinct(ID, .keep_all = T)
+# Lista com 8 bases de dados:
+bases_sp <- map(nomes_bases, func_carregamento_sp)
 
-# Informações municipais:
-municipios_sp <- read_xlsx("municipios_sp.xlsx") %>%
-    mutate(CD_MUN = as.character(CD_MUN))
+# Pivoteamento para ano:
+roubos_sp <- do.call(rbind, bases_sp) %>%
+    pivot_wider(names_from = Ano, values_from = Total, values_fill = 0)
 
-# Cria arquivo com os nomes dos municípios e o total de roubos:
-celulares_2023 %>%
-    group_by(NOME_MUNICIPIO) %>%
-    summarise(Total = n()) %>%
+# Criar arquivo para manipulação manual dos nomes dos municípios:
+roubos_sp %>%
     arrange(NOME_MUNICIPIO) %>%
-    write_csv(file = "roubos_por_municipio.csv")
+    write_csv(file = "roubos_sp.csv")
 
-# Carrega arquivo com os nomes ajustados manualmente:
-roubos_2023 <- read.csv("roubos_total.csv")
+# Arquivo ajustado:
+roubos_sp_total <- read.csv("roubos_sp_total.csv") %>%
+    select(NM_MUN = NOME_MUNICIPIO, everything())
 
 # Malha municipal:
-mapa_sp <- read_sf("Malha/SP_Municipios_2023.shp")
+mapa_sp_total <- read_sf("Malha/SP_Municipios_2023.shp")
 
-mapa_sp <- mapa_sp %>%
-    left_join(municipios_sp %>% select(-NM_MUN), by = "CD_MUN")
+#----Modelo espaço-temporal----
 
-# Junção dos dados no mapa:
-mapa_sp <- mapa_sp %>%
-    left_join(roubos_2023, by = "NM_MUN") %>%
-    mutate(ROUBOS = case_when(is.na(ROUBOS) ~ 0,
-                              .default = ROUBOS))
+# Matriz de adjacência entre os municípios:
+nb_sp <- poly2nb(mapa_sp_total)
 
-E <- expected(mapa_sp$Populacao, mapa_sp$ROUBOS, 1)
+nb2INLA("mapa_sp.adj", nb_sp)
 
-mapa_sp$E <- E
-
-nb <- poly2nb(mapa_sp)
-
-nb2INLA("mapa_sp.adj", nb)
-
+# Grafo para INLA:
 g <- inla.read.graph(filename = "mapa_sp.adj")
 
-# Efeitos aleatórios:
-## Espacialmente correlacionados:
-mapa_sp$ea_u <- 1:nrow(mapa_sp)
+# Conexão das bases com o mapa:
+mapa_sp_total <- mapa_sp_total %>%
+    left_join(municipios_sp %>% select(-NM_MUN), by = "CD_MUN")
 
-## Não correlacionados:
-mapa_sp$ea_v <- 1:nrow(mapa_sp)
+mapa_sp_total <- mapa_sp_total %>%
+    select(NM_MUN, Populacao, Escolarizacao, IDHM) %>%
+    left_join(roubos_sp_total, by = "NM_MUN") %>%
+    pivot_longer(cols = !c(NM_MUN, geometry, Populacao, Escolarizacao, IDHM), names_to = "Ano", values_to = "Roubos") %>%
+    mutate(Ano = as.numeric(str_sub(Ano, start = 2))) %>%
+    arrange(Ano, NM_MUN)
+
+# Valores esperados de assaltos por ano:
+E_sp_total <- numeric()
+
+for (i in 2017:2024) {
+    E_sp_total <- expected(
+    (filter(mapa_sp_total, Ano == i))$Populacao,
+    (filter(mapa_sp_total, Ano == i))$Roubos,
+    1
+    ) %>%
+        c(E_sp_total, .)
+}
+
+mapa_sp_total$E <- E_sp_total
+
+# Efeitos aleatórios:
+
+## Espacialmente correlacionados:
+mapa_sp_total$ea_u <- rep(1:nrow(roubos_sp_total), 8)
+
+## Temporais
+mapa_sp_total$Ano2 <- mapa_sp_total$Ano - 2017 + 1
+
+# Adição de 2025 para predição:
+sp_2025 <- data.frame(
+    NM_MUN = mapa_sp_total$NM_MUN[1:nrow(roubos_sp_total)],
+    Populacao = mapa_sp_total$Populacao[1:nrow(roubos_sp_total)],
+    Escolarizacao = mapa_sp_total$Escolarizacao[1:nrow(roubos_sp_total)],
+    IDHM = mapa_sp_total$IDHM[1:nrow(roubos_sp_total)],
+    geometry = mapa_sp_total$geometry[1:nrow(roubos_sp_total)],
+    Ano = 2025,
+    Roubos = NA,
+    E = NA,
+    ea_u = 1:nrow(roubos_sp_total),
+    Ano2 = 9
+) %>%
+    st_as_sf() %>%
+    st_transform(crs = 4674)
+
+mapa_sp_total <- rbind(mapa_sp_total, sp_2025)
 
 #----Modelagem----
 
-formula <- ROUBOS ~ IDHM + Escolarizacao +
-    f(ea_u, model = "besag", graph = g, scale.model = T) +
-    f(ea_v, model = "iid")
+# Fórmula usando modelo AR1 para temporal e Besag-York-Mollier combinado
+# Com ano AR1 para espaço-temporal:
+formula <- Roubos ~ IDHM + Escolarizacao +
+    f(Ano, model = "ar1") +
+    f(ea_u, model = "bym", graph = g, scale.model = T,
+      group = Ano2, control.group = list(model = "ar1"))
 
-modelo <- inla(formula, family = "poisson", data = mapa_sp, E = E,
-               control.predictor = list(compute = T),
-               control.compute = list(return.marginals.predictor = T))
+# Modelo final:
+modelo_sp_total <- inla(formula, family = "poisson", data = mapa_sp_total, E = E,
+                        control.predictor = list(compute = T, link = 1),
+                        control.compute = list(return.marginals.predictor = T,
+                                               dic = T))
 
-modelo$summary.fixed
+# Estimativas pontuais dos betas:
+modelo_sp_total$summary.fixed
 
-# Estimação do risco relativo a posteriori:
-mapa_sp$RAP <- modelo$summary.fitted.values[, "mean"]
+# Distribuições a posteriori dos betas:
+lista_betas_sp <- modelo_sp_total$marginals.fixed
 
-modelo$summary.fitted.values
+posterioris_betas_sp <- vector(mode = "list", length = length(lista_betas_sp))
 
-mapa_sp %>%
-    select(RAP) %>%
-    plot()
+for (i in 1:length(lista_betas_sp)) {
+    posterioris_betas_sp[[i]] <- lista_betas_sp[[i]] %>%
+        ggplot(aes(x = x, y = y)) +
+        geom_line() +
+        labs(title = names(lista_betas_sp)[i])
+}
 
-#----Testes----
+ggpubr::ggarrange(plotlist = posterioris_betas_sp)
 
-# Malha de bairros em Campinas:
-malhas <- read_sf("Malha/Campinas2.shp") %>%
-    select(APG, POP_2022)
+# Distribuições a posteriori para os valores dos hiper-parâmetros:
+lista_hiperparametros_sp <- modelo_sp_total$marginals.hyperpar
 
-plot(malhas)
+posterioris_hiper_sp <- vector(mode = "list", length = length(lista_hiperparametros_sp))
 
-# Alterando para valores numericos as coordenadas:
-celulares_2023$LATITUDE <- as.numeric(celulares_2023$LATITUDE, digits = 10)
-celulares_2023$LONGITUDE <- as.numeric(celulares_2023$LONGITUDE, digits = 10)
+for (i in 1:length(lista_hiperparametros_sp)) {
+    posterioris_hiper_sp[[i]] <- lista_hiperparametros_sp[[i]] %>%
+        ggplot(aes(x = x, y = y)) +
+        geom_line() +
+        labs(title = names(lista_hiperparametros_sp)[i])
+}
 
-campinas_2023 <- subset(celulares_2023, NOME_MUNICIPIO == "CAMPINAS" & LATITUDE != 0)
+ggpubr::ggarrange(plotlist = posterioris_hiper_sp)
 
-roubos_campinas_2023 <- campinas_2023 %>%
-    dplyr::select(LATITUDE, LONGITUDE) %>%
-    st_as_sf(coords = c("LONGITUDE", "LATITUDE"),
-             crs = 4326)
+# Valores ajustados para cada cidade e ano:
+modelo_sp_total$summary.fitted.values
 
-roubos_campinas_2023 <- st_transform(roubos_campinas_2023, crs = 31983)
+# Média do Risco Relativo a Posteriori:
+mapa_sp_total$RRAP <- modelo_sp_total$summary.fitted.values[, "mean"]
 
-contagem_2023 <- malhas %>%
-    mutate(roubos = lengths(st_intersects(malhas, roubos_campinas_2023)),
-           Ano = 2023)
+mapa_sp_total$RRAP_L <- modelo_sp_total$summary.fitted.values[, "0.025quant"]
+mapa_sp_total$RRAP_U <- modelo_sp_total$summary.fitted.values[, "0.975quant"]
 
-plot(contagem_2023["roubos"])
-
-nb_campinas <- poly2nb(contagem_2023)
-
-nb2INLA("mapa_campinas.adj", nb_campinas)
-
-g_campinas <- inla.read.graph(filename = "mapa_campinas.adj")
-
-# Efeitos aleatórios:
-## Espacialmente correlacionados:
-contagem_2023$ea_u <- 1:nrow(contagem)
-
-## Não correlacionados:
-contagem_2023$ea_v <- 1:nrow(contagem)
-
-#----Modelagem----
-
-E_campinas_2023 <- expected(contagem_2023$POP_2022, contagem_2023$roubos, 1)
-
-formula_campinas <- roubos ~ 1 +
-    f(ea_u, model = "besag", graph = g_campinas, scale.model = T) +
-    f(ea_v, model = "iid")
-
-modelo_campinas_2023 <- inla(formula_campinas, family = "poisson", data = contagem_2023, E = E_campinas_2023,
-                             control.predictor = list(compute = T),
-                             control.compute = list(return.marginals.predictor = T))
-
-# Sumário dos efeitos fixos:
-modelo_campinas_2023$summary.fitted.values
-
-# Sumário dos efeitos aleatórios:
-modelo_campinas_2023$summary.random
-
-# Estimação do risco relativo a posteriori:
-contagem_2023$RAP <- modelo_campinas_2023$summary.fitted.values[, "mean"]
-
-# Mapa do Risco a Posteriori:
-contagem_2023 %>%
-    dplyr::select(RAP) %>%
-    plot()
-
-plot(contagem_2023[c("roubos", "RAP")])
-
-contagem_2023 %>%
-    ggplot(aes(fill = RAP)) +
+# Distribuição espaço-temporal do risco relativo a posteriori:
+mapa_sp_total %>%
+    ggplot(aes(fill = RRAP)) +
     geom_sf() +
-    geom_sf_label(aes(label = round(RAP, 1))) +
-    scale_fill_continuous(type = "viridis")
+    scale_fill_distiller(palette = "Spectral",
+                         limits = c(min(mapa_sp_total$RRAP_L),
+                                    max(mapa_sp_total$RRAP_U))) +
+    facet_wrap(~Ano) +
+    ggpubr::theme_classic2()
+
+mapa_sp_total %>%
+    ggplot(aes(fill = RRAP_L)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral",
+                         limits = c(min(mapa_sp_total$RRAP_L),
+                                    max(mapa_sp_total$RRAP_U))) +
+    facet_wrap(~Ano) +
+    ggpubr::theme_classic2()
+
+mapa_sp_total %>%
+    ggplot(aes(fill = RRAP_U)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral",
+                         limits = c(min(mapa_sp_total$RRAP_L),
+                                    max(mapa_sp_total$RRAP_U))) +
+    facet_wrap(~Ano) +
+    ggpubr::theme_classic2()
 
 # Predição a Posteriori:
 
-# Densidade marginal do risco a posteriori para Barão Geraldo:
-marginal_bg <- inla.smarginal(modelo_campinas$marginals.fitted.values[[3]]) %>%
-    data.frame()
+# Densidades marginais do risco relativo a posteriori para a cidade de São Paulo:
+marginais_sp <- list()
 
-marginal_bg %>%
+for (i in 1:8) {
+    marginais_sp[[i]] <- inla.smarginal(modelo_sp_total$marginals.fitted.values[[573 + nrow(roubos_sp_total) * (i - 1)]]) %>%
+        data.frame() %>%
+        mutate(Ano = 2017 + (i - 1))
+}
+
+marginais_sp <- do.call(rbind, marginais_sp)
+
+# Mudança no risco relativo a posteriori para São Paulo:
+marginais_sp %>%
     ggplot(aes(x = x, y = y)) +
-    geom_line()
-
-# Probabilidade de Barão Geraldo ter um risco de assalto maior que 1.2:
-1 - inla.pmarginal(1.2, modelo_campinas$marginals.fitted.values[[3]])
+    geom_line() +
+    facet_wrap(~Ano) +
+    labs(x = "Risco a posteriori", y = "Densidade") +
+    theme_bw()
