@@ -93,7 +93,7 @@
 \makeatother
 \subtitle{Probabilidade}
 \author{Caio Gomes Alves}
-\date{04/2025}
+\date{05/2025}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[section]
@@ -3408,6 +3408,7 @@ E(Y) = \int_{-\infty}^{\infty}ydF(y) &= \int_{0}^{1/2}y.1dy + \frac{1}{2}P_{Y}\l
 \end{example}
 
 \begin{proposition}
+\protect\hypertarget{prp:separespe}{}\label{prp:separespe}
 
 \(E(X) = \int_{0}^{\infty}(1 - F(x))dx - \int_{-\infty}^{0}F(x)dx\). Disso, temos que:
 
@@ -3425,8 +3426,709 @@ E(Y) = \int_{-\infty}^{\infty}ydF(y) &= \int_{0}^{1/2}y.1dy + \frac{1}{2}P_{Y}\l
 Vejamos \textbf{(a)}: considere que \(d(xF(x)) = F(x)dx + xd(F(x)) \Rightarrow xd(F(x)) = d(xF(x)) - F(x)dx\). Seja um \(b > 0\):
 
 \begin{align*}
-X=x
+\int_{0}^{b}xdF(x) &= \int_{0}^{b}d(xF(x)) - \int_{0}^{b}F(x)dx \\
+&= xF(x)\bigg{|}_{0}^{b} - \int_{0}^{b}F(x)dx \\
+&= bF(b) - \int_{0}^{b}F(x)dx \\
+&= \int_{0}^{b}[F(b) - F(x)]dx
+\end{align*}
+
+Note que \(\int_{0}^{b}xdF(x) \le \int_{0}^{\infty}[1 - F(x)]dx, \; \forall b>0\). Basta notar que \(F(b) - F(x) \le 1 - F(x)\) e que \(\int_{0}^{b}[1 - F(x)]dx \le \int_{0}^{\infty}[1 - F(x)]dx\). Logo:
+
+\begin{equation*}
+\int_{0}^{\infty}xdF(x) = \lim_{b \to \infty}\int_{0}^{b}xdF(x) \le \int_{0}^{\infty}[1 - F(x)]dx \Rightarrow \int_{0}^{\infty}xdF(x) \le \int_{0}^{\infty}[1 - F(x)]dx
+\end{equation*}
+
+Considere \(\lambda > 0\) e \(b > 0\), tais que:
+
+\begin{align*}
+\int_{0}^{b}[F(b) - F(x)]dx \ge \int_{0}^{\lambda}[1 - F(x)]dx &= \int_{0}^{\lambda}[F(b) - 1]dx + \int_{0}^{\lambda}[1 - F(x)]dx \\
+&= \lambda[F(b) - 1] + \int_{0}^{\lambda}[1 - F(x)]dx \\
+\int_{0}^{b}[F(b) - F(x)]dx &\ge \lambda[F(b) - 1] + \int_{0}^{\lambda}[1 - F(x)]dx
+\end{align*}
+
+Logo, como \(\int_{0}^{\infty}xdF(x) = \lim_{b \to \infty}\int_{0}^{b}[F(b) - F(x)]dx \ge \lim_{b \to \infty}\{\lambda[F(b) - 1] + \int_{0}^{\lambda}[1 - F(x)]dx\} = \int_{0}^{\lambda}[1 - F(x)]dx\). Assim:
+
+\begin{equation*}
+\int_{0}^{\infty}xdF(x) \ge \lim_{\lambda \to \infty}\int_{0}^{\lambda}[1 - F(x)]dx = \int_{0}^{\infty}[1 - F(x)]dx
+\end{equation*}
+
+E como \(\int_{0}^{\infty}xdF(x) \le \int_{0}^{\infty}[1 - F(x)]dx\), temos que \(\int_{0}^{\infty}xdF(x) = \int_{0}^{\infty}[1 - F(x)]dx\)
+\end{proof}
+
+\begin{corollary}
+\protect\hypertarget{cor:esppositiva}{}\label{cor:esppositiva}Se \(X\) é tal que \(X(\omega) \ge 0 \; \forall \omega \in \mathbb{R} \Rightarrow E(X) = \int_{0}^{\infty}[1 - F(x)]dx = \int_{0}^{\infty}P(X \ge x)dx\).
+\end{corollary}
+
+\begin{example}
+Seja \(X \sim Exp(\lambda)\), qual a \(E(X)\)? Como o suporte de \(X\) é \((0,\infty)\), aplica-se o corolário anterior, de modo que:
+
+\begin{align*}
+F_{X}(x) &= 1 - e^{-\lambda x} \Leftrightarrow P(X > x) = e^{-\lambda x} \\
+E(X) &= \int_{0}^{\infty}e^{-\lambda x}dx = -\frac{1}{\lambda}e^{-\lambda x}\bigg{|}_{0}^{\infty} = \frac{1}{\lambda}
+\end{align*}
+\end{example}
+
+\textbf{Nota}: Suponha \(X\) discreta e \(X(\omega) \ge 0 \; \forall \omega\). Então:
+
+\begin{align*}
+E(X) = \sum_{n=0}^{\infty}P(X > n) &= \sum_{n=0}^{\infty}P(X \ge n+1) \\
+&= \sum_{n=1}^{\infty}P(X \ge n)
+\end{align*}
+
+\begin{example}
+Considere o lançamento de uma moeda até a 1ª cara. Suponha \(p=\) probabilidade de cara e \((1 - p) =\) probabilidade de coroa, e \(X =\) número de lançamentos até a primeira cara. Tome o evento \([X \ge n]\), logo:
+
+\begin{equation*}
+E(X) = \sum_{n=1}^{\infty}(1 - p)^{n-1} = \sum_{n=0}^{\infty}(1 - p)^{n} = \frac{1}{p}
+\end{equation*}
+\end{example}
+
+\textbf{Nota}: Sendo \(X\) uma variável aleatória, temos pelo corolário \ref{cor:esppositiva} que:
+
+\begin{align*}
+E(|X|) &= \int_{0}^{\infty}P(|X| > x)dx \\
+&= \int_{0}^{\infty}\big[P(X > x) + P(X < -x)\big]dx \\
+&= \int_{0}^{\infty}P(X > x)dx + \int_{0}^{\infty}P(X < -x)dx \\
+&= \int_{0}^{\infty}(1-F(x))dx + \int_{0}^{\infty}F((-x)^{-})dx
+\end{align*}
+
+Onde \(F((-x)^{-}) = \lim_{u \uparrow -x}F(u)\), que caso \(F\) seja contínua, coincide com \(F(-x)\). Logo:
+
+\begin{equation*}
+E(|X|) = \int_{0}^{\infty}(1 - F(x))dx + \int_{0}^{\infty}F(-x)dx
+\end{equation*}
+
+Já que \(F\) pode ser descontínua em uma coleção enumerável de pontos. Agora, tomando a transformação de variável \(y = -x \Leftrightarrow dy = -dx\):
+
+\begin{align*}
+E(|X|) &= \int_{0}^{\infty}(1 - F(x))dx + \int_{-\infty}^{0}F(y)dy \\
+&= \int_{0}^{\infty}(1 - F(x))dx + \int_{-\infty}^{0}F(x)dx
+\end{align*}
+
+Utilizando os resultados \textbf{a} e \textbf{b} da proposição \ref{prp:separespe}, temos que:
+
+\begin{align*}
+E(|X|) &= \int_{0}^{\infty}xdF(x) - \int_{-\infty}^{0}xdF(x) \\
+&= \int_{0}^{\infty}|x|dF(x) + \int_{-\infty}^{0}|x|dF(x) \\
+&= \int_{-\infty}^{\infty}|x|dF(x)
+\end{align*}
+
+Onde \(F\) é a acumulada de \(X\), ao invés de \(|X|\). Assim, a integrabilidade de \(X\) depende da finitude de \(\int_{0}^{\infty}xdF(x)\) e \(\int_{-\infty}^{0}xdF(x)\), logo \(X\) é integrável se \(E(|X|) < \infty\).
+
+\hypertarget{propriedades-da-esperanuxe7a}{%
+\subsection{Propriedades da esperança}\label{propriedades-da-esperanuxe7a}}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\mathbf{E_{1}}\): Se \(X = c\), com \(c\) uma constante, \(E(X) = c\);
+\item
+  \(\mathbf{E_{2}}\)\textbf{(monotonia)}: Se \(X\) e \(Y\) são variáveis aleatórias, com \(X \le Y \Rightarrow E(X) \le E(Y)\), caso ambas as esperanças estejam bem definidas;
+\end{itemize}
+
+\begin{proof}[Prova]
+Seja \(z\) um valor fixo. Se \(Y \le z \Rightarrow X \le z\), logo \([Y \le z] \subseteq [X \le z]\), assim:
+
+\begin{align*}
+P(Y \le z) &\le P(X \le z) \\
+F_{Y}(z) &\le F_{X}(z) \Longleftrightarrow 1 - F_{Y}(z) \ge 1 - F_{X}(z)
+\end{align*}
+
+E pela proposição \ref{prp:separespe}, temos que:
+
+\begin{align*}
+E(Y) = \int_{0}^{\infty}\big{[}1 - F_{Y}(z)\big{]}dz - \int_{-\infty}^{0}F_{Y}(z)dz &\ge \int_{0}^{\infty}\big{[}1 - F_{X}(z)\big{]}dz - \int_{-\infty}^{0}F_{X}(z)dz = E(X) \\
+E(Y) &\ge E(X)
 \end{align*}
 \end{proof}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\mathbf{E_{3}}\)\textbf{(linearidade)}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{(i)} Se \(E(X)\) é bem definida, \(a,b \in \mathbb{R}\), então \(E(aX + b) = aE(X) + b\);
+  \item
+    \textbf{(ii)} \(E(aX + bY) = aE(X) + bE(Y)\), caso o termo \(aE(X) + bE(Y)\) esteja bem definido;
+  \item
+    Note que se \(E(X) = \infty \Rightarrow E(X - X) \neq E(X) - E(X)\).
+  \end{itemize}
+\end{itemize}
+
+\begin{proof}[Prova]
+Quando \(a = 0; E(aX + b) = E(b) = b = 0E(X) + b\).
+
+Quando \(a > 0, b > 0; F_{aX + b}(x) = P(aX+b \le x) = P\left(X \le \frac{x-b}{a}\right) = F_{X}\left(\frac{x-b}{a}\right)\). Logo:
+
+\begin{align*}
+E(aX + b) &= \int_{0}^{\infty}\big{[}1 - F_{aX + b}(x)\big{]}dx - \int_{-\infty}^{0}F_{aX + b}(x)dx \\
+&= \int_{0}^{\infty}\left[1 - F_{X}\left(\frac{x-b}{a}\right)\right]dx - \int_{-\infty}^{0}F_{X}\left(\frac{x-b}{a}\right)dx
+\end{align*}
+
+Tome \(y = \frac{x-b}{a} \Rightarrow dy = \frac{1}{a}dx\). Então:
+
+\begin{align*}
+E(aX+b) &= \int_{-b/a}^{\infty}a\big{[}1 - F_{X}(y)\big{]}dy - \int_{-\infty}^{-b/a}aF_{X}(y)dy \\
+&= a\left\{\int_{-b/a}^{\infty}\big{[}1 - F_{X}(y)\big{]}dy - \int_{-\infty}^{-b/a}F_{X}(y)dy\right\} \\
+&= a\int_{0}^{\infty}\big{[}1 - F_{X}(y)\big{]}dy - a\int_{-\infty}^{0}F_{X}(y)dy + a\int_{-b/a}^{0}\big{[}1 - F_{X}(y)\big{]}dy + a\int_{-b/a}^{0}F_{X}(y)dy \\
+&= aE(X) + a \int_{-b/a}^{0}dy \\
+&= aE(X) + a \frac{b}{a} \\
+&= aE(X) + b
+\end{align*}
+\end{proof}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\mathbf{E_{4}}\)\textbf{(Desigualdade de Jansen)}: Seja \(\varphi\) uma função convexa, definida na reta, com \(X\) integrável, então:
+\end{itemize}
+
+\begin{equation}
+E(\varphi(X)) \ge \varphi(E(X))
+\label{eq:desigjansen}
+\end{equation}
+
+\textbf{Nota}: Caso \(\varphi\) seja côncava:
+
+\begin{equation*}
+E(\varphi(X)) \le \varphi(E(X))
+\end{equation*}
+
+\begin{proof}[Prova para convexa]
+Tome \(x_{0}\) e \(\varphi(x_{0})\). Então existe uma reta \(L\) tal que \(L\) passe por \(\varphi(x_{0})\) e \(\varphi\) fica por cima de \(L\). Logo temos a seguinte equação da reta:
+
+\begin{equation*}
+L(x) = \varphi(x_{0}) + \lambda(x - x_{0})
+\end{equation*}
+
+Onde \(\lambda\) é alguma constante apropriada. Então para todo \(x\) temos:
+
+\begin{align*}
+\varphi(x) &\ge L(x) = \varphi(x_{0}) + \lambda(x - x_{0}) \\
+&\big{\Downarrow} \;\mathbf{E_{2}} \\
+E(\varphi(x)) &\ge E(L(x)) \stackrel{\mathbf{E_{1},E_{3}}}{=} \varphi(x_{0}) + \lambda\left[E(x) - x_{0}\right]
+\end{align*}
+
+Que vale para \(x_{0} = E(x)\), de modo que \(E(\varphi(x)) \ge \varphi(E(x)) + \lambda\left[E(x) - E(x)\right]\), então:
+
+\begin{equation*}
+E(\varphi(x)) \ge \varphi(E(x))
+\end{equation*}
+
+A prova para funções côncavas segue a mesma metodologia, com a inversão da desigualdade.
+\end{proof}
+
+\hypertarget{crituxe9rio-de-integrabilidade}{%
+\subsubsection{Critério de integrabilidade}\label{crituxe9rio-de-integrabilidade}}
+
+Suponha que \(X\) é uma variável aleatória dominada por \(Y\) (ou seja, \(X \le Y\)), sendo \(Y\) uma variável aleatória integrável. \(X\) é integrável? Temos que:
+
+\begin{equation*}
+X \le Y \Rightarrow E(X) \le E(Y)
+\end{equation*}
+
+Se \(X\) e \(Y\) são tais que \(Y \ge 0\) e \(Y\) é integrável e \(|X| \le Y \Rightarrow 0 \le |X| \le Y\), e como consequência:
+
+\begin{equation*}
+0 \le E(X) \le E(Y) < \infty \Longrightarrow X \text{ é integrável}
+\end{equation*}
+
+De maneira similar, seja \(X\) uma variável aleatória qualquer. Então:
+
+\begin{equation*}
+\sum_{n=1}^{\infty}P(|X| \ge n) \le E(|X|) \le 1 + \sum_{n=1}^{\infty}P(|X| \ge n)
+\end{equation*}
+
+Assim, \(X\) é integrável se e somente se \(\sum_{n=1}^{\infty}P(|X| \ge n) < \infty\).
+
+\begin{proof}[Prova]
+Seja \(x \ge 0\). Tome \([x]\) como a parte inteira de \(x\). Então \([|x|] = k\) se \(k \le |x| < k+1\). Então:
+
+\begin{align*}
+0 \le [|x|] &\le |x| \le [|x|] + 1 \\
+&\Downarrow \; \mathbf{E_{2},E_{3}} \\
+0 \le E([|x|]) &\le E(|x|) \le E([|x|]) + 1
+\end{align*}
+
+Pelo corolário \ref{cor:esppositiva}, como \([|x|]\) é discreta e não-negativa, temos que:
+
+\begin{align*}
+E([|x|]) &= \sum_{n=1}^{\infty}P([|x|] \ge n) \\
+&= \sum_{n=1}^{\infty}P(|x| \ge n) \le E(|x|) \le \sum_{n=1}^{\infty}P(|x| \ge n) + 1
+\end{align*}
+\end{proof}
+
+\hypertarget{casos-de-interesse}{%
+\subsubsection{Casos de interesse}\label{casos-de-interesse}}
+
+\textbf{a) (Consistência absoluta)} \(\varphi(X) = |X|\):
+
+\begin{equation*}
+E(|X|) \ge |E(X)|
+\end{equation*}
+
+\textbf{b) (Consistência quadrática)} \(\varphi(X) = X^{2}\):
+
+\begin{equation*}
+E(X^{2}) \ge [E(X)]^{2}
+\end{equation*}
+
+\textbf{c) (Consistência absoluta de ordem p)} \(\varphi(X) = |X|^{p}, p \ge 1\):
+
+\begin{equation*}
+E(|X|^{p}) \ge |E(X)|^{p}
+\end{equation*}
+
+\textbf{Nota}: \(\varphi\) só precisa ser convexa (ou côncava) em uma região de probabilidade 1. Por exemplo, se \(X\) é uma variável aleatória, tal que \(P(X > 0) = 1\), ou o suporte da distribuição de \(X\) é \((0, \infty), \varphi(X) = \frac{1}{X}\) é convexa em \((0,\infty) \Rightarrow E\left(\frac{1}{X}\right) \ge \frac{1}{E(X)}\). De modo análogo, se \(P(X > 0) = 1\) e \(\varphi(X) = \ln(X), \varphi\) é côncava em \((0,\infty)\) logo \(E(\ln(X)) \le \ln(E(X))\).
+
+\hypertarget{esperanuxe7a-de-funuxe7uxf5es-de-variuxe1veis-aleatuxf3rias}{%
+\subsection{Esperança de funções de variáveis aleatórias}\label{esperanuxe7a-de-funuxe7uxf5es-de-variuxe1veis-aleatuxf3rias}}
+
+Seja \(X\) uma variável aleatória, \(\varphi\) uma função mensurável e \(Y = \varphi(X)\). Assim, \(Y\) é uma variável aleatória, cuja esperança é \(E(Y) = \int ydF_{\varphi(X)}(y) = \int_{0}^{\infty}[1 - F_{\varphi(X)}(y)]dy - \int_{-\infty}^{0}F_{\varphi(X)}(y)dy\).
+
+\begin{theorem}
+Se \(X\) é uma variável aleatória e \(\varphi\) uma função mensurável, com \(Y = \varphi(X)\):
+
+\begin{equation*}
+E(Y) = E(\varphi(X)) = \int\varphi(x)dF_{X}(x)
+\end{equation*}
+\end{theorem}
+
+\begin{proof}[Prova para caso $\varphi(x) = x^{k}$]
+Note que a prova já foi feita para \(\varphi(x) = |x|\). Vejamos que a prova é válida para \(\varphi(x) = x^{k}\), com \(k = 1,2,\ldots\), em 2 casos: \(k\) par e \(k\) ímpar:
+
+\textbf{\(\mathbf{k}\) par:}
+
+\begin{align*}
+E(X^{k}) &= \int_{0}^{\infty}P\left(X^{k} > t\right)dt \\
+&= \int_{0}^{\infty}P\left(X > \sqrt[k]{t}\right)dt + \int_{0}^{\infty}P\left(X < - \sqrt[k]{t}\right)dt \\
+&= \int_{0}^{\infty}\left[1 - F_{X}\left(\sqrt[k]{t}\right)\right]dt + \int_{0}^{\infty}F_{X}\left(-\sqrt[k]{t}^{\;-}\right)dt
+\end{align*}
+
+Apliquemos as seguintes mudanças de variáveis: \(s = t^{\frac{1}{k}}, ds = \frac{1}{k}t^{\frac{1}{k} - 1}dt, dt = \frac{(ds)ks^{k}}{s}, u = -s, du = -ds\):
+
+\begin{align*}
+E(X^{k}) &= \int_{0}^{\infty}\left[1-F_{X}(s)\right]ks^{k-1}ds + \int_{0}^{\infty}F_{X}(-s)ks^{k-1}ds \\
+&= \int_{0}^{\infty}\left[1-F_{X}(s)\right]ks^{k-1}ds - \int_{-\infty}^{0}F_{X}(u)ku^{k-1}du \\
+&= k\left\{\int_{0}^{\infty}[1 - F_{X}(s)]s^{k-1}ds - \int_{-\infty}^{0}F_{X}(u)u^{k-1}du\right\}
+\end{align*}
+
+Agora, mostremos que \(E(X^{k}) = \int x^{k}dF_{X}(x)\):
+
+\begin{align*}
+\int_{-\infty}^{\infty}x^{k}dF_{X}(x) &\stackrel{Def}{=} \int_{0}^{\infty}\left[1 - F_{X}(x)\right]d(x^{k}) - \int_{-\infty}^{0}F_{X}(x)d(x^{k}) \\
+&= k\left\{\int_{0}^{\infty}[1 - F_{X}(x)]x^{k-1}dx - \int_{-\infty}^{0}F_{X}(x)x^{k-1}dx\right\} \\
+&= E(X^{k})
+\end{align*}
+\end{proof}
+
+\textbf{Nota}: A propriedade é também válida para polinômios, visto que a esperança opera de maneira linear.
+
+\begin{example}
+Seja \(X \sim Exp(\lambda)\), vimos que \(E(X) = \frac{1}{\lambda}\):
+
+Calcular \(E(X^{2})\):
+
+\begin{align*}
+E(X^{2}) = 2\int_{0}^{\infty}xe^{-\lambda x}dx &= \frac{2}{\lambda}\int_{0}^{\infty}x\lambda e^{-\lambda x}dx \\
+&= \frac{2}{\lambda}E(X) = \frac{2}{\lambda^{2}}
+\end{align*}
+
+Calcular \(E(X^{3})\):
+
+\begin{align*}
+E(X^{3}) = 3\int_{0}^{\infty}x^{2}e^{-\lambda x}dx &= \frac{3}{\lambda}\int_{0}^{\infty}x^{2}\lambda e^{-\lambda x}dx \\
+&= \frac{3}{\lambda}E(X^{2}) = \frac{3}{\lambda^{3}}
+\end{align*}
+
+De modo que podemos observar o padrão emergente, e definir \(E(X^{k}) = \frac{k!}{\lambda^{k}}\).
+\end{example}
+
+\hypertarget{momentos-de-uma-variuxe1vel-aleatuxf3ria}{%
+\subsection{Momentos de uma variável aleatória}\label{momentos-de-uma-variuxe1vel-aleatuxf3ria}}
+
+\textbf{a)} \(E\left(\left[X - b\right]^{k}\right)\): \(k-\)ésimo momento de \(X\) em torno de \(b\);
+
+\textbf{b)} \(E\left(X^{k}\right)\): \(k-\)ésimo momento em torno de 0;
+
+\textbf{c)} Se em \textbf{(a)}, \(b = E(X)\), o momento é central;
+
+\textbf{d)} \(t>0,E\left(|X|^{t}\right)\): \(t-\)ésimo momento absoluto de \(X\).
+
+\begin{definition}[Variância de uma variável aleatória]
+\protect\hypertarget{def:Variancia}{}\label{def:Variancia}\begin{equation*}
+\mathrm{Var}(X) = E\left\{(X - E(X))^{2}\right\} \Longleftrightarrow \mathrm{Var}(X) = E\left(X^{2}\right) - \big{(}E(X)\big{)}^{2}
+\end{equation*}
+\end{definition}
+
+\begin{proposition}
+Se \(X\) é uma variável aleatória, \(f(t) = \left[E(|X|^{t})\right]^{\frac{1}{t}}\) é não-decrescente em \(t, t >0\).
+\end{proposition}
+
+\begin{proof}[Prova]
+Devemos provar que, se \(0 < s < t, f(s) \le f(t)\) (ou \(\left\{E(|X|^{s})\right\}^{\frac{1}{s}} \le \left\{E(|X|^{t})\right\}^{\frac{1}{t}}\)). Para tanto, consideremos dois casos: \textbf{a)} \(E(|X|^{s})<\infty\), \textbf{b)} \(E(|X|^{s})=\infty\):
+
+\textbf{a)} Defina \(\varphi(y) = |y|^{\frac{t}{s}}\) (caso \(\frac{t}{s} > 1, \varphi\) será convexa). Pela Desigualdade de Jansen:
+
+\begin{align*}
+E(\varphi(Y)) &\ge \varphi(E(Y)) \\
+E\left(|Y|^{\frac{t}{s}}\right) &\ge \left|E(Y)\right|^{\frac{t}{s}}
+\end{align*}
+
+Tome \(Y = |X|^{s}\). Substituindo temos:
+
+\begin{align*}
+E\left((|X|^{s})^{\frac{t}{s}}\right) &\ge \left|E(|X|^{s})\right|^{\frac{t}{s}} \\
+E\left(|X|^{t}\right) &\ge \left\{E(|X|^{s})\right\}^{\frac{t}{s}} \\
+\left\{E(|X|^{t})\right\}^{\frac{1}{t}} &\ge \left\{E(|X|^{s})\right\}^{\frac{1}{s}}
+\end{align*}
+
+\textbf{b)} Como \(t > s > 0\), sabemos que \(|X|^{s} \le 1 + |X|^{t}\). Como \(E(|X|^{s}) = \infty\), então:
+
+\begin{equation*}
+\infty = E(|X|^{s}) \le 1 + E(|X|^{t}) = \infty
+\end{equation*}
+\end{proof}
+
+\begin{corollary}
+Se \(E(|X|^{t}) < \infty \; \forall t \in (0,\infty) \Rightarrow E(|X|^{s}) < \infty \; \forall s\), com \(0 < s < t\).
+\end{corollary}
+
+\hypertarget{propriedades-1}{%
+\subsubsection{Propriedades}\label{propriedades-1}}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\mathbf{E_{5}}\): Se \(X = c\), com \(c\) uma constante, \(\mathrm{Var}(X) = 0\);
+\item
+  \(\mathbf{E_{6}}\): \(\mathrm{Var}(X+b) = \mathrm{Var}(X), \mathrm{Var}(aX + b) = a^{2}\mathrm{Var}(X)\), com \(a,b \in \mathbb{R}\);
+\end{itemize}
+
+\begin{proof}[Prova]
+\begin{align*}
+\mathrm{Var}(aX + b) &= E\left\{\left[aX + b - E(aX + b)\right]^{2}\right\} \\
+&= E\left\{\left[aX + b - aE(X) - b\right]^{2}\right\} \\
+&= E\left\{a^{2}\left[X - E(X)\right]^{2}\right\} \\
+&= a^{2}E\left\{\left[X - E(X)\right]^{2}\right\} = a^{2}\mathrm{Var}(X)
+\end{align*}
+\end{proof}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\mathbf{E_{7}}\)\textbf{(Desigualdade de Tchebychev)}: Seja \(X\) uma variável aleatória, com \(X \ge 0\). Para todo \(\lambda > 0\):
+\end{itemize}
+
+\begin{equation}
+P(X \ge \lambda) \le \frac{E(X)}{\lambda}
+\label{eq:desigcheby}
+\end{equation}
+
+\begin{proof}[Prova]
+Seja \(Y = I_{[X \ge \lambda]}\lambda = \begin{cases}\lambda &,X \ge \lambda \\ 0 &,c.c.\end{cases}\). Por definição, \(0 \le Y \le X \Rightarrow E(Y) \le E(X)\) e \(E(Y) = \lambda P(X \ge \lambda)\), de modo que:
+
+\begin{equation*}
+\lambda P(X \ge \lambda) \le E(X) \Leftrightarrow P(X \ge \lambda) \le \frac{E(X)}{\lambda}
+\end{equation*}
+\end{proof}
+
+\hypertarget{consequuxeancias}{%
+\subsubsection{Consequências}\label{consequuxeancias}}
+
+\textbf{a)} Para todo \(\lambda>0\):
+
+\begin{equation*}
+P(|X - E(X)| \ge \lambda) \le \frac{\mathrm{Var}(X)}{\lambda^{2}}
+\end{equation*}
+
+\textbf{b) (Desigualdade de Markov)} Seja \(X\) uma variável aleatória, para todo \(t\):
+
+\begin{equation}
+P(|X| \ge \lambda) \le \frac{E\left(|X|^{t}\right)}{\lambda^{t}}
+\label{eq:desigmarkov}
+\end{equation}
+
+\textbf{c)} Se \(Z\) é uma variável aleatória, com \(Z \ge 0\) e \(E(Z) = 0\):
+
+\begin{equation*}
+P(Z=0) = 1 \;\;\;\;(\text{i.e., }Z=0\text{ quase certamente})
+\end{equation*}
+
+\begin{proof}[Provas]
+\textbf{a)} Se \(Y = [X - E(X)]^{2}\), aplicamos \(\mathbf{E_{7}}\) usando \(\lambda^{2}: P(Y \ge \lambda^{2}) \le \frac{E(Y)}{\lambda^{2}}\). Note que \(E(Y) = E([X - E(X)]^{2}) = \mathrm{Var}(X)\). Logo:
+
+\begin{equation*}
+P\left(|X - E(X)| \ge \lambda\right) = P(|X - E(X)|^{2} \ge \lambda^{2}) = P(Y \ge \lambda^{2}) \le \frac{E(Y)}{\lambda^{2}} = \frac{\mathrm{Var}(X)}{\lambda^{2}}
+\end{equation*}
+
+\textbf{b)} Seja \(Y = |X|^{t}\), aplicamos \(\mathbf{E_{7}}\) a \(Y\) e \(\lambda^{t}: P(Y \ge \lambda^{t}) \le \frac{E(Y)}{\lambda^{t}}\). Note que \(E(Y) = E(|X|^{t})\) e que \(P(Y \ge \lambda^{t}) = P(|X|^{t} \ge \lambda^{t}) = P(|X| > \lambda)\). Logo:
+
+\begin{equation*}
+P(|X| \ge \lambda) \le \frac{E(|X|^{t})}{\lambda^{t}}
+\end{equation*}
+
+\textbf{c)} \(Z = 0\) quase certamente, usamos \(\mathbf{E_{7}}\) na variável \(Z\) e em \(\lambda = \frac{1}{n}\), então:
+
+\begin{equation*}
+P\left(Z \ge \frac{1}{n}\right) \le E(Z).n \stackrel{Hip}{=}0
+\end{equation*}
+
+Temos que \([Z > 0] = \bigcup_{n}\left[Z \ge \frac{1}{n}\right]\), de modo que:
+
+\begin{equation*}
+P(Z > 0) = P\left(\bigcup_{n}\left[Z \ge \frac{1}{n}\right]\right) = \lim_{n \to \infty}P\left(Z \ge \frac{1}{n}\right) = 0 \Rightarrow P(Z = 0) = 1 - P(Z > 0) = 1
+\end{equation*}
+\end{proof}
+
+\textbf{Nota}: Se \(X\) é uma variável tal que \(\mathrm{Var}(X) = 0\), temos que \(\mathrm{Var}(X) = 0 \Leftrightarrow E([X - E(X)]^{2}) = 0\), ou seja, se definirmos \(Z = [X - E(X)]^{2}, Z \ge 0\) e \(E(Z) = 0\). Logo, por \textbf{c)}, \(P(Z = 0) = 1\), ou seja, \(P([X - E(X)]^{2} = 0) = 1 \Leftrightarrow P(X = E(X)) = 1\), ou seja, \(X = E(X)\) quase certamente.
+
+\begin{example}
+Se \(X\) e \(Y\) são variáveis aleatórias tais que \(E(|X|^{t}) < \infty\) e \(E(|Y|^{t}) < \infty\), então \(E(|X + Y|^{t}) < \infty\):
+
+\textbf{(i)} A finitude de \(E(|X|^{t})\) leva à finitude de \(E(|aX|^{t})\);
+
+\textbf{(ii)} Se \(X\) e \(Y\) forem integráveis (com \(t = 1\)), então \(X + Y\) é integrável. Se \(X\) e \(Y\) tem variâncias finitas \((t = 2)\), então \(X + Y\) tem variância finita.
+\end{example}
+
+\begin{proposition}
+Seja \(X\) uma variável aleatória integrável e \(\mu = E(X) \Rightarrow \mu\) minimiza \(E([X - c]^{2})\), com \(c \in \mathbb{R}\).
+\end{proposition}
+
+\begin{proof}[Prova]
+Temos que \((X - c)^{2} = (X - \mu + \mu - c)^{2} = (X - \mu)^{2} + 2(\mu - c)(X - \mu) + (\mu - c)^{2}\). Logo, pelas propriedades lineares do valor esperado:
+
+\begin{align*}
+E([X - c]^{2}) &= E([X - c]^{2}) + 2(\mu - c)E(X - \mu) + (\mu - c)^{2} \\
+&= \mathrm{Var}(X) + (\mu - c)^{2}
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Seja \(X\) uma variável aleatória e \(m\) sua mediana. Assim, \(m\) minimiza \(E(|X - c|), c \in \mathbb{R}\). Ou seja:
+
+\begin{equation*}
+E(|x - m|) = \min_{c \in \mathbb{R}}E(|X - c|)
+\end{equation*}
+\end{proposition}
+
+\begin{proof}[Prova]
+Considere a definição de mediana: \(P(X \le m) = P(X > m) = \frac{1}{2}\). Suponha que \(X\) é integrável, logo \(X - c\) também o será para todo \(c\) constante real. Vamos ver que, com \(m < c\) (o caso em que \(m > c\) segue analogamente):
+
+\begin{itemize}
+\tightlist
+\item
+  \(X \le m \Rightarrow |X - c| - |X - m| = \lambda\), onde \(\lambda = c - m\);
+\item
+  \(X > m \Rightarrow |X - c| - |X - m| \ge \lambda\).
+\end{itemize}
+
+Seja \(c\) tal que \(m < c\). Defina \(\lambda = c - m > 0\). Então:
+
+\begin{itemize}
+\tightlist
+\item
+  Se \(x \le m \Rightarrow |x - c| = |x - m| + \lambda \Rightarrow |x - c| - |x - m| = \lambda\);
+\item
+  Se \(x > m\) e \(x > c\) (os casos intermediários são decorrências), então \(x > c \Rightarrow \lambda + |x - c| = |x - m| \Rightarrow |x - c| - |x - m| \ge - \lambda\).
+\end{itemize}
+
+Defina \(Y = |X - c| - |X - m| = \begin{cases} \lambda & ,\text{se } X \le m, \\ y & ,\text{se }X > m. \end{cases}\). Assim, temos que \(y \ge -\lambda\), e que \(Y = \begin{cases} \lambda & ,P(X \le m) \ge \frac{1}{2}, \\ y &,P(X > m) \le \frac{1}{2} \end{cases}\). Logo, \(Y \ge \lambda I_{[X \le m]} - \lambda I_{[X > m]} \Rightarrow E(Y) \ge \lambda E(I_{[X \le m]}) - \lambda E(I_{[X > m]}) = \lambda P(X \le m) - \lambda P(X > m) \ge 0\).
+
+Como \(E(Y) \ge 0 \Rightarrow E(|X - c|) \ge E(|x - m|) \; \forall c\), com \(m < c\).
+\end{proof}
+
+\hypertarget{esperanuxe7as-e-funuxe7uxf5es-de-vetores}{%
+\subsection{Esperanças e funções de vetores}\label{esperanuxe7as-e-funuxe7uxf5es-de-vetores}}
+
+\begin{theorem}
+Seja \(\underbar{X} = (X_{1},\ldots,X_{n})\) um vetor aleatório e \(\varphi:\mathbb{R}^{n} \to \mathbb{R}\) mensurável. Então:
+
+\begin{align*}
+E(\varphi(\underbar{X})) = \int ydF_{\varphi\left(\underbar{X}\right)}(y) &= \int_{\mathbb{R}^{n}}\varphi(\underbar{x})dF_{\underbar{X}}(\underbar{x}) \\
+&= \int \cdots \int \varphi(x_{1},\ldots,x_{n})dF_{\underbar{X}}(x_{1},\ldots,x_{n})
+\end{align*}
+
+Caso discreto: Seja \(\underbar{X}\) discreto, tomando valores \(\underbar{X}_{i} = (x_{i1},\ldots,x_{in})\), com probabilidade \(P(\underbar{X}_{i}) = \sum_{i}P(x_{i}) = 1\). Então:
+
+\begin{equation*}
+E(\varphi(\underbar{X})) = \sum_{i}\varphi(\underbar{x}_{i})P(\underbar{x}_{i})
+\end{equation*}
+
+Caso contínuo: Seja \(\underbar{X}\) contínuo, com densidade \(f(x_{1},\ldots,x_{n})\). Então:
+
+\begin{equation*}
+E(\varphi(\underbar{X})) = \int \cdots \int f(x_{1},\ldots,x_{n})dx_{1}\ldots dx_{n}
+\end{equation*}
+\end{theorem}
+
+\begin{example}
+Lembrando a propriedade \(E_{3}: E(X + Y) = E(X) + E(Y)\) desde que existam \(E(X)\) e \(E(Y)\). Seja \(\varphi(x,y) = x + y\) e defina \(\varphi_{1}(x,y) = x\) e \(\varphi_{2}(x,y) = y\). Teremos pelo teorema que:
+
+\begin{align*}
+E(X + Y) = E(\varphi(x,y)) = \int \int(x+y)dF_{X,Y}(x,y) &= \int\int x dF_{X,Y}(x,y) + \int\int y dF_{X,Y}(x,y) \\
+&= E(\varphi_{1}(x,y)) + E(\varphi_{2}(x,y)) \\
+&= E(X) + E(Y)
+\end{align*}
+\end{example}
+
+Se \(\{X_{i}\}_{i=1}^{n}\) é conjuntamente independente, com densidades \(f_{1},\ldots,f_{n}\), sendo a densidade conjunta dada por \(f = \prod_{i = 1}^{n}f_{i}\), então:
+
+\begin{align*}
+E(\varphi(\underbar{X})) &= \int \cdots \int \varphi(x_{1},\ldots,x_{n})f_{1}(x_{1})\ldots f_{n}(x_{n})dx_{1}\ldots dx_{n} \\
+&= \int \cdots \int \varphi(x_{1}, \ldots, x_{n})dF_{X_{1}}(x_{1})\ldots dF_{X_{n}}(x_{n})
+\end{align*}
+
+\begin{proposition}
+Sejam \(\{X_{i}\}_{i=1}^{n}\) conjuntamente independentes e integráveis. Então:
+
+\begin{equation*}
+E\left(\prod_{i=1}^{n}X_{i}\right) = \prod_{i=1}^{n}E(X_{i})
+\end{equation*}
+\end{proposition}
+
+\begin{proof}[Prova (para $n = 2$)]
+Seja \(\varphi(X,Y) = X.Y\):
+
+\begin{align*}
+E(X.Y) = E(\varphi(X,Y)) &= \int \int \varphi(x,y)dF_{X}(x)dF_{Y}(y) \\
+&= \int[y.xdF_{X}(x)]dF_{Y}(y) \\
+&= \int yE(X)dF_{Y}(y) \\
+&= E(X)\int ydF_{Y}(y) = E(X)E(Y)
+\end{align*}
+\end{proof}
+
+\begin{definition}
+A covariância entre \(X\) e \(Y\) será definida por:
+
+\begin{equation*}
+\mathrm{Cov}(X,Y) = E\Big[\big(X - E(X)\big)\big(Y - E(Y)\big)\Big]
+\end{equation*}
+
+Sempre que \(X\) e \(Y\) sejam integráveis. Assim:
+
+\begin{align*}
+\mathrm{Cov}(X,Y) &= E\{XY - E(Y)X - E(X)Y + E(X)E(Y)\} \\
+&= E(XY) - E(X)E(Y) - E(X)E(Y) + E(X)E(Y) \\
+&= E(XY) - E(X)E(Y)
+\end{align*}
+
+Note que \(X\) e \(Y\) podem ter \(Cov(X,Y) = 0\) e mesmo assim \(X \not\perp Y\).
+\end{definition}
+
+\textbf{Notas}:
+
+\begin{itemize}
+\tightlist
+\item
+  A existência da covariância entre variáveis integráveis depende da existência de \(E(XY)\);
+\item
+  \(Cov(X,Y) = 0\) é interpretado como ``\(X\) e \(Y\) são não-correlacionados'';
+\item
+  Há casos onde \(Cov(X,Y) = 0\) implica independência, como na Normal Bivariada, por exemplo.
+\end{itemize}
+
+\begin{proposition}
+Sejam \(X_{1},\ldots,X_{n}\) variáveis aleatórias integráveis tais que \(\mathrm{Cov}(X_{i},X_{j}) = 0 \; \forall i \neq j\). Então
+
+\begin{equation*}
+\mathrm{Var}\left(\sum_{i=1}^{n}X_{i}\right) = \sum_{i=1}^{n}\mathrm{Var}(X_{i})
+\end{equation*}
+\end{proposition}
+
+\begin{proof}[Prova]
+\begin{align*}
+\mathrm{Var}\left(\sum_{i=1}^{n}X_{i}\right) &= E\left\{[X_{1} + \ldots X_{n}] - E[X_{1} + \ldots + X_{n}]^{2}\right\} \\
+&= E\left\{\sum_{i=1}^{n}[X_{i} - E(X_{i})]^{2} + 2 \sum_{i < j}(X_{i} - E(X_{i}))(X_{j} - E(X_{j}))\right\} \\
+&= \sum_{i=1}^{n}E\left[(X_{i} - E(X_{i}))^{2}\right] + 2 \sum_{i < j}E[(X_{i} - E(X_{i}))(X_{j} - E(X_{j}))] \\
+&= \sum_{i=1}^{n}\mathrm{Var}(X_{i}) + 2 \sum_{i < j}\mathrm{Cov}(X_{i},X_{j}) \\
+&= \sum_{i=1}^{n}\mathrm{Var}(X_{i})
+\end{align*}
+\end{proof}
+
+\begin{corollary}
+Sejam \(X_{1},\ldots,X_{n}\) variáveis aleatórias independentes e integráveis. Então:
+
+\begin{equation*}
+\mathrm{Var}\left(\sum_{i=1}^{n}X_{i}\right) = \sum_{i=1}^{n}\mathrm{Var}(X_{i})
+\end{equation*}
+\end{corollary}
+
+\begin{definition}
+\protect\hypertarget{def:corrpearson}{}\label{def:corrpearson}Para \(X\) e \(Y\) variáveis aleatórias, o coeficiente de correlação de Pearson é definido por:
+
+\begin{equation*}
+\rho_{X,Y} = \frac{\mathrm{Cov}(X,Y)}{\sigma_{X}\sigma_{Y}}
+\end{equation*}
+
+Com \(\sigma_{X} = \sqrt{\mathrm{Var(X)}} \text{ e } \sigma_{Y} = \sqrt{\mathrm{Var(Y)}}\), sempre que \(\mathrm{Var}(X)\) e \(\mathrm{Var}(Y)\) sejam finitas e maiores que 0.
+\end{definition}
+
+\begin{proposition}
+
+Sob os supostos da definição \ref{def:corrpearson}:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{a)} \(-1 \le \rho_{X,Y} \le 1\);
+\item
+  \textbf{b)} \(\rho_{X,Y} = 1 \Leftrightarrow P(Y = aX + b) = 1\), para algum \(a > 0\) e \(b \in \mathbb{R}\);
+\item
+  \textbf{c)} \(\rho_{X,Y} = -1 \Leftrightarrow P(Y = aX + b) = 1\), para algum \(a < 0\) e \(b \in \mathbb{R}\).
+\end{itemize}
+
+\end{proposition}
+
+\begin{proof}[Prova]
+Note primeiramente que \(\mathrm{Cov}(X,Y) = E\left\{(X - E(X))(Y - E(Y))\right\}\), logo:
+
+\begin{equation*}
+\rho_{X,Y} = \frac{\mathrm{Cov}(X,Y)}{\sigma_{X}\sigma_{Y}} = E\left\{\frac{(X - E(X))}{\sigma_{X}}\frac{(Y - E(Y))}{\sigma_{Y}}\right\}
+\end{equation*}
+
+Observe que \(E\left(\frac{X - E(X)}{\sigma_{X}}\right) = 0\) e \(\mathrm{Var}\left(\frac{X - E(X)}{\sigma_{X}}\right) = 1\), e analogamente para \(Y\). Assim:
+
+\textbf{a)}
+
+\begin{align*}
+0 &\le \left(\frac{(X - E(X))}{\sigma_{X}} - \frac{(Y - E(Y))}{\sigma_{Y}}\right)^{2} \\
+0 &\le E\left\{\left(\frac{(X - E(X))}{\sigma_{X}} - \frac{(Y - E(Y))}{\sigma_{Y}}\right)^{2}\right\} \\
+0 &\le E\left(\left[\frac{X - E(X)}{\sigma_{X}}\right]^{2}\right) + E\left(\left[\frac{Y - E(Y)}{\sigma_{Y}}\right]^{2}\right) - \frac{2}{\sigma_{X}\sigma_{Y}}E((X - E(X))(Y - E(Y))) \\
+0 &\le \frac{\mathrm{Var}(X)}{\sigma_{X}^{2}} + \frac{\mathrm{Var}(Y)}{\sigma_{Y}^{2}} - \frac{2\mathrm{Cov}(X,Y)}{\sigma_{X}\sigma_{Y}} \\
+0 &\le 2 - 2\rho_{X,Y} \\
+\rho_{X,Y} \le 1
+\end{align*}
+
+Tomando a diferença ao invés da soma, chegamos que \(\rho_{X,Y} \ge -1\).
+
+\textbf{b)}
+
+Suponha \(\rho_{X,Y} = 1 \Leftrightarrow E\left\{\left[\frac{X - E(X)}{\sigma_{X}} - \frac{Y - E(Y)}{\sigma_{Y}}\right]^{2}\right\} = 0\). Pela propriedade \(E_{7}\), temos que:
+
+\begin{equation*}
+P\left(\frac{X - E(X)}{\sigma_{X}} = \frac{Y - E(Y)}{\sigma_{Y}}\right) = 1
+\end{equation*}
+
+Ou seja, \(Y \stackrel{q.c}{=} E(Y) + \frac{\sigma_{Y}}{\sigma_{X}}(X - E(X))\), então \(a = \frac{\sigma_{Y}}{\sigma_{X}}>0, b = E(Y) - \frac{\sigma_{Y}}{\sigma_{X}}E(X)\).
+\end{proof}
+
+\textbf{Nota}: Se \(P(Y = aX + b) = 1\), sendo \(a \neq 0\), pelo desenvolvimento da prova de \textbf{(a)}, temos que:
+
+\begin{align*}
+\rho_{X,Y} &= E\left\{\left(\frac{X - E(X)}{\sigma_{X}}\right)\left(\frac{aX + b - aE(X) - b}{\sqrt{a^{2}\sigma_{X}^{2}}}\right)\right\} \\
+&= \frac{a}{|a|}E\left\{\left[\frac{X - E(X)}{\sigma_{X}}\right]^{2}\right\} \\
+&= \frac{a}{|a|} = \mathrm{sgn}(a) = \pm 1
+\end{align*}
+
+\hypertarget{converguxeancia}{%
+\subsection{Convergência}\label{converguxeancia}}
+
+\begin{theorem}[Teorema da convergência monótona]
+Sejam \(X_{1},X_{2},\ldots\) e \(X\) variáveis aleatórias em \((\Omega,\mathcal{A},P)\). Se \(0 \le X_{n} \underset{n \to \infty}{\uparrow}X\)
+\end{theorem}
 
 \end{document}

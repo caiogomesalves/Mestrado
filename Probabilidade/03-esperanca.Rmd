@@ -397,7 +397,7 @@ De modo que podemos observar o padrão emergente, e definir $E(X^{k}) = \frac{k!
 ::: {.definition #Variancia name="Variância de uma variável aleatória"}
 
 \begin{equation*}
-Var(X) = E\left\{(X - E(X))^{2}\right\} \Longleftrightarrow Var(X) = E\left(X^{2}\right) - \big{(}E(X)\big{)}^{2}
+\mathrm{Var}(X) = E\left\{(X - E(X))^{2}\right\} \Longleftrightarrow \mathrm{Var}(X) = E\left(X^{2}\right) - \big{(}E(X)\big{)}^{2}
 \end{equation*}
 
 :::
@@ -444,16 +444,16 @@ Se $E(|X|^{t}) < \infty \; \forall t \in (0,\infty) \Rightarrow E(|X|^{s}) < \in
 ### Propriedades
 
 
-- $\mathbf{E_{5}}$: Se $X = c$, com $c$ uma constante, $Var(X) = 0$;
-- $\mathbf{E_{6}}$: $Var(X+b) = Var(X), Var(aX + b) = a^{2}Var(X)$, com $a,b \in \mathbb{R}$;
+- $\mathbf{E_{5}}$: Se $X = c$, com $c$ uma constante, $\mathrm{Var}(X) = 0$;
+- $\mathbf{E_{6}}$: $\mathrm{Var}(X+b) = \mathrm{Var}(X), \mathrm{Var}(aX + b) = a^{2}\mathrm{Var}(X)$, com $a,b \in \mathbb{R}$;
 
 ::: {.proof name="Prova"}
 
 \begin{align*}
-Var(aX + b) &= E\left\{\left[aX + b - E(aX + b)\right]^{2}\right\} \\
+\mathrm{Var}(aX + b) &= E\left\{\left[aX + b - E(aX + b)\right]^{2}\right\} \\
 &= E\left\{\left[aX + b - aE(X) - b\right]^{2}\right\} \\
 &= E\left\{a^{2}\left[X - E(X)\right]^{2}\right\} \\
-&= a^{2}E\left\{\left[X - E(X)\right]^{2}\right\} = a^{2}Var(X)
+&= a^{2}E\left\{\left[X - E(X)\right]^{2}\right\} = a^{2}\mathrm{Var}(X)
 \end{align*}
 
 :::
@@ -480,7 +480,7 @@ Seja $Y = I_{[X \ge \lambda]}\lambda = \begin{cases}\lambda &,X \ge \lambda \\ 0
 **a)** Para todo $\lambda>0$:
 
 \begin{equation*}
-P(|X - E(X)| \ge \lambda) \le \frac{Var(X)}{\lambda^{2}}
+P(|X - E(X)| \ge \lambda) \le \frac{\mathrm{Var}(X)}{\lambda^{2}}
 \end{equation*}
 
 **b) (Desigualdade de Markov)** Seja $X$ uma variável aleatória, para todo $t$:
@@ -498,10 +498,10 @@ P(Z=0) = 1 \;\;\;\;(\text{i.e., }Z=0\text{ quase certamente})
 
 ::: {.proof name="Provas"}
 
-**a)** Se $Y = [X - E(X)]^{2}$, aplicamos $\mathbf{E_{7}}$ usando $\lambda^{2}: P(Y \ge \lambda^{2}) \le \frac{E(Y)}{\lambda^{2}}$. Note que $E(Y) = E([X - E(X)]^{2}) = Var(X)$. Logo:
+**a)** Se $Y = [X - E(X)]^{2}$, aplicamos $\mathbf{E_{7}}$ usando $\lambda^{2}: P(Y \ge \lambda^{2}) \le \frac{E(Y)}{\lambda^{2}}$. Note que $E(Y) = E([X - E(X)]^{2}) = \mathrm{Var}(X)$. Logo:
 
 \begin{equation*}
-P\left(|X - E(X)| \ge \lambda\right) = P(|X - E(X)|^{2} \ge \lambda^{2}) = P(Y \ge \lambda^{2}) \le \frac{E(Y)}{\lambda^{2}} = \frac{Var(X)}{\lambda^{2}}
+P\left(|X - E(X)| \ge \lambda\right) = P(|X - E(X)|^{2} \ge \lambda^{2}) = P(Y \ge \lambda^{2}) \le \frac{E(Y)}{\lambda^{2}} = \frac{\mathrm{Var}(X)}{\lambda^{2}}
 \end{equation*}
 
 **b)** Seja $Y = |X|^{t}$, aplicamos $\mathbf{E_{7}}$ a $Y$ e $\lambda^{t}: P(Y \ge \lambda^{t}) \le \frac{E(Y)}{\lambda^{t}}$. Note que $E(Y) = E(|X|^{t})$ e que $P(Y \ge \lambda^{t}) = P(|X|^{t} \ge \lambda^{t}) = P(|X| > \lambda)$. Logo:
@@ -521,5 +521,266 @@ Temos que $[Z > 0] = \bigcup_{n}\left[Z \ge \frac{1}{n}\right]$, de modo que:
 \begin{equation*}
 P(Z > 0) = P\left(\bigcup_{n}\left[Z \ge \frac{1}{n}\right]\right) = \lim_{n \to \infty}P\left(Z \ge \frac{1}{n}\right) = 0 \Rightarrow P(Z = 0) = 1 - P(Z > 0) = 1
 \end{equation*}
+
+:::
+
+**Nota**: Se $X$ é uma variável tal que $\mathrm{Var}(X) = 0$, temos que $\mathrm{Var}(X) = 0 \Leftrightarrow E([X - E(X)]^{2}) = 0$, ou seja, se definirmos $Z = [X - E(X)]^{2}, Z \ge 0$ e $E(Z) = 0$. Logo, por **c)**, $P(Z = 0) = 1$, ou seja, $P([X - E(X)]^{2} = 0) = 1 \Leftrightarrow P(X = E(X)) = 1$, ou seja, $X = E(X)$ quase certamente.
+
+::: {.example}
+
+Se $X$ e $Y$ são variáveis aleatórias tais que $E(|X|^{t}) < \infty$ e $E(|Y|^{t}) < \infty$, então $E(|X + Y|^{t}) < \infty$:
+
+**(i)** A finitude de $E(|X|^{t})$ leva à finitude de $E(|aX|^{t})$;
+
+**(ii)** Se $X$ e $Y$ forem integráveis (com $t = 1$), então $X + Y$ é integrável. Se $X$ e $Y$ tem variâncias finitas $(t = 2)$, então $X + Y$ tem variância finita.
+
+:::
+
+::: {.proposition}
+
+Seja $X$ uma variável aleatória integrável e $\mu = E(X) \Rightarrow \mu$ minimiza $E([X - c]^{2})$, com $c \in \mathbb{R}$.
+
+:::
+
+::: {.proof name="Prova"}
+
+Temos que $(X - c)^{2} = (X - \mu + \mu - c)^{2} = (X - \mu)^{2} + 2(\mu - c)(X - \mu) + (\mu - c)^{2}$. Logo, pelas propriedades lineares do valor esperado:
+
+\begin{align*}
+E([X - c]^{2}) &= E([X - c]^{2}) + 2(\mu - c)E(X - \mu) + (\mu - c)^{2} \\
+&= \mathrm{Var}(X) + (\mu - c)^{2}
+\end{align*}
+
+:::
+
+::: {.proposition}
+
+Seja $X$ uma variável aleatória e $m$ sua mediana. Assim, $m$ minimiza $E(|X - c|), c \in \mathbb{R}$. Ou seja:
+
+\begin{equation*}
+E(|x - m|) = \min_{c \in \mathbb{R}}E(|X - c|)
+\end{equation*}
+
+:::
+
+::: {.proof name="Prova"}
+
+Considere a definição de mediana: $P(X \le m) = P(X > m) = \frac{1}{2}$. Suponha que $X$ é integrável, logo $X - c$ também o será para todo $c$ constante real. Vamos ver que, com $m < c$ (o caso em que $m > c$ segue analogamente):
+
+- $X \le m \Rightarrow |X - c| - |X - m| = \lambda$, onde $\lambda = c - m$;
+- $X > m \Rightarrow |X - c| - |X - m| \ge \lambda$.
+
+Seja $c$ tal que $m < c$. Defina $\lambda = c - m > 0$. Então:
+
+- Se $x \le m \Rightarrow |x - c| = |x - m| + \lambda \Rightarrow |x - c| - |x - m| = \lambda$;
+- Se $x > m$ e $x > c$ (os casos intermediários são decorrências), então $x > c \Rightarrow \lambda + |x - c| = |x - m| \Rightarrow |x - c| - |x - m| \ge - \lambda$.
+
+Defina $Y = |X - c| - |X - m| = \begin{cases}
+\lambda & ,\text{se } X \le m, \\
+y & ,\text{se }X > m.
+\end{cases}$. Assim, temos que $y \ge -\lambda$, e que $Y = \begin{cases}
+\lambda & ,P(X \le m) \ge \frac{1}{2}, \\
+y &,P(X > m) \le \frac{1}{2}
+\end{cases}$. Logo, $Y \ge \lambda I_{[X \le m]} - \lambda I_{[X > m]} \Rightarrow E(Y) \ge \lambda E(I_{[X \le m]}) - \lambda E(I_{[X > m]}) = \lambda P(X \le m) - \lambda P(X > m) \ge 0$.
+
+Como $E(Y) \ge 0 \Rightarrow E(|X - c|) \ge E(|x - m|) \; \forall c$, com $m < c$.
+
+:::
+
+## Esperanças e funções de vetores
+
+::: {.theorem}
+
+Seja $\underbar{X} = (X_{1},\ldots,X_{n})$ um vetor aleatório e $\varphi:\mathbb{R}^{n} \to \mathbb{R}$ mensurável. Então:
+
+\begin{align*}
+E(\varphi(\underbar{X})) = \int ydF_{\varphi\left(\underbar{X}\right)}(y) &= \int_{\mathbb{R}^{n}}\varphi(\underbar{x})dF_{\underbar{X}}(\underbar{x}) \\
+&= \int \cdots \int \varphi(x_{1},\ldots,x_{n})dF_{\underbar{X}}(x_{1},\ldots,x_{n})
+\end{align*}
+
+Caso discreto: Seja $\underbar{X}$ discreto, tomando valores $\underbar{X}_{i} = (x_{i1},\ldots,x_{in})$, com probabilidade $P(\underbar{X}_{i}) = \sum_{i}P(x_{i}) = 1$. Então:
+
+\begin{equation*}
+E(\varphi(\underbar{X})) = \sum_{i}\varphi(\underbar{x}_{i})P(\underbar{x}_{i})
+\end{equation*}
+
+Caso contínuo: Seja $\underbar{X}$ contínuo, com densidade $f(x_{1},\ldots,x_{n})$. Então:
+
+\begin{equation*}
+E(\varphi(\underbar{X})) = \int \cdots \int f(x_{1},\ldots,x_{n})dx_{1}\ldots dx_{n}
+\end{equation*}
+
+:::
+
+::: {.example}
+
+Lembrando a propriedade $E_{3}: E(X + Y) = E(X) + E(Y)$ desde que existam $E(X)$ e $E(Y)$. Seja $\varphi(x,y) = x + y$ e defina $\varphi_{1}(x,y) = x$ e $\varphi_{2}(x,y) = y$. Teremos pelo teorema que:
+
+\begin{align*}
+E(X + Y) = E(\varphi(x,y)) = \int \int(x+y)dF_{X,Y}(x,y) &= \int\int x dF_{X,Y}(x,y) + \int\int y dF_{X,Y}(x,y) \\
+&= E(\varphi_{1}(x,y)) + E(\varphi_{2}(x,y)) \\
+&= E(X) + E(Y)
+\end{align*}
+
+:::
+
+Se $\{X_{i}\}_{i=1}^{n}$ é conjuntamente independente, com densidades $f_{1},\ldots,f_{n}$, sendo a densidade conjunta dada por $f = \prod_{i = 1}^{n}f_{i}$, então:
+
+\begin{align*}
+E(\varphi(\underbar{X})) &= \int \cdots \int \varphi(x_{1},\ldots,x_{n})f_{1}(x_{1})\ldots f_{n}(x_{n})dx_{1}\ldots dx_{n} \\
+&= \int \cdots \int \varphi(x_{1}, \ldots, x_{n})dF_{X_{1}}(x_{1})\ldots dF_{X_{n}}(x_{n})
+\end{align*}
+
+::: {.proposition}
+
+Sejam $\{X_{i}\}_{i=1}^{n}$ conjuntamente independentes e integráveis. Então:
+
+\begin{equation*}
+E\left(\prod_{i=1}^{n}X_{i}\right) = \prod_{i=1}^{n}E(X_{i})
+\end{equation*}
+
+:::
+
+::: {.proof name="Prova (para $n = 2$)"}
+
+Seja $\varphi(X,Y) = X.Y$:
+
+\begin{align*}
+E(X.Y) = E(\varphi(X,Y)) &= \int \int \varphi(x,y)dF_{X}(x)dF_{Y}(y) \\
+&= \int[y.xdF_{X}(x)]dF_{Y}(y) \\
+&= \int yE(X)dF_{Y}(y) \\
+&= E(X)\int ydF_{Y}(y) = E(X)E(Y)
+\end{align*}
+
+:::
+
+::: {.definition}
+
+A covariância entre $X$ e $Y$ será definida por:
+
+\begin{equation*}
+\mathrm{Cov}(X,Y) = E\Big[\big(X - E(X)\big)\big(Y - E(Y)\big)\Big]
+\end{equation*}
+
+Sempre que $X$ e $Y$ sejam integráveis. Assim:
+
+\begin{align*}
+\mathrm{Cov}(X,Y) &= E\{XY - E(Y)X - E(X)Y + E(X)E(Y)\} \\
+&= E(XY) - E(X)E(Y) - E(X)E(Y) + E(X)E(Y) \\
+&= E(XY) - E(X)E(Y)
+\end{align*}
+
+Note que $X$ e $Y$ podem ter $Cov(X,Y) = 0$ e mesmo assim $X \not\perp Y$.
+
+:::
+
+**Notas**:
+
+- A existência da covariância entre variáveis integráveis depende da existência de $E(XY)$;
+- $Cov(X,Y) = 0$ é interpretado como "$X$ e $Y$ são não-correlacionados";
+- Há casos onde $Cov(X,Y) = 0$ implica independência, como na Normal Bivariada, por exemplo.
+
+::: {.proposition}
+
+Sejam $X_{1},\ldots,X_{n}$ variáveis aleatórias integráveis tais que $\mathrm{Cov}(X_{i},X_{j}) = 0 \; \forall i \neq j$. Então
+
+\begin{equation*}
+\mathrm{Var}\left(\sum_{i=1}^{n}X_{i}\right) = \sum_{i=1}^{n}\mathrm{Var}(X_{i})
+\end{equation*}
+
+:::
+
+::: {.proof name="Prova"}
+
+\begin{align*}
+\mathrm{Var}\left(\sum_{i=1}^{n}X_{i}\right) &= E\left\{[X_{1} + \ldots X_{n}] - E[X_{1} + \ldots + X_{n}]^{2}\right\} \\
+&= E\left\{\sum_{i=1}^{n}[X_{i} - E(X_{i})]^{2} + 2 \sum_{i < j}(X_{i} - E(X_{i}))(X_{j} - E(X_{j}))\right\} \\
+&= \sum_{i=1}^{n}E\left[(X_{i} - E(X_{i}))^{2}\right] + 2 \sum_{i < j}E[(X_{i} - E(X_{i}))(X_{j} - E(X_{j}))] \\
+&= \sum_{i=1}^{n}\mathrm{Var}(X_{i}) + 2 \sum_{i < j}\mathrm{Cov}(X_{i},X_{j}) \\
+&= \sum_{i=1}^{n}\mathrm{Var}(X_{i})
+\end{align*}
+
+:::
+
+::: {.corollary}
+
+Sejam $X_{1},\ldots,X_{n}$ variáveis aleatórias independentes e integráveis. Então:
+
+\begin{equation*}
+\mathrm{Var}\left(\sum_{i=1}^{n}X_{i}\right) = \sum_{i=1}^{n}\mathrm{Var}(X_{i})
+\end{equation*}
+
+:::
+
+::: {.definition #corrpearson}
+
+Para $X$ e $Y$ variáveis aleatórias, o coeficiente de correlação de Pearson é definido por:
+
+\begin{equation*}
+\rho_{X,Y} = \frac{\mathrm{Cov}(X,Y)}{\sigma_{X}\sigma_{Y}}
+\end{equation*}
+
+Com $\sigma_{X} = \sqrt{\mathrm{Var(X)}} \text{ e } \sigma_{Y} = \sqrt{\mathrm{Var(Y)}}$, sempre que $\mathrm{Var}(X)$ e $\mathrm{Var}(Y)$ sejam finitas e maiores que 0.
+
+:::
+
+::: {.proposition}
+
+Sob os supostos da definição \@ref(def:corrpearson):
+
+- **a)** $-1 \le \rho_{X,Y} \le 1$;
+- **b)** $\rho_{X,Y} = 1 \Leftrightarrow P(Y = aX + b) = 1$, para algum $a > 0$ e $b \in \mathbb{R}$;
+- **c)** $\rho_{X,Y} = -1 \Leftrightarrow P(Y = aX + b) = 1$, para algum $a < 0$ e $b \in \mathbb{R}$.
+
+:::
+
+::: {.proof name="Prova"}
+
+Note primeiramente que $\mathrm{Cov}(X,Y) = E\left\{(X - E(X))(Y - E(Y))\right\}$, logo:
+
+\begin{equation*}
+\rho_{X,Y} = \frac{\mathrm{Cov}(X,Y)}{\sigma_{X}\sigma_{Y}} = E\left\{\frac{(X - E(X))}{\sigma_{X}}\frac{(Y - E(Y))}{\sigma_{Y}}\right\}
+\end{equation*}
+
+Observe que $E\left(\frac{X - E(X)}{\sigma_{X}}\right) = 0$ e $\mathrm{Var}\left(\frac{X - E(X)}{\sigma_{X}}\right) = 1$, e analogamente para $Y$. Assim:
+
+**a)**
+
+\begin{align*}
+0 &\le \left(\frac{(X - E(X))}{\sigma_{X}} - \frac{(Y - E(Y))}{\sigma_{Y}}\right)^{2} \\
+0 &\le E\left\{\left(\frac{(X - E(X))}{\sigma_{X}} - \frac{(Y - E(Y))}{\sigma_{Y}}\right)^{2}\right\} \\
+0 &\le E\left(\left[\frac{X - E(X)}{\sigma_{X}}\right]^{2}\right) + E\left(\left[\frac{Y - E(Y)}{\sigma_{Y}}\right]^{2}\right) - \frac{2}{\sigma_{X}\sigma_{Y}}E((X - E(X))(Y - E(Y))) \\
+0 &\le \frac{\mathrm{Var}(X)}{\sigma_{X}^{2}} + \frac{\mathrm{Var}(Y)}{\sigma_{Y}^{2}} - \frac{2\mathrm{Cov}(X,Y)}{\sigma_{X}\sigma_{Y}} \\
+0 &\le 2 - 2\rho_{X,Y} \\
+\rho_{X,Y} \le 1
+\end{align*}
+
+Tomando a diferença ao invés da soma, chegamos que $\rho_{X,Y} \ge -1$.
+
+**b)**
+
+Suponha $\rho_{X,Y} = 1 \Leftrightarrow E\left\{\left[\frac{X - E(X)}{\sigma_{X}} - \frac{Y - E(Y)}{\sigma_{Y}}\right]^{2}\right\} = 0$. Pela propriedade $E_{7}$, temos que:
+
+\begin{equation*}
+P\left(\frac{X - E(X)}{\sigma_{X}} = \frac{Y - E(Y)}{\sigma_{Y}}\right) = 1
+\end{equation*}
+
+Ou seja, $Y \stackrel{q.c}{=} E(Y) + \frac{\sigma_{Y}}{\sigma_{X}}(X - E(X))$, então $a = \frac{\sigma_{Y}}{\sigma_{X}}>0, b = E(Y) - \frac{\sigma_{Y}}{\sigma_{X}}E(X)$.
+
+:::
+
+**Nota**: Se $P(Y = aX + b) = 1$, sendo $a \neq 0$, pelo desenvolvimento da prova de **(a)**, temos que:
+
+\begin{align*}
+\rho_{X,Y} &= E\left\{\left(\frac{X - E(X)}{\sigma_{X}}\right)\left(\frac{aX + b - aE(X) - b}{\sqrt{a^{2}\sigma_{X}^{2}}}\right)\right\} \\
+&= \frac{a}{|a|}E\left\{\left[\frac{X - E(X)}{\sigma_{X}}\right]^{2}\right\} \\
+&= \frac{a}{|a|} = \mathrm{sgn}(a) = \pm 1
+\end{align*}
+
+## Convergência
+
+::: {.theorem name="Teorema da convergência monótona"}
+
+Sejam $X_{1},X_{2},\ldots$ e $X$ variáveis aleatórias em $(\Omega,\mathcal{A},P)$. Se $0 \le X_{n} \underset{n \to \infty}{\uparrow}X$ (ou seja, $X_{n}(\omega) \ge 0 ,\forall \omega \in \Omega$ e $X_{n}(\omega)\underset{n \to \infty}{\uparrow}X(\omega),\forall \omega \in \Omega$). Então $E(X_{n}) \underset{n \to \infty}{\uparrow} E(X)$.
 
 :::
