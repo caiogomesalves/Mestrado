@@ -1,0 +1,95 @@
+% \thispagestyle{empty}
+% \begin{tikzpicture}[remember picture, overlay]
+%   % Fundo sem gradiente:
+%   \shade[top color=blue!30!black, bottom color=blue!30!black]
+%     (current page.north west) rectangle (current page.south east);
+%
+%   % Faixa central
+%   \fill[white, opacity=0.2]
+%     ([yshift=-3cm]current page.north west) rectangle
+%     ([yshift=3cm]current page.south east);
+%
+%   % Título
+%   \node[align=center, text width=0.8\paperwidth, font=\Huge\bfseries, white]
+%     at ([yshift=2cm]current page.center)
+%     {Notas de Aulas\\MI401 Probabilidade};
+%
+%   % Autor
+%   \node[align=center, text width=0.8\paperwidth, font=\Large, white]
+%     at (current page.center)
+%     {Caio Gomes Alves};
+%
+%   % Instituição
+%   \node[align=center, text width=0.8\paperwidth, font=\large, white]
+%     at ([yshift=-1cm]current page.center)
+%     {Instituto de Matemática, Estatística e Computação Científica};
+%   \node[align=center, text width=0.8\paperwidth, font=\large, white]
+%     at ([yshift=-2cm]current page.center)
+%     {Universidade Estadual de Campinas - UNICAMP};
+%
+%   % Data
+%   \node[align=center, font=\large, white]
+%     at ([yshift=-4cm]current page.center)
+%     {Maio 2025};
+%
+%   % Elementos gráficos - Curvas de distribuição
+%   \draw[white, thick, opacity=0.3] plot[domain=-3:3, smooth]
+%     (\x+2,{0.5*exp(-(\x)^2/2)-5});
+%   \draw[white, thick, opacity=0.3] plot[domain=0:4, smooth]
+%     (\x-6,{0.3*exp(-\x)-4});
+% \end{tikzpicture}
+% \clearpage
+
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+  % Fundo gradiente
+  \shade[top color=blue!30!black, bottom color=blue!30!black]
+    (current page.north west) rectangle (current page.south east);
+
+  % Equações matemáticas de fundo
+  \node[white, opacity=0.1, anchor=center, scale=3] at (current page.center) {
+    $\begin{aligned}
+      P\left(\bigcup_{i=1}^{n} A_{i}\right) \le &\sum_{i=1}^{n}P(A_{n}) - \sum_{1 \le i_{1} < i_{2} \le n}P(A_{i_{1}} \cap A_{i_{2}}) + \dots \\
+                                                &+ (-1)^{k-1} \sum_{1 \le i_{1} < \dots < i_{k-1} < i_{k}}P(A_{i_{1}} \cap \dots \cap A_{i_{k}}) \\
+      &F_{X}(x|A) = \sum_{n}P(A_{n})F_{X}(x|A_{n}) \\
+      \Delta_{K,I}(&g(x_{1},\ldots,x_{k})) = g(x_{1},\ldots,x_{k-1},b) - g(x_{1},\ldots,) \\
+                                                &J(\underbar{x},\underbar{y}) = \det \begin{bmatrix}
+                                                  \frac{\partial x_{1}}{\partial y_{1}} & \cdots & \frac{\partial x_{1}}{\partial y_{n}} \\
+                                                  \vdots & \ddots & \vdots \\
+                                                  \frac{\partial x_{n}}{\partial y_{1}} & \cdots & \frac{\partial x_{n}}{\partial y_{n}}
+                                                \end{bmatrix} \\
+      E(X) &= \int_{0}^{\infty}(1 - F(x))dx - \int_{-\infty}^{0}F(x)dx \\
+      P(&|X - E(X)| \ge \lambda) \le \frac{\mathrm{Var}(X)}{\lambda^{2}}, \forall \lambda > 0
+    \end{aligned}$
+  };
+
+  % Conteúdo principal da capa (mesmo código anterior)
+  \fill[black, opacity=0.2]
+    ([yshift=-3cm]current page.north west) rectangle
+    ([yshift=3cm]current page.south east);
+
+  \node[align=center, text width=0.8\paperwidth, font=\Huge\bfseries, white]
+    at ([yshift=2cm]current page.center)
+    {Notas de Aulas\\MI401 Probabilidade};
+
+    % ... (restante do seu código existente)
+    % Autor
+  \node[align=center, text width=0.8\paperwidth, font=\Large, white]
+    at (current page.center)
+    {Caio Gomes Alves};
+
+  % Instituição
+  \node[align=center, text width=0.8\paperwidth, font=\large, white]
+    at ([yshift=-1cm]current page.center)
+    {Instituto de Matemática, Estatística e Computação Científica};
+  \node[align=center, text width=0.8\paperwidth, font=\large, white]
+    at ([yshift=-2cm]current page.center)
+    {Universidade Estadual de Campinas - UNICAMP};
+
+  % Data
+  \node[align=center, font=\large, white]
+    at ([yshift=-4cm]current page.center)
+    {Maio 2025};
+
+\end{tikzpicture}
+\cleardoublepage

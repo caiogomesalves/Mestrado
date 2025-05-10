@@ -638,7 +638,7 @@ P(A_{1} \cap \ldots \cap A_{n} \cap A_{n+1}) &= P(D \cap A_{n+1}) \\
 
 ## Exercícios
 
-::: {.exercise name="BJ1"}
+::: {.exercise name="BJ 1.1"}
 
 Sejam $A, B$ e $C$ eventos aleatórios. Identifique as seguintes equações e frases, casando cada equação expressa na notação de conjuntos com a correspondente frase na linguagem de eventos:
 
@@ -653,7 +653,7 @@ Sejam $A, B$ e $C$ eventos aleatórios. Identifique as seguintes equações e fr
         \end{aligned}$};
     \node (i) at (7.5,0) {$
         \begin{aligned}
-            & \text{A e "B ou C" são incpmpatíveis.}\\
+            & \text{A e "B ou C" são incompatíveis.}\\
             & \text{Os eventos A,B e C são idênticos.}\\
             & \text{A ocorrência de A implica a de "B e C".}\\
             & \text{A ocorrência de A decorre de "B ou C".}
@@ -668,7 +668,7 @@ Sejam $A, B$ e $C$ eventos aleatórios. Identifique as seguintes equações e fr
 
 :::
 
-::: {.exercise name="BJ2" #exbj2}
+::: {.exercise name="BJ 1.2" #exbj2}
 A partir dos axiomas, prove a propriedade $P5$:
 
 $$
@@ -717,7 +717,7 @@ $$
 
 :::
 
-::: {.exercise name="BJ3" #exbj3}
+::: {.exercise name="BJ 1.3" #exbj3}
 
 Sejam $A_{1}, A_{2},\dots$ eventos aleatórios. Mostre que:
 
@@ -774,7 +774,7 @@ Para ver a demonstração da propriedade $P5$, vide exercício \@ref(exr:exbj2).
 
 :::
 
-::: {.exercise name="BJ4"}
+::: {.exercise name="BJ 1.4"}
 
 Demonstre as seguintes propriedades:
 
@@ -813,7 +813,7 @@ P\left(\bigcap_{n=1}^{\infty}A_{n}\right) &= 1
 
 :::
 
-::: {.exercise name="BJ6"}
+::: {.exercise name="BJ 1.6"}
 
 Seja $\Omega$ um conjunto não-vazio.
 
@@ -863,7 +863,7 @@ Considere que temos $\sigma$-álgebras de partes de $\Omega$, $\mathcal{A}_{i}$ 
 
 :::
 
-::: {.exercise name="BJ9"}
+::: {.exercise name="BJ 1.9"}
 
 Uma caixa contém $2n$ sorvetes, $n$ do sabor $A$ e $n$ do sabor $B$. De um grupo de $2n$ pessoas, $a < n$ preferem o sabor $A$, $b < n$ o sabor $B$ e $2n-(a+b)$ não tem preferência. Demonstre: se os sorvetes são distribuídos ao acaso, a probabilidade de que a preferência de todas as pessoas seja respeitada é de $\binom{2n-a-b}{n-a}/\binom{2n}{n}$.
 
@@ -905,7 +905,7 @@ P(R) = \frac{|R|}{|\Omega|} = \frac{\binom{2n-a-b}{n-a}}{\binom{2n}{n}}
 
 :::
 
-::: {.exercise name="BJ10"}
+::: {.exercise name="BJ 1.10"}
 
 Suponhamos que dez cartas estejam numeradas de 1 até 10. Das dez cartas, retira-se uma de cada vez, ao acaso e sem reposição, até retirar-se o primeiro número par. Conta-se o número de retiradas necessárias. Exiba um bom modelo probabilístico para esse experimento.
 
@@ -943,7 +943,7 @@ A segunda parcela da equação \@ref(eq:bj10) é válida para $k \ge 2$, pois el
 
 :::
 
-::: {.exercise name="BJ11"}
+::: {.exercise name="BJ 1.11"}
 
 Para cada um dos seguintes experimentos, descreva um espaço de probabilidade que sirva de modelo:
 
@@ -1069,7 +1069,7 @@ Esse modelo de probabilidade é chamado de multinomial hipergeométrico, e é um
 
 :::
 
-::: {.exercise name="BJ12"}
+::: {.exercise name="BJ 1.12"}
 
 Retiram-se 4 cartas, ao acaso, de um baralho de 52 cartas. Registra-se o número de reis na amostra. Exiba um bom modelo probabilístico para este experimento se:
 
@@ -1127,7 +1127,7 @@ De modo que é possível ver que no caso com reposição a probabilidade de enco
 
 :::
 
-::: {.exercise name="BJ13" #exbj13}
+::: {.exercise name="BJ 1.13" #exbj13}
 
 a) Sejam $A, B \text{ e } C$ eventos aleatórios em um espaço de probabilidade $(\Omega,\mathcal{A},P)$. Mostre que
 
@@ -1370,7 +1370,7 @@ Se $k$ for par, o termo $k$ será negativo e o termo $k+1$ será positivo, de mo
 
 :::
 
-::: {.exercise name="BJ15"}
+::: {.exercise name="BJ 1.15"}
 
 Suponha que $n$ cartas numeradas de 1 até $n$ sejam embaralhadas e retiradas uma por uma, sem reposição, até todas as cartas serem retiradas. Qual a probabilidade de que para pelo menos uma carta, o número da carta coincida com o número da retirada?
 
@@ -1413,7 +1413,7 @@ P\left(\bigcup_{i=1}^{n} A_{i}\right) = \frac{1}{1!} - \frac{1}{2!} + \frac{1}{3
 :::
 
 
-::: {.exercise name="BJ16"}
+::: {.exercise name="BJ 1.16"}
 
 Seja $(\Omega, \mathcal{A},P)$ um espaço de probabilidade e suponha que todos os conjuntos abaixo pertençam a $\mathcal{A}$. Prove:
 
@@ -1561,7 +1561,7 @@ P(B|C) &= \frac{P(B \cap C)}{P(C)} \\
 
 :::
 
-::: {.exercise name="BJ17"}
+::: {.exercise name="BJ 1.17"}
 
 Suponha que a ocorrência ou não de chuva dependa das condições do tempo no dia imediatamente anterior. Admita-se que se chove hoje, choverá amanhã com probabilidade de 0,7 e que se não chove hoje choverá amanhã com probabilidade 0,4. Sabendo-se que choveu hoje, calcule a probabilidade de que choverá depois de amanhã.
 
@@ -1602,7 +1602,7 @@ P(C_{n+2}) &= P(C_{n+1}|C_{n}) \times 0,7 + P(C_{n+1}|NC_{n}) \times 0,3 \\
 
 :::
 
-::: {.exercise name="BJ18"}
+::: {.exercise name="BJ 1.18"}
 
 Certo experimento consiste em lançar um dado equilibrado duas vezes, independentemente. Dado que os dois números sejam diferentes, qual a probabilidade condicional de:
 
@@ -1637,7 +1637,7 @@ P(S=8) &= P(S=8|A_{1} = 1)P(A_{1} = 1) + P(S=8|A_{1} = 2)P(A_{1} = 2) + \dots + 
 
 :::
 
-::: {.exercise name="BJ19"}
+::: {.exercise name="BJ 1.19"}
 
 Em teste de múltipla escolha, a probabilidade do aluno saber a resposta é $p$. Havendo $m$ escolhas, se ele sabe a resposta ele responde corretamente com probabilidade 1; se não sabe, ele responde corretamente com probabilidade $\frac{1}{m}$. Qual a probabilidade de que ele soubesse a resposta dado que a pergunta foi respondida corretamente? Calcule o limite dessa probabilidade quando (i) $m \to \infty$ com $p$ fixo e (ii) $p \to 0$ com $m$ fixo.
 
@@ -1676,7 +1676,7 @@ Agora, calculando os limites temos:
 
 :::
 
-::: {.exercise name="BJ20"}
+::: {.exercise name="BJ 1.20"}
 
 Durante o mês de novembro a probabilidade de chuva é de 0,3. O Fluminense ganha um jogo em um dia de chuva com a probabilidade de 0,4; em um dia sem chuva com a probabilidade 0,6. Se ganhou um jogo em novembro, qual é a probabilidade de que choveu neste dia?
 

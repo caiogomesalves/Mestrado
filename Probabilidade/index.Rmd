@@ -5,8 +5,10 @@ author: "Caio Gomes Alves"
 date: "`r format(Sys.Date(), '%m/%Y')`"
 output:
   bookdown::pdf_document2:
+      includes:
+         in_header: preamble.tex
+         before_body: capa.tex
       keep_tex: yes
-# documentclass: amsbook
 toc-title: "Conteúdos"
 header-includes:
    - \usepackage{amsmath}

@@ -1165,6 +1165,210 @@ Ou seja, $Y \sim Gama\left(\frac{1}{2}, \frac{1}{2}\right)$, ou $Y \sim \chi^{2}
 
 ## Exercícios
 
-TODO
+::: {.exercise name="BJ 2.1"}
+
+Seja $X$ o número de caras obtidas em 4 lançamentos de uma moeda honesta. Desenhe o gráfico da função de distribuição de $X$.
+
+:::
+
+::: {.proof name="Resposta"}
+
+Sabemos que $X \sim \mathrm{Bin}(4,0.5)$, então o gráfico da distribuição de $X$ será dada por:
+
+```{r distacummoeda, echo=F}
+x <- 0:4
+Fx <- pbinom(x, 4, 0.5)
+n <- length(x)
+plot(x = NA, y = NA, pch = NA,
+     xlim = c(0, max(x)),
+     ylim = c(0, 1),
+     xlab = "X",
+     ylab = expression(F[X](x)),
+     main = "Distribuição acumulada")
+points(x = x[-n], y = Fx[-1], pch=19)
+for(i in 1:(n-1)) points(x=x[i+0:1], y=Fx[c(i,i)+1], type="l")
+points(x = x[-1], y = Fx[-1], pch=1)
+```
+
+:::
+
+::: {.exercise name="BJ 2.2"}
+
+Um ponto é selecionado, ao acaso, do quadrado unitário $[0,1] \times [0,1]$. Seja $X$ a primeira coordenada do ponto selecionado. Faça o gráfico da função de distribuição de $X$.
+
+:::
+
+::: {.proof name="Resposta"}
+
+Como o ponto é escolhido ao acaso, cada uma das coordenadas seguirá uma distribuição uniforme entre 0 e 1, de modo que $X \sim \mathrm{U}(0,1)$, e o gráfico da distribuição será dado por:
+
+```{r distacumx, echo=F}
+curve(punif, -0.1, 1.1, xlab = "X", ylab = expression(F[X](x)), main = "Distribuição acumulada")
+```
+
+:::
+
+::: {.exercise name="BJ 2.4"}
+
+Seja $X$ uma variável aleatória com distribuição de Poisson, com parâmetro $\lambda > 0$. Mostre que a função de distribuição de $X$ é
+
+\begin{equation*}
+F(X) = \begin{cases}
+\frac{1}{n!}\int_{\lambda}^{\infty}e^{-t}t^{n}dt & ,\text{se } n \le x < n+1, n = 0,1,2,\ldots \\
+0 & ,\text{se } x <0
+\end{cases}
+\end{equation*}
+
+:::
+
+::: {.proof name="Resposta"}
+
+Sabemos que a função densidade de probabilidade de $X$ é dada por $f(x) = \frac{e^{-\lambda}\lambda^{x}}{x!}$. Suponha que, para $x = k$ a função de distribuição anterior é verdadeira. Assim, mostremos por indução que a mesma é válida para $x = k+1$.
+
+\begin{align*}
+F(k+1) &= \frac{1}{(k+1)!}\int_{\lambda}^{\infty}e^{-t}t^{k+1}dt \Rightarrow \begin{bmatrix}
+u = t^{k+1}dt & dv = e^{-t} \\
+du = (k+1)t^{k} & v = -e^{-t}
+\end{bmatrix}\\
+&= \frac{1}{(k+1)!}\left[-e^{-t}t^{k+1}\Big{|}_{\lambda}^{\infty} + \int_{\lambda}^{\infty}e^{-t}(k+1)t^{k}dt\right] \\
+&= \frac{1}{(k+1)!}\left[e^{-\lambda}\lambda^{k+1} + (k+1)\int_{\lambda}^{\infty}e^{-t}t^{k}dt\right] \\
+&= \frac{e^{-\lambda}\lambda^{k+1}}{(k+1)!} + \frac{1}{k!}\int_{\lambda}^{\infty}e^{-t}t^{k}dt = P(X = k+1) + F(k)
+\end{align*}
+
+Assim, $F(k + 1) = F(k) + P(X = k+1)$, de modo que a função apresentada é sim a distribuição de $X$.
+
+:::
+
+::: {.exercise name="BJ 2.5"}
+
+Suponha que a vida útil de um certo tipo de lâmpada tenha distribuição exponencial com parâmetro $\lambda$.
+
+**a)** Seja $T$ o tempo de vida de uma lâmpada desse tipo. Mostre que:
+
+\begin{equation*}
+P(T > t+s | T>t) = P(T > s), \; \forall s,t>0
+\end{equation*}
+
+**b)** Suponha que $\lambda = 3$ quando a vida é expressa em dias. Uma lâmpada solitária é ligada em uma sala no instante $t = 0$. Um dia depois, você entra na sala e fica ali durante 8 horas, saindo no final desse período.
+
+- *(i)* Qual a probabilidade de que você entre na sala quando já está escura?
+- *(ii)* Qual a probabilidade de você entrar na sala com a lâmpada ainda acesa e sair da sala depois da lâmpada queimar?
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Temos que $[T > t+s] \subset [T > t] \Rightarrow P(T > t+s, T > t) = P(T > t+s)$. Além disso, como $T \sim \mathrm{Exp}(\lambda) \Rightarrow P(T > t) = 1 - P(T \le t) = 1 - F_{T}(t) = 1 - (1 - e^{-\lambda t}) = e^{-\lambda t}$. Desse modo:
+
+\begin{align*}
+P(T > t+s | T > t) = \frac{P(T > t+s,T > t)}{P(T > t)} &= \frac{P(T > t+s)}{P(T > t)} \\
+&= \frac{e^{-\lambda(t+s)}}{e^{-\lambda t}} \\
+&= e^{-\lambda s} = 1 - F_{T}(s) = P(T > s)
+\end{align*}
+
+**b)**
+
+*(i)* Caso depois de um dia a lâmpada já esteja apagada, então $T \le 1$, de modo que:
+
+\begin{equation*}
+P(T \le 1) = 1 - e^{-3.1} = 1 - e^{-3}
+\end{equation*}
+
+*(ii)* Caso a lâmpada ainda esteja acesa depois de um dia, mas tenha queimado antes de 8 horas ($\frac{1}{3}$ de dia) dado que não tenha queimado no primeiro dia, queremos encontrar a probabilidade do seguinte evento: $P\left(T \le 1 + \frac{1}{3}|T > 1\right) = 1 - P\left(T > 1 + \frac{1}{3}|T > 1\right)$, que utilizando o resultado obtido em **(a)**, temos que será:
+
+\begin{align*}
+P\left(T \le 1 + \frac{1}{3}|T > 1\right) &= 1 - P\left(T > 1 + \frac{1}{3}|T > 1\right) \\
+&= 1 - P\left(T > \frac{1}{3}\right) \\
+&= 1 - e^{-3.\frac{1}{3}} = 1 - e^{-1}
+\end{align*}
+
+:::
+
+::: {.exercise name="BJ 2.6"}
+
+Seja $X$ uma variável aleatória com densidade:
+
+\begin{equation*}
+f(x) = \begin{cases}
+cx^{2} & ,\text{se } -1 \le x \le 1 \\
+0 & ,\text{c.c.}
+\end{cases}
+\end{equation*}
+
+**a)** Determine o valor da constante $c$.
+
+**b)** Ache o valor $\alpha$ tal que $F_{X}(\alpha) = \frac{1}{4}$.
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Temos que $\int_{-\infty}^{\infty}f(x)dx = 1 \Rightarrow \int_{-1}^{1}cx^{2}dx = 1$. Assim:
+
+\begin{align*}
+\int_{-1}^{1}cx^{2}dx &= c\int_{-1}^{1}x^{2}dx \\
+&= c\left(\frac{x^{3}}{3}\Big{|}_{-1}^{1}\right) \\
+&= c\left(\frac{1}{3} + \frac{1}{3}\right) = \frac{2c}{3} \Longrightarrow c = \frac{1}{\frac{2}{3}} = \frac{3}{2}
+\end{align*}
+
+**b)**
+
+Podemos calcular a distribuição de $X$ como segue:
+
+\begin{align*}
+F_{X}(x) &= \frac{3}{2}\int_{-1}^{x}x^{2}dx \\
+&= \frac{3}{2}\left(\frac{x^{3}}{3}\Big{|}_{-1}^{x}\right) \\
+&= \frac{3}{2}\left(\frac{x^{3} + 1}{3}\right) = \frac{x^{3} + 1}{2}
+\end{align*}
+
+Assim, podemos encontrar o valor $\alpha$ tal que $F_{X}(\alpha) = \frac{1}{4}$:
+
+\begin{align*}
+\frac{x^{3} + 1}{2} &= \frac{1}{4} \\
+x^{3} + 1 &= \frac{1}{2} \\
+x &= \sqrt[3]{-\frac{1}{2}}
+\end{align*}
+
+:::
+
+::: {.exercise name="BJ 2.7"}
+
+Uma variável aleatória $X$ tem função de distribuição:
+
+\begin{equation*}
+F(X) = \begin{cases}
+0 & ,\text{se }x<0 \\
+x^{3} & ,\text{se }0 \le x \le 1 \\
+1 & ,\text{se }x>1
+\end{cases}
+\end{equation*}
+
+Qual a densidade de $X$?
+
+:::
+
+::: {.proof name="Resposta"}
+
+Podemos encontrar a função densidade de probabilidade de $X$ a partir da derivação em partes da distribuição acumulada:
+
+\begin{equation*}
+f_{X}(x) = \frac{\partial}{\partial x}F_{X}(x) = \frac{\partial}{\partial x}(x^{3}) = 3x^{2}
+\end{equation*}
+
+De modo que a densidade será:
+
+\begin{equation*}
+f_{X}(x) = \begin{cases}
+0 & ,\text{se }x<0 \\
+3x^{2} & ,\text{se }0 \le x \le 1 \\
+0 & ,\text{se }x>1
+\end{cases}
+\end{equation*}
+
+:::
 
 \newpage

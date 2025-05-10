@@ -64,6 +64,8 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
 \usepackage{amsmath}
 \usepackage{tikz}
 \usepackage{pgfplots}
@@ -114,6 +116,102 @@
 \newtheorem*{solution}{Solution}
 \begin{document}
 \maketitle
+
+% \thispagestyle{empty}
+% \begin{tikzpicture}[remember picture, overlay]
+%   % Fundo sem gradiente:
+%   \shade[top color=blue!30!black, bottom color=blue!30!black]
+%     (current page.north west) rectangle (current page.south east);
+%
+%   % Faixa central
+%   \fill[white, opacity=0.2]
+%     ([yshift=-3cm]current page.north west) rectangle
+%     ([yshift=3cm]current page.south east);
+%
+%   % Título
+%   \node[align=center, text width=0.8\paperwidth, font=\Huge\bfseries, white]
+%     at ([yshift=2cm]current page.center)
+%     {Notas de Aulas\\MI401 Probabilidade};
+%
+%   % Autor
+%   \node[align=center, text width=0.8\paperwidth, font=\Large, white]
+%     at (current page.center)
+%     {Caio Gomes Alves};
+%
+%   % Instituição
+%   \node[align=center, text width=0.8\paperwidth, font=\large, white]
+%     at ([yshift=-1cm]current page.center)
+%     {Instituto de Matemática, Estatística e Computação Científica};
+%   \node[align=center, text width=0.8\paperwidth, font=\large, white]
+%     at ([yshift=-2cm]current page.center)
+%     {Universidade Estadual de Campinas - UNICAMP};
+%
+%   % Data
+%   \node[align=center, font=\large, white]
+%     at ([yshift=-4cm]current page.center)
+%     {Maio 2025};
+%
+%   % Elementos gráficos - Curvas de distribuição
+%   \draw[white, thick, opacity=0.3] plot[domain=-3:3, smooth]
+%     (\x+2,{0.5*exp(-(\x)^2/2)-5});
+%   \draw[white, thick, opacity=0.3] plot[domain=0:4, smooth]
+%     (\x-6,{0.3*exp(-\x)-4});
+% \end{tikzpicture}
+% \clearpage
+
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+  % Fundo gradiente
+  \shade[top color=blue!30!black, bottom color=blue!30!black]
+    (current page.north west) rectangle (current page.south east);
+
+  % Equações matemáticas de fundo
+  \node[white, opacity=0.1, anchor=center, scale=3] at (current page.center) {
+    $\begin{aligned}
+      P\left(\bigcup_{i=1}^{n} A_{i}\right) \le &\sum_{i=1}^{n}P(A_{n}) - \sum_{1 \le i_{1} < i_{2} \le n}P(A_{i_{1}} \cap A_{i_{2}}) + \dots \\
+                                                &+ (-1)^{k-1} \sum_{1 \le i_{1} < \dots < i_{k-1} < i_{k}}P(A_{i_{1}} \cap \dots \cap A_{i_{k}}) \\
+      &F_{X}(x|A) = \sum_{n}P(A_{n})F_{X}(x|A_{n}) \\
+      \Delta_{K,I}(&g(x_{1},\ldots,x_{k})) = g(x_{1},\ldots,x_{k-1},b) - g(x_{1},\ldots,) \\
+                                                &J(\underbar{x},\underbar{y}) = \det \begin{bmatrix}
+                                                  \frac{\partial x_{1}}{\partial y_{1}} & \cdots & \frac{\partial x_{1}}{\partial y_{n}} \\
+                                                  \vdots & \ddots & \vdots \\
+                                                  \frac{\partial x_{n}}{\partial y_{1}} & \cdots & \frac{\partial x_{n}}{\partial y_{n}}
+                                                \end{bmatrix} \\
+      E(X) &= \int_{0}^{\infty}(1 - F(x))dx - \int_{-\infty}^{0}F(x)dx \\
+      P(&|X - E(X)| \ge \lambda) \le \frac{\mathrm{Var}(X)}{\lambda^{2}}, \forall \lambda > 0
+    \end{aligned}$
+  };
+
+  % Conteúdo principal da capa (mesmo código anterior)
+  \fill[black, opacity=0.2]
+    ([yshift=-3cm]current page.north west) rectangle
+    ([yshift=3cm]current page.south east);
+
+  \node[align=center, text width=0.8\paperwidth, font=\Huge\bfseries, white]
+    at ([yshift=2cm]current page.center)
+    {Notas de Aulas\\MI401 Probabilidade};
+
+    % ... (restante do seu código existente)
+    % Autor
+  \node[align=center, text width=0.8\paperwidth, font=\Large, white]
+    at (current page.center)
+    {Caio Gomes Alves};
+
+  % Instituição
+  \node[align=center, text width=0.8\paperwidth, font=\large, white]
+    at ([yshift=-1cm]current page.center)
+    {Instituto de Matemática, Estatística e Computação Científica};
+  \node[align=center, text width=0.8\paperwidth, font=\large, white]
+    at ([yshift=-2cm]current page.center)
+    {Universidade Estadual de Campinas - UNICAMP};
+
+  % Data
+  \node[align=center, font=\large, white]
+    at ([yshift=-4cm]current page.center)
+    {Maio 2025};
+
+\end{tikzpicture}
+\cleardoublepage
 
 \renewcommand*\contentsname{Conteúdos}
 {
@@ -888,7 +986,7 @@ Sejam \(A, B\) e \(C\) eventos aleatórios. Identifique as seguintes equações 
         \end{aligned}$};
     \node (i) at (7.5,0) {$
         \begin{aligned}
-            & \text{A e "B ou C" são incpmpatíveis.}\\
+            & \text{A e "B ou C" são incompatíveis.}\\
             & \text{Os eventos A,B e C são idênticos.}\\
             & \text{A ocorrência de A implica a de "B e C".}\\
             & \text{A ocorrência de A decorre de "B ou C".}
@@ -4128,7 +4226,119 @@ Ou seja, \(Y \stackrel{q.c}{=} E(Y) + \frac{\sigma_{Y}}{\sigma_{X}}(X - E(X))\),
 \subsection{Convergência}\label{converguxeancia}}
 
 \begin{theorem}[Teorema da convergência monótona]
-Sejam \(X_{1},X_{2},\ldots\) e \(X\) variáveis aleatórias em \((\Omega,\mathcal{A},P)\). Se \(0 \le X_{n} \underset{n \to \infty}{\uparrow}X\)
+Sejam \(X_{1},X_{2},\ldots\) e \(X\) variáveis aleatórias em \((\Omega,\mathcal{A},P)\). Se \(0 \le X_{n} \underset{n \to \infty}{\uparrow}X\) (ou seja, \(X_{n}(\omega) \ge 0 ,\forall \omega \in \Omega\) e \(X_{n}(\omega)\underset{n \to \infty}{\uparrow}X(\omega),\forall \omega \in \Omega\)). Então \(E(X_{n}) \underset{n \to \infty}{\uparrow} E(X)\).
 \end{theorem}
+
+\begin{proof}[Prova]
+Como \(X_{n} \underset{n \to \infty}{\uparrow} X, X_{n} \ge 0\), por \(E_{2}\) temos que \(0 \le E(X_{n}) \le E(X)\). Devemos então provar que \(\forall \epsilon > 0, \lim_{n \to \infty}E(X_{n}) \ge E(X) - \epsilon\) (ou seja, \(\forall \epsilon > 0 \;\exists\; n_{0}(\epsilon) : E(X_{n}) \ge E(X) - \epsilon, \forall n: n \ge n_{0}(\epsilon)\)).
+
+Defina \(Y = \sum_{n=0}^{\infty}n\epsilon I_{B_{n}}\), onde \(B_{n} = [x\epsilon < X \le (n+1)\epsilon], n = 0,1,\ldots\). Assim:
+
+\begin{align*}
+n=0 &: B_{0} = [0 < X \le \epsilon] \\
+n=1 &: B_{1} = [\epsilon < X \le 2\epsilon] \\
+n=2 &: B_{2} = [2\epsilon < X \le 3\epsilon] \\
+\vdots &\; \\
+Y &= \begin{cases}
+n\epsilon &, \text{se } n\epsilon < X \le (n+1)\epsilon \\
+0 &, \text{se }X = 0
+\end{cases}
+\end{align*}
+
+Temos então que mostrar que \(X - \epsilon \le Y \le X\). Como \(Y = n\epsilon < X\), o lado direito é dado diretamente. Para o lado esquerdo temos que:
+
+\begin{equation*}
+X \le (n+1)\epsilon = n\epsilon + \epsilon \Leftrightarrow X - \epsilon \le n\epsilon = Y \Rightarrow E(X) - \epsilon \le E(Y) \le E(X)
+\end{equation*}
+
+Note que, se \(E(Y) \le \lim_{n \to \infty}E(X_{n})\), então teremos provado o resultado. Seja \(A_{k} = [X_{k} \ge Y]\), com \(k\) grande o suficiente. Se \(\omega\) é tal que \(X_{k}(\omega) \ge Y(\omega) \Rightarrow X_{k+1}(\omega) \ge Y(\omega) \Rightarrow A_{k} \subseteq A_{k+1} \subseteq A_{k+2} \subseteq \ldots\).
+
+Formalmente, pelo limite \(X_{k} \uparrow X\) se \(k\) é suficientemente grande, \(X_{k}(\omega) \ge Y(\omega)\). Assim, \(\bigcup A_{k} = [Y \le X] = \Omega\), e:
+
+\begin{equation*}
+YI_{k} = \begin{cases}
+Y(\omega) &, \text{se }\omega \in A_{k} \\
+0 &, \text{se } \omega \not\in A_{k}
+\end{cases} = \begin{cases}
+n\epsilon &, \text{se }\omega \in B_{n} \cap A_{k}, n=0,1,\ldots \\
+0 &, \text{se } \omega \not\in \bigcup_{n=0}^{\infty}B_{n}\cap A_{k}
+\end{cases}
+\end{equation*}
+
+Logo, \(0 \le YI_{k} \le X_{k} \Rightarrow 0 \le E(YI_{k}) \le E(X_{k})\). Assim, \(E(YI_{k})\) será:
+
+\begin{equation*}
+E(YI_{k}) = \sum_{n=0}^{\infty}n\epsilon P(B_{n} \cap A_{k}) \ge \sum_{n=0}^{m}n\epsilon P(B_{n} \cap A_{k})
+\end{equation*}
+
+Logo, \(\lim_{k \to \infty}E(X_{k}) \ge \lim_{k \to \infty} \sum_{n=0}^{m}n\epsilon P(B_{n} \cap A_{k}) = \sum_{n=0}^{m}n\epsilon P(B_{n}), \forall m\). Como \(m\) é arbitrário, \(\lim_{k \to \infty}E(X_{k}) \ge \sum_{n=0}^{m}n\epsilon P(B_{n}) = E(Y)\).
+\end{proof}
+
+\begin{theorem}[Teorema da convergência dominada]
+Sejam \(Y,X_{1},X_{2},\ldots,X\) variáveis aleatórias em \((\Omega, \mathcal{A},P)\), tais que \(Y\) é integrável, \(|X_{n}| \le Y \; \forall n\) e \(X_{n} \to X\) (ou seja, dado \(\omega: X_{n}(\omega) \xrightarrow[n \to \infty]{}X(\omega)\)). Então \(X\) e \(X_{n}\) são integráveis e \(E(X_{n}) \xrightarrow[n \to \infty]{}E(X)\).
+\end{theorem}
+
+\begin{proof}[Prova]
+Por hipótese, temos a integrabilidade de \(X\) e \(X_{n}\), tais que:
+
+\begin{equation*}
+|X| = \lim_{n \to \infty}|X_{n}| \stackrel{\mathrm{hip}}{\le} Y
+\end{equation*}
+
+Assim, \(X\) e \(X_{n}\) são dominadas, então por \(E_{2}\), \(X\) e \(X_{n}\) são integráveis. Defina \(Y_{n} = \inf_{k \ge n}X_{k}\). Tomar o ínfimo provoca a sequência a se movimentar pela esquerda, de modo que:
+
+\begin{equation*}
+X(\omega) \stackrel{\mathrm{hip}}{=}\lim_{n \to \infty}X_{n}(\omega) = \lim_{n \to \infty}\inf X_{n}(\omega) = \lim_{n \to \infty}\left(\inf_{k \ge n}X_{k}(n)\right) = \lim_{n \to \infty}Y_{n}
+\end{equation*}
+
+E por definição de \(Y_{n}:Y_{n} \uparrow X \Rightarrow (Y_{n} + Y) \underset{n \to \infty}{\uparrow} (X + Y)\). Aplicando o teorema da convergência monótona, temos que \(|X_{n}| \le Y \;\forall n \Rightarrow -Y \le X_{n}\), logo \(\inf_{k \ge n}X_{k} \ge -Y \Rightarrow Y_{n} \ge -Y \Rightarrow Y_{n} + Y \ge 0\). Logo:
+
+\begin{equation*}
+E(Y_{n} + Y) \underset{n \to \infty}{\uparrow} E(X + Y)
+\end{equation*}
+
+Defina \(Z_{n}(\omega) = \sup_{k \ge n}X_{k}(\omega)\). Note que \(Z_{n}(\omega) \underset{n \to \infty}{\downarrow} X(\omega)\), logo \((Y - Z_{n}) \underset{n \to \infty}{\uparrow} (Y - X)\). Note que \(|X_{n}| \le Y, \forall n \Rightarrow X_{n} \le Y\), de modo que:
+
+\begin{equation*}
+\sup_{k \ge n}X_{k} \le Y \Rightarrow Z_{n} \le Y \Rightarrow 0 \le Y - Z_{n}
+\end{equation*}
+
+Agora que temos a positividade e a monotonia do crescimento, utilizamos o teorema da convergência monótona, de modo que:
+
+\begin{equation*}
+E(Y - Z_{n}) \underset{n \to \infty}{\uparrow} E(Y - X) \Rightarrow E(Z_{n}) \underset{n \to \infty}{\downarrow} E(X)
+\end{equation*}
+
+Juntando as convergências de \(Y_{n}\) e \(Z_{n}\):
+
+\begin{equation*}
+Y_{n} = \inf_{k \ge n}X_{k} \le X_{n} \le \sup_{k \ge n}X_{k} = Z_{n} \Longrightarrow E(Y_{n}) \le E(X_{n}) \le E(Z_{n})
+\end{equation*}
+
+De modo que \(E(X_{n}) \to E(X)\).
+\end{proof}
+
+\hypertarget{observauxe7uxf5es-sobre-o-teorema-da-converguxeancia-dominada}{%
+\subsubsection{Observações sobre o teorema da convergência dominada}\label{observauxe7uxf5es-sobre-o-teorema-da-converguxeancia-dominada}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Há casos nos quais \(X_{n} \to X\), no entanto \(E(X_{n}) \not\to E(X)\);
+\end{enumerate}
+
+\begin{example}
+
+\(X \sim \mathrm{Cauchy} \rightarrow f(x) = \frac{1}{\pi(1 + x^{2})}\). Sabemos que \(E(X) = \infty\). Seja \(X_{n} = I_{[-n \le x \le n]} = \begin{cases} X &, -n \le x \le n \\ 0 &, |x| > n \end{cases}\). Então:
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\tightlist
+\item
+  \(X_{n} \underset{n \to \infty}{\rightarrow} X\)
+\end{enumerate}
+
+\end{example}
 
 \end{document}

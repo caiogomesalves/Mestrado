@@ -784,3 +784,173 @@ Ou seja, $Y \stackrel{q.c}{=} E(Y) + \frac{\sigma_{Y}}{\sigma_{X}}(X - E(X))$, e
 Sejam $X_{1},X_{2},\ldots$ e $X$ variáveis aleatórias em $(\Omega,\mathcal{A},P)$. Se $0 \le X_{n} \underset{n \to \infty}{\uparrow}X$ (ou seja, $X_{n}(\omega) \ge 0 ,\forall \omega \in \Omega$ e $X_{n}(\omega)\underset{n \to \infty}{\uparrow}X(\omega),\forall \omega \in \Omega$). Então $E(X_{n}) \underset{n \to \infty}{\uparrow} E(X)$.
 
 :::
+
+::: {.proof name="Prova"}
+
+Como $X_{n} \underset{n \to \infty}{\uparrow} X, X_{n} \ge 0$, por $E_{2}$ temos que $0 \le E(X_{n}) \le E(X)$. Devemos então provar que $\forall \epsilon > 0, \lim_{n \to \infty}E(X_{n}) \ge E(X) - \epsilon$ (ou seja, $\forall \epsilon > 0 \;\exists\; n_{0}(\epsilon) : E(X_{n}) \ge E(X) - \epsilon, \forall n: n \ge n_{0}(\epsilon)$).
+
+Defina $Y = \sum_{n=0}^{\infty}n\epsilon I_{B_{n}}$, onde $B_{n} = [x\epsilon < X \le (n+1)\epsilon], n = 0,1,\ldots$. Assim:
+
+\begin{align*}
+n=0 &: B_{0} = [0 < X \le \epsilon] \\
+n=1 &: B_{1} = [\epsilon < X \le 2\epsilon] \\
+n=2 &: B_{2} = [2\epsilon < X \le 3\epsilon] \\
+\vdots &\; \\
+Y &= \begin{cases}
+n\epsilon &, \text{se } n\epsilon < X \le (n+1)\epsilon \\
+0 &, \text{se }X = 0
+\end{cases}
+\end{align*}
+
+Temos então que mostrar que $X - \epsilon \le Y \le X$. Como $Y = n\epsilon < X$, o lado direito é dado diretamente. Para o lado esquerdo temos que:
+
+\begin{equation*}
+X \le (n+1)\epsilon = n\epsilon + \epsilon \Leftrightarrow X - \epsilon \le n\epsilon = Y \Rightarrow E(X) - \epsilon \le E(Y) \le E(X)
+\end{equation*}
+
+Note que, se $E(Y) \le \lim_{n \to \infty}E(X_{n})$, então teremos provado o resultado. Seja $A_{k} = [X_{k} \ge Y]$, com $k$ grande o suficiente. Se $\omega$ é tal que $X_{k}(\omega) \ge Y(\omega) \Rightarrow X_{k+1}(\omega) \ge Y(\omega) \Rightarrow A_{k} \subseteq A_{k+1} \subseteq A_{k+2} \subseteq \ldots$.
+
+Formalmente, pelo limite $X_{k} \uparrow X$ se $k$ é suficientemente grande, $X_{k}(\omega) \ge Y(\omega)$. Assim, $\bigcup A_{k} = [Y \le X] = \Omega$, e:
+
+\begin{equation*}
+YI_{k} = \begin{cases}
+Y(\omega) &, \text{se }\omega \in A_{k} \\
+0 &, \text{se } \omega \not\in A_{k}
+\end{cases} = \begin{cases}
+n\epsilon &, \text{se }\omega \in B_{n} \cap A_{k}, n=0,1,\ldots \\
+0 &, \text{se } \omega \not\in \bigcup_{n=0}^{\infty}B_{n}\cap A_{k}
+\end{cases}
+\end{equation*}
+
+Logo, $0 \le YI_{k} \le X_{k} \Rightarrow 0 \le E(YI_{k}) \le E(X_{k})$. Assim, $E(YI_{k})$ será:
+
+\begin{equation*}
+E(YI_{k}) = \sum_{n=0}^{\infty}n\epsilon P(B_{n} \cap A_{k}) \ge \sum_{n=0}^{m}n\epsilon P(B_{n} \cap A_{k})
+\end{equation*}
+
+Logo, $\lim_{k \to \infty}E(X_{k}) \ge \lim_{k \to \infty} \sum_{n=0}^{m}n\epsilon P(B_{n} \cap A_{k}) = \sum_{n=0}^{m}n\epsilon P(B_{n}), \forall m$. Como $m$ é arbitrário, $\lim_{k \to \infty}E(X_{k}) \ge \sum_{n=0}^{m}n\epsilon P(B_{n}) = E(Y)$.
+
+:::
+
+::: {.theorem name="Teorema da convergência dominada"}
+
+Sejam $Y,X_{1},X_{2},\ldots,X$ variáveis aleatórias em $(\Omega, \mathcal{A},P)$, tais que $Y$ é integrável, $|X_{n}| \le Y \; \forall n$ e $X_{n} \to X$ (ou seja, dado $\omega: X_{n}(\omega) \xrightarrow[n \to \infty]{}X(\omega)$). Então $X$ e $X_{n}$ são integráveis e $E(X_{n}) \xrightarrow[n \to \infty]{}E(X)$.
+
+:::
+
+::: {.proof name="Prova"}
+
+Por hipótese, temos a integrabilidade de $X$ e $X_{n}$, tais que:
+
+\begin{equation*}
+|X| = \lim_{n \to \infty}|X_{n}| \stackrel{\mathrm{hip}}{\le} Y
+\end{equation*}
+
+Assim, $X$ e $X_{n}$ são dominadas, então por $E_{2}$, $X$ e $X_{n}$ são integráveis. Defina $Y_{n} = \inf_{k \ge n}X_{k}$. Tomar o ínfimo provoca a sequência a se movimentar pela esquerda, de modo que:
+
+\begin{equation*}
+X(\omega) \stackrel{\mathrm{hip}}{=}\lim_{n \to \infty}X_{n}(\omega) = \lim_{n \to \infty}\inf X_{n}(\omega) = \lim_{n \to \infty}\left(\inf_{k \ge n}X_{k}(n)\right) = \lim_{n \to \infty}Y_{n}
+\end{equation*}
+
+E por definição de $Y_{n}:Y_{n} \uparrow X \Rightarrow (Y_{n} + Y) \underset{n \to \infty}{\uparrow} (X + Y)$. Aplicando o teorema da convergência monótona, temos que $|X_{n}| \le Y \;\forall n \Rightarrow -Y \le X_{n}$, logo $\inf_{k \ge n}X_{k} \ge -Y \Rightarrow Y_{n} \ge -Y \Rightarrow Y_{n} + Y \ge 0$. Logo:
+
+\begin{equation*}
+E(Y_{n} + Y) \underset{n \to \infty}{\uparrow} E(X + Y)
+\end{equation*}
+
+Defina $Z_{n}(\omega) = \sup_{k \ge n}X_{k}(\omega)$. Note que $Z_{n}(\omega) \underset{n \to \infty}{\downarrow} X(\omega)$, logo $(Y - Z_{n}) \underset{n \to \infty}{\uparrow} (Y - X)$. Note que $|X_{n}| \le Y, \forall n \Rightarrow X_{n} \le Y$, de modo que:
+
+\begin{equation*}
+\sup_{k \ge n}X_{k} \le Y \Rightarrow Z_{n} \le Y \Rightarrow 0 \le Y - Z_{n}
+\end{equation*}
+
+Agora que temos a positividade e a monotonia do crescimento, utilizamos o teorema da convergência monótona, de modo que:
+
+\begin{equation*}
+E(Y - Z_{n}) \underset{n \to \infty}{\uparrow} E(Y - X) \Rightarrow E(Z_{n}) \underset{n \to \infty}{\downarrow} E(X)
+\end{equation*}
+
+Juntando as convergências de $Y_{n}$ e $Z_{n}$:
+
+\begin{equation*}
+Y_{n} = \inf_{k \ge n}X_{k} \le X_{n} \le \sup_{k \ge n}X_{k} = Z_{n} \Longrightarrow E(Y_{n}) \le E(X_{n}) \le E(Z_{n})
+\end{equation*}
+
+De modo que $E(X_{n}) \to E(X)$.
+
+:::
+
+### Observações sobre o teorema da convergência dominada
+
+1. Há casos nos quais $X_{n} \to X$, no entanto $E(X_{n}) \not\to E(X)$;
+
+::: {.example}
+
+$X \sim \mathrm{Cauchy} \rightarrow f(x) = \frac{1}{\pi(1 + x^{2})}$. Sabemos que $E(X) = \infty$. Seja $X_{n} = I_{[-n \le x \le n]} = \begin{cases}
+X &, -n \le x \le n \\
+0 &, |x| > n
+\end{cases}$. Então:
+
+**i)** $X_{n} \underset{n \to \infty}{\rightarrow} X$;
+
+**ii)** Cada $X_{n}$ é limitado pois $|X_{n}| \le n$, ou seja, podemos computar $E(X_{n})$;
+
+**iii)** $E(X_{n}) = 0 \;\forall n$ fixo, pois $X_{n}$ é simétrica em torno de $0$, de modo que $E(X_{n}) \not \to E(X) = \infty$.
+
+:::
+
+2. Levemos em consideração que se $0 < s < t \Rightarrow |X|^{s} \le 1 + |X|^{t}$. Então, se $X$ é uma variável aleatória tal que $E(|X|^{t}) < \infty$ para $t > 0 \Rightarrow g(s) = E(|X|^{s})$ é contínua para todo $s \in (0,t]$. Basta ver que se $s_{n} \to s \Rightarrow g(s_{n}) \to g(s)$. Note que $|X|^{s_{n}} \le |X|^{t} + 1 \Rightarrow E(|X|^{s_{n}}) \le E(|X|^{t}) + 1 < \infty$. Assim, pelo teorema da convergência dominada:
+
+\begin{equation*}
+E(|X|^{s_{n}}) \to E(|X|^{s})
+\end{equation*}
+
+3. **(Teorema de Arzelà)** Sejam $f,f_{1},f_{2},\ldots$, funções reais (borel-mensuráveis) definidas em $[a,b]$, com $a < b$ e integráveis a Riemann. Se $f_{n} \to f$ e se $|f_{n}| \le M \; \forall n$, então:
+
+\begin{equation*}
+\int_{a}^{b}f_{n}(x)dx \to \int_{a}^{b}f(x)dx
+\end{equation*}
+
+::: {.proof name="Prova"}
+
+Considere $Omega = [a,b]$ e $\mathcal{A} = \mathcal{B}_{[a,b]}$ (ou seja, a $\sigma-$álgebra dos borelianos em $[a,b]$). Defina $\forall \omega \in \Omega$:
+
+\begin{align*}
+X_{n}(\omega) &= (b-a)f_{n}(\omega) \\
+X(\omega) &= (b-a)f(\omega)
+\end{align*}
+
+Já que $f_{n} \to f$ por hipótese, então $X_{n}(\omega) \to X(\omega) \; \forall \omega \in \Omega$. Também $|f_{n}| \le M \Rightarrow (a-b)M \ge |X_{n}|$, logo $\{X_{n}\}$ é uma sequência de variáveis aleatórias integráveis, e sob o teorema da convergência dominada:
+
+\begin{equation*}
+E(X_{n}) \underset{n \to \infty}{\longrightarrow}E(X)
+\end{equation*}
+
+:::
+
+4. **(Convergência de séries)** Se $a_{mn} \ge 0$ para $m,n = 1,2,\ldots$ e $a_{mn} \underset{n \to \infty}{\uparrow}a_{m} \; \forall m$, então:
+
+\begin{equation*}
+\sum_{m=1}^{\infty}a_{mn} \uparrow \sum_{m=1}^{\infty}a_{m}
+\end{equation*}
+
+::: {.proof name="Prova"}
+
+Podemos escrever $a_{mn} = X_{n}(m)p_{m}$ onde $X_{n}(m) = \frac{a_{mn}}{p_{m}}, p_{m} = p(m) \; \forall m, m = \{1,2,\ldots\}$, sendo $p_{m}$ tal que $\sum_{m=1}^{\infty}p_{m} = 1$. Analogamente $a_{m} = X(m)p_{m}$, e sendo $p_{m} \ge 0 \; \forall m$, como $a_{mn} \ge 0$ e $p_{m} \ge 0 \Rightarrow X_{n}(m) \ge 0$. Já que $a_{mn} \underset{n \to \infty}{\uparrow}a_{m} \Rightarrow 0 \le X_{n}(m) \underset{n \to \infty}{\uparrow} X(m), \forall m$. Logo, pelo teorema da convergência monótona, $E(X_{n}) \underset{n \to \infty}{\uparrow} E(X)$, e assim:
+
+\begin{align*}
+E(X_{n}) &= \sum_{m=1}^{\infty}X_{n}(m)p_{m} = \sum_{m=1}^{\infty}a_{mn} \\
+E(X) &= \sum_{m=1}^{\infty}X(m)p_{m} = \sum_{m=1}^{\infty}a_{m}
+\end{align*}
+
+Ou seja, $\sum_{m=1}^{\infty}a_{mn} \underset{n \to \infty}{\uparrow} \sum_{m=1}^{\infty}a_{m}$.
+
+:::
+
+\newpage
+
+## Exercícios
+
+TODO
+
+\newpage
