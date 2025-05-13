@@ -73,6 +73,7 @@
 \usepackage{subcaption}
 \usepackage{cancel}
 \usepackage{mathtools}
+\usepackage{slashbox}
 \usepackage{annotate-equations}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -971,7 +972,7 @@ P(A_{1} \cap \ldots \cap A_{n} \cap A_{n+1}) &= P(D \cap A_{n+1}) \\
 \hypertarget{exercuxedcios}{%
 \subsection{Exercícios}\label{exercuxedcios}}
 
-\begin{exercise}[BJ1]
+\begin{exercise}[BJ 1.1]
 
 Sejam \(A, B\) e \(C\) eventos aleatórios. Identifique as seguintes equações e frases, casando cada equação expressa na notação de conjuntos com a correspondente frase na linguagem de eventos:
 
@@ -1001,7 +1002,7 @@ Sejam \(A, B\) e \(C\) eventos aleatórios. Identifique as seguintes equações 
 
 \end{exercise}
 
-\begin{exercise}[BJ2]
+\begin{exercise}[BJ 1.2]
 \protect\hypertarget{exr:exbj2}{}\label{exr:exbj2}
 
 A partir dos axiomas, prove a propriedade \(P5\):
@@ -1050,7 +1051,7 @@ P\left(\bigcup_{n=i}^{\infty}A_{n}\right) \le \sum_{n=1}^{\infty}P(A_{n})
 
 \end{exercise}
 
-\begin{exercise}[BJ3]
+\begin{exercise}[BJ 1.3]
 \protect\hypertarget{exr:exbj3}{}\label{exr:exbj3}
 
 Sejam \(A_{1}, A_{2},\dots\) eventos aleatórios. Mostre que:
@@ -1119,7 +1120,7 @@ Para ver a demonstração da propriedade \(P5\), vide exercício \ref{exr:exbj2}
 
 \end{exercise}
 
-\begin{exercise}[BJ4]
+\begin{exercise}[BJ 1.4]
 
 Demonstre as seguintes propriedades:
 
@@ -1165,7 +1166,7 @@ P\left(\bigcap_{n=1}^{\infty}A_{n}\right) &= 1
 
 \end{exercise}
 
-\begin{exercise}[BJ6]
+\begin{exercise}[BJ 1.6]
 
 Seja \(\Omega\) um conjunto não-vazio.
 
@@ -1242,7 +1243,7 @@ Considere que temos \(\sigma\)-álgebras de partes de \(\Omega\), \(\mathcal{A}_
 
 \end{exercise}
 
-\begin{exercise}[BJ9]
+\begin{exercise}[BJ 1.9]
 
 Uma caixa contém \(2n\) sorvetes, \(n\) do sabor \(A\) e \(n\) do sabor \(B\). De um grupo de \(2n\) pessoas, \(a < n\) preferem o sabor \(A\), \(b < n\) o sabor \(B\) e \(2n-(a+b)\) não tem preferência. Demonstre: se os sorvetes são distribuídos ao acaso, a probabilidade de que a preferência de todas as pessoas seja respeitada é de \(\binom{2n-a-b}{n-a}/\binom{2n}{n}\).
 
@@ -1282,7 +1283,7 @@ P(R) = \frac{|R|}{|\Omega|} = \frac{\binom{2n-a-b}{n-a}}{\binom{2n}{n}}
 
 \end{exercise}
 
-\begin{exercise}[BJ10]
+\begin{exercise}[BJ 1.10]
 
 Suponhamos que dez cartas estejam numeradas de 1 até 10. Das dez cartas, retira-se uma de cada vez, ao acaso e sem reposição, até retirar-se o primeiro número par. Conta-se o número de retiradas necessárias. Exiba um bom modelo probabilístico para esse experimento.
 
@@ -1318,7 +1319,7 @@ A segunda parcela da equação \eqref{eq:bj10} é válida para \(k \ge 2\), pois
 
 \end{exercise}
 
-\begin{exercise}[BJ11]
+\begin{exercise}[BJ 1.11]
 
 Para cada um dos seguintes experimentos, descreva um espaço de probabilidade que sirva de modelo:
 
@@ -1459,7 +1460,7 @@ Esse modelo de probabilidade é chamado de multinomial hipergeométrico, e é um
 
 \end{exercise}
 
-\begin{exercise}[BJ12]
+\begin{exercise}[BJ 1.12]
 
 Retiram-se 4 cartas, ao acaso, de um baralho de 52 cartas. Registra-se o número de reis na amostra. Exiba um bom modelo probabilístico para este experimento se:
 
@@ -1527,7 +1528,7 @@ De modo que é possível ver que no caso com reposição a probabilidade de enco
 
 \end{exercise}
 
-\begin{exercise}[BJ13]
+\begin{exercise}[BJ 1.13]
 \protect\hypertarget{exr:exbj13}{}\label{exr:exbj13}\leavevmode
 
 \begin{enumerate}
@@ -1786,7 +1787,7 @@ Se \(k\) for par, o termo \(k\) será negativo e o termo \(k+1\) será positivo,
 
 \end{exercise}
 
-\begin{exercise}[BJ15]
+\begin{exercise}[BJ 1.15]
 
 Suponha que \(n\) cartas numeradas de 1 até \(n\) sejam embaralhadas e retiradas uma por uma, sem reposição, até todas as cartas serem retiradas. Qual a probabilidade de que para pelo menos uma carta, o número da carta coincida com o número da retirada?
 
@@ -1826,7 +1827,7 @@ P\left(\bigcup_{i=1}^{n} A_{i}\right) = \frac{1}{1!} - \frac{1}{2!} + \frac{1}{3
 
 \end{exercise}
 
-\begin{exercise}[BJ16]
+\begin{exercise}[BJ 1.16]
 
 Seja \((\Omega, \mathcal{A},P)\) um espaço de probabilidade e suponha que todos os conjuntos abaixo pertençam a \(\mathcal{A}\). Prove:
 
@@ -1992,7 +1993,7 @@ P(B|C) &= \frac{P(B \cap C)}{P(C)} \\
 
 \end{exercise}
 
-\begin{exercise}[BJ17]
+\begin{exercise}[BJ 1.17]
 
 Suponha que a ocorrência ou não de chuva dependa das condições do tempo no dia imediatamente anterior. Admita-se que se chove hoje, choverá amanhã com probabilidade de 0,7 e que se não chove hoje choverá amanhã com probabilidade 0,4. Sabendo-se que choveu hoje, calcule a probabilidade de que choverá depois de amanhã.
 
@@ -2030,7 +2031,7 @@ P(C_{n+2}) &= P(C_{n+1}|C_{n}) \times 0,7 + P(C_{n+1}|NC_{n}) \times 0,3 \\
 
 \end{exercise}
 
-\begin{exercise}[BJ18]
+\begin{exercise}[BJ 1.18]
 
 Certo experimento consiste em lançar um dado equilibrado duas vezes, independentemente. Dado que os dois números sejam diferentes, qual a probabilidade condicional de:
 
@@ -2072,7 +2073,7 @@ P(S=8) &= P(S=8|A_{1} = 1)P(A_{1} = 1) + P(S=8|A_{1} = 2)P(A_{1} = 2) + \dots + 
 
 \end{exercise}
 
-\begin{exercise}[BJ19]
+\begin{exercise}[BJ 1.19]
 
 Em teste de múltipla escolha, a probabilidade do aluno saber a resposta é \(p\). Havendo \(m\) escolhas, se ele sabe a resposta ele responde corretamente com probabilidade 1; se não sabe, ele responde corretamente com probabilidade \(\frac{1}{m}\). Qual a probabilidade de que ele soubesse a resposta dado que a pergunta foi respondida corretamente? Calcule o limite dessa probabilidade quando (i) \(m \to \infty\) com \(p\) fixo e (ii) \(p \to 0\) com \(m\) fixo.
 
@@ -2121,7 +2122,7 @@ Agora, calculando os limites temos:
 
 \end{exercise}
 
-\begin{exercise}[BJ20]
+\begin{exercise}[BJ 1.20]
 
 Durante o mês de novembro a probabilidade de chuva é de 0,3. O Fluminense ganha um jogo em um dia de chuva com a probabilidade de 0,4; em um dia sem chuva com a probabilidade 0,6. Se ganhou um jogo em novembro, qual é a probabilidade de que choveu neste dia?
 
@@ -2596,7 +2597,7 @@ A probabilidade \(P_{X}\) definida na \(\sigma\)-álgebra de Borel por \(P_{X}(B
 \subsection{Variáveis contínuas}\label{variuxe1veis-contuxednuas}}
 
 \begin{proposition}
-Se \(X \sim f_{X}, \; y = bx+c, \; b>0\) e \(c \in \mathbb{R} \Rightarrow Y \sim f_{Y}\) onde \(f_{Y}(y) = \frac{1}{b}f_{X}(\frac{y-c}{b}); y \in \mathbb{R}\), onde \(c\) é dito um parâmetro de posição (muitas vezes de posição central) e \(b\) um parâmetro de escala.
+\protect\hypertarget{prp:transfsoma}{}\label{prp:transfsoma}Se \(X \sim f_{X}, \; y = bx+c, \; b>0\) e \(c \in \mathbb{R} \Rightarrow Y \sim f_{Y}\) onde \(f_{Y}(y) = \frac{1}{b}f_{X}(\frac{y-c}{b}); y \in \mathbb{R}\), onde \(c\) é dito um parâmetro de posição (muitas vezes de posição central) e \(b\) um parâmetro de escala.
 \end{proposition}
 
 \hypertarget{exemplos}{%
@@ -3461,7 +3462,546 @@ Ou seja, \(Y \sim Gama\left(\frac{1}{2}, \frac{1}{2}\right)\), ou \(Y \sim \chi^
 \hypertarget{exercuxedcios-1}{%
 \subsection{Exercícios}\label{exercuxedcios-1}}
 
-TODO
+\begin{exercise}[BJ 2.1]
+Seja \(X\) o número de caras obtidas em 4 lançamentos de uma moeda honesta. Desenhe o gráfico da função de distribuição de \(X\).
+\end{exercise}
+
+\begin{proof}[Resposta]
+Sabemos que \(X \sim \mathrm{Bin}(4,0.5)\), então o gráfico da distribuição de \(X\) será dada por:
+
+\includegraphics{_main_files/figure-latex/distacummoeda-1.pdf}
+\end{proof}
+
+\begin{exercise}[BJ 2.2]
+Um ponto é selecionado, ao acaso, do quadrado unitário \([0,1] \times [0,1]\). Seja \(X\) a primeira coordenada do ponto selecionado. Faça o gráfico da função de distribuição de \(X\).
+\end{exercise}
+
+\begin{proof}[Resposta]
+Como o ponto é escolhido ao acaso, cada uma das coordenadas seguirá uma distribuição uniforme entre 0 e 1, de modo que \(X \sim \mathrm{U}(0,1)\), e o gráfico da distribuição será dado por:
+
+\includegraphics{_main_files/figure-latex/distacumx-1.pdf}
+\end{proof}
+
+\begin{exercise}[BJ 2.4]
+Seja \(X\) uma variável aleatória com distribuição de Poisson, com parâmetro \(\lambda > 0\). Mostre que a função de distribuição de \(X\) é
+
+\begin{equation*}
+F(X) = \begin{cases}
+\frac{1}{n!}\int_{\lambda}^{\infty}e^{-t}t^{n}dt & ,\text{se } n \le x < n+1, n = 0,1,2,\ldots \\
+0 & ,\text{se } x <0
+\end{cases}
+\end{equation*}
+\end{exercise}
+
+\begin{proof}[Resposta]
+Sabemos que a função densidade de probabilidade de \(X\) é dada por \(f(x) = \frac{e^{-\lambda}\lambda^{x}}{x!}\). Suponha que, para \(x = k\) a função de distribuição anterior é verdadeira. Assim, mostremos por indução que a mesma é válida para \(x = k+1\).
+
+\begin{align*}
+F(k+1) &= \frac{1}{(k+1)!}\int_{\lambda}^{\infty}e^{-t}t^{k+1}dt \Rightarrow \begin{bmatrix}
+u = t^{k+1}dt & dv = e^{-t} \\
+du = (k+1)t^{k} & v = -e^{-t}
+\end{bmatrix}\\
+&= \frac{1}{(k+1)!}\left[-e^{-t}t^{k+1}\Big{|}_{\lambda}^{\infty} + \int_{\lambda}^{\infty}e^{-t}(k+1)t^{k}dt\right] \\
+&= \frac{1}{(k+1)!}\left[e^{-\lambda}\lambda^{k+1} + (k+1)\int_{\lambda}^{\infty}e^{-t}t^{k}dt\right] \\
+&= \frac{e^{-\lambda}\lambda^{k+1}}{(k+1)!} + \frac{1}{k!}\int_{\lambda}^{\infty}e^{-t}t^{k}dt = P(X = k+1) + F(k)
+\end{align*}
+
+Assim, \(F(k + 1) = F(k) + P(X = k+1)\), de modo que a função apresentada é sim a distribuição de \(X\).
+\end{proof}
+
+\begin{exercise}[BJ 2.5]
+
+Suponha que a vida útil de um certo tipo de lâmpada tenha distribuição exponencial com parâmetro \(\lambda\).
+
+\textbf{a)} Seja \(T\) o tempo de vida de uma lâmpada desse tipo. Mostre que:
+
+\begin{equation*}
+P(T > t+s | T>t) = P(T > s), \; \forall s,t>0
+\end{equation*}
+
+\textbf{b)} Suponha que \(\lambda = 3\) quando a vida é expressa em dias. Uma lâmpada solitária é ligada em uma sala no instante \(t = 0\). Um dia depois, você entra na sala e fica ali durante 8 horas, saindo no final desse período.
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{(i)} Qual a probabilidade de que você entre na sala quando já está escura?
+\item
+  \emph{(ii)} Qual a probabilidade de você entrar na sala com a lâmpada ainda acesa e sair da sala depois da lâmpada queimar?
+\end{itemize}
+
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Temos que \([T > t+s] \subset [T > t] \Rightarrow P(T > t+s, T > t) = P(T > t+s)\). Além disso, como \(T \sim \mathrm{Exp}(\lambda) \Rightarrow P(T > t) = 1 - P(T \le t) = 1 - F_{T}(t) = 1 - (1 - e^{-\lambda t}) = e^{-\lambda t}\). Desse modo:
+
+\begin{align*}
+P(T > t+s | T > t) = \frac{P(T > t+s,T > t)}{P(T > t)} &= \frac{P(T > t+s)}{P(T > t)} \\
+&= \frac{e^{-\lambda(t+s)}}{e^{-\lambda t}} \\
+&= e^{-\lambda s} = 1 - F_{T}(s) = P(T > s)
+\end{align*}
+
+\textbf{b)}
+
+\emph{(i)} Caso depois de um dia a lâmpada já esteja apagada, então \(T \le 1\), de modo que:
+
+\begin{equation*}
+P(T \le 1) = 1 - e^{-3.1} = 1 - e^{-3}
+\end{equation*}
+
+\emph{(ii)} Caso a lâmpada ainda esteja acesa depois de um dia, mas tenha queimado antes de 8 horas (\(\frac{1}{3}\) de dia) dado que não tenha queimado no primeiro dia, queremos encontrar a probabilidade do seguinte evento: \(P\left(T \le 1 + \frac{1}{3}|T > 1\right) = 1 - P\left(T > 1 + \frac{1}{3}|T > 1\right)\), que utilizando o resultado obtido em \textbf{(a)}, temos que será:
+
+\begin{align*}
+P\left(T \le 1 + \frac{1}{3}|T > 1\right) &= 1 - P\left(T > 1 + \frac{1}{3}|T > 1\right) \\
+&= 1 - P\left(T > \frac{1}{3}\right) \\
+&= 1 - e^{-3.\frac{1}{3}} = 1 - e^{-1}
+\end{align*}
+\end{proof}
+
+\begin{exercise}[BJ 2.6]
+Seja \(X\) uma variável aleatória com densidade:
+
+\begin{equation*}
+f(x) = \begin{cases}
+cx^{2} & ,\text{se } -1 \le x \le 1 \\
+0 & ,\text{c.c.}
+\end{cases}
+\end{equation*}
+
+\textbf{a)} Determine o valor da constante \(c\).
+
+\textbf{b)} Ache o valor \(\alpha\) tal que \(F_{X}(\alpha) = \frac{1}{4}\).
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Temos que \(\int_{-\infty}^{\infty}f(x)dx = 1 \Rightarrow \int_{-1}^{1}cx^{2}dx = 1\). Assim:
+
+\begin{align*}
+\int_{-1}^{1}cx^{2}dx &= c\int_{-1}^{1}x^{2}dx \\
+&= c\left(\frac{x^{3}}{3}\Big{|}_{-1}^{1}\right) \\
+&= c\left(\frac{1}{3} + \frac{1}{3}\right) = \frac{2c}{3} \Longrightarrow c = \frac{1}{\frac{2}{3}} = \frac{3}{2}
+\end{align*}
+
+\textbf{b)}
+
+Podemos calcular a distribuição de \(X\) como segue:
+
+\begin{align*}
+F_{X}(x) &= \frac{3}{2}\int_{-1}^{x}x^{2}dx \\
+&= \frac{3}{2}\left(\frac{x^{3}}{3}\Big{|}_{-1}^{x}\right) \\
+&= \frac{3}{2}\left(\frac{x^{3} + 1}{3}\right) = \frac{x^{3} + 1}{2}
+\end{align*}
+
+Assim, podemos encontrar o valor \(\alpha\) tal que \(F_{X}(\alpha) = \frac{1}{4}\):
+
+\begin{align*}
+\frac{x^{3} + 1}{2} &= \frac{1}{4} \\
+x^{3} + 1 &= \frac{1}{2} \\
+x &= \sqrt[3]{-\frac{1}{2}}
+\end{align*}
+\end{proof}
+
+\begin{exercise}[BJ 2.7]
+Uma variável aleatória \(X\) tem função de distribuição:
+
+\begin{equation*}
+F(X) = \begin{cases}
+0 & ,\text{se }x<0 \\
+x^{3} & ,\text{se }0 \le x \le 1 \\
+1 & ,\text{se }x>1
+\end{cases}
+\end{equation*}
+
+Qual a densidade de \(X\)?
+\end{exercise}
+
+\begin{proof}[Resposta]
+Podemos encontrar a função densidade de probabilidade de \(X\) a partir da derivação em partes da distribuição acumulada:
+
+\begin{equation*}
+f_{X}(x) = \frac{\partial}{\partial x}F_{X}(x) = \frac{\partial}{\partial x}(x^{3}) = 3x^{2}
+\end{equation*}
+
+De modo que a densidade será:
+
+\begin{equation*}
+f_{X}(x) = \begin{cases}
+0 & ,\text{se }x<0 \\
+3x^{2} & ,\text{se }0 \le x \le 1 \\
+0 & ,\text{se }x>1
+\end{cases}
+\end{equation*}
+\end{proof}
+
+\begin{exercise}[BJ 2.9]
+Seja \(X\) uma variável aleatória com densidade:
+
+\begin{equation*}
+f(x) = \begin{cases}
+\frac{1}{(1+x)^{2}} &, \text{se } x > 0 \\
+0 & ,\text{c.c.}
+\end{cases}
+\end{equation*}
+
+Seja \(Y = \max(X,c)\), onde \(c\) é uma constante maior que 0.
+
+\textbf{a)} Ache a função de distribuição de \(Y\).
+
+\textbf{b)} Decomponha \(F_{Y}\) em partes discreta, absolutamente contínua e singular.
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Como \(Y = \max(X,c)\), separaremos em dois casos:
+
+\(\mathbf{\min(X,c) = X} \Rightarrow \mathbf{X \le c}\):
+
+\begin{align*}
+F_{Y}(y) &= \int_{0}^{c}\frac{1}{(1+y)^{2}}dy \Rightarrow \begin{bmatrix}
+u = (1+y) & du = dy \\
+a = 1 & b = c+1
+\end{bmatrix}\\
+&= \int_{1}^{c+1}u^{-2}du \\
+&= -u^{-1}\Big{|}_{1}^{c+1} = -(c+1)^{-1} - (-1^{-1}) = 1 - \frac{1}{c+1} = \frac{c}{c+1}
+\end{align*}
+
+Como \(c\) é uma constante, esse valor será a probabilidade pontual \(P(\max(X,c) = c) = P(Y = c) = \frac{c}{c+1}\).
+
+\(\mathbf{\min(X,c) = c} \Rightarrow \mathbf{X > c}\):
+
+\begin{align*}
+F_{Y}(y) = P(Y = c) + P(c < Y \le y) &= \frac{c}{c+1} + \int_{c}^{y}\frac{1}{(1+y)^{2}}dy \Rightarrow \begin{bmatrix}
+u = (1+y) & du = dy \\
+a = c+1 & b = y+1
+\end{bmatrix}\\
+&= \frac{c}{c+1} + \left(\int_{c+1}^{y+1}u^{-2}du\right) \\
+&= \frac{c}{c+1} + \left(-u^{-1}\Big{|}_{c+1}^{y+1}\right) \\
+&= \frac{c}{c+1} + \frac{1}{c+1} - \frac{1}{y+1} \\
+&= \frac{c + 1}{c + 1} - \frac{1}{y+1} = 1 - \frac{1}{y+1} = \frac{y}{y+1}
+\end{align*}
+
+Assim, a distribuição de \(Y\) será:
+
+\begin{equation*}
+F_{Y}(x) = \begin{cases}
+0 &,\text{se }x \le 0 \\
+\frac{c}{c+1} &,\text{se } 0 < x \le c \\
+\frac{x}{x+1} &,\text{se } x > c
+\end{cases} \Rightarrow F_{Y}(y) = \begin{cases}
+0 &,\text{se } y < c \\
+\frac{y}{y+1} &,\text{se } y \ge c
+\end{cases}
+\end{equation*}
+
+\textbf{b)}
+
+A parte discreta envolve o salto que ocorre em \(Y = c\), de tamanho \(\frac{c}{c+1}\). Os demais pontos são absolutamente contínuos. Assim, não temos partes singulares.
+\end{proof}
+
+\begin{exercise}[BJ 2.10]
+Se \(X\) é uma variável aleatória com distribuição exponencial de parâmetro \(\lambda > 0\), qual a distribuição da variável aleatória \(Y = \min(\lambda, X)\)
+\end{exercise}
+
+\begin{proof}[Resposta]
+De maneira similar ao caso anterior, como \(Y = \min(\lambda,X)\), separaremos \(Y\) em dois casos:
+
+\(\mathbf{\min(\lambda,X) = X} \Rightarrow \mathbf{X \le \lambda}\):
+
+\begin{align*}
+F_{Y}(y) &= \int_{0}^{y}\lambda e^{-\lambda y}dy \\
+&= \frac{\lambda}{\lambda}\left(-e^{-u}\Big{|}_{0}^{\lambda y}\right) = 1 - e^{-\lambda y}
+\end{align*}
+
+\(\mathbf{\min(\lambda,X) = \lambda} \Rightarrow \mathbf{\lambda < X < \infty}\):
+
+\begin{align*}
+F_{Y}(y) = P(Y \le \lambda) + P(Y > \lambda) &= 1 - e^{-\lambda \lambda} + \int_{\lambda}^{\infty}\lambda e^{-\lambda y}dy \\
+&=  1 - e^{-\lambda^{2}} + \frac{\lambda}{\lambda}\left(-e^{-u}\Big{|}_{\lambda^{2}}^{\infty}\right) = 1 - e^{-\lambda^{2}} + e^{-\lambda^{2}} = 1
+\end{align*}
+
+De modo que a distribuição de \(Y\) é dada por:
+
+\begin{equation*}
+F_{Y}(y) = \begin{cases}
+0 &,\text{se } x \le 0 \\
+1 - e^{-\lambda y} &,\text{se } 0 < x \le \lambda \\
+1 &,\text{se } x > \lambda
+\end{cases}
+\end{equation*}
+\end{proof}
+
+\begin{exercise}[BJ 2.12]
+Determine a densidade de \(Y = (b-a)X + a\), onde \(X \sim U[0,1]\). Faça o gráfico da função de distribuição de \(Y\).
+\end{exercise}
+
+\begin{proof}[Resposta]
+Sabemos que \(f_{X}(x) = I_{[0,1]}\) e pela proposição \ref{prp:transfsoma} temos que quando \(Y = bX + c\) então:
+
+\begin{equation*}
+f_{Y}(y) = \frac{1}{b}f_{X}\left(\frac{y - c}{b}\right)
+\end{equation*}
+
+Dessa forma, considerando que \(b = (b-a)\) e \(c = (a)\), então:
+
+\begin{align*}
+f_{Y}(y) &= \frac{1}{(b-a)}f_{X}\left(\frac{y-a}{b-a}\right) = \frac{1}{(b-a)}I_{[0,1]}
+\end{align*}
+
+De modo que \(Y \sim U(a,b)\).
+\end{proof}
+
+\begin{exercise}[BJ 2.13]
+Se \(X\) tem densidade \(f(x) = e^{-2|x|}, -\infty < x < \infty\), qual a densidade de \(Y = |X|\)?
+\end{exercise}
+
+\begin{proof}[Resposta]
+Como \(F_{Y}(y) = P(Y \le y)\), temos que:
+
+\begin{align*}
+F_{Y}(y) &= P(Y \le y) \\
+&= P(|X| \le y) \\
+&= \int_{-y}^{y}e^{-2|x|}dx
+\end{align*}
+
+Como \(f_{X}(x)\) é simétrica em torno de zero, temos que:
+
+\begin{align*}
+F_{Y}(y) = 2\int_{0}^{y}e^{-2|x|}dx &= 2\int_{0}^{y}e^{-2x}dx \\
+&= \frac{2}{2}\int_{0}^{2y}e^{-u}du \\
+&= -e^{-u}\Big{|}_{0}^{2y} \\
+&= 1 - e^{-2y}
+\end{align*}
+
+Ou seja, \(f_{Y}(y) = \frac{\partial}{\partial y}F_{Y}(y) = 2e^{-2y} \Rightarrow Y \sim \mathrm{Exp}(2)\).
+\end{proof}
+
+\begin{exercise}[BJ 2.14]
+Cinco pontos são escolhidos, independentemente e ao acaso, do intervalo \([0,1]\). Seja \(X\) o número de pontos que pertencem ao intervalo \([0,c]\) onde \(0 < c < 1\). Qual a distribuição de \(X\)?
+\end{exercise}
+
+\begin{proof}[Resposta]
+Consideremos inicialmente o caso em que um ponto é escolhido ao acaso do intervalo \([0,1]\). Desse modo, por ser uniformemente distribuído no intervalo, a probabilidade de que o ponto pertença ao intervalo \([0,c]\) é o comprimento desse intervalo, de modo que:
+
+\begin{equation*}
+P(X = 0) = (1-c),P(X = 1) = c
+\end{equation*}
+
+Para dois pontos, temos que levar em consideração o caso em que \(X = 1\), pois podem ocorrer duas formas diferentes de isso ocorrer: o primeiro ponto pertence ao intervalo e o segundo não, ou o segundo ponto pertence ao intervalo e o segundo não, de modo que:
+
+\begin{equation*}
+P(X = 0) = (1-c)^{2},P(X = 1) = 2c(1-c), P(X = 2) = c^{2}
+\end{equation*}
+
+É fácil perceber o padrão, de modo que \(X \sim \mathrm{Bin}(5,c)\).
+\end{proof}
+
+\begin{exercise}[BJ 2.15]
+Determine a distribuição do tempo de espera até o segundo sucesso em uma sequência de ensaios de Bernoulli com probabilidade \(p\) de sucesso.
+\end{exercise}
+
+\begin{proof}[Resposta]
+Considerando que, nesse caso, o tempo de espera é discreto, vamos levar em consideração que foram necessários \(n\) ensaios até o segundo sucesso, que ocorreu com probabilidade \(p\). Assim, ocorreu algum sucesso entre os \((n-1)\) ensaios anteriores, também com probabilidade \(p\), enquanto que os \((n-2)\) ensaios restantes foram fracassos, cada um com probabilidade \((1 - p)\).
+
+Seja \(X\) o número de ensaios necessários até o segundo sucesso. Como os ensaios são independentes, a probabilidade de que \(X = 2\) será:
+
+\begin{equation*}
+P(X = 2) = (n-1)p^{2}(1-p)^{n-2}
+\end{equation*}
+
+Que podemos identificar como sendo proveniente de uma distribuição binomial negativa, que de modo geral descreve a probabilidade de serem necessários \(X\) ensaios de Bernoulli independentes com probabilidade de sucesso \(p\) até se obter o \(r\)-ésimo sucesso, com a seguinte densidade:
+
+\begin{equation*}
+X \sim \mathrm{NegBin}(r,p) \Rightarrow f_{X}(x) = \binom{x-1}{r-1}p^{r}(1-p)^{x-r}
+\end{equation*}
+\end{proof}
+
+\begin{exercise}[BJ 2.17]
+\textbf{a)}
+
+Demonstre que a função
+
+\begin{equation*}
+F(x,y) = \begin{cases}
+1 - e^{-x-y} &,\text{se }x \ge 0, y \ge 0 \\
+0 &,\text{c.c.}
+\end{cases}
+\end{equation*}
+
+não é função de distribuição de um vetor aleatório.
+
+\textbf{b)}
+
+Mostre que a seguinte função é função de distribuição de algum \((X,Y)\):
+
+\begin{equation*}
+F(x,y) = \begin{cases}
+(1 - e^{-x})(1 - e^{-y}) &,\text{se }x \ge 0, y \ge 0 \\
+0 &,\text{c.c.}
+\end{cases}
+\end{equation*}
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Para que \(F\) seja uma função de distribuição de probabilidade, é necessário que ela siga as propriedades enunciadas no início do capítulo, a ver:
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{1}\): é não-decrescente em cada uma das coordenadas:
+\end{itemize}
+
+Seja \(x_{1} \le x_{2}\). Teremos que:
+
+\begin{align*}
+F(x_{1},y) &\stackrel{?}{\le} F(x_{2},y) \\
+1 - e^{-y}e^{-x_{1}} &\stackrel{?}{\le} 1 - e^{-y}e^{-x_{2}} \\
+-e^{-y}e^{-x_{1}} &\stackrel{?}{\le} -e^{-y}e^{-x_{2}} \\
+e^{-x_{1}} &\stackrel{?}{\ge} e^{-x_{2}}
+\end{align*}
+
+Como \(x_{1} \le x_{2} \Rightarrow e^{-x_{1}} \ge e^{-x_{2}}\), então a função é não decrescente em \(X\). Para \(Y\) se obtém de maneira análoga.
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{2}\): é contínua à direita:
+\end{itemize}
+
+Como a função \(F\) é absolutamente contínua no espaço amostral de \(X\) e \(Y\), ela será também contínua à direita.
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{3}\): limites do espaço amostral:
+\end{itemize}
+
+\begin{equation*}
+\lim_{x \to 0}F(x,y) = 0 \;\;\; \lim_{y \to 0}F(x,y) = 0 \;\;\; \lim_{x \to \infty,y \to \infty}F(x,y) = 1
+\end{equation*}
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{4}: \Delta_{1,I_{1}}\Delta_{2,I_{2}}\ldots\Delta_{n,I_{n}}(F(x_{1},\ldots,x_{n})) \ge 0 \; \forall I_{k} = (a_{k}, b_{k}]; a_{k} \le b_{k}, k=1,\ldots,n\).
+\end{itemize}
+
+\begin{align*}
+P(a < X \le b, c < Y \le d) &= F(b,d) - F(a,d) - F(b,c) + F(a,c) \ge 0 \\
+&= 1 - e^{-b-d} - 1 + e^{-a-d} - 1 + e^{-b-c} + 1 - e^{-a-c} \ge 0 \\
+&= e^{-a-d} + e^{-b-c} - e^{-b-d} - e^{-a-c} \ge 0 \\
+e^{-a-d} + e^{-b-c} &\ge e^{-b-d} + e^{-a-c}
+\end{align*}
+
+E como \(a < b\) e \(c < d\), temos que \(e^{-a-d} < e^{-b-d}\) e \(e^{-b-c} < e^{-a-c}\), de modo que a última desigualdade é falsa. Assim, a avaliação dessa probabilidade será negativa, para qualquer conjunto de pontos \((a,b] \in X, (c,d] \in Y\), o que mostra que \(F\) não é uma função distribuição de probabilidade.
+
+\textbf{b)}
+
+Semelhante ao caso anterior, vejamos se \(F\) segue as propriedades \(F_{1}\) a \(F_{4}\):
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{1}\): é não-decrescente em cada uma das coordenadas:
+\end{itemize}
+
+Como podemos separar essa distribuição em um produto de duas partes, uma que depende apenas de \(x\) e outra que
+depende apenas de \(y\), podemos analisar cada caso separadamente. Como \((1 - e^{-x})\) é não-decrescente em \([0, \infty)\), ela será não-decrescente em \(y\) também.
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{2}\): é contínua à direita:
+\end{itemize}
+
+Como a função \(F\) é absolutamente contínua no espaço amostral de \(X\) e \(Y\), ela será também contínua à direita.
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{3}\): limites do espaço amostral:
+\end{itemize}
+
+\begin{equation*}
+\lim_{x \to 0}F(x,y) = 0 \;\;\; \lim_{y \to 0}F(x,y) = 0 \;\;\; \lim_{x \to \infty,y \to \infty}F(x,y) = 1
+\end{equation*}
+
+\begin{itemize}
+\tightlist
+\item
+  \(F_{4}: \Delta_{1,I_{1}}\Delta_{2,I_{2}}\ldots\Delta_{n,I_{n}}(F(x_{1},\ldots,x_{n})) \ge 0 \; \forall I_{k} = (a_{k}, b_{k}]; a_{k} \le b_{k}, k=1,\ldots,n\).
+\end{itemize}
+
+\begin{align*}
+P(a < X \le b, c < Y \le d) &= F(b,d) - F(a,d) - F(b,c) + F(a,c) \ge 0 \\
+&= (1 - e^{-b})(1 - e^{-d}) - (1 - e^{-a})(1 - e^{-d}) - (1 - e^{-b})(1 - e^{-c}) + (1 - e^{a})(1 - e^{c}) \ge 0 \\
+&= (1 - e^{-b})(1 - e^{-d} - 1 + e^{-c}) - (1 - e^{-a})(1 - e^{-d} - 1 + e^{-c}) \ge 0 \\
+&= (1 - e^{-b})(e^{-c} - e^{-d}) - (1 - e^{-a})(e^{-c} - e^{-d}) \ge 0 \\
+(1 - e^{-b})(e^{-c} - e^{-d}) &\ge (1 - e^{-a})(e^{-c} - e^{-d}) \\
+\end{align*}
+
+E como \(a < b\), temos que \((1 - e^{-a}) < (1 - e^{-b})\), de modo que a última desigualdade é verdadeira. Assim, a avaliação dessa probabilidade será positiva, para qualquer conjunto de pontos \((a,b] \in X, (c,d] \in Y\), o que mostra que \(F\) é uma função distribuição de probabilidade.
+\end{proof}
+
+\begin{exercise}[BJ 2.18]
+Uma urna contém três bolas numeradas 1, 2 e 3. Duas bolas são retiradas sucessivamente da urna, ao acaso e sem reposição. Seja \(X\) o número da primeira bola tirada e \(Y\) o número da segunda.
+
+\textbf{a)} Descreva a distribuição conjunta de \(X\) e \(Y\).
+
+\textbf{b)} Calcule \(P(X < Y)\).
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Temos que a tabela da distribuição conjunta de \(X\) e \(Y\) será:
+
+\begin{center}
+\begin{tabular}{|l||*{3}{c|}c|c|c|c|c|c|}\hline
+\backslashbox{$X$}{$Y$}
+&\makebox[1em]{1}&\makebox[1em]{2}&\makebox[1em]{3}\\\hline\hline
+1 & 0 & 1/6 & 1/6 \\ \hline
+2 & 1/6 & 0 & 1/6 \\ \hline
+3 & 1/6 & 1/6 & 0 \\ \hline
+\end{tabular}
+\end{center}
+
+Assim, podemos ver que a distribuição conjunta será:
+
+\begin{equation*}
+f_{XY}(i,j) = P(X = i, Y = j) = \begin{cases}
+0 & ,\text{se }i = j, \; i,j = 1,2,3 \\
+\frac{1}{6} & ,\text{se }i \neq j
+\end{cases}
+\end{equation*}
+
+\textbf{b)}
+
+Temos que \(P(X < Y)\) será dado por:
+
+\begin{equation*}
+P(X < Y) = P(X = 1, Y = 2) + P(X = 1, Y = 3) + P(X = 2, Y = 3) = \frac{1}{6} + \frac{1}{6} + \frac{1}{6} = \frac{1}{2}
+\end{equation*}
+\end{proof}
+
+\begin{exercise}[BJ 2.19]
+Dizemos que a distribuição conjunta de \(X_{1},\ldots,X_{n}\) é invariante para permutações se toda permutação das \(X_{i}\) tem a mesma distribuição, i.e., se \((X_{\pi_{1}},\ldots,X_{\pi_{n}}) \sim (X_{1},\ldots,X_{n})\) para toda permutação \((\pi_{1},\ldots,\pi_{n})\) do vetor \((1,\ldots,n)\).
+
+\textbf{a)} Mostre que se \((X,Y) \sim (Y,X)\) e \(X\) e \(Y\) possuem densidade conjunta \(f(x,y)\), então \(P(X < Y) = P(X > Y) = \frac{1}{2}\), com \(P(X = Y) = 0\).
+
+\textbf{b)} Generalize o item \textbf{(a)}, provando que se a distribuição conjunta de \(X_{1},\ldots,X_{n}\) é invariante para permutações e \(X_{1},\ldots,X_{n}\) possuem densidade conjunta \(f(x_{1},\ldots,x_{n})\), então:
+
+\begin{equation*}
+P(X_{1} < X_{2} < \ldots < X_{n}) = P(X_{\pi_{1}} < X_{\pi_{2}} < \ldots < X_{\pi_{n}}) = \frac{1}{n!}
+\end{equation*}
+
+e \(P(X_{i} = X_{j} \text{ para algum par }(i,j) \text{ tal que } i \neq j) = 0\)
+\end{exercise}
 
 \newpage
 
@@ -4329,16 +4869,84 @@ De modo que \(E(X_{n}) \to E(X)\).
 \end{enumerate}
 
 \begin{example}
-
 \(X \sim \mathrm{Cauchy} \rightarrow f(x) = \frac{1}{\pi(1 + x^{2})}\). Sabemos que \(E(X) = \infty\). Seja \(X_{n} = I_{[-n \le x \le n]} = \begin{cases} X &, -n \le x \le n \\ 0 &, |x| > n \end{cases}\). Então:
 
+\textbf{i)} \(X_{n} \underset{n \to \infty}{\rightarrow} X\);
+
+\textbf{ii)} Cada \(X_{n}\) é limitado pois \(|X_{n}| \le n\), ou seja, podemos computar \(E(X_{n})\);
+
+\textbf{iii)} \(E(X_{n}) = 0 \;\forall n\) fixo, pois \(X_{n}\) é simétrica em torno de \(0\), de modo que \(E(X_{n}) \not \to E(X) = \infty\).
+\end{example}
+
 \begin{enumerate}
-\def\labelenumi{\roman{enumi}.}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
 \tightlist
 \item
-  \(X_{n} \underset{n \to \infty}{\rightarrow} X\)
+  Levemos em consideração que se \(0 < s < t \Rightarrow |X|^{s} \le 1 + |X|^{t}\). Então, se \(X\) é uma variável aleatória tal que \(E(|X|^{t}) < \infty\) para \(t > 0 \Rightarrow g(s) = E(|X|^{s})\) é contínua para todo \(s \in (0,t]\). Basta ver que se \(s_{n} \to s \Rightarrow g(s_{n}) \to g(s)\). Note que \(|X|^{s_{n}} \le |X|^{t} + 1 \Rightarrow E(|X|^{s_{n}}) \le E(|X|^{t}) + 1 < \infty\). Assim, pelo teorema da convergência dominada:
 \end{enumerate}
 
-\end{example}
+\begin{equation*}
+E(|X|^{s_{n}}) \to E(|X|^{s})
+\end{equation*}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{(Teorema de Arzelà)} Sejam \(f,f_{1},f_{2},\ldots\), funções reais (borel-mensuráveis) definidas em \([a,b]\), com \(a < b\) e integráveis a Riemann. Se \(f_{n} \to f\) e se \(|f_{n}| \le M \; \forall n\), então:
+\end{enumerate}
+
+\begin{equation*}
+\int_{a}^{b}f_{n}(x)dx \to \int_{a}^{b}f(x)dx
+\end{equation*}
+
+\begin{proof}[Prova]
+Considere \(Omega = [a,b]\) e \(\mathcal{A} = \mathcal{B}_{[a,b]}\) (ou seja, a \(\sigma-\)álgebra dos borelianos em \([a,b]\)). Defina \(\forall \omega \in \Omega\):
+
+\begin{align*}
+X_{n}(\omega) &= (b-a)f_{n}(\omega) \\
+X(\omega) &= (b-a)f(\omega)
+\end{align*}
+
+Já que \(f_{n} \to f\) por hipótese, então \(X_{n}(\omega) \to X(\omega) \; \forall \omega \in \Omega\). Também \(|f_{n}| \le M \Rightarrow (a-b)M \ge |X_{n}|\), logo \(\{X_{n}\}\) é uma sequência de variáveis aleatórias integráveis, e sob o teorema da convergência dominada:
+
+\begin{equation*}
+E(X_{n}) \underset{n \to \infty}{\longrightarrow}E(X)
+\end{equation*}
+\end{proof}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \textbf{(Convergência de séries)} Se \(a_{mn} \ge 0\) para \(m,n = 1,2,\ldots\) e \(a_{mn} \underset{n \to \infty}{\uparrow}a_{m} \; \forall m\), então:
+\end{enumerate}
+
+\begin{equation*}
+\sum_{m=1}^{\infty}a_{mn} \uparrow \sum_{m=1}^{\infty}a_{m}
+\end{equation*}
+
+\begin{proof}[Prova]
+Podemos escrever \(a_{mn} = X_{n}(m)p_{m}\) onde \(X_{n}(m) = \frac{a_{mn}}{p_{m}}, p_{m} = p(m) \; \forall m, m = \{1,2,\ldots\}\), sendo \(p_{m}\) tal que \(\sum_{m=1}^{\infty}p_{m} = 1\). Analogamente \(a_{m} = X(m)p_{m}\), e sendo \(p_{m} \ge 0 \; \forall m\), como \(a_{mn} \ge 0\) e \(p_{m} \ge 0 \Rightarrow X_{n}(m) \ge 0\). Já que \(a_{mn} \underset{n \to \infty}{\uparrow}a_{m} \Rightarrow 0 \le X_{n}(m) \underset{n \to \infty}{\uparrow} X(m), \forall m\). Logo, pelo teorema da convergência monótona, \(E(X_{n}) \underset{n \to \infty}{\uparrow} E(X)\), e assim:
+
+\begin{align*}
+E(X_{n}) &= \sum_{m=1}^{\infty}X_{n}(m)p_{m} = \sum_{m=1}^{\infty}a_{mn} \\
+E(X) &= \sum_{m=1}^{\infty}X(m)p_{m} = \sum_{m=1}^{\infty}a_{m}
+\end{align*}
+
+Ou seja, \(\sum_{m=1}^{\infty}a_{mn} \underset{n \to \infty}{\uparrow} \sum_{m=1}^{\infty}a_{m}\).
+\end{proof}
+
+\newpage
+
+\hypertarget{exercuxedcios-2}{%
+\subsection{Exercícios}\label{exercuxedcios-2}}
+
+TODO
+
+\newpage
 
 \end{document}

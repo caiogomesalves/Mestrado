@@ -11,6 +11,7 @@ header-includes:
    - \usepackage{subcaption}
    - \usepackage{cancel}
    - \usepackage{mathtools}
+   - \usepackage{slashbox}
    - \usepackage{annotate-equations}
 output:
   bookdown::pdf_document2:
@@ -392,7 +393,7 @@ b) Se $X$ é absolutamente contínua com densidade $f \Rightarrow P_{X}(B) = \in
 
 ## Variáveis contínuas
 
-::: {.proposition}
+::: {.proposition #transfsoma}
 
 Se $X \sim f_{X}, \; y = bx+c, \; b>0$ e $c \in \mathbb{R} \Rightarrow Y \sim f_{Y}$ onde $f_{Y}(y) = \frac{1}{b}f_{X}(\frac{y-c}{b}); y \in \mathbb{R}$, onde $c$ é dito um parâmetro de posição (muitas vezes de posição central) e $b$ um parâmetro de escala.
 
@@ -1368,6 +1369,375 @@ f_{X}(x) = \begin{cases}
 0 & ,\text{se }x>1
 \end{cases}
 \end{equation*}
+
+:::
+
+::: {.exercise name="BJ 2.9"}
+
+Seja $X$ uma variável aleatória com densidade:
+
+\begin{equation*}
+f(x) = \begin{cases}
+\frac{1}{(1+x)^{2}} &, \text{se } x > 0 \\
+0 & ,\text{c.c.}
+\end{cases}
+\end{equation*}
+
+Seja $Y = \max(X,c)$, onde $c$ é uma constante maior que 0.
+
+**a)** Ache a função de distribuição de $Y$.
+
+**b)** Decomponha $F_{Y}$ em partes discreta, absolutamente contínua e singular.
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Como $Y = \max(X,c)$, separaremos em dois casos:
+
+$\mathbf{\min(X,c) = X} \Rightarrow \mathbf{X \le c}$:
+
+\begin{align*}
+F_{Y}(y) &= \int_{0}^{c}\frac{1}{(1+y)^{2}}dy \Rightarrow \begin{bmatrix}
+u = (1+y) & du = dy \\
+a = 1 & b = c+1
+\end{bmatrix}\\
+&= \int_{1}^{c+1}u^{-2}du \\
+&= -u^{-1}\Big{|}_{1}^{c+1} = -(c+1)^{-1} - (-1^{-1}) = 1 - \frac{1}{c+1} = \frac{c}{c+1}
+\end{align*}
+
+Como $c$ é uma constante, esse valor será a probabilidade pontual $P(\max(X,c) = c) = P(Y = c) = \frac{c}{c+1}$.
+
+$\mathbf{\min(X,c) = c} \Rightarrow \mathbf{X > c}$:
+
+\begin{align*}
+F_{Y}(y) = P(Y = c) + P(c < Y \le y) &= \frac{c}{c+1} + \int_{c}^{y}\frac{1}{(1+y)^{2}}dy \Rightarrow \begin{bmatrix}
+u = (1+y) & du = dy \\
+a = c+1 & b = y+1
+\end{bmatrix}\\
+&= \frac{c}{c+1} + \left(\int_{c+1}^{y+1}u^{-2}du\right) \\
+&= \frac{c}{c+1} + \left(-u^{-1}\Big{|}_{c+1}^{y+1}\right) \\
+&= \frac{c}{c+1} + \frac{1}{c+1} - \frac{1}{y+1} \\
+&= \frac{c + 1}{c + 1} - \frac{1}{y+1} = 1 - \frac{1}{y+1} = \frac{y}{y+1}
+\end{align*}
+
+Assim, a distribuição de $Y$ será:
+
+\begin{equation*}
+F_{Y}(x) = \begin{cases}
+0 &,\text{se }x \le 0 \\
+\frac{c}{c+1} &,\text{se } 0 < x \le c \\
+\frac{x}{x+1} &,\text{se } x > c
+\end{cases} \Rightarrow F_{Y}(y) = \begin{cases}
+0 &,\text{se } y < c \\
+\frac{y}{y+1} &,\text{se } y \ge c
+\end{cases}
+\end{equation*}
+
+**b)**
+
+A parte discreta envolve o salto que ocorre em $Y = c$, de tamanho $\frac{c}{c+1}$. Os demais pontos são absolutamente contínuos. Assim, não temos partes singulares.
+
+:::
+
+::: {.exercise name="BJ 2.10"}
+
+Se $X$ é uma variável aleatória com distribuição exponencial de parâmetro $\lambda > 0$, qual a distribuição da variável aleatória $Y = \min(\lambda, X)$
+
+:::
+
+::: {.proof name="Resposta"}
+
+De maneira similar ao caso anterior, como $Y = \min(\lambda,X)$, separaremos $Y$ em dois casos:
+
+$\mathbf{\min(\lambda,X) = X} \Rightarrow \mathbf{X \le \lambda}$:
+
+\begin{align*}
+F_{Y}(y) &= \int_{0}^{y}\lambda e^{-\lambda y}dy \\
+&= \frac{\lambda}{\lambda}\left(-e^{-u}\Big{|}_{0}^{\lambda y}\right) = 1 - e^{-\lambda y}
+\end{align*}
+
+$\mathbf{\min(\lambda,X) = \lambda} \Rightarrow \mathbf{\lambda < X < \infty}$:
+
+\begin{align*}
+F_{Y}(y) = P(Y \le \lambda) + P(Y > \lambda) &= 1 - e^{-\lambda \lambda} + \int_{\lambda}^{\infty}\lambda e^{-\lambda y}dy \\
+&=  1 - e^{-\lambda^{2}} + \frac{\lambda}{\lambda}\left(-e^{-u}\Big{|}_{\lambda^{2}}^{\infty}\right) = 1 - e^{-\lambda^{2}} + e^{-\lambda^{2}} = 1
+\end{align*}
+
+De modo que a distribuição de $Y$ é dada por:
+
+\begin{equation*}
+F_{Y}(y) = \begin{cases}
+0 &,\text{se } x \le 0 \\
+1 - e^{-\lambda y} &,\text{se } 0 < x \le \lambda \\
+1 &,\text{se } x > \lambda
+\end{cases}
+\end{equation*}
+
+:::
+
+::: {.exercise name="BJ 2.12"}
+
+Determine a densidade de $Y = (b-a)X + a$, onde $X \sim U[0,1]$. Faça o gráfico da função de distribuição de $Y$.
+
+:::
+
+::: {.proof name="Resposta"}
+
+Sabemos que $f_{X}(x) = I_{[0,1]}$ e pela proposição \@ref(prp:transfsoma) temos que quando $Y = bX + c$ então:
+
+\begin{equation*}
+f_{Y}(y) = \frac{1}{b}f_{X}\left(\frac{y - c}{b}\right)
+\end{equation*}
+
+Dessa forma, considerando que $b = (b-a)$ e $c = (a)$, então:
+
+\begin{align*}
+f_{Y}(y) &= \frac{1}{(b-a)}f_{X}\left(\frac{y-a}{b-a}\right) = \frac{1}{(b-a)}I_{[0,1]}
+\end{align*}
+
+De modo que $Y \sim U(a,b)$.
+
+:::
+
+::: {.exercise name="BJ 2.13"}
+
+Se $X$ tem densidade $f(x) = e^{-2|x|}, -\infty < x < \infty$, qual a densidade de $Y = |X|$?
+
+:::
+
+::: {.proof name="Resposta"}
+
+Como $F_{Y}(y) = P(Y \le y)$, temos que:
+
+\begin{align*}
+F_{Y}(y) &= P(Y \le y) \\
+&= P(|X| \le y) \\
+&= \int_{-y}^{y}e^{-2|x|}dx
+\end{align*}
+
+Como $f_{X}(x)$ é simétrica em torno de zero, temos que:
+
+\begin{align*}
+F_{Y}(y) = 2\int_{0}^{y}e^{-2|x|}dx &= 2\int_{0}^{y}e^{-2x}dx \\
+&= \frac{2}{2}\int_{0}^{2y}e^{-u}du \\
+&= -e^{-u}\Big{|}_{0}^{2y} \\
+&= 1 - e^{-2y}
+\end{align*}
+
+Ou seja, $f_{Y}(y) = \frac{\partial}{\partial y}F_{Y}(y) = 2e^{-2y} \Rightarrow Y \sim \mathrm{Exp}(2)$.
+
+:::
+
+::: {.exercise name="BJ 2.14"}
+
+Cinco pontos são escolhidos, independentemente e ao acaso, do intervalo $[0,1]$. Seja $X$ o número de pontos que pertencem ao intervalo $[0,c]$ onde $0 < c < 1$. Qual a distribuição de $X$?
+
+:::
+
+::: {.proof name="Resposta"}
+
+Consideremos inicialmente o caso em que um ponto é escolhido ao acaso do intervalo $[0,1]$. Desse modo, por ser uniformemente distribuído no intervalo, a probabilidade de que o ponto pertença ao intervalo $[0,c]$ é o comprimento desse intervalo, de modo que:
+
+\begin{equation*}
+P(X = 0) = (1-c),P(X = 1) = c
+\end{equation*}
+
+Para dois pontos, temos que levar em consideração o caso em que $X = 1$, pois podem ocorrer duas formas diferentes de isso ocorrer: o primeiro ponto pertence ao intervalo e o segundo não, ou o segundo ponto pertence ao intervalo e o segundo não, de modo que:
+
+\begin{equation*}
+P(X = 0) = (1-c)^{2},P(X = 1) = 2c(1-c), P(X = 2) = c^{2}
+\end{equation*}
+
+É fácil perceber o padrão, de modo que $X \sim \mathrm{Bin}(5,c)$.
+
+:::
+
+::: {.exercise name="BJ 2.15"}
+
+Determine a distribuição do tempo de espera até o segundo sucesso em uma sequência de ensaios de Bernoulli com probabilidade $p$ de sucesso.
+
+:::
+
+::: {.proof name="Resposta"}
+
+Considerando que, nesse caso, o tempo de espera é discreto, vamos levar em consideração que foram necessários $n$ ensaios até o segundo sucesso, que ocorreu com probabilidade $p$. Assim, ocorreu algum sucesso entre os $(n-1)$ ensaios anteriores, também com probabilidade $p$, enquanto que os $(n-2)$ ensaios restantes foram fracassos, cada um com probabilidade $(1 - p)$.
+
+Seja $X$ o número de ensaios necessários até o segundo sucesso. Como os ensaios são independentes, a probabilidade de que $X = 2$ será:
+
+\begin{equation*}
+P(X = 2) = (n-1)p^{2}(1-p)^{n-2}
+\end{equation*}
+
+Que podemos identificar como sendo proveniente de uma distribuição binomial negativa, que de modo geral descreve a probabilidade de serem necessários $X$ ensaios de Bernoulli independentes com probabilidade de sucesso $p$ até se obter o $r$-ésimo sucesso, com a seguinte densidade:
+
+\begin{equation*}
+X \sim \mathrm{NegBin}(r,p) \Rightarrow f_{X}(x) = \binom{x-1}{r-1}p^{r}(1-p)^{x-r}
+\end{equation*}
+
+:::
+
+::: {.exercise name="BJ 2.17"}
+
+**a)**
+
+Demonstre que a função
+
+\begin{equation*}
+F(x,y) = \begin{cases}
+1 - e^{-x-y} &,\text{se }x \ge 0, y \ge 0 \\
+0 &,\text{c.c.}
+\end{cases}
+\end{equation*}
+
+não é função de distribuição de um vetor aleatório.
+
+**b)**
+
+Mostre que a seguinte função é função de distribuição de algum $(X,Y)$:
+
+\begin{equation*}
+F(x,y) = \begin{cases}
+(1 - e^{-x})(1 - e^{-y}) &,\text{se }x \ge 0, y \ge 0 \\
+0 &,\text{c.c.}
+\end{cases}
+\end{equation*}
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Para que $F$ seja uma função de distribuição de probabilidade, é necessário que ela siga as propriedades enunciadas no início do capítulo, a ver:
+
+- $F_{1}$: é não-decrescente em cada uma das coordenadas:
+
+Seja $x_{1} \le x_{2}$. Teremos que:
+
+\begin{align*}
+F(x_{1},y) &\stackrel{?}{\le} F(x_{2},y) \\
+1 - e^{-y}e^{-x_{1}} &\stackrel{?}{\le} 1 - e^{-y}e^{-x_{2}} \\
+-e^{-y}e^{-x_{1}} &\stackrel{?}{\le} -e^{-y}e^{-x_{2}} \\
+e^{-x_{1}} &\stackrel{?}{\ge} e^{-x_{2}}
+\end{align*}
+
+Como $x_{1} \le x_{2} \Rightarrow e^{-x_{1}} \ge e^{-x_{2}}$, então a função é não decrescente em $X$. Para $Y$ se obtém de maneira análoga.
+
+- $F_{2}$: é contínua à direita:
+
+Como a função $F$ é absolutamente contínua no espaço amostral de $X$ e $Y$, ela será também contínua à direita.
+
+- $F_{3}$: limites do espaço amostral:
+
+\begin{equation*}
+\lim_{x \to 0}F(x,y) = 0 \;\;\; \lim_{y \to 0}F(x,y) = 0 \;\;\; \lim_{x \to \infty,y \to \infty}F(x,y) = 1
+\end{equation*}
+
+- $F_{4}: \Delta_{1,I_{1}}\Delta_{2,I_{2}}\ldots\Delta_{n,I_{n}}(F(x_{1},\ldots,x_{n})) \ge 0 \; \forall I_{k} = (a_{k}, b_{k}]; a_{k} \le b_{k}, k=1,\ldots,n$.
+
+\begin{align*}
+P(a < X \le b, c < Y \le d) &= F(b,d) - F(a,d) - F(b,c) + F(a,c) \ge 0 \\
+&= 1 - e^{-b-d} - 1 + e^{-a-d} - 1 + e^{-b-c} + 1 - e^{-a-c} \ge 0 \\
+&= e^{-a-d} + e^{-b-c} - e^{-b-d} - e^{-a-c} \ge 0 \\
+e^{-a-d} + e^{-b-c} &\ge e^{-b-d} + e^{-a-c}
+\end{align*}
+
+E como $a < b$ e $c < d$, temos que $e^{-a-d} < e^{-b-d}$ e $e^{-b-c} < e^{-a-c}$, de modo que a última desigualdade é falsa. Assim, a avaliação dessa probabilidade será negativa, para qualquer conjunto de pontos $(a,b] \in X, (c,d] \in Y$, o que mostra que $F$ não é uma função distribuição de probabilidade.
+
+**b)**
+
+Semelhante ao caso anterior, vejamos se $F$ segue as propriedades $F_{1}$ a $F_{4}$:
+
+- $F_{1}$: é não-decrescente em cada uma das coordenadas:
+
+Como podemos separar essa distribuição em um produto de duas partes, uma que depende apenas de $x$ e outra que
+depende apenas de $y$, podemos analisar cada caso separadamente. Como $(1 - e^{-x})$ é não-decrescente em $[0, \infty)$, ela será não-decrescente em $y$ também.
+
+- $F_{2}$: é contínua à direita:
+
+Como a função $F$ é absolutamente contínua no espaço amostral de $X$ e $Y$, ela será também contínua à direita.
+
+- $F_{3}$: limites do espaço amostral:
+
+\begin{equation*}
+\lim_{x \to 0}F(x,y) = 0 \;\;\; \lim_{y \to 0}F(x,y) = 0 \;\;\; \lim_{x \to \infty,y \to \infty}F(x,y) = 1
+\end{equation*}
+
+- $F_{4}: \Delta_{1,I_{1}}\Delta_{2,I_{2}}\ldots\Delta_{n,I_{n}}(F(x_{1},\ldots,x_{n})) \ge 0 \; \forall I_{k} = (a_{k}, b_{k}]; a_{k} \le b_{k}, k=1,\ldots,n$.
+
+\begin{align*}
+P(a < X \le b, c < Y \le d) &= F(b,d) - F(a,d) - F(b,c) + F(a,c) \ge 0 \\
+&= (1 - e^{-b})(1 - e^{-d}) - (1 - e^{-a})(1 - e^{-d}) - (1 - e^{-b})(1 - e^{-c}) + (1 - e^{a})(1 - e^{c}) \ge 0 \\
+&= (1 - e^{-b})(1 - e^{-d} - 1 + e^{-c}) - (1 - e^{-a})(1 - e^{-d} - 1 + e^{-c}) \ge 0 \\
+&= (1 - e^{-b})(e^{-c} - e^{-d}) - (1 - e^{-a})(e^{-c} - e^{-d}) \ge 0 \\
+(1 - e^{-b})(e^{-c} - e^{-d}) &\ge (1 - e^{-a})(e^{-c} - e^{-d}) \\
+\end{align*}
+
+E como $a < b$, temos que $(1 - e^{-a}) < (1 - e^{-b})$, de modo que a última desigualdade é verdadeira. Assim, a avaliação dessa probabilidade será positiva, para qualquer conjunto de pontos $(a,b] \in X, (c,d] \in Y$, o que mostra que $F$ é uma função distribuição de probabilidade.
+
+:::
+
+::: {.exercise name="BJ 2.18"}
+
+Uma urna contém três bolas numeradas 1, 2 e 3. Duas bolas são retiradas sucessivamente da urna, ao acaso e sem reposição. Seja $X$ o número da primeira bola tirada e $Y$ o número da segunda.
+
+**a)** Descreva a distribuição conjunta de $X$ e $Y$.
+
+**b)** Calcule $P(X < Y)$.
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Temos que a tabela da distribuição conjunta de $X$ e $Y$ será:
+
+\begin{center}
+\begin{tabular}{|l||*{3}{c|}}\hline
+\backslashbox{$X$}{$Y$}
+&\makebox[1em]{1}&\makebox[1em]{2}&\makebox[1em]{3}\\\hline\hline
+1 & 0 & 1/6 & 1/6 \\ \hline
+2 & 1/6 & 0 & 1/6 \\ \hline
+3 & 1/6 & 1/6 & 0 \\ \hline
+\end{tabular}
+\end{center}
+
+Assim, podemos ver que a distribuição conjunta será:
+
+\begin{equation*}
+f_{XY}(i,j) = P(X = i, Y = j) = \begin{cases}
+0 & ,\text{se }i = j, \; i,j = 1,2,3 \\
+\frac{1}{6} & ,\text{se }i \neq j
+\end{cases}
+\end{equation*}
+
+**b)**
+
+Temos que $P(X < Y)$ será dado por:
+
+\begin{equation*}
+P(X < Y) = P(X = 1, Y = 2) + P(X = 1, Y = 3) + P(X = 2, Y = 3) = \frac{1}{6} + \frac{1}{6} + \frac{1}{6} = \frac{1}{2}
+\end{equation*}
+
+:::
+
+::: {.exercise name="BJ 2.19"}
+
+Dizemos que a distribuição conjunta de $X_{1},\ldots,X_{n}$ é invariante para permutações se toda permutação das $X_{i}$ tem a mesma distribuição, i.e., se $(X_{\pi_{1}},\ldots,X_{\pi_{n}}) \sim (X_{1},\ldots,X_{n})$ para toda permutação $(\pi_{1},\ldots,\pi_{n})$ do vetor $(1,\ldots,n)$.
+
+**a)** Mostre que se $(X,Y) \sim (Y,X)$ e $X$ e $Y$ possuem densidade conjunta $f(x,y)$, então $P(X < Y) = P(X > Y) = \frac{1}{2}$, com $P(X = Y) = 0$.
+
+**b)** Generalize o item **(a)**, provando que se a distribuição conjunta de $X_{1},\ldots,X_{n}$ é invariante para permutações e $X_{1},\ldots,X_{n}$ possuem densidade conjunta $f(x_{1},\ldots,x_{n})$, então:
+
+\begin{equation*}
+P(X_{1} < X_{2} < \ldots < X_{n}) = P(X_{\pi_{1}} < X_{\pi_{2}} < \ldots < X_{\pi_{n}}) = \frac{1}{n!}
+\end{equation*}
+
+e $P(X_{i} = X_{j} \text{ para algum par }(i,j) \text{ tal que } i \neq j) = 0$
 
 :::
 

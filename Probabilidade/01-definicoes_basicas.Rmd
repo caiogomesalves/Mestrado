@@ -11,6 +11,7 @@ header-includes:
    - \usepackage{subcaption}
    - \usepackage{cancel}
    - \usepackage{mathtools}
+   - \usepackage{slashbox}
    - \usepackage{annotate-equations}
 output:
   bookdown::pdf_document2:
