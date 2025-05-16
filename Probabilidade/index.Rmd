@@ -30,4 +30,6 @@ Este "livro" consiste de notas de aulas da matéria MI401 - Probabilidade, do Pr
 
 Os seus conteúdos são baseados nas notas tomadas durante as aulas, do livro "Probabilidade e Variáveis Aleatórias", do autor Marcos Nascimento Magalhães, 3ª edição, e do livro "Probabilidade: um curso em nível intermediário", do autor Barry R. James, 5ª edição.
 
+Meus grandes agradecimentos aos meus caros amigos (e colegas de matéria) Lucas Silvestrini Nicodemo, Luis Davi de Araújo Pereira e Pedro Francisco Godoy Bernardinelli, por me auxiliarem com as soluções dos exercícios e pela companhia ao longo do semestre.
+
 \newpage

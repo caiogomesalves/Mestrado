@@ -1579,7 +1579,7 @@ X \sim \mathrm{NegBin}(r,p) \Rightarrow f_{X}(x) = \binom{x-1}{r-1}p^{r}(1-p)^{x
 
 :::
 
-::: {.exercise name="BJ 2.17"}
+::: {.exercise name="BJ 2.17" #exer217}
 
 **a)**
 
@@ -1680,7 +1680,7 @@ E como $a < b$, temos que $(1 - e^{-a}) < (1 - e^{-b})$, de modo que a última d
 
 :::
 
-::: {.exercise name="BJ 2.18"}
+::: {.exercise name="BJ 2.18" #exer218}
 
 Uma urna contém três bolas numeradas 1, 2 e 3. Duas bolas são retiradas sucessivamente da urna, ao acaso e sem reposição. Seja $X$ o número da primeira bola tirada e $Y$ o número da segunda.
 
@@ -1738,6 +1738,549 @@ P(X_{1} < X_{2} < \ldots < X_{n}) = P(X_{\pi_{1}} < X_{\pi_{2}} < \ldots < X_{\p
 \end{equation*}
 
 e $P(X_{i} = X_{j} \text{ para algum par }(i,j) \text{ tal que } i \neq j) = 0$
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Sabemos que $(X,Y) \sim (Y,X)$, de modo que $f(x,y) = f(y,x) \Rightarrow P(X > Y) = P(Y < X)$, assim:
+
+\begin{align*}
+\begin{rcases}
+P(X > Y) &= \int_{-\infty}^{\infty}\int_{-\infty}^{y}f(x,y)dxdy \\
+P(Y < X) &= \int_{-\infty}^{\infty}\int_{y}^{\infty}f(x,y)dxdy
+\end{rcases} P(X > Y) + P(Y < X) = \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}f(x,y)dxdy = 1
+\end{align*}
+
+E como $P(X > Y) = P(Y < X)$, temos que $2P(X > Y) = 1 \Rightarrow P(X > Y) = \frac{1}{2} \Rightarrow P(Y < X) = \frac{1}{2}$. Por fim, como o evento $[X = Y]$ é complementar de $[X<Y] \cup [X>Y] \Rightarrow P(X = Y) = 1 - P(X<Y) - P(X>Y) = 0$.
+
+**b)**
+
+Como todas as $\pi_{i}$ permutações possíveis são igualmente distribuídas, temos que $P(X_{\pi_{i1}} < \ldots < X_{\pi_{in}}) = P(X_{1} < \ldots < X_{n}), \forall \pi_{i}$. Assim, para que consideremos todas as $n!$ combinações possíveis de permutações de $\pi_{i}$, teremos que:
+
+\begin{align*}
+\sum_{j}P(X_{\pi_{j1}} < \ldots < X_{\pi_{jn}}) = n!P(X_{1} < \ldots < X_{n}) &= 1 \\
+P(X_{1} < \ldots < X_{n}) &= \frac{1}{n!}
+\end{align*}
+
+E novamente, o complementar desse conjunto será que algum $X_{i} = X_{j}$ para algum par $(i,j) , i \neq j$, então $P(X_{i} = X_{j}) = 1 - n!P(X_{1} < \ldots < X_{n}) = 1 - \frac{n!}{n!} = 0$.
+
+:::
+
+::: {.exercise name="BJ 2.20"}
+
+Seleciona-se, ao acaso, um ponto do círculo unitário, dado por:
+
+\begin{equation*}
+\{(x,y) \; : \; x^{2} + y^{2} \le 1\}
+\end{equation*}
+
+Sejam $X$ e $Y$ as coordenadas do ponto selecionado.
+
+**a)** Qual a densidade conjunta de $X$ e $Y$?
+
+**b)** Determine $P(X < Y), P(X > Y)$ e $P(X = Y)$.
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Chamemos o círculo unitário de $A$. Como o ponto é escolhido ao acaso dentro de $A$, temos que a densidade conjunta de $X$ e $Y$ será:
+
+\begin{equation*}
+f(x,y) = \frac{1}{\text{Área}(A)}I_{A}(x,y)
+\end{equation*}
+
+Onde $I_{A}(x,y)$ é uma função indicadora, que toma valor 0 caso $\{(x,y) \not\in A\}$ e 1 caso $\{(x,y) \in A\}$. E como $A$ é um círculo de raio 1, sabemos que sua área será $\pi$, de modo que:
+
+\begin{equation*}
+f(x,y) = \frac{1}{\pi}I_{A}(x,y)
+\end{equation*}
+
+**b)**
+
+É fácil ver que $(X,Y)$ é invariante à permutação (já que a reta $Y = X$ corta o espaço amostral de maneira simétrica em $(X,Y)$), de modo que podemos usar os resultados obtidos anteriormente para ver que:
+
+\begin{equation*}
+P(X < Y) = P(X > Y) = \frac{1}{2} \;\;\; P(X = Y) = 0
+\end{equation*}
+
+:::
+
+::: {.exercise name="BJ 2.21"}
+
+Seleciona-se, ao acaso, um ponto do quadrado unitário, dado por:
+
+\begin{equation*}
+\{(x,y) \; : \; 0 \le x \le 1, 0 \le y \le 1\}
+\end{equation*}
+
+Sejam $X$ e $Y$ as coordenadas do ponto selecionado.
+
+**a)** Qual a densidade conjunta de $X$ e $Y$?
+
+**b)** Calcule $P\left(\left|\frac{Y}{X} - 1\right|\le \frac{1}{2}\right)$;
+
+**c)** Calcule $P\left(Y \ge X | Y \ge \frac{1}{2}\right)$
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Seja $A$ o quadrado unitário. Assim como no caso anterior, temos que a densidade conjunta será dada por:
+
+\begin{equation*}
+f(x,y) = \frac{1}{\text{Área}(A)}I_{[0,1]}(x,y) = I_{[0,1]}(x,y)
+\end{equation*}
+
+**b)**
+
+Temos que levar em consideração que:
+
+\begin{equation*}
+P\left(\left|\frac{Y}{X} - 1\right|\le \frac{1}{2}\right) = P\left(\frac{x}{2} \le Y \le \frac{3x}{2}\right)
+\end{equation*}
+
+Que pode ser representado por encontrar a área hachurada no diagrama a seguir:
+
+\begin{center}
+\begin{tikzpicture}[scale=2]
+  \draw[very thick, ->] (-0.1,0) -- (1.2,0);
+  \draw[very thick, ->] (0,-0.1) -- (0,1.2);
+  \draw[thick] (0,0) -- (1,3/2);
+  \draw[thick] (0,0) -- (3/2,3/4);
+  \node at (1 + 0.3,3/2) {$y=\frac{3}{2}x$};
+  \node at (3/2,3/4 - 0.2) {$y=\frac{1}{2}x$};
+  \draw[very thick] (0,1) -- (1,1);
+  \draw[very thick] (1,0) -- (1,1);
+  \node at (1.2,-0.2) {x};
+  \node at (-0.2,1.2) {y};
+  \fill[fill=black!60!white, opacity=0.5] (0, 0) -- (2/3, 1) -- (1, 1) -- (1, 1/2);
+  \node at (2/3,-0.25) {$\frac{2}{3}$};
+  \draw[thick,dotted] (2/3,0) -- (2/3,1);
+  \node at (-0.25,1/2) {$\frac{1}{2}$};
+  \draw[thick,dotted] (0,1/2) -- (1,1/2);
+\end{tikzpicture}
+\end{center}
+
+Que resulta na seguinte integral:
+
+\begin{align*}
+P\left(\frac{x}{2} \le Y \le \frac{3x}{2}\right) &= \int_{0}^{2/3}\int_{x/2}^{3x/2}1dydx + \int_{2/3}^{1}\int_{x/2}^{1}1dydx \\
+&= \int_{0}^{2/3}\left(y\Big{|}_{x/2}^{3x/2}\right)dx + \int_{2/3}^{1}\left(y\Big{|}_{x/2}^{1}\right)dx \\
+&= \int_{0}^{2/3}xdx + \int_{2/3}^{1}1-\frac{x}{2}dx \\
+&= \left(\frac{x^{2}}{2}\Big{|}_{0}^{2/3}\right) + \left(x - \frac{x^{2}}{4}\Big{|}_{2/3}^{1}\right) \\
+&= \frac{4}{9} + 1 - \frac{1}{4} - \frac{2}{3} + \frac{4}{36} \\
+&= \frac{5}{12}
+\end{align*}
+
+**c)**
+
+Aqui temos o condicionante que restringe o espaço amostral, de forma que teremos que encontrar a área hachurada a seguir, dividida pela área de $Y \ge 1/2$:
+
+\begin{center}
+\begin{tikzpicture}[scale=2]
+  \draw[very thick, ->] (-0.1,0) -- (1.2,0);
+  \draw[very thick, ->] (0,-0.1) -- (0,1.2);
+  \draw[thick] (0,0) -- (1.1,1.1);
+  \draw[thick] (0,1/2) -- (1,1/2);
+  \draw[very thick] (0,1) -- (1,1);
+  \draw[very thick] (1,0) -- (1,1);
+  \node at (1.2,-0.2) {x};
+  \node at (-0.2,1.2) {y};
+  \fill[fill=black!60!white, opacity=0.5] (0, 1/2) -- (1/2, 1/2) -- (1, 1) -- (0, 1);
+  \node at (1/2,-0.25) {$\frac{1}{2}$};
+  \node at (-0.25,1/2) {$\frac{1}{2}$};
+  \draw[thick,dotted] (1/2,0) -- (1/2,1/2);
+\end{tikzpicture}
+\end{center}
+
+Desse modo, teremos:
+
+\begin{align*}
+P\left(Y \ge X, Y \ge \frac{1}{2}\right) &= \int_{0}^{1/2}\int_{1/2}^{1}1dydx + \int_{1/2}^{1}\int_{x}^{1}1dydx \\
+&= \int_{0}^{1/2}\left(y\Big{|}_{1/2}^{1}\right)dx + \int_{1/2}^{1}\left(y\Big{|}_{x}^{1}\right)dx \\
+&= \int_{0}^{1/2}\frac{1}{2}dx + \int_{1/2}^{1}(1-x)dx \\
+&= \left(\frac{x}{2}\Big{|}_{0}^{1/2}\right) + \left(x - \frac{x^{2}}{2}\Big{|}_{1/2}^{1}\right) \\
+&= \frac{1}{4} + 1 - \frac{1}{2} - \frac{1}{2} + \frac{1}{8} \\
+&= \frac{3}{8}
+\end{align*}
+
+E podemos encontrar o valor da probabilidade condicional pelo Teorema de Bayes:
+
+\begin{equation*}
+P\left(Y \ge X | Y \ge \frac{1}{2}\right) = \frac{P\left(Y \ge X, Y \ge \frac{1}{2}\right)}{P\left(Y \ge \frac{1}{2}\right)} = \frac{3/8}{1/2} = \frac{3}{4}
+\end{equation*}
+
+:::
+
+::: {.exercise name="BJ 2.22"}
+
+(Critério para independência no caso discreto)
+
+**a)** Sejam $X$ e $Y$ variáveis aleatórias discretas, tomando respectivamente os valores $x_{1},x_{2},\ldots$ e $y_{1},y_{2},\ldots$. Prove que $X$ e $Y$ são independentes se, e somente se:
+
+\begin{equation*}
+P(X = x_{i},Y = y_{j}) = P(X = x_{i})P(Y = y_{j})
+\end{equation*}
+
+para todo $i,j$.
+
+**b)** Mostre que, se $X$ e $Y$ tomam somente um número finito de valores, digamos $x_{1},\ldots,x_{m}$ e $y_{1},\ldots,y_{n}$, então $X$ e $Y$ são independentes se:
+
+\begin{equation*}
+P(X = x_{i},Y = y_{j}) = P(X = x_{i})P(Y = y_{j})
+\end{equation*}
+
+para $1 \le i \le m-1, 1 \le j \le n-1$, ou seja, para provar independência, basta verificar $(m-1)(n-1)$ equações.
+
+**c)** Generalize o item **(a)** para o caso de $n$ variáveis aleatórias.
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+:::
+
+::: {.exercise name="BJ 2.24"}
+
+Ache a densidade conjunta e as distribuições marginais das variáveis aleatórias $X$ e $Y$ cuja função de distribuição conjunta está no exercício \@ref(exr:exer217) **(b)**. $X$ e $Y$ são independentes?
+
+:::
+
+::: {.proof name="Resposta"}
+
+Temos que $F(x,y) = (1 - e^{-x})(1 - e^{-y})$. Podemos encontrar a densidade conjunta a partir das derivadas parciais da acumulada:
+
+\begin{align*}
+f(x,y) &= \frac{\partial}{\partial x}\frac{\partial}{\partial y}(1-e^{-x})(1-e^{-y}) \\
+&= \frac{\partial}{\partial x}(1-e^{-x})(-e^{-y}) \\
+&= (-e^{-x})(-e^{-y}) \\
+&= e^{-x}e^{-y}
+\end{align*}
+
+Com isso, as distribuições marginais serão dadas por:
+
+\begin{align*}
+f_{X}(x) &= \int_{0}^{\infty}e^{-x}e^{-y}dy = e^{-x} \\
+f_{Y}(y) &= \int_{0}^{\infty}e^{-x}e^{-y}dx = e^{-y}
+\end{align*}
+
+Podemos assim ver que $X$ e $Y$ são independentes, já que $f_{X,Y}(x,y) = f_{X}(x)f_{Y}(y)$
+
+:::
+
+::: {.exercise name="BJ 2.25"}
+
+Determine as distribuições marginais das variáveis aleatórias discretas $X$ e $Y$ definidas no exercício \@ref(exr:exer218). $X$ e $Y$ são independentes?
+
+:::
+
+::: {.proof name="Resposta"}
+
+Temos que $P(X = i, Y = j) = \frac{1}{6}$ caso $i \neq j, i,j = 1,2,3$. As marginais serão as somas parciais para cada valor, resultando em:
+
+\begin{align*}
+P(X = x) &= \sum_{j=1}^{3}P(X=x,Y=j) = \begin{cases}
+\frac{1}{3} & x=1,2,3 \\
+0 & \text{c.c.}
+\end{cases} \\
+P(Y = y) &= \sum_{i=1}^{3}P(X=i,Y=y) = \begin{cases}
+\frac{1}{3} & y=1,2,3 \\
+0 & \text{c.c.}
+\end{cases}
+\end{align*}
+
+Assim, podemos ver que $X$ e $Y$ não são independentes, já que $P(X = i, Y = j) \neq P(X = i)P(Y = j)$.
+
+:::
+
+::: {.exercise name="BJ 2.26"}
+
+Demonstre que se $f(x,y)$ é a densidade conjunta de $X$ e $Y$, então $X$ tem densidade dada por:
+
+\begin{equation*}
+f_{X}(x) = \int_{-\infty}^{\infty}f(x,y)dy
+\end{equation*}
+
+:::
+
+::: {.proof name="Resposta"}
+
+Sabemos que podemos encontrar a acumulada marginal de $X$, a partir da sua densidade conjunta, integrando da seguinte forma:
+
+\begin{equation*}
+F_{X}(x) = \int_{-\infty}^{x}\int_{-\infty}^{\infty}f(u,y)dydu
+\end{equation*}
+
+E que, a partir da acumulada podemos chegar na densidade por meio de derivação:
+
+\begin{equation*}
+f_{X}(x) = \frac{\partial}{\partial x} F_{X}(x) = \frac{\partial}{\partial x}\left(\int_{-\infty}^{x}\int_{-\infty}^{\infty}f(u,y)dydu\right)
+\end{equation*}
+
+E, pelo Teorema Fundamental do Cálculo, temos que a derivada de uma integral definida é o valor da sua derivada avaliada no limite superior da integral, de modo que teremos:
+
+\begin{align*}
+f_{X}(x) &= \frac{\partial}{\partial x}\left(\int_{-\infty}^{x}\int_{-\infty}^{\infty}f(u,y)dydu\right) \\
+&= \int_{-\infty}^{\infty}f(x,y)dy
+\end{align*}
+
+:::
+
+::: {.exercise name="BJ 2.28"}
+
+Sejam $X$ e $Y$ variáveis aleatórias independentes, com $X \sim U(0,a)$ e $Y \sim U(a,a+b)$, onde $a > 0, b > 0$. Qual a probabilidade de que os três segmentos $[0,X],[X,Y],[Y,a+b]$ possam formar um triângulo?
+
+:::
+
+::: {.proof name="Resposta"}
+
+Sabemos que $f_{X}(x) = \frac{1}{a}I_{[0,a]}(x)$ e $f_{Y}(y) = \frac{1}{b}I_{[a,b]}(y)$. Como $X$ e $Y$ são independentes, a distribuição conjunta será o produto das distribuições marginais, de modo que:
+
+\begin{equation*}
+f(x,y) = \frac{1}{ab}I_{[0,a] \times [a,b]}(x,y)
+\end{equation*}
+
+Para que os segmentos $[0,X],[X,Y],[Y,a+b]$ formem um triângulo, eles devem preservar a desigualdade triangular, ou seja:
+
+\begin{align*}
+(X - 0)+(Y-X) &\ge (a+b-Y) \\
+Y &\ge \frac{a+b}{2} \\
+(X - 0)+(a+b-Y) &\ge (Y-X) \\
+Y &\le X + \frac{a+b}{2} \\
+(Y-X)+(a+b-Y) &\ge (X-0) \\
+X &\le \frac{a+b}{2}
+\end{align*}
+
+Ou seja, seja $A$ o evento em que ocorre um triângulo. A probabilidade de $A$ será dividida em dois casos: $a > b$ e $a < b$:
+
+$\mathbf{b>a} \Rightarrow \frac{a+b}{2} > a$:
+
+\begin{align*}
+P(A) &= \int_{0}^{a}\int_{\frac{a+b}{2}}^{\frac{a+b}{2} + x}\frac{1}{ab}dydx \\
+&= \frac{1}{ab}\int_{0}^{a}\int_{\frac{a+b}{2}}^{\frac{a+b}{2} + x}1dydx \\
+&= \frac{1}{ab}\int_{0}^{a}xdx = \frac{1}{ab}\frac{a^{2}}{2} \\
+&= \frac{a}{2b}
+\end{align*}
+
+$\mathbf{b<a} \Rightarrow \frac{a+b}{2} < a$ e $\frac{a-b}{2} > 0$:
+
+\begin{align*}
+P(A) &= \int_{\frac{a-b}{2}}^{\frac{a+b}{2}}\int_{0}^{\frac{a+b}{2} + x}\frac{1}{ab}dydx \\
+&= \frac{1}{ab}\int_{\frac{a-b}{2}}^{\frac{a+b}{2}}\left(\frac{b-a}{2} + x\right)dx \\
+&= \frac{1}{ab}\left(\frac{b-a}{2}x + \frac{x^{2}}{2}\Big{|}_{\frac{a-b}{2}}^{\frac{a+b}{2}}\right) \\
+&= \frac{b}{2a}
+\end{align*}
+
+De modo que:
+
+\begin{equation*}
+P(A) = \frac{\min(a,b)}{2\max(a,b)}
+\end{equation*}
+
+:::
+
+::: {.exercise name="BJ 2.29"}
+
+Demonstre: se a variável aleatória $X$ é independente de si mesma, então $X$ é constante com probabilidade 1 (i.e., existe uma constante $c$ tal que $P(X = c) = 1$).
+
+:::
+
+::: {.proof name="Resposta"}
+
+Vamos provar por absurdo: suponha que $X$ não é constante, ou seja, existem pelo menos dois valores (chamemos de $c_{1}$ e $c_{2}$) que tomem valores de probabilidade não nula em $X$. Como $X \perp X$, teremos que:
+
+\begin{align*}
+P(X = c_{1},X = c_{2}) &= P(X = c_{1})P(X = c_{2}) = 0 \\
+P(X = c_{1},X = c_{1}) &= (P(X = c_{1}))^{2} = P(X = c_{1}) = 0 \text{ ou }1 \\
+P(X = c_{2},X = c_{2}) &= (P(X = c_{2}))^{2} = P(X = c_{2}) = 0 \text{ ou }1
+\end{align*}
+
+Mas, como $P(X = c_{1}) + P(X = c_{2}) = 1$, ou $P(X = c_{1}) = 0$ ou $P(X = c_{2}) = 0$, de modo que uma das constantes deve ter probabilidade igual a 0, de modo que $c$ é único.
+
+:::
+
+::: {.exercise name="BJ 2.30"}
+
+Suponha que as vidas úteis $T_{1}$ e $T_{2}$ de máquinas I e II sejam variáveis aleatórias independentes tendo distribuições exponenciais com, respectivamente, parâmetros $\lambda_{1}$ e $\lambda_{2}$. Um inspetor escolhe uma das máquinas ao acaso, cada uma tendo a mesma probabilidade de ser escolhida, e depois observa a máquina escolhida durante a vida útil dela.
+
+**a)** Determine a densidade de $T$, onde $T$ é a vida observada.
+
+**b)** Suponha que o inspetor parou de observar a máquina depois de 100 horas, com a máquina ainda funcionando. Qual a probabilidade condicional da máquina escolhida ter sido a máquina I?
+
+**c)** Qual a distribuição de $T$ se $\lambda_{1} = \lambda_{2} = \lambda$?
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Como $T_{1} \sim \mathrm{Exp}(\lambda_{1})$ e $T_{2} \sim \mathrm{Exp}(\lambda_{2})$, temos que as acumuladas e densidades dessas variáveis aleatórias serão:
+
+\begin{align*}
+F_{T_{1}}(t) &= 1 - e^{-\lambda_{1}t} \;\;\; f_{T_{1}}(t) = \lambda_{1}e^{-\lambda_{1}t} \\
+F_{T_{2}}(t) &= 1 - e^{-\lambda_{2}t} \;\;\; f_{T_{2}}(t) = \lambda_{2}e^{-\lambda_{2}t}
+\end{align*}
+
+E além disso, seja $M_{i}$ o evento em que a máquina $i$ foi escolhida. Como as probabilidades serão as mesmas, teremos que:
+
+\begin{equation*}
+P(M) = \begin{cases}
+\frac{1}{2} & M=I\\
+\frac{1}{2} & M=II
+\end{cases}
+\end{equation*}
+
+Levando isso em consideração, podemos utilizar a lei das probabilidades totais para encontrar a distribuição de $T$:
+
+\begin{align*}
+F_{T}(t) = P(T \le t) &= P(T \le t|M=I)P(M=I) + P(T \le t|M=II)P(M=II) \\
+&= \frac{1}{2}F_{T_{1}}(t) + \frac{1}{2}F_{T_{2}}(t) \\
+&= \frac{1}{2}(1 - e^{-\lambda_{1}t} + 1 - e^{-\lambda_{2}t}) \\
+&= 1 - \frac{1}{2}\left(e^{-\lambda_{1}t} + e^{-\lambda_{2}t}\right) \\
+\end{align*}
+
+E a densidade será obtida derivando com relação a $t$:
+
+\begin{align*}
+f_{T}(t) &= \frac{\partial}{\partial t}F_{T}(t) \\
+&= \frac{\partial}{\partial t}\left(1 - \frac{1}{2}\left(e^{-\lambda_{1}t} + e^{-\lambda_{2}t}\right)\right) \\
+&= -\frac{1}{2}\left(\frac{\partial}{\partial t}\left(e^{-\lambda_{1}t}\right) + \frac{\partial}{\partial t}\left(e^{-\lambda_{2}t}\right)\right) \\
+&= -\frac{1}{2}\left(-\lambda_{1}e^{-\lambda_{1}t} -\lambda_{2}e^{-\lambda_{2}t}\right) \\
+&= \frac{1}{2}\left(\lambda_{1}e^{-\lambda_{1}t} + \lambda_{2}e^{-\lambda_{2}t}\right)
+\end{align*}
+
+**b)**
+
+Podemos encontrar essa probabilidade condicional por meio da inversão da condição, utilizando o teorema de Bayes:
+
+\begin{align*}
+P(M = I|T > 100) &= \frac{P(M = I, T > 100)}{P(T > 100)} = \frac{P(T > 100|M = I)P(M = I)}{P(T > 100)} \\
+&= \frac{\frac{1}{2}(1 - F_{T_{1}}(100))}{1 - F_{T}(100)} \\
+&= \frac{\frac{1}{2}e^{-100\lambda_{1}}}{\frac{1}{2}\left(e^{-100\lambda_{1}} + e^{-100\lambda_{2}}\right)} \\
+&= \frac{e^{-100\lambda_{1}}}{e^{-100\lambda_{1}} + e^{-100\lambda_{2}}}
+\end{align*}
+
+**c)**
+
+Como $\lambda_{1} = \lambda_{2} = \lambda$, teremos que:
+
+\begin{align*}
+F_{T}(t) &= 1 - \frac{1}{2}\left(e^{-\lambda t} + e^{-\lambda t}\right) = 1 - e^{-\lambda t} \\
+f_{T}(t) &= \frac{1}{2}\left(\lambda e^{-\lambda t} + \lambda e^{-\lambda t}\right) = \lambda e^{-\lambda t}
+\end{align*}
+
+Assim, podemos ver que nesse caso $T \sim \mathrm{Exp}(\lambda)$.
+
+:::
+
+::: {.exercise name="BJ 2.31"}
+
+Suponhamos que os tempos que dois estudantes demoram para resolverem um problema sejam independentes e exponenciais, com parâmetro $\lambda > 0$. Calcule a probabilidade do primeiro estudante demorar pelo menos duas vezes o tempo do segundo para resolver o problema.
+
+:::
+
+::: {.proof name="Resposta"}
+
+Sejam $T_{1}$ e $T_{2}$ os tempos necessários para que os estudantes 1 e 2 (respectivamente) resolvam o problema. Temos que $T_{1} \sim \mathrm{Exp}(\lambda),T_{2} \sim \mathrm{Exp}(\lambda), T_{1} \perp T_{2}$, de modo que $f(t_{1},t_{2}) = \lambda^{2}e^{-\lambda(t_{1} + t_{2})}$:
+
+\begin{align*}
+P(T_{1} > 2T_{2}) &= \int_{0}^{\infty}\int_{2t_{2}}^{\infty}f(t_{1},t_{2})dt_{1}dt_{2} \\
+&\stackrel{\text{ind}}{=} \int_{0}^{\infty}\int_{2t_{2}}^{\infty}\lambda^{2}e^{-\lambda t_{1}}e^{-\lambda t_{2}}dt_{1}dt_{2} \\
+&= \int_{0}^{\infty}\lambda e^{-\lambda t_{2}}\int_{2t_{2}}^{\infty}\lambda e^{-\lambda t_{1}}dt_{1}dt_{2} \\
+&= \int_{0}^{\infty}\lambda e^{-\lambda t_{2}}\left(-e^{-\lambda t_{1}}\Big{|}_{2t_{2}}^{\infty}\right)dt_{2} \\
+&= \int_{0}^{\infty}\lambda e^{-\lambda t_{2}}e^{-2\lambda t_{2}}dt_{2} \\
+&= \int_{0}^{\infty}\lambda e^{-3\lambda t_{2}}dt_{2} \\
+&= \frac{1}{3}\left(-e^{-3\lambda t_{2}}\Big{|}_{0}^{\infty}\right) \\
+&= \frac{1}{3+}
+\end{align*}
+
+:::
+
+::: {.exercise name="BJ 2.32"}
+
+Um ponto é selecionado, ao acaso, do seguinte quadrado:
+
+\begin{center}
+\begin{tikzpicture}[scale=2]
+  \draw[very thick, ->] (-1.5,0) -- (1.5,0);
+  \draw[very thick, ->] (0,-1.5) -- (0,1.5);
+  \node at (1.5,-0.2) {x};
+  \node at (-0.2,1.5) {y};
+  \fill[fill=black!60!white, opacity=0.5] (-1, 0) -- (0, 1) -- (1, 0) -- (0, -1);
+  \draw[thick] (-1, 0) -- (0, 1) -- (1, 0) -- (0, -1) -- (-1,0);
+  \node at (1,-0.25) {$1$};
+  \node at (0.25,1) {$1$};
+  \node at (-1,0.25) {$-1$};
+  \node at (-0.25,-1) {$-1$};
+\end{tikzpicture}
+\end{center}
+
+Sejam $X$ e $Y$ as coordenadas do ponto selecionado.
+
+**a)** Qual a densidade conjunta de $X$ e $Y$?
+
+**b)** Obtenha a densidade marginal de $X$.
+
+**c)** $X$ e $Y$ são independentes?
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Chamemos de $A$ o quadrado. Como a escolha do ponto é ao acaso, temos que a densidade conjunta será:
+
+\begin{equation*}
+f(x,y) = \frac{1}{\text{Área}(A)}I_{A}(x,y) = \frac{1}{2}I_{A}(x,y)
+\end{equation*}
+
+**b)**
+
+Sabemos que $f_{X}(x) = \int_{-\infty}^{\infty}f(x,y)dy$, porém temos que verificar que as equações que limitam $Y$ mudam, conforme $X$ muda. Assim, serão dois casos:
+
+\begin{equation*}
+\begin{cases}
+-x-1 \le y \le x+1 & ,\text{se }-1 \le x < 0 \\
+x-1 \le y \le -x+1 & ,\text{se }0 \le x \le 1
+\end{cases}
+\end{equation*}
+
+Assim, a densidade marginal de $X$ será dada por:
+
+\begin{align*}
+f_{X}(x) &= \int_{-x+1}^{x+1}\frac{1}{2}dy I_{[-1,0)}(x) + \int_{x-1}^{-x+1}\frac{1}{2}dy I_{[0,1]}(x) \\
+&= \frac{1}{2}\left(y\Big{|}_{-x+1}^{x+1}\right)I_{[-1,0)}(x) + \frac{1}{2}\left(y\Big{|}_{x-1}^{-x+1}\right)I_{[0,1]}(x) \\
+&= \frac{1}{2}(2x+2)I_{[-1,0)}(x) + \frac{1}{2}(-2x+2)I_{[0,1]}(x) \\
+&= \begin{cases}
+x+1 & -1 \le x < 0 \\
+-x+1 & 0 \le x \le 1
+\end{cases}
+\end{align*}
+
+**c)**
+
+Podemos obter a densidade marginal de $Y$ de maneira similar, em que teremos:
+
+\begin{equation*}
+f_{Y}(y) = \begin{cases}
+y+1 & -1 \le y < 0 \\
+-y+1 & 0 \le y \le 1
+\end{cases}
+\end{equation*}
+
+E com isso, podemos facilmente ver que $f(x,y) \neq f_{X}(x)f_{Y}(y)$, de modo que $X$ e $Y$ não serão independentes.
 
 :::
 
