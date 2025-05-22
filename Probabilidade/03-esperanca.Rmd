@@ -608,7 +608,7 @@ E(\varphi(\underbar{X})) = \sum_{i}\varphi(\underbar{x}_{i})P(\underbar{x}_{i})
 Caso contínuo: Seja $\underbar{X}$ contínuo, com densidade $f(x_{1},\ldots,x_{n})$. Então:
 
 \begin{equation*}
-E(\varphi(\underbar{X})) = \int \cdots \int f(x_{1},\ldots,x_{n})dx_{1}\ldots dx_{n}
+E(\varphi(\underbar{X})) = \int \cdots \int \varphi(x_{1},\ldots,x_{n}) f(x_{1},\ldots,x_{n})dx_{1}\ldots dx_{n}
 \end{equation*}
 
 :::

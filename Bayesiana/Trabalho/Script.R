@@ -96,9 +96,11 @@ mapa_sp_total$E <- E_sp_total
 
 ## Espacialmente correlacionados:
 mapa_sp_total$ea_u <- rep(1:nrow(roubos_sp_total), 8)
+mapa_sp_total$ea_u2 <- rep(1:nrow(roubos_sp_total), 8)
 
 ## Temporais
 mapa_sp_total$Ano2 <- mapa_sp_total$Ano - 2017 + 1
+mapa_sp_total$Ano3 <- mapa_sp_total$Ano - 2017 + 1
 
 # Adição de 2025 para predição:
 sp_2025 <- data.frame(
@@ -120,24 +122,80 @@ mapa_sp_total <- rbind(mapa_sp_total, sp_2025)
 
 #----Modelagem----
 
-# Fórmula usando modelo AR1 para temporal e Besag-York-Mollier combinado
-# Com ano AR1 para espaço-temporal:
-formula <- Roubos ~ IDHM + Escolarizacao +
-    f(Ano, model = "ar1") +
-    f(ea_u, model = "bym", graph = g, scale.model = T,
-      group = Ano2, control.group = list(model = "ar1"))
+# Fórmulas para os diferentes tipos de interação espaço-temporal:
+formula_1 <- Roubos ~ IDHM + Escolarizacao +
+    f(ea_u, model = "bym", graph = g) +
+    f(Ano, model = "rw1") +
+    f(Ano2, model = "iid") +
+    f(ea_u2, model = "iid")
 
-# Modelo final:
-modelo_sp_total <- inla(formula, family = "poisson", data = mapa_sp_total, E = E,
-                        control.predictor = list(compute = T, link = 1),
-                        control.compute = list(return.marginals.predictor = T,
-                                               dic = T))
+formula_2 <- Roubos ~ IDHM + Escolarizacao +
+    f(ea_u, model = "bym", graph = g) +
+    f(Ano, model = "rw1") +
+    f(Ano2, model = "iid") +
+    f(ea_u2, model = "iid", group = Ano3,
+      control.group = list(model = "rw1"))
+
+formula_3 <- Roubos ~ IDHM + Escolarizacao +
+    f(ea_u, model = "bym", graph = g) +
+    f(Ano, model = "rw1") +
+    f(Ano2, model = "iid") +
+    f(Ano3, model = "iid", group = ea_u2,
+      control.group = list(model = "besag",
+                           graph = g))
+
+formula_4 <- Roubos ~ IDHM + Escolarizacao +
+    f(ea_u, model = "bym", graph = g) +
+    f(Ano, model = "ar1") +
+    f(Ano2, model = "iid") +
+    f(ea_u2, model = "besag", graph = g,
+      group = Ano3, control.group = list(model = "ar1"))
+
+formula <- Roubos ~ IDHM + Escolarizacao +
+    f(ea_u, model = "bym", graph = g) +
+    f(Ano, model = "rw1") +
+    f(Ano2, model = "iid") +
+    f(ea_u2, model = "besag", graph = g, scale.model = T,
+      group = Ano2, control.group = list(model = "rw1"))
+
+# Modelagem:
+modelo_1 <- inla(formula_1, family = "poisson", data = mapa_sp_total, E = E,
+                 control.predictor = list(compute = T, link = 1),
+                 control.compute = list(return.marginals.predictor = T,
+                                        dic = T))
+
+modelo_2 <- inla(formula_2, family = "poisson", data = mapa_sp_total, E = E,
+                 control.predictor = list(compute = T, link = 1),
+                 control.compute = list(return.marginals.predictor = T,
+                                        dic = T))
+
+modelo_3 <- inla(formula_3, family = "poisson", data = mapa_sp_total, E = E,
+                 control.predictor = list(compute = T, link = 1),
+                 control.compute = list(return.marginals.predictor = T,
+                                        dic = T))
+
+modelo_4 <- inla(formula_4, family = "poisson", data = mapa_sp_total, E = E,
+                 control.predictor = list(compute = T, link = 1),
+                 control.compute = list(return.marginals.predictor = T,
+                                        dic = T))
+
+# Melhor modelo:
+data.frame(
+    Inter =  c("I", "II", "III", "IV"),
+    DIC = c(modelo_1$dic$dic, modelo_2$dic$dic,
+            modelo_3$dic$dic, modelo_4$dic$dic)
+) %>%
+    knitr::kable()
+
+# Modelo II.
 
 # Estimativas pontuais dos betas:
-modelo_sp_total$summary.fixed
+modelo_2$summary.fixed %>%
+    select(mean, sd, mode) %>%
+    knitr::kable()
 
 # Distribuições a posteriori dos betas:
-lista_betas_sp <- modelo_sp_total$marginals.fixed
+lista_betas_sp <- modelo_2$marginals.fixed
 
 posterioris_betas_sp <- vector(mode = "list", length = length(lista_betas_sp))
 
@@ -145,13 +203,14 @@ for (i in 1:length(lista_betas_sp)) {
     posterioris_betas_sp[[i]] <- lista_betas_sp[[i]] %>%
         ggplot(aes(x = x, y = y)) +
         geom_line() +
-        labs(title = names(lista_betas_sp)[i])
+        labs(title = names(lista_betas_sp)[i]) +
+        theme_bw()
 }
 
 ggpubr::ggarrange(plotlist = posterioris_betas_sp)
 
 # Distribuições a posteriori para os valores dos hiper-parâmetros:
-lista_hiperparametros_sp <- modelo_sp_total$marginals.hyperpar
+lista_hiperparametros_sp <- modelo_2$marginals.hyperpar
 
 posterioris_hiper_sp <- vector(mode = "list", length = length(lista_hiperparametros_sp))
 
@@ -159,19 +218,20 @@ for (i in 1:length(lista_hiperparametros_sp)) {
     posterioris_hiper_sp[[i]] <- lista_hiperparametros_sp[[i]] %>%
         ggplot(aes(x = x, y = y)) +
         geom_line() +
+        theme_bw() +
         labs(title = names(lista_hiperparametros_sp)[i])
 }
 
 ggpubr::ggarrange(plotlist = posterioris_hiper_sp)
 
 # Valores ajustados para cada cidade e ano:
-modelo_sp_total$summary.fitted.values
+modelo_2$summary.fitted.values
 
 # Média do Risco Relativo a Posteriori:
-mapa_sp_total$RRAP <- modelo_sp_total$summary.fitted.values[, "mean"]
+mapa_sp_total$RRAP <- modelo_2$summary.fitted.values[, "mean"]
 
-mapa_sp_total$RRAP_L <- modelo_sp_total$summary.fitted.values[, "0.025quant"]
-mapa_sp_total$RRAP_U <- modelo_sp_total$summary.fitted.values[, "0.975quant"]
+mapa_sp_total$RRAP_L <- modelo_2$summary.fitted.values[, "0.025quant"]
+mapa_sp_total$RRAP_U <- modelo_2$summary.fitted.values[, "0.975quant"]
 
 # Distribuição espaço-temporal do risco relativo a posteriori:
 mapa_sp_total %>%
@@ -201,21 +261,31 @@ mapa_sp_total %>%
     facet_wrap(~Ano) +
     ggpubr::theme_classic2()
 
-# Predição a Posteriori:
+gif_mapa <- mapa_sp_total %>%
+    ggplot(aes(fill = RRAP)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral",
+                         limits = c(min(mapa_sp_total$RRAP_L),
+                                    max(mapa_sp_total$RRAP_U))) +
+    labs(title = 'Ano: {frame_time}') +
+    gganimate::transition_time(Ano) +
+    gganimate::ease_aes('linear')
+
+gganimate::anim_save()
 
 # Densidades marginais do risco relativo a posteriori para a cidade de São Paulo:
-marginais_sp <- list()
+marginais_campinas <- list()
 
 for (i in 1:8) {
-    marginais_sp[[i]] <- inla.smarginal(modelo_sp_total$marginals.fitted.values[[573 + nrow(roubos_sp_total) * (i - 1)]]) %>%
+    marginais_campinas[[i]] <- inla.smarginal(modelo_sp_total$marginals.fitted.values[[101 + nrow(roubos_sp_total) * (i - 1)]]) %>%
         data.frame() %>%
         mutate(Ano = 2017 + (i - 1))
 }
 
-marginais_sp <- do.call(rbind, marginais_sp)
+marginais_campinas <- do.call(rbind, marginais_campinas)
 
 # Mudança no risco relativo a posteriori para São Paulo:
-marginais_sp %>%
+marginais_campinas %>%
     ggplot(aes(x = x, y = y)) +
     geom_line() +
     facet_wrap(~Ano) +

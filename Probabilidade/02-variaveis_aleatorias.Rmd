@@ -1009,7 +1009,7 @@ Pelo teorema do Jacobiano, temos que:
 \int \ldots \int_{A}f(x_{1}, \ldots, x_{n})dx_{1} \ldots dx_{n} = \int \ldots \int_{g(A)}f(h_{1}(y_{1}, \ldots, y_{n}), \ldots , h_{n}(y_{1}, \ldots, y_{n}))|J(\underbar{x}, \underbar{y})|dy_{1} \ldots dy_{n}
 \end{equation*}
 
-Se $f$ é integrável em $A$, com $A \subseteq G_{0}$ e $h = g^{-1}$. Assim, usando os valores do exemplo \@ref(exm:motivacaoexponencial), temos que $X_{1} \sim exp(1), X_{2} \sim exp(1), X_{1} \perp X_{2}$, com densidade conjunta dada por $ f_{X_{1}X_{2}}(x_{1},x_{2}) = e^{-x_{1} + x_{2}}$, de modo que:
+Se $f$ é integrável em $A$, com $A \subseteq G_{0}$ e $h = g^{-1}$. Assim, usando os valores do exemplo \@ref(exm:motivacaoexponencial), temos que $X_{1} \sim exp(1), X_{2} \sim exp(1), X_{1} \perp X_{2}$, com densidade conjunta dada por $f_{X_{1}X_{2}}(x_{1},x_{2}) = e^{-x_{1} + x_{2}}$, de modo que:
 
 \begin{align*}
 f(h_{1}(y_{1},y_{2}),h_{2}(y_{1},y_{2}))|J(\underbar{x},\underbar{y})| &= f\left(\frac{y_{1}y_{2}}{y_{2} + 1},\frac{y_{1}}{y_{2} + 1}\right)\big{|}-y_{1}(y_{2} + 1)^{-2}\big{|} \\
@@ -2201,8 +2201,8 @@ P(T_{1} > 2T_{2}) &= \int_{0}^{\infty}\int_{2t_{2}}^{\infty}f(t_{1},t_{2})dt_{1}
 &= \int_{0}^{\infty}\lambda e^{-\lambda t_{2}}\left(-e^{-\lambda t_{1}}\Big{|}_{2t_{2}}^{\infty}\right)dt_{2} \\
 &= \int_{0}^{\infty}\lambda e^{-\lambda t_{2}}e^{-2\lambda t_{2}}dt_{2} \\
 &= \int_{0}^{\infty}\lambda e^{-3\lambda t_{2}}dt_{2} \\
-&= \frac{1}{3}\left(-e^{-3\lambda t_{2}}\Big{|}_{0}^{\infty}\right) \\
-&= \frac{1}{3+}
+&= \frac{\lambda}{3\lambda}\left(-e^{-3\lambda t_{2}}\Big{|}_{0}^{\infty}\right) \\
+&= \frac{1}{3}
 \end{align*}
 
 :::
@@ -2281,6 +2281,308 @@ y+1 & -1 \le y < 0 \\
 \end{equation*}
 
 E com isso, podemos facilmente ver que $f(x,y) \neq f_{X}(x)f_{Y}(y)$, de modo que $X$ e $Y$ não serão independentes.
+
+:::
+
+::: {.exercise name="BJ 2.33"}
+
+Suponhamos que $X$ e $Y$ tenham distribuição conjunta dada pela seguinte tabela:
+
+\begin{center}
+\begin{tabular}{|l||*{3}{c|}}\hline
+\backslashbox{$X$}{$Y$}
+&\makebox[1em]{1}&\makebox[1em]{2}&\makebox[1em]{3}\\\hline\hline
+1 & 0 & 1/5 & 0 \\ \hline
+2 & 1/5 & 1/5 & 1/5 \\ \hline
+3 & 0 & 1/5 & 0 \\ \hline
+\end{tabular}
+\end{center}
+
+(Por exemplo, $P(X=1,Y=1) = 0$ e $P(X=2,Y=1) = 1/5$.)
+
+**a)** Determine as distribuições marginais de $X$ e $Y$.
+
+**b)** $X$ e $Y$ são independentes? Por quê?
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Temos que as marginais serão dadas por:
+
+\begin{align*}
+P(X = x) &= \sum_{i=1}^{3}P(X = x,Y = i) = \begin{cases}
+\frac{1}{5} & ,x=1 \\
+\frac{3}{5} & ,x=2 \\
+\frac{1}{5} & ,x=3
+\end{cases} \\
+P(Y = y) &= \sum_{i=1}^{3}P(X = i,Y = y) = \begin{cases}
+\frac{1}{5} & ,y=1 \\
+\frac{3}{5} & ,y=2 \\
+\frac{1}{5} & ,y=3
+\end{cases}
+\end{align*}
+
+**b)**
+
+É fácil ver que $X$ e $Y$ não são independentes, pois $P(X = i, Y = j) \neq P(X = i)P(Y = j), \forall i,j = 1,2,3$.
+
+:::
+
+::: {.exercise name="BJ 2.34"}
+
+Sejam $X$ e $Y$ variáveis aleatórias independentes com distribuição uniforme em $[\theta - 1/2, \theta + 1/2]$, onde $\theta \in \mathbb{R}$. Prove que a distribuição de $X -Y$ não depende de $\theta$, achando sua densidade.
+
+:::
+
+::: {.exercise name="BJ 2.35"}
+
+Sejam $X_{1},\ldots,X_{n}$ variáveis aleatórias independentes com densidade comum de Rayleigh com parâmetro $\theta > 0$:
+
+\begin{equation*}
+f(x) = \begin{cases}
+\frac{x}{\theta^{2}}\exp\left(-\frac{x^{2}}{2\theta^{2}}\right) & x>0 \\
+0 & x\le 0
+\end{cases}
+\end{equation*}
+
+**a)** Determine a densidade conjunta de $Y_{1},\ldots,Y_{n}$, em que $Y_{i} = X_{i}^{2}$.
+
+**b)** Qual a distribuição de $U = \min_{1 \le i \le n}X_{i}$?
+
+**c)** Calcule a distribuição de $Z = \frac{X_{1}}{X_{2}}$.
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Como os $X_{i}$'s são independentes, sabemos que os $Y_{i}$'s também o serão, de modo que $f_{Y_{1} \ldots Y_{n}}(y_{1},\ldots,y_{n}) = \prod_{i=1}^{n}f_{Y_{i}}(y_{i})$, que podemos encontrar como segue:
+
+\begin{align*}
+F_{Y}(y) &= P(X^{2} \le y) = P(X \le \sqrt{y}) \\
+&= \int_{0}^{\sqrt{y}}\frac{x}{\theta^{2}}\exp\left(-\frac{x^{2}}{2\theta^{2}}\right)dx \Rightarrow \begin{bmatrix}
+u = x^{2} \\
+du = 2xdx
+\end{bmatrix} \\
+&= \int_{0}^{y}\frac{1}{2\theta^{2}}\exp\left(-\frac{u}{2\theta^{2}}\right)du \\
+&= \frac{1}{2\theta^{2}}\left(-2\theta^{2}\exp\left(-\frac{u}{2\theta^{2}}\right)\Big{|}_{0}^{y}\right) \\
+&= 1 - \exp\left(-\frac{y}{2\theta^{2}}\right) \\
+f_{Y}(y) &= \frac{\partial}{\partial y}F_{Y}(y) = \frac{1}{2\theta^{2}}\exp\left(-\frac{y}{2\theta^{2}}\right)
+\end{align*}
+
+Podemos ver que, cada um dos $Y_{i} \sim \mathrm{Exp}\left(\frac{1}{2\theta^{2}}\right)$, de modo que a densidade conjunta será:
+
+\begin{equation*}
+f_{Y_{1} \ldots Y_{n}}(y_{1},\ldots,y_{n}) = \prod_{i=1}^{n} = \frac{1}{2\theta^{2}}\exp\left(-\frac{y_{i}}{2\theta^{2}}\right) = \left(\frac{1}{2\theta^{2}}\right)^{n}\exp\left(-\frac{1}{2\theta^{2}}\sum_{i=1}^{n}y_{i}\right)
+\end{equation*}
+
+**b)**
+
+\begin{align*}
+P(U \le u) = P\left(\min_{1 \le i \le n}X_{i} \le u\right) &= 1 - P\left(\min_{1 \le i \le n}X_{i} > u\right) \\
+&= 1 - P(X_{1} > u, \ldots, X_{n} > u) \\
+&\stackrel{\text{ind}}{=} 1 - \prod_{i=1}^{n}P(X_{i} > u) \\
+&\stackrel{\text{iid}}{=} 1 - \left(P(X > u)\right)^{n} \\
+&= 1 - \left(\int_{u}^{\infty}\frac{x}{\theta^{2}}\exp\left(-\frac{x^{2}}{2\theta^{2}}\right)dx\right)^{n} \\
+&= 1 - \left(\exp\left(-\frac{u^{2}}{2\theta^{2}}\right)\right)^{n} \\
+&= 1 - \exp\left(-\frac{nu^{2}}{2\theta^{2}}\right) \\
+f_{U}(u) &= \frac{\partial}{\partial u}F_{U}(u) \\
+&= \frac{nu}{\theta^{2}}\exp\left(-\frac{nu^{2}}{2\theta^{2}}\right)
+\end{align*}
+
+Podemos perceber que $U \sim \mathrm{Rayleigh}\left(\frac{\sqrt{n}}{\theta}\right)$.
+
+**c)**
+
+Podemos inicialmente encontrar a distribuição acumulada de $Z$:
+
+\begin{align*}
+P(Z \le z) &= P(X_{1} \le X_{2}z) \\
+&= \int_{0}^{\infty}\int_{0}^{x_{2}z}f(x_{1},x_{2})dx_{1}dx_{2} \\
+&\stackrel{\text{ind}}{=} \int_{0}^{\infty}\int_{0}^{x_{2}z}\frac{x_{1}}{\theta^{2}}\exp\left(-\frac{x_{1}^{2}}{2\theta^{2}}\right)\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)dx_{1}dx_{2} \\
+&= \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)\int_{0}^{x_{2}z}\frac{x_{1}}{\theta^{2}}\exp\left(-\frac{x_{1}^{2}}{2\theta^{2}}\right)dx_{1}dx_{2} \Rightarrow \begin{bmatrix}
+u = \frac{x_{1}^{2}}{2\theta^{2}} \\
+du = \frac{x_{1}}{\theta^{2}}dx_{1}
+\end{bmatrix} \\
+&= \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)\int_{0}^{\frac{x_{2}^{2}z^{2}}{2\theta^{2}}}\exp\left(-u\right)dudx_{2} \\
+&= \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)\left(1 - \exp\left(-\frac{x_{2}^{2}z^{2}}{2\theta^{2}}\right)\right)dx_{2} \\
+&= \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)dx_{2} - \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}(1 + z^{2})}{2\theta^{2}}\right)dx_{2} \\
+&= 1 - \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}(1 + z^{2})}{2\theta^{2}}\right)dx_{2} \Rightarrow \begin{bmatrix}
+v = \frac{x_{2}^{2}(1+z^{2})}{2\theta^{2}} \\
+dv = \frac{x_{2}(1+z^{2})}{\theta^{2}}dx_{2}
+\end{bmatrix} \\
+&= 1 - \int_{0}^{\infty}\frac{1}{(1+z^{2})}\exp(-v)dv \\
+F_{Z}(z) &= 1 - \frac{1}{(1 + z^{2})}
+\end{align*}
+
+De modo que sua densidade será:
+
+\begin{equation*}
+f_{Z}(z) = \frac{\partial}{\partial z}F_{Z}(z) = \frac{2z}{(1 + z^{2})^{2}}
+\end{equation*}
+
+:::
+
+::: {.exercise name="BJ 2.36"}
+
+Sejam as variáveis $X_{1},\ldots,X_{n}$ independentes e exponenciais com, respectivamente, parâmetros $\alpha_{1},\ldots,\alpha_{n}$.
+
+**a)** Mostre que a distribuição de $Y = \min_{1 \le i \le n}X_{i}$ é exponencial. Qual o parâmetro?
+
+**b)** Prove que para $k = 1,\ldots,n$:
+
+\begin{equation*}
+P\left(X_{k} = \min_{1 \le i \le n}X_{i}\right) = \frac{\alpha_{k}}{\alpha_{1} + \ldots + \alpha_{n}}
+\end{equation*}
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Como todos os $X_{i} \sim \mathrm{Exp}(\alpha_{i})$, com $X_{i} \perp X_{j}, \forall i \neq j$, teremos que:
+
+\begin{align*}
+P(Y \le y) &= P\left(\min_{1 \le i \le 1}X_{i} \le y\right) = 1 - P\left(\min_{1 \le i \le 1}X_{i} > y\right) \\
+&= 1 - P(X_{1} > y, \ldots, X_{n} > y) \\
+&\stackrel{\text{ind}}{=} 1 - \prod_{i=1}^{n}P(X_{i} > y) \\
+&= 1 - \prod_{i=1}^{n}(\exp(-\alpha_{i}y)) \\
+&= 1 - \exp\left(-y\sum_{i=1}^{n}\alpha_{i}\right)
+\end{align*}
+
+Assim, temos que $Y \sim \mathrm{Exp}\left(\sum_{i=1}^{n}\alpha_{i}\right)$.
+
+**b)**
+
+Seja $Z = \min_{i \neq k}X_{i}$. Veja que $[X_{k} = \min_{1 \le i \le n}X_{i}] \perp [Z]$, de modo que a densidade conjunta de ambos será:
+
+\begin{align*}
+f_{X_{k}Z}(x_{k},z) = \alpha_{k}\sum_{i \neq k}\alpha_{i}\exp\left(-\alpha_{k}x_{k} - z\sum_{i \neq k}\alpha_{i}\right)
+\end{align*}
+
+Dessa forma, podemos ver que $P\left(X_{k} = \min_{1 \le i \le n}X_{i}\right) = P(X_{k} < Z)$. Assim, podemos encontrar essa probabilidade por meio da seguinte integral:
+
+\begin{align*}
+P(X_{k} < z) &= \int_{0}^{\infty}\int_{0}^{z}\alpha_{k}\sum_{i \neq k}\alpha_{i}\exp\left(-\alpha_{k}x_{k} - z\sum_{i \neq k}\alpha_{i}\right)dx_{k}dz \\
+&= \int_{0}^{\infty}\alpha_{k}\sum_{i \neq k}\alpha_{i}\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)\int_{0}^{z}\exp(-\alpha_{k}x_{k})dx_{k}dz \\
+&= \int_{0}^{\infty}\alpha_{k}\sum_{i \neq k}\alpha_{i}\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)\frac{1}{\alpha_{k}}\left(-\exp(-\alpha_{k}x_{k})\Big{|}_{0}^{z}\right)dz \\
+&= \sum_{i \neq k}\alpha_{i}\int_{0}^{\infty}\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)(1-\exp(-z\alpha_{k}))dz \\
+&= \sum_{i \neq k}\alpha_{i}\left(\int_{0}^{\infty}\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)dz - \int_{0}^{\infty}\exp\left(-z\sum_{i=1}^{n}\alpha_{i}\right)dz\right) \\
+&= \sum_{i \neq k}\alpha_{i}\left(\frac{-\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)}{\sum_{i \neq k}\alpha_{i}}\Big{|}_{0}^{\infty} - \frac{-\exp\left(-z\sum_{i=1}^{n}\alpha_{i}\right)}{\sum_{i = 1}^{n}\alpha_{i}}\Big{|}_{0}^{\infty}\right) \\
+&= \sum_{i \neq k}\alpha_{i}\left(\frac{1}{\sum_{i \neq k}\alpha_{i}} - \frac{1}{\sum_{i = 1}^{n}\alpha_{i}}\right) \\
+&= \frac{\sum_{i=1}^{n}\alpha_{i} - \sum_{i \neq k}\alpha_{i}}{\sum_{i=1}^{n}\alpha_{i}} =  \frac{\alpha_{k}}{\sum_{i=1}^{n}\alpha_{i}}
+\end{align*}
+
+:::
+
+::: {.exercise name="BJ 2.37" #exer237}
+
+Seja $X$ uma variável aleatória cuja função de distribuição $F$ é uma função contínua na reta. Prove que a distribuição de $Y = F(X)$ é $U(0,1)$.
+
+:::
+
+::: {.proof name="Resposta"}
+
+Vejamos que:
+
+\begin{align*}
+F_{Y}(y) = P(Y \le y) &= P(F_{X}(x) \le y) \\
+&= P(x \le F_{X}^{-1}(y)) \\
+&= F_{X}(F_{X}^{-1}(y)) = y
+\end{align*}
+
+De modo que $F_{Y}(y) = y$. Ainda, caso $y < 0, P(F_{X}(x) \le y) = 0$ e de maneira similar, caso $y > 1, P(F_{X}(x) \le y) = 1$, de modo que a distribuição de $Y$ será:
+
+\begin{equation*}
+F_{Y}(y) = \begin{cases}
+0 &, y < 0 \\
+y &, 0 \le y \le 1 \\
+1 &, y > 1
+\end{cases} \Rightarrow Y \sim U(0,1)
+\end{equation*}
+
+:::
+
+::: {.exercise name="BJ 2.38"}
+
+**a)** As variáveis $X, Y$ e $Z$ são independentes, cada uma uniformemente distribuída no intervalo $[0,1]$. Determine $P(X < Y < Z)$ e $P(X \le Y \le Z)$.
+
+**b)** Se $X,Y$ e $Z$ são independentes e identicamente distribuídas, e a função de distribuição comum $F$ é contínua, qual a $P(X < Y < Z)$?
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Vejamos que o evento $(x < y < z)$ implica que $x < y$ e $y < z$. Como as variáveis são independentes, temos que a distribuição conjunta é igual a 1, e a probabilidade desse evento será:
+
+\begin{align*}
+P(X < Y < Z) &= \int_{0}^{1}\int_{0}^{x}\int_{0}^{z}1dzdydx \\
+&= \int_{0}^{1}\int_{0}^{x}ydydx \\
+&= \int_{0}^{1}\frac{x^{2}}{2}dx \\
+&= \frac{x^{3}}{6}\Big{|}_{0}^{1} = \frac{1}{6}
+\end{align*}
+
+E como $P(X = Y) = P(Y = Z) = P(X = Z) = 0$ (pela continuidade no vazio), teremos que $P(X \le Y \le Z) = P(X < Y < Z) = \frac{1}{6}$.
+
+**b)**
+
+Por ser crescente e contínua, teremos que $X < Y < Z \Leftrightarrow F(X) < F(Y) < F(Z)$, e como $F \sim U(0,1)$ (pelo exercício \@ref(exr:exer237)), teremos que:
+
+\begin{align*}
+P(X < Y < Z) &= P(F(X) < F(Y) < F(Z)) \\
+&= \frac{1}{6}
+\end{align*}
+
+Pelo resultado obtido em **(a)**.
+
+:::
+
+::: {.exercise name="BJ 2.39" #exer239}
+
+**a)** Sejam $X$ e $Y$ independentes com distribuição de Poisson tendo, respectivamente, parâmetros $\lambda_{1}$ e $\lambda_{2}$. Mostre que $X + Y \sim \mathrm{Poisson}(\lambda_{1} + \lambda_{2})$.
+
+**b)** Mostre que se $X_{1},\ldots,X_{n}$ são independentes tais que $X_{i} \sim \mathrm{Poisson}(\lambda_{i}),i=1,\ldots,n$, então $X_{1} + \ldots + X_{n} \sim \mathrm{Poisson}(\lambda_{1} + \ldots + \lambda_{n})$.
+
+:::
+
+::: {.proof name="Resposta"}
+
+**a)**
+
+Como $X \perp Y$, temos que a densidade conjunta será:
+
+\begin{equation*}
+P(X=x,Y=y) = \frac{e^{-\lambda_{1}}\lambda_{1}^{x}}{x!}\frac{e^{-\lambda_{2}}\lambda_{2}^{y}}{y!}
+\end{equation*}
+
+Dessa forma, seja $X+Y = Z \Rightarrow Y = Z-X$, de modo que:
+
+\begin{align*}
+P(Z=z) = P(X+Y = z) &= P(Y = z-x) \\
+&= \sum_{i=0}^{\infty}P(X = i,Y = z-i) \\
+&\stackrel{\text{ind}}{=} \sum_{i=0}^{\infty}P(X = i)P(Y = z-i) \\
+&= \sum_{i=0}^{z}\frac{e^{-\lambda_{1}}\lambda_{1}^{i}}{i}\frac{e^{-\lambda_{2}}\lambda_{2}^{(z-i)}}{(z-i)!} \\
+&= e^{-(\lambda_{1} + \lambda_{2})}\sum_{i=0}^{z}\frac{\lambda_{1}^{i}\lambda_{2}^{(z-i)}}{i!(z-i)!} \\
+&= \frac{e^{-(\lambda_{1} + \lambda_{2})}}{z!}\sum_{i=0}^{z}\lambda_{1}^{i}\lambda_{2}^{(z-i)}\frac{z!}{i!(z-i)!} \\
+&= \frac{e^{-(\lambda_{1} + \lambda_{2})}}{z!}\sum_{i=0}^{z}\binom{z}{i}\lambda_{1}^{i}\lambda_{2}^{(z-i)} \\
+&= \frac{e^{-(\lambda_{1} + \lambda_{2})}(\lambda_{1} + \lambda_{2})^{z}}{z!}\underbrace{\sum_{i=0}^{z}\binom{z}{i}\left(\frac{\lambda_{1}}{\lambda_{1} + \lambda_{2}}\right)^{i}\left(\frac{\lambda_{2}}{\lambda_{1} + \lambda_{2}}\right)^{(z-i)}}_{\sum_{i=1}^{z}\mathrm{Binom}\left(z,\frac{\lambda_{1}}{\lambda_{1} + \lambda_{2}}\right) = 1} \\
+&= \frac{e^{-(\lambda_{1} + \lambda_{2})}(\lambda_{1} + \lambda_{2})^{z}}{z!}
+\end{align*}
+
+Assim, $X + Y \sim \mathrm{Poisson}(\lambda_{1} + \lambda_{2})$.
+
+**b)**
+
+Provemos por indução. Em **(a)** provamos para $n = 2$. Consideremos que $X_{i} \sim \mathrm{Poisson}(\lambda_{i}), \forall i = 1,\ldots,n$ e que (por hipótese) $Z = \sum_{i=1}^{n}X_{i} \sim \mathrm{Poisson}\left(\sum_{i=1}^{n}\lambda_{i}\right)$. Seja $X_{n+1} \sim \mathrm{Poisson}(\lambda_{n+1})$.
+
+Pelo que foi visto em **(a)**, a soma de duas variáveis aleatórias com distribuição Poisson resulta em uma variável aleatória com distribuição Poisson, com parâmetro igual à soma dos parâmetros das variáveis somadas. Assim, $Z + X_{n+1} \sim \mathrm{Poisson}\left((\sum_{i=1}^{n}\lambda_{i}) + \lambda_{n+1}\right) = \mathrm{Poisson}\left(\sum_{i=1}^{n+1}\lambda_{i}\right)$, que vale para todo $n \in \mathbb{N}$.
 
 :::
 

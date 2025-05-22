@@ -1,0 +1,24 @@
+---
+title: "Relatório Preliminar"
+subtitle: "Inferência Bayesiana"
+author:
+  - "Caio Gomes Alves"
+  - "Pedro Francisco Godoy Bernardinelli"
+  - "Rafael Ribeiro Santos"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  beamer_presentation:
+    theme: "Dresden"
+---
+
+# Problemática
+
+## Problemática
+
+Estimação espaço-temporal da
+
+# Modelo
+
+## Modelo
+
+Exemplo

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.16)  16 MAY 2025 02:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.16)  20 MAY 2025 00:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1014,25 +1014,37 @@ Overfull \hbox (18.08302pt too wide) detected at line 1910
 
 [38]
 
-[39] (./02-variaveis_aleatorias.aux)
+[39]
+
+[40]
+
+[41]
+
+[42]
+
+[43]
+
+[44]
+
+[45] (./02-variaveis_aleatorias.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-04-29>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 37448 strings out of 471571
- 884050 string characters out of 5519873
- 1350151 words of memory out of 5000000
- 63228 multiletter control sequences out of 15000+600000
+ 37464 strings out of 471571
+ 884218 string characters out of 5519873
+ 1350226 words of memory out of 5000000
+ 63229 multiletter control sequences out of 15000+600000
  708094 words of font info for 90 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 89i,16n,93p,739b,2358s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 89i,17n,93p,739b,2358s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/latxfont/line10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on 02-variaveis_aleatorias.pdf (39 pages, 462209 bytes).
+Output written on 02-variaveis_aleatorias.pdf (45 pages, 482265 bytes).
 PDF statistics:
- 567 PDF objects out of 1000 (max. 8388607)
- 473 compressed objects within 5 object streams
- 187 named destinations out of 1000 (max. 500000)
+ 605 PDF objects out of 1000 (max. 8388607)
+ 504 compressed objects within 6 object streams
+ 202 named destinations out of 1000 (max. 500000)
  175 words of extra memory for PDF output out of 10000 (max. 10000000)
 
