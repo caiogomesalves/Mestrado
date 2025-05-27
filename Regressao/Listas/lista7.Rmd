@@ -1,0 +1,279 @@
+---
+title: "Lista 7"
+subtitle: "MI406-Regressão"
+author: "Caio Gomes Alves"
+output:
+  bookdown::pdf_document2:
+    toc: false
+---
+
+# Questão 1
+
+## Pergunta
+
+Seja $\hat{\beta}$ o estimador de mínimos quadrados de um modelo de regressão linear $\hat{\beta} = (X^{\top}X)^{-1}X^{\top}y$. Mostre que:
+
+\begin{equation}
+(y - X\beta)^{\top}(y - X\beta) = (y - X\hat{\beta})^{\top}(y - X\hat{\beta}) + (\hat{\beta} - \beta)^{\top}X^{\top}X(\hat{\beta} - \beta)
+\end{equation}
+
+## Resposta
+
+Subtraindo $X\hat{\beta}$ da forma quadrática inicial teremos:
+
+\begin{align*}
+(y - X\beta)^{\top}(y - X\beta) &= (y - X\beta + X\hat{\beta} - X\hat{\beta})^{\top}(y - X\beta + X\hat{\beta} - X\hat{\beta}) \\
+&= (y - X\hat{\beta})^{\top}(y - X\hat{\beta}) + (y - X\hat{\beta})^{\top}X(\hat{\beta} - \beta) + X^{\top}(\hat{\beta} - \beta)(y - X\hat{\beta}) + (\hat{\beta} - \beta)^{\top}X^{\top}X(\hat{\beta} - \beta)
+\end{align*}
+
+Como $(y - X\hat{\beta})$ são os resíduos de Mínimos Quadrados Ordinários, eles serão ortogonais às colunas de $X$, de modo que $(y - X\hat{\beta})^{\top}X = 0$, de modo que $(y - X\hat{\beta})^{\top}X(\hat{\beta} - \beta) = 0^{\top}(\hat{\beta} - \beta) = 0$. Além disso, podemos transpor o terceiro termo de modo que $(\hat{\beta} - \beta)^{\top}X^{\top}(y - X\hat{\beta}) = (\hat{\beta} - \beta)0 = 0$. Assim, ambos os termos centrais são zerados, de modo que teremos:
+
+\begin{equation}
+(y - X\beta)^{\top}(y - X\beta) = (y - X\hat{\beta})^{\top}(y - X\hat{\beta}) + (\hat{\beta} - \beta)^{\top}X^{\top}X(\hat{\beta} - \beta)
+(\#eq:exprformquad)
+\end{equation}
+
+Que é a igualdade que tínhamos no início.
+
+# Questão 2
+
+## Pergunta
+
+Considere o modelo de regressão linear:
+
+\begin{equation*}
+y|\beta,\sigma^{2} \sim N(X\beta,\sigma^{2}I_{n})
+\end{equation*}
+
+com $y \in \mathbb{R}^{n}, X \in \mathbb{R}^{n \times p}$, de posto completo, e parâmetros $\beta \in \mathbb{R}^{p}, \sigma^{2} > 0$.
+
+- **(a)** Usando a identidade do item 1, mostre que a verossimilhança pode ser escrita como:
+
+\begin{equation*}
+\frac{1}{(2\pi\sigma^{2})^{n/2}}\exp\left(-\frac{1}{2\sigma^{2}}(y - X\hat{\beta})^{\top}(y - X\hat{\beta})\right)\exp\left(-\frac{1}{2\sigma^{2}}(\hat{\beta} - \beta)^{\top}X^{\top}X(\hat{\beta} - \beta)\right)
+\end{equation*}
+
+- **(b)** Interprete o primeiro fator como função de $\sigma^{2}$, mas independentes de $\beta$, e o segundo como (parte de) uma densidade normal em $\beta$ com variância proporcional a $\sigma^{2}$. Comente a utilidade dessa decomposição para a construção da distribuição a posteriori.
+
+## Resposta
+
+**a)**
+
+Utilizando o resultado obtido em \@ref(eq:exprformquad) na função de distribuição da Normal Multivariada, teremos que a verossimilhança será:
+
+\begin{align*}
+p(y|\beta,\sigma^{2}) &= \frac{1}{(2\pi\sigma^{2})^{n/2}}\exp\left(-\frac{1}{2\sigma^{2}}\left[(y - X\hat{\beta})^{\top}(y - X\hat{\beta}) + (\hat{\beta} - \beta)^{\top}X^{\top}X(\hat{\beta} - \beta)\right]\right) \\
+&= \frac{1}{(2\pi\sigma^{2})^{n/2}}\exp\left(-\frac{1}{2\sigma^{2}}(y - X\hat{\beta})^{\top}(y - X\hat{\beta})\right)\exp\left(-\frac{1}{2\sigma^{2}}(\hat{\beta} - \beta)^{\top}X^{\top}X(\hat{\beta} - \beta)\right)
+\end{align*}
+
+Que utiliza a propriedade da função exponencial em que $\exp{a + b} = \exp(a)\exp(b)$, chegando assim na verossimilhança na forma explicitada.
+
+**b)**
+
+Como $\hat{\beta} = (X^{\top}X)^{-1}X^{\top}Y$, o primeiro termo pode ser reescrito como:
+
+\begin{equation*}
+\exp\left(-\frac{1}{2\sigma^{2}}(y - X(X^{\top}X)^{-1}X^{\top}Y)^{\top}(y - X(X^{\top}X)^{-1}X^{\top}Y)\right)
+\end{equation*}
+
+Que não depende de $\beta$, representando assim a verossimilhança dos dados quando avaliados no ponto de $\beta = \hat{\beta}$. O segundo fator representa o núcleo (lide *kernel*) da parte exponencial de uma distribuição Normal Multivariada, com média $\hat{\beta}$ e variância $\sigma^{2}(X^{\top}X)^{-1}$, sendo assim proporcional à $\sigma^{2}$.
+
+Essa decomposição é útil para a identificação da distribuição à posteriori de $\beta$, pois o primeiro termo não depende dele e pode ser considerado como uma constante de normalização para $p(\beta|y,\sigma^{2})$, enquanto que o segundo termo indica que a distribuição à posteriori $p(\beta|\sigma^{2})$ será Normal Multivariada, quando não houver priori informativa para $\beta$.
+
+# Questão 3
+
+## Pergunta
+
+Considere o modelo de regressão linear:
+
+\begin{equation*}
+y|\beta,\sigma^{2} \sim N(X\beta, \sigma^{2}I_{n})
+\end{equation*}
+
+com $X \in \mathbb{R}^{n \times p}$ conhecido. Suponha as prioris independentes:
+
+\begin{align*}
+\beta &\sim \mathcal{N}(\mu_{0},\Sigma_{0}) \\
+\sigma^{2} &\sim IG(a,b)
+\end{align*}
+
+- **(a)** Encontre a distribuição a posteriori $\pi(\beta,\sigma|y)$ a menos de uma constante de normalização.
+- **(b)** Encontre a distribuição condicional a posteriori $\pi(\beta|y,\sigma^{2})$.
+- **(c)** Encontre a distribuição condicional a posteriori $\pi(\sigma^{2}|y,\beta)$.
+
+## Resposta
+
+**a)**
+
+Com os termos para as prioris e a verossimilhança dos dados, teremos que a posteriori será:
+
+\begin{equation*}
+\pi(\beta,\sigma^{2}|y) \propto p(y|\beta,\sigma^{2})\pi(\beta)\pi(\sigma^{2})
+\end{equation*}
+
+Em que teremos a verossimilhança, dada por:
+
+\begin{equation*}
+p(y|\beta,\sigma^{2}) = (2\pi\sigma^{2})^{-n/2} \exp\left\{-\frac{1}{2\sigma^{2}}(y-X\beta)^{\top}(y-X\beta)\right\}
+\end{equation*}
+
+E as distribuições a priori para $\beta$ e $\sigma^{2}$:
+
+\begin{align*}
+\pi(\beta) &= (2\pi)^{-p/2} |\Sigma_0|^{-1/2} \exp\left\{-\frac{1}{2}(\beta-\mu_0)^{\top}\Sigma_0^{-1}(\beta-\mu_0)\right\} \\
+\pi(\sigma^2) &= \frac{b^a}{\Gamma(a)} (\sigma^2)^{-(a+1)} \exp\left\{-\frac{b}{\sigma^2}\right\}
+\end{align*}
+
+Após multiplicarmos e agruparmos os termos que dependem de $\sigma^{2}$, teremos:
+
+\begin{equation*}
+\pi(\beta,\sigma^{2}|y) \propto (\sigma^{2})^{-(n/2 + a + 1)} \exp\left\{-\frac{1}{2\sigma^{2}}(y-X\beta)^{\top}(y-X\beta) - \frac{b}{\sigma^2}\right\} \cdot \exp\left\{-\frac{1}{2}(\beta-\mu_0)^{\top}\Sigma_0^{-1}(\beta-\mu_0)\right\}
+\end{equation*}
+
+Verifique que a primeira exponencial está com o mesmo formato do apresentado na questão 1, de modo que podemos utilizar a identidade apresentada. Assim, a parte exponencial com $\sigma^2$ pode ser reescrita como:
+
+\begin{equation*}
+\exp\left\{-\frac{1}{2\sigma^{2}} \left[ (y-X\hat{\beta})^{\top}(y-X\hat{\beta}) + (\beta-\hat{\beta})^{\top}X^{\top}X(\beta-\hat{\beta}) + 2b \right] \right\}
+\end{equation*}
+
+E a parte exponencial com $\beta$ pode ser reescrita como:
+
+\begin{equation*}
+\exp\left\{-\frac{1}{2} \left[ \frac{1}{\sigma^2}(\beta-\hat{\beta})^{\top}X^{\top}X(\beta-\hat{\beta}) + (\beta-\mu_0)^{\top}\Sigma_0^{-1}(\beta-\mu_0) \right] \right\}
+\end{equation*}
+
+Podemos definir os seguintes termos para fins de simplicidade:
+
+\begin{align*}
+\Sigma_n^{-1} &= \frac{1}{\sigma^{2}}X^{\top}X + \Sigma_0^{-1} \\
+\mu_n &= \Sigma_n \left(\frac{1}{\sigma^{2}}X^{\top}X\hat{\beta} + \Sigma_0^{-1}\mu_0\right)
+\end{align*}
+
+Com isso, a distribuição a posteriori conjunta será dada por:
+
+\begin{equation*}
+\pi(\beta,\sigma^{2}|y) \propto (\sigma^{2})^{-(n/2 + a + 1)} \exp\left\{-\frac{1}{\sigma^{2}}\left[\frac{1}{2}(y-X\hat{\beta})^{\top}(y-X\hat{\beta}) + b\right]\right\} \cdot \exp\left\{-\frac{1}{2}(\beta-\mu_n)^{\top}\Sigma_n^{-1}(\beta-\mu_n)\right\}
+\end{equation*}
+
+**b)**
+
+Para encontrarmos a distribuição condicional a posteriori $\pi(\beta|y,\sigma^{2})$, devemos analisar a conjunta obtida anteriormente considerando $\sigma^{2}$ como uma constante. Para tanto, apenas a última exponencial será considerada, que como visto na questão 2 é o núcleo de uma Normal Multivariada, de forma que a posteriori de $\beta$ será:
+
+\begin{equation*}
+\pi(\beta|y,\sigma^{2}) \sim \mathcal{N}(\mu_n, \Sigma_n)
+\end{equation*}
+
+Onde $\mu_{n}$ e $\Sigma_{n}$ são os valores já especificados anteriormente.
+
+**c)**
+
+De forma similar ao realizado anteriormente, temos que a posteriori condicional de $\sigma^{2}$ será dada avaliando a posteriori conjunta considerando $\beta$ constante. Com isso, podemos chegar em:
+
+\begin{equation*}
+\pi(\sigma^{2}|y,\beta) \propto (\sigma^{2})^{-(n/2 + a + 1)} \exp\left\{-\frac{1}{\sigma^{2}}\left[\frac{1}{2}(y-X\beta)^{\top}(y-X\beta) + b\right]\right\}
+\end{equation*}
+
+Que é o núcleo de uma Gamma Inversa, com os seguintes parâmetros:
+
+\begin{equation*}
+\pi(\sigma^{2}|y,\beta) \sim IG\left(\frac{n}{2} + a, \frac{1}{2}(y - X\beta)^{\top}(y - X\beta) + b\right)
+\end{equation*}
+
+# Questão 4
+
+## Pergunta
+
+Considere o modelo de regressão linear:
+
+\begin{equation*}
+y|\beta \sim N(X\beta, \sigma^{2}I_{n})
+\end{equation*}
+
+com $\sigma^{2} > 0$ conhecido. Suponha que a priori sobre $\beta$ seja:
+
+\begin{equation*}
+\beta \sim N(0,\tau^{2}(X^{\top}X)^{-1})
+\end{equation*}
+
+onde $\tau^{2} > 0$ é uma constante conhecida.
+
+- **(a)** Mostre que a distribuição a posteriori de $\beta|y$ é normal com:
+
+\begin{equation*}
+\beta|y \sim \mathcal{N}\left(\frac{\tau^{2}}{\tau^{2}+\sigma^{2}}\hat{\beta},\frac{\sigma^{2}\tau^{2}}{\tau^{2}+\sigma^{2}}(X^{\top}X)^{-1}\right)
+\end{equation*}
+
+Onde $\hat{\beta} = (X^{\top}X)^{-1}X^{\top}y$ é o estimador de mínimos quadrados.
+
+- **(b)** Interprete a média a posteriori como um "encolhimento" de $\hat{\beta}$ em direção à origem. Qual o papel de $\tau^{2}$ nesse encolhimento?
+- **(c)** O que acontece com a distribuição a posteriori de $\beta$ nos casos extremos:
+  - $\tau^{2} \to \infty$?
+  - $\tau^{2} \to 0$?
+
+## Resposta
+
+**a)**
+
+Sabemos que a distribuição a posteriori de $\beta|y$ será dada por:
+
+\begin{equation*}
+\pi(\beta|y) \propto p(y|\beta) \pi(\beta)
+\end{equation*}
+
+A Verossimilhança para os dados será:
+
+\begin{equation*}
+p(y|\beta) = (2\pi\sigma^{2})^{-n/2} \exp\left\{-\frac{1}{2\sigma^{2}}(y-X\beta)^{\top}(y-X\beta)\right\}
+\end{equation*}
+
+Considerando a priori para beta sendo $\pi(\beta) \sim \mathcal{N}(0,\tau^{2}(X^{\top}X)^{-1})$, podemos focar apenas no núcleo da distribuição, chegando em:
+
+\begin{equation*}
+\pi(\beta) \propto \exp\left\{-\frac{1}{2\tau^{2}}\beta^{\top}X^{\top}X\beta\right\}
+\end{equation*}
+
+Para a verossimilhança, podemos expandir o termo quadrático, de modo a chegar em:
+
+\begin{equation*}
+(y-X\beta)^{\top}(y-X\beta) = y^{\top}y - 2\beta^{\top}X^{\top}y + \beta^{\top}X^{\top}X\beta
+\end{equation*}
+
+Multiplicando os dois termos, chegamos no exponencial combinado:
+
+\begin{equation*}
+\exp\left(-\frac{1}{2\sigma^{2}}(y^{\top}y - 2\beta^{\top}X^{\top}y + \beta^{\top}X^{\top}X\beta) - \frac{1}{2\tau^{2}}(\beta^{\top}X^{\top}X\beta)\right)
+\end{equation*}
+
+Rearranjando os termos e eliminando os termos que não dependem de $\beta$, chegamos em:
+
+\begin{equation*}
+\exp\left(\beta^{\top}\left(\frac{X^{\top}y}{\sigma^{2}}\right) - \frac{1}{2}\beta^{\top}X^{\top}X\left(\frac{\tau^{2} + \sigma^{2}}{\sigma^{2}\tau^{2}}\right)\beta\right)
+\end{equation*}
+
+Após completar quadrado, para que a expressão anterior pareça com o núcleo de uma distribuição Normal Multivariada, chegamos que a média a posteriori será:
+
+\begin{equation*}
+\mu_p = \frac{\tau^{2}}{\tau^{2}+\sigma^{2}}\hat{\beta}
+\end{equation*}
+
+E a variância a posteriori será:
+
+\begin{equation*}
+\Sigma_p = \left(\frac{\sigma^{2}\tau^{2}}{\tau^{2}+\sigma^{2}}\right)(X^{\top}X)^{-1}
+\end{equation*}
+
+Portanto, a distribuição a posteriori de $\beta|y$ será:
+
+\begin{equation*}
+\beta|y\sim\mathcal{N}\left(\frac{\tau^{2}}{\tau^{2}+\sigma^{2}}\hat{\beta},\frac{\sigma^{2}\tau^{2}}{\tau^{2}+\sigma^{2}}(X^{\top}X)^{-1}\right)
+\end{equation*}
+
+**b)**
+
+Como os valores de $\sigma^{2}$ e $\tau^{2}$ são estritamente positivos, temos que $0 < \frac{\tau^{2}}{\tau^{2} + \sigma^{2}} < 1$, de modo que a média a posteriori será uma proporção do valor de $\hat{\beta}$. Assim, independentemente do valor estimado para $\hat{\beta}$, o valor a posteriori será reduzido e aproximado do valor 0 (que é o valor a priori para $\beta$).
+
+**c)**
+
+Caso o valor de $\tau^{2} \to \infty$, a variância à priori para $\beta$ será infinita, de modo que a distribuição será imprópria, e completamente não informativa. Com isso, o valor a posteriori para $\beta$ não será encolhido para 0, de modo que os dados "dominam" a posteriori e a média será exatamente igual ao valor do Estimador de Mínimos Quadrados.
+
+Caso o valor de $\tau^{2} \to 0$, a variância à priori para $\beta$ será igual a 0, dando a entender que há certeza que o valor de $\beta$ será 0. Neste caso, a priori domina a verossimilhança, e independentemente do valor estimado para $\hat{\beta}$, o valor de $\beta$ a posteriori será reduzido para 0.

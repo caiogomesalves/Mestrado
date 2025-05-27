@@ -94,13 +94,13 @@ mapa_sp_total$E <- E_sp_total
 
 # Efeitos aleatórios:
 
-## Espacialmente correlacionados:
-mapa_sp_total$ea_u <- rep(1:nrow(roubos_sp_total), 8)
-mapa_sp_total$ea_u2 <- rep(1:nrow(roubos_sp_total), 8)
+## Espaciais:
+mapa_sp_total$u <- rep(1:nrow(roubos_sp_total), 8)
+mapa_sp_total$v <- rep(1:nrow(roubos_sp_total), 8)
 
 ## Temporais
-mapa_sp_total$Ano2 <- mapa_sp_total$Ano - 2017 + 1
-mapa_sp_total$Ano3 <- mapa_sp_total$Ano - 2017 + 1
+mapa_sp_total$gamma <- mapa_sp_total$Ano - 2017 + 1
+mapa_sp_total$phi <- mapa_sp_total$Ano - 2017 + 1
 
 # Adição de 2025 para predição:
 sp_2025 <- data.frame(
@@ -112,8 +112,10 @@ sp_2025 <- data.frame(
     Ano = 2025,
     Roubos = NA,
     E = NA,
-    ea_u = 1:nrow(roubos_sp_total),
-    Ano2 = 9
+    u = 1:nrow(roubos_sp_total),
+    v = 1:nrow(roubos_sp_total),
+    gamma = 9,
+    phi = 9
 ) %>%
     st_as_sf() %>%
     st_transform(crs = 4674)
@@ -123,33 +125,29 @@ mapa_sp_total <- rbind(mapa_sp_total, sp_2025)
 #----Modelagem----
 
 # Fórmulas para os diferentes tipos de interação espaço-temporal:
-formula_1 <- Roubos ~ IDHM + Escolarizacao +
-    f(ea_u, model = "bym", graph = g) +
-    f(Ano, model = "rw1") +
-    f(Ano2, model = "iid") +
-    f(ea_u2, model = "iid")
+formula_1 <- Roubos ~  f(u, model = "bym", graph = g) +
+    f(gamma, model = "rw1") +
+    f(phi, model = "iid") +
+    f(v, model = "iid")
 
-formula_2 <- Roubos ~ IDHM + Escolarizacao +
-    f(ea_u, model = "bym", graph = g) +
-    f(Ano, model = "rw1") +
-    f(Ano2, model = "iid") +
-    f(ea_u2, model = "iid", group = Ano3,
+formula_2 <- Roubos ~ f(u, model = "bym", graph = g) +
+    f(gamma, model = "rw1") +
+    f(phi, model = "iid") +
+    f(v, model = "iid", group = phi,
       control.group = list(model = "rw1"))
 
-formula_3 <- Roubos ~ IDHM + Escolarizacao +
-    f(ea_u, model = "bym", graph = g) +
-    f(Ano, model = "rw1") +
-    f(Ano2, model = "iid") +
-    f(Ano3, model = "iid", group = ea_u2,
+formula_3 <- Roubos ~ f(u, model = "bym", graph = g) +
+    f(gamma, model = "rw1") +
+    f(phi, model = "iid") +
+    f(Ano, model = "iid", group = v,
       control.group = list(model = "besag",
                            graph = g))
 
-formula_4 <- Roubos ~ IDHM + Escolarizacao +
-    f(ea_u, model = "bym", graph = g) +
-    f(Ano, model = "ar1") +
-    f(Ano2, model = "iid") +
-    f(ea_u2, model = "besag", graph = g,
-      group = Ano3, control.group = list(model = "ar1"))
+formula_4 <- Roubos ~ f(u, model = "bym", graph = g) +
+    f(gamma, model = "ar1") +
+    f(phi, model = "iid") +
+    f(v, model = "besag", graph = g,
+      group = phi, control.group = list(model = "ar1"))
 
 formula <- Roubos ~ IDHM + Escolarizacao +
     f(ea_u, model = "bym", graph = g) +
@@ -228,7 +226,7 @@ ggpubr::ggarrange(plotlist = posterioris_hiper_sp)
 modelo_2$summary.fitted.values
 
 # Média do Risco Relativo a Posteriori:
-mapa_sp_total$RRAP <- modelo_2$summary.fitted.values[, "mean"]
+mapa_sp_total$RRAP <- modelo_2$summary.fitted.values[, "mode"]
 
 mapa_sp_total$RRAP_L <- modelo_2$summary.fitted.values[, "0.025quant"]
 mapa_sp_total$RRAP_U <- modelo_2$summary.fitted.values[, "0.975quant"]
@@ -237,9 +235,7 @@ mapa_sp_total$RRAP_U <- modelo_2$summary.fitted.values[, "0.975quant"]
 mapa_sp_total %>%
     ggplot(aes(fill = RRAP)) +
     geom_sf() +
-    scale_fill_distiller(palette = "Spectral",
-                         limits = c(min(mapa_sp_total$RRAP_L),
-                                    max(mapa_sp_total$RRAP_U))) +
+    scale_fill_distiller(palette = "Spectral") +
     facet_wrap(~Ano) +
     ggpubr::theme_classic2()
 
@@ -261,23 +257,26 @@ mapa_sp_total %>%
     facet_wrap(~Ano) +
     ggpubr::theme_classic2()
 
+mapa_sp_total %>%
+    filter(NM_MUN == "Campinas") %>%
+    ggplot(aes(x = Ano, y = RRAP)) +
+    geom_line()
+
 gif_mapa <- mapa_sp_total %>%
     ggplot(aes(fill = RRAP)) +
     geom_sf() +
-    scale_fill_distiller(palette = "Spectral",
-                         limits = c(min(mapa_sp_total$RRAP_L),
-                                    max(mapa_sp_total$RRAP_U))) +
-    labs(title = 'Ano: {frame_time}') +
-    gganimate::transition_time(Ano) +
+    scale_fill_distiller(palette = "Spectral") +
+    labs(title = 'Ano: {closest_state}') +
+    gganimate::transition_states(Ano) +
     gganimate::ease_aes('linear')
 
-gganimate::anim_save()
+gganimate::anim_save("anim_mapa.gif", gif_mapa)
 
 # Densidades marginais do risco relativo a posteriori para a cidade de São Paulo:
 marginais_campinas <- list()
 
-for (i in 1:8) {
-    marginais_campinas[[i]] <- inla.smarginal(modelo_sp_total$marginals.fitted.values[[101 + nrow(roubos_sp_total) * (i - 1)]]) %>%
+for (i in 1:9) {
+    marginais_campinas[[i]] <- inla.smarginal(modelo_2$marginals.fitted.values[[101 + nrow(roubos_sp_total) * (i - 1)]]) %>%
         data.frame() %>%
         mutate(Ano = 2017 + (i - 1))
 }
@@ -291,3 +290,105 @@ marginais_campinas %>%
     facet_wrap(~Ano) +
     labs(x = "Risco a posteriori", y = "Densidade") +
     theme_bw()
+
+#----Testes----
+mapa_interativo <- mapa_sp_total %>%
+    filter(Ano == 2024 | Ano == 2025) %>%
+    ggplot(aes(fill = RRAP)) +
+    geom_sf_interactive() +
+    scale_fill_distiller(palette = "Spectral") +
+    facet_wrap(~Ano) +
+    ggpubr::theme_classic2()
+
+girafe(mapa_interativo)
+
+efeito_temporal_gamma <- lapply(modelo_2$marginals.random$gamma,
+                                function(X){
+                                    marg <- inla.tmarginal(function(x) exp(x), X)
+                                    inla.emarginal(mean, marg)
+                                }) %>%
+    unlist()
+
+efeito_temporal_phi <- lapply(modelo_2$marginals.random$phi,
+                              function(X){
+                                  marg <- inla.tmarginal(function(x) exp(x), X)
+                                  inla.emarginal(mean, marg)
+                              }) %>%
+    unlist()
+
+# Tendência temporal estimada:
+data.frame(
+    Ano = 2017:2025,
+    gamma = efeito_temporal_gamma,
+    phi = efeito_temporal_phi
+) %>%
+    pivot_longer(cols = !Ano, names_to = "Efeito") %>%
+    ggplot(aes(x = Ano, y = value)) +
+    geom_line(aes(linetype = Efeito), linewidth = 1.5) +
+    scale_colour_manual(values = c("black", "grey50")) +
+    labs(y = expression(exp(phi[Ano]))) +
+    theme_bw()
+
+# Posterioris para os parâmetros de precisão:
+post_prec_gamma <- modelo_2$marginals.hyperpar$`Precision for gamma`
+post_prec_phi <- modelo_2$marginals.hyperpar$`Precision for phi`
+post_prec_u <- modelo_2$marginals.hyperpar$`Precision for u (spatial component)`
+
+plot.default(inla.tmarginal(function(x)(x), post_prec_gamma), type = "l")
+plot.default(inla.tmarginal(function(x)(x), post_prec_phi), type = "l")
+plot.default(inla.tmarginal(function(x)(x), post_prec_u), type = "l")
+
+#----Capacidade Preditiva----
+
+mod_2023 <- inla(formula_2, family = "poisson", data =
+                                                    mapa_sp_total %>%
+                                                    filter(Ano <= 2024) %>%
+                                                    mutate(
+                                                        Roubos = case_when(Ano == 2024 ~ NA,
+                                                                           .default = Roubos)
+                                                    ), E = E,
+                 control.predictor = list(compute = T, link = 1),
+                 control.compute = list(return.marginals.predictor = T,
+                                        dic = T))
+
+mapa_sp_total %>%
+    filter(Ano <= 2024) %>%
+    cbind(data.frame(moda = mod_2023$summary.fitted.values[, "mode"])) %>%
+    ggplot(aes(fill = moda)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral") +
+    facet_wrap(~Ano) +
+    ggpubr::theme_classic2()
+
+mapa_sp_total %>%
+    filter(Ano <= 2024) %>%
+    cbind(data.frame(moda = mod_2023$summary.fitted.values[, "mode"])) %>%
+    st_drop_geometry() %>%
+    mutate(Dif = RRAP - moda,
+           Roubos_est = RRAP * E,
+           Dif_Roubos = round(Roubos - Roubos_est, 2)) %>%
+    select(Dif_Roubos) %>%
+    arrange(desc(Dif_Roubos)) %>%
+    head()
+
+mod_2023$summary.random$u[, "mode"]
+
+g1 <- mapa_sp_total %>%
+    filter(Ano == 2024) %>%
+    ggplot(aes(fill = RRAP)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral") +
+    labs(title = "Dados reais") +
+    ggpubr::theme_classic2()
+
+g2 <- mapa_sp_total %>%
+    filter(Ano <= 2024) %>%
+    cbind(data.frame(moda = mod_2023$summary.fitted.values[, "mode"])) %>%
+    filter(Ano == 2023) %>%
+    ggplot(aes(fill = moda)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral") +
+    labs(title = "Dados preditos") +
+    ggpubr::theme_classic2()
+
+ggpubr::ggarrange(g1, g2)

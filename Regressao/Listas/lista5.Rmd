@@ -1,0 +1,401 @@
+---
+title: "Lista 5"
+subtitle: "MI406-Regressão"
+author: "Caio Gomes Alves"
+output:
+  bookdown::pdf_document2:
+    toc: false
+---
+
+```{r setup, echo = F}
+library(tidyverse)
+```
+
+# Questão 1
+
+## Pergunta
+
+Considere o conjunto de dados abaixo:
+
+\begin{center}
+
+```{r tabela1, echo=FALSE, results='asis'}
+df1 <- data.frame(
+    x = rep(c(1,4,7,10), each = 3),
+    y = c(2.67, 3.48, 2.46, 3.40, 2.13, 0.98,
+          6.19, 6.44, 6.28, 14.69, 16.51, 15.39)
+)
+
+tab1 <- xtable::xtable(
+                    df1,
+                    auto = T
+                )
+
+print(tab1, include.rownames = F)
+```
+
+\end{center}
+
+- (a) Calcule a Soma de Quadrados dos Resíduos considerando o modelo $Y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i}$.
+- (b) Calcule a Soma de Quadrados de Erro Puro.
+- (c) Calcule a Soma de Quadrados da Falta de Ajuste ("Lack of Fit").
+- (d) Faça um teste para determinar se o modelo linear é apropriado.
+
+## Resposta
+
+**a)**
+
+Considerando o modelo $Y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i}$, teremos que:
+
+```{r modelo1}
+# Primeiramente, criemos o modelo de regressão especificado:
+mod1 <- lm(y ~ x, data = df1)
+
+# A soma dos quadrados dos resíduos pode ser
+# facilmente calculada com os resíduos do
+# objeto onde o modelo está armazenado:
+(SQR1 <- sum(residuals(mod1)^2))
+```
+
+**b)**
+
+Utilizando as funções do pacote `tidyverse`, podemos agregar as observações na base de dados e calcular a Soma de Quadrados de Erro Puro:
+
+```{r sqep1}
+# Soma de Quadrados de Erro Puro:
+(SQEp1 <- df1 %>%
+     group_by(x) %>%
+     mutate(y_bar = mean(y)) %>%
+     ungroup() %>%
+     mutate(EP = y - y_bar) %>%
+     summarise(SQEp = sum(EP^2)) %>%
+     unlist())
+```
+
+**c)**
+
+Semelhantemente ao efetuado no item **(b)**, temos que a Soma de Quadrados da Falta de Ajuste será dada por:
+
+```{r sqlof1}
+# Soma de Quadrados da Falta de Ajuste
+(SQLoF1 <- df1 %>%
+     cbind(data.frame(y_pred = predict(mod1, df1))) %>%
+     group_by(x) %>%
+     summarise(y_bar = mean(y),
+               y_pred = mean(y_pred)) %>%
+     mutate(LOF = y_pred - y_bar) %>%
+     summarise(SQLoF = round(3 * sum(LOF^2), 4)) %>%
+     unlist())
+```
+
+**d)**
+
+Para verificar se o modelo linear é apropriado para esse conjunto de dados, usaremos o teste de falta de ajuste, dado por:
+
+\begin{equation*}
+\frac{\mathrm{SQLoF}/(m-2)}{\mathrm{SQEp}/(n-m)} \sim F_{(m-2,n-m)}
+\end{equation*}
+
+Em que $n = 12$ é a quantidade de observações, $m = 4$ é a quantidade de observações distintas de $x$ e $F_{(m-2,n-m)}$ é a distribuição F de Snedecor, com $(4-2,12-4)$ graus de liberdade. Assim, se considerarmos um nível de significância de 95% para o teste, teremos:
+
+```{r teste1}
+# Estatística de Teste:
+(estat_teste1 <- unname((SQLoF1/2)/(SQEp1/8)))
+
+# Valor do quantil 0.95 da distribuição F:
+(f_1 <- qf(0.95, 2, 8))
+
+# Estatística de Teste > Valor de F?
+estat_teste1 > f_1
+```
+
+Como o valor da estatística de teste foi maior do que o valor do quantil 0.95 da distribuição F correspondente, rejeitamos a hipótese nula do teste, de modo que alguma das esperanças condicionais nos valores únicos de $x$ não é expresso pela relação do modelo ajustado. Podemos verificar isso com o gráfico do modelo ajustado:
+
+```{r graf_mod1, echo = FALSE}
+with(df1, plot(y ~ x))
+abline(mod1)
+```
+
+# Questão 2
+
+## Pergunta
+
+Considere o conjunto de dados abaixo:
+
+\begin{center}
+
+```{r tabela2, echo=FALSE, results='asis'}
+df2 <- data.frame(
+    x = rep(c(1,4,7,10), each = 3),
+    y = c(2.37, 3.18, 2.16, 7.60, 6.33, 5.18,
+          9.49, 9.74, 9.58, 11.69, 13.51, 12.39)
+)
+
+tab2 <- xtable::xtable(
+                    df2,
+                    auto = T
+                )
+
+print(tab2, include.rownames = F)
+```
+
+\end{center}
+
+- (a) Calcule a Soma de Quadrados dos Resíduos considerando o modelo $Y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i}$.
+- (b) Calcule a Soma de Quadrados de Erro Puro.
+- (c) Calcule a Soma de Quadrados da Falta de Ajuste ("Lack of Fit").
+- (d) Faça um teste para determinar se o modelo linear é apropriado.
+
+## Resposta
+
+**a)**
+
+Considerando o modelo $Y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i}$, teremos de maneira semelhante ao exercício anterior:
+
+```{r modelo2}
+# Modelo de regressão especificado:
+mod2 <- lm(y ~ x, data = df2)
+
+# Soma dos Quadrados dos Resíduos:
+(SQR2 <- sum(residuals(mod2)^2))
+```
+
+**b)**
+
+Utilizando as funções do pacote `tidyverse`, podemos agregar as observações na base de dados e calcular a Soma de Quadrados de Erro Puro:
+
+```{r sqep2}
+(SQEp2 <- df2 %>%
+     group_by(x) %>%
+     mutate(y_bar = mean(y)) %>%
+     ungroup() %>%
+     mutate(EP = y - y_bar) %>%
+     summarise(SQEp = sum(EP^2)) %>%
+     unlist())
+```
+
+**c)**
+
+Semelhantemente ao efetuado no item **(b)**, temos que a Soma de Quadrados da Falta de Ajuste será dada por:
+
+```{r sqlof2}
+(SQLoF2 <- df2 %>%
+     cbind(data.frame(y_pred = predict(mod2, df2))) %>%
+     group_by(x) %>%
+     summarise(y_bar = mean(y),
+               y_pred = mean(y_pred)) %>%
+     mutate(LOF = y_pred - y_bar) %>%
+     summarise(SQLoF = round(3 * sum(LOF^2), 4)) %>%
+     unlist())
+```
+
+**d)**
+
+Para verificar se o modelo linear é apropriado para esse conjunto de dados, usaremos o teste de falta de ajuste, dado por:
+
+\begin{equation*}
+\frac{\mathrm{SQLoF}/(m-2)}{\mathrm{SQEp}/(n-m)} \sim F_{(m-2,n-m)}
+\end{equation*}
+
+Em que $n = 12$ é a quantidade de observações, $m = 4$ é a quantidade de observações distintas de $x$ e $F_{(m-2,n-m)}$ é a distribuição F de Snedecor, com $(4-2,12-4)$ graus de liberdade. Assim, se considerarmos um nível de significância de 95% para o teste, teremos:
+
+```{r teste2}
+# Estatística de Teste:
+estat_teste2 <- unname((SQLoF2/2)/(SQEp2/8))
+
+# Valor do quantil 0.95 da distribuição F:
+(f_2 <- qf(0.95, 2, 8))
+
+# Estatística de Teste > Valor de F?
+estat_teste2 > f_2
+```
+
+Desta vez, temos que o teste não rejeita a hipótese nula, de modo que todas as esperanças condicionais nos valores únicos de $x$ são modeladas pela relação explicitada. Podemos ver isso com o gráfico do modelo:
+
+```{r graf_mod2, echo = FALSE}
+with(df2, plot(y ~ x))
+abline(mod2)
+```
+
+# Questão 3
+
+## Pergunta
+
+Considerando o mesmo conjunto de dados da questão 2:
+
+- (a) Calcule a Soma de Quadrados dos Resíduos considerando o modelo $Y_{i} = \beta_{1}x_{i} + \epsilon_{i}$.
+- (b) Calcule a Soma de Quadrados de Erro Puro.
+- (c) Calcule a Soma de Quadrados da Falta de Ajuste ("Lack of Fit").
+- (d) Faça um teste para determinar se o modelo linear sem intercepto é apropriado.
+
+## Resposta
+
+**a)**
+
+Podemos atualizar o modelo especificado anteriormente com o seguinte código:
+
+```{r modelo3}
+mod3 <- lm(y ~ x - 1, data = df2)
+
+(SQR3 <- sum(residuals(mod3)^2))
+```
+
+**b)**
+
+Como a Soma de Quadrados do Erro Puro não depende do modelo, ela será igual à do modelo 2:
+
+```{r sqep3}
+(SQEp3 <- SQEp2)
+```
+
+**c)**
+
+Diferentemente ao efetuado no item **(b)**, temos que a Soma de Quadrados da Falta de Ajuste depende do modelo, e será dada por:
+
+```{r sqlof3}
+(SQLoF3 <- df2 %>%
+     cbind(data.frame(y_pred = predict(mod3, df2))) %>%
+     group_by(x) %>%
+     summarise(y_bar = mean(y),
+               y_pred = mean(y_pred)) %>%
+     mutate(LOF = y_pred - y_bar) %>%
+     summarise(SQLoF = round(3 * sum(LOF^2), 4)) %>%
+     unlist())
+```
+
+**d)**
+
+Para verificar se o modelo linear é apropriado para esse conjunto de dados, usaremos o teste de falta de ajuste, dado por:
+
+\begin{equation*}
+\frac{\mathrm{SQLoF}/(m-2)}{\mathrm{SQEp}/(n-m)} \sim F_{(m-2,n-m)}
+\end{equation*}
+
+Em que $n = 12$ é a quantidade de observações, $m = 4$ é a quantidade de observações distintas de $x$ e $F_{(m-2,n-m)}$ é a distribuição F de Snedecor, com $(4-2,12-4)$ graus de liberdade. Assim, se considerarmos um nível de significância de 95% para o teste, teremos:
+
+```{r teste3}
+# Estatística de Teste:
+estat_teste3 <- unname((SQLoF3/2)/(SQEp3/8))
+
+# Valor do quantil 0.95 da distribuição F:
+(f_3 <- qf(0.95, 2, 8))
+
+# Estatística de Teste > Valor de F?
+estat_teste3 > f_3
+```
+
+Desta vez, temos que o teste rejeita a hipótese nula, de modo que alguma das esperanças condicionais nos valores únicos de $x$ não é modelada pela relação explicitada. Podemos ver isso com o gráfico do modelo:
+
+```{r graf_mod3, echo = FALSE}
+with(df2, plot(y ~ x))
+abline(mod3)
+```
+
+# Questão 4
+
+## Pergunta
+
+Um banco de dados contém informações de área e valor sobre 3 tipos de imóveis: Apartamentos, Casas e Terrenos. Defina dois modelos de regressão para determinação do valor dos imóveis de acordo com o tipo e a área. Em um deles o incremento do valor com respeito à área deve ser o mesmo para os 3 tipos, enquanto no outro, cada tipo de imóvel pode ter um incremento de valor em função da área distinto.
+
+Interprete todos os parâmetros desses dois modelos.
+
+## Resposta
+
+Sejam $Y_{i}$ o valor do imóvel $i$, $x_{i}$ a sua área e $z_{i}$ o tipo de imóvel, podendo tomar valores $z \in \{0,1,2\}$, referente aos tipos Apartamentos, Casas e Terrenos, respectivamente. Para o primeiro tipo de modelo, em que o incremento de em valor em função da área é igual para os três tipos, podemos definir como:
+
+\begin{equation*}
+Y_{i} = \beta_{0} + \beta_{1}x_{i} + \beta_{2}\mathbb{I}(z_{i} = 1) + \beta_{3}\mathbb{I}(z_{i} = 2) + \epsilon_{i}
+\end{equation*}
+
+Aqui, $\beta_{1}$ representa o comportamento do aumento no valor do imóvel com relação à área, que é comum a todos os tipos de imóvel. $\beta_{0}$ representa o valor do intercepto quando o tipo de imóvel for Apartamentos, pois $\mathbb{I}(z_{i} = 1) = 0$ e $\mathbb{I}(z_{i} = 2) = 0$. Por outro lado, $\beta_{2}$ e $\beta_{3}$ representam a diferença no intercepto para os tipos de imóveis Casas e Terrenos com relação ao tipo Apartamentos. Esse modelo representa 3 retas paralelas, com diferentes valores de intercepto.
+
+Por outro lado, se considerarmos um modelo em que cada tipo de imóvel possui um incremento diferente, teremos:
+
+\begin{align*}
+Y_{i} = &\beta_{0} + \beta_{1}x_{i} + \beta_{2}\mathbb{I}(z_{i} = 1) + \beta_{3}\mathbb{I}(z_{i} = 2) +  \\
+&\beta_{4}x_{i}\mathbb{I}(z_{i} = 1) + \beta_{5}x_{i}\mathbb{I}(z_{i} = 2) + \epsilon_{i}
+\end{align*}
+
+Neste caso, teremos que $\beta_{0}, \beta_{2}$ e $\beta_{3}$ terão as mesmas interpretações que no caso anterior. Porém, $\beta_{1}$ agora representa o crescimento do valor em função da área para imóveis do tipo Apartamentos, enquanto que $\beta_{4}$ representa o crescimento do valor em função da área para imóveis do tipo Casas e $\beta_{5}$ representa o crescimento do valor em função da área para imóveis do tipo Terrenos. Assim, este modelo representa três retas com diferentes valores de intercepto e diferentes inclinações, dependendo do tipo do imóvel.
+
+# Questão 5
+
+## Pergunta
+
+Sejam $x_{i} \in \mathbb{R}$ covariáveis com valores contínuos e $z_{i}$ covariáveis com valores $z_{i} \in \{0,1\}$. Considere os seguintes modelos de regressão:
+
+\begin{align*}
+Y_{i} &= \beta_{a,0} + \beta_{a,1}x_{i} + \epsilon_{i} \\ \\
+Y_{i} &= \beta_{b,0} + \beta_{b,1}x_{i} + \beta_{b,2}z_{i} + \epsilon_{i}
+\end{align*}
+
+- (a) Explique, se existir, em que cenário os coeficientes dos estimadores $\hat{\beta}_{a,1}$ e $\hat{\beta}_{b,1}$ podem ter sinais diferentes.
+- (b) O que podemos dizer sobre a igualdade $\hat{\beta}_{a,2} = \hat{\beta}_{b,2}$? Em que cenários, se existirem, essa igualdade é verdadeira? Interprete.
+- (c) (Extra, opcional) Simule um banco de dados com base no modelo $Y_{i} = \beta_{b,0} + \beta_{b,1}x_{i} + \beta_{b,2}z_{i} + \epsilon_{i}$, de forma que o teste de falta de ajuste não rejeite a hipótese de que o modelo $Y_{i} = \beta_{a,0} + \beta_{a,1}x_{i} + \epsilon_{i}$ é apropriado. Interprete esse resultado.
+
+## Resposta
+
+**a)**
+
+Veja que, como $z \in \{0,1\}$, podemos especificar o segundo modelo da seguinte forma:
+
+\begin{equation*}
+Y_{i} = \begin{cases}
+\beta_{b,0} + \beta_{b,1} x_{i} + \epsilon_{i} &, \text{se }z_{i} = 0 \\
+(\beta_{b,0} + \beta_{b,2}) + \beta_{b,1} x_{i} + \epsilon_{i} &, \text{se }z_{i} = 1
+\end{cases}
+\end{equation*}
+
+Desse modo, podemos ver que o modelo representa duas retas paralelas, em que uma é deslocada $\beta_{b,2}$ caso $z = 1$. Isso pode representar o caso em que uma covariável seja binária, o que representaria um modelo que acomoda o comportamento das duas categorias (0 e 1) conjuntamente. A fim de ilustrar o caso, seja a seguinte base de dados de exemplo:
+
+\begin{center}
+
+```{r dados_exemplo, echo = FALSE, results = 'asis'}
+set.seed(5050)
+x1 <- round(seq(1, 3.5, length.out = 8), 2)
+x2 <- round(seq(4, 6.5, length.out = 8), 2)
+y <- round(c(5 + x1, 0 + x2) + rnorm(16, 0, 1), 2)
+z <- c(rep(0, 8), rep(1, 8))
+
+df_exemplo <- data.frame(
+    x = c(x1, x2),
+    z = z,
+    y = y
+)
+
+tab_exemplo <- xtable::xtable(
+                           df_exemplo,
+                           auto = T
+                       )
+
+print(tab_exemplo, include.rownames = F)
+```
+
+\end{center}
+
+Podemos com ele ajustar os dois modelos, considerando os modelos
+
+```{r modelos_exemplo}
+# Primeiro modelo:
+(mod_exemplo_1 <- lm(y ~ x, data = df_exemplo))
+
+# Segundo modelo:
+(mod_exemplo_2 <- lm(y ~ x + z, data = df_exemplo))
+```
+
+Podemos ver que, não levando em consideração a variável $z$, as estimativas do $\beta_{1}$ tem os sinais invertidos. Vejamos graficamente como se comportam os dados e os modelos ajustados (o primreiro estará em preto, e o segundo estará em vermelho):
+
+```{r graf_exemplo, echo = FALSE}
+with(df_exemplo, plot(y ~ x))
+abline(mod_teste_1)
+abline(a = coef(mod_teste_2)[1], b = coef(mod_teste_2)[2], col = "red")
+abline(a = coef(mod_teste_2)[1] + coef(mod_teste_2)[3], b = coef(mod_teste_2)[2], col = "red")
+```
+
+Essa inclusão de variáveis que separam os dados em conjuntos com comportamentos internos que são o contrário do comportamento "global" cria o chamado Paradoxo de Simpson, e é um problema recorrente de regressão.
+
+**b)**
+
+A igualdade ocorre quando a inclusão dessa variável $z$ que "separa" os grupos nos dados não altera de maneira significativa a estimação do efeito "global" de $\beta_{.,2}$. Assim, espera-se que os grupos possuam comportamento semelhante e que estejam distribuídos sem distinção ao longo do espaço da variável.
+
+Veja que no exemplo de demonstração, ambos os grupos possuem o mesmo crescimento, mas eles possuem uma clara separação ao longo de $x$, de modo que ocore a inversão no sinal da estimação de $\beta_{1}$.

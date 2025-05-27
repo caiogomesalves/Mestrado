@@ -1,0 +1,603 @@
+---
+title: "Lista 6"
+subtitle: "MI406-Regressão"
+author: "Caio Gomes Alves"
+output:
+  bookdown::pdf_document2:
+    toc: false
+---
+
+# Questão 1
+
+## Pergunta
+
+Considere o problema de Regressão Linear com erros auto-regressivos da seguinte forma:
+
+\begin{equation*}
+\mathbf{Y} = \mathbf{X}\beta + \epsilon
+\end{equation*}
+
+onde $\epsilon \sim N(0,\sigma^{2}V)$, e
+
+\begin{equation*}
+V = \begin{bmatrix}
+1 & \rho & \rho^{2} & \cdots & \rho^{n-1} \\
+\rho & 1 & \rho & \cdots & \rho^{n-2} \\
+\rho^{2} & \rho & 1 &  \cdots & \rho^{n-3} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+\rho^{n-1} & \rho^{n-2} & \rho^{n-3} & \cdots & 1
+\end{bmatrix}
+\end{equation*}
+
+- **(a)** Simule um conjunto de dados com 2 covariáveis + intercepto desse modelo. Escolha os coeficientes da forma que achar apropriado, porém utilize $\sigma^{2} = 1$ e $\rho = 0.75$.
+- **(b)** Encontre a inversa da matriz $V$. O que você pode observar nesse caso? Teste para outros valores de $\rho$.
+- **(c)** Com o conjunto de dados simulado e considerando $\rho$ conhecido, encontre os estimadores de Mínimos Quadrados Generalizados.
+- **(d)** Com o mesmo conjunto de dados, encontre os estimadores de Mínimos Quadrados Ordinários e compare com o item anterior.
+- **(e)** Considerando os coeficientes $\beta$ e $\sigma^{2}$ conhecidos, estime $\rho$ por máxima verossimilhança. Dica: $\epsilon = \mathbf{Y - X}\beta$ pode ser obtido nesse caso, e a verossimilhança é a densidade da normal multivariada apropriada do vetor $\epsilon$.
+
+## Resposta
+
+**a)**
+
+Utilizaremos o seguinte código em R para gerar 10 observações provenientes do modelo considerando os valores de $\beta_{0} = 1, \beta_{1} = -1, \beta_{2} = 2$:
+
+```{r simul_1}
+# Parâmetros:
+
+# Número de observações:
+n <- 10
+
+# Correlação entre as observações:
+rho <- 0.75
+
+# Variância:
+sigma <- 1
+
+# Valores verdadeiros dos betas:
+beta_true <- c(1, -1, 2)
+
+# Simulação:
+
+# Seed para reprodutibilidade:
+set.seed(1)
+
+# Matriz do modelo:
+(X <- cbind(1, matrix(rnorm(n * 2), ncol = 2)))
+
+# Função para gerar a matriz V:
+V_func <- function(n, rho) {
+  V <- matrix(0, nrow = n, ncol = n)
+  for (i in 1:n) {
+    for (j in 1:n) {
+      V[i, j] <- rho^(abs(i - j))
+    }
+  }
+  return(V)
+}
+
+V <- V_func(n, rho)
+
+# Vejamos os valores da matriz V, arredondados em
+# 4 casas decimais:
+round(V, 4)
+
+# Gerar vetor de erros:
+
+# Utilizaremos decomposição de Cholesky de sigma * V (que será simétrica)
+# para obter a raiz quadrada da matriz de covariância:
+L <- chol(sigma * V)
+epsilon <- t(L) %*% rnorm(n)
+
+# Gerar Y:
+
+(Y <- X %*% beta_true + epsilon)
+```
+
+**b)**
+
+Podemos encontrar o valor da inversa de $V$ por meio da função `solve` presente no R. Assim, teremos que:
+
+```{r inv_v1}
+# Inversa de V:
+V_inv <- solve(V)
+
+# Muitos valores serão calculados numericamente
+# como muito próximos de zero, quando na verdade serão
+# zeros realmente. Por isso, usemos o valor arredondado da matriz:
+print(round(V_inv, 4))
+
+# Testar para outros valores de rho:
+rho_teste1 <- 0.2
+V_teste1 <- V_func(n, rho_teste1)
+V_inv_teste1 <- solve(V_teste1)
+print(round(V_inv_teste1, 4))
+
+rho_teste2 <- 0.9
+V_teste2 <- V_func(n, rho_teste2)
+V_inv_teste2 <- solve(V_teste2)
+print(round(V_inv_teste2, 4))
+```
+
+Observa-se a estrutura de banda (ou matriz tri-diagonal) presente independente do valor escolhido para $\rho$, que é uma estrutura característica da especificação da matriz $V$ com valores de correlação decrescente pelo valor absoluto da diferença entre os valores das linhas/colunas.
+
+**c)**
+
+Temos que os estimadores de mínimos quadrados generalizados serão dados por:
+
+\begin{equation*}
+(X^{\top}V^{-1}X)^{-1}X^{\top}V^{-1}Y
+\end{equation*}
+
+Que, computacionalmente, serão calculados como:
+
+```{r mqg1}
+# Estimadores de Mínimos Quadrados Generalizados (GLS):
+(beta_hat_GLS <- solve(t(X) %*% V_inv %*% X) %*% t(X) %*% V_inv %*% Y)
+```
+
+Que são valores muito próximos dos valores reais de $\beta = (1, -1, 2)$.
+
+**d)**
+
+Temos que os estimadores de mínimos quadrados ordinários serão dados por:
+
+\begin{equation*}
+(X^{\top}X)^{-1}X^{\top}Y
+\end{equation*}
+
+Que, computacionalmente, serão calculados como:
+
+```{r}
+# Estimadores de Mínimos Quadrados Ordinários (OLS):
+(beta_hat_OLS <- solve(t(X) %*% X) %*% t(X) %*% Y)
+```
+
+Que dão valores também próximos dos valores originais dos $\beta$'s.
+
+**e)**
+
+Como $\beta$ e $\sigma^{2}$ são dados como conhecidos, a função de log-verossimilhança para $\rho$ será dada por:
+
+\begin{equation*}
+\log(L(\rho)) = -\frac{n}{2}\log(2\pi\sigma^{2}) - \frac{1}{2}\log(|V|) - \frac{1}{2}\epsilon^{\top}(\sigma^{2}V)^{-1}\epsilon
+\end{equation*}
+
+```{r estim_rho}
+# Erros observados (já que beta e sigma^2 são conhecidos)
+epsilon_obs <- Y - X %*% beta_true
+
+# Função de log-verossimilhança para rho:
+log_likelihood <- function(rho, epsilon_obs, sigma, n) {
+    # Confere se rho está no espaço paramétrico:
+    if (rho <= -1 || rho >= 1) {
+        return(-Inf)
+    }
+    # Calcula a matriz V usando a função anterior:
+    V_rho <- V_func(n, rho)
+    # Lidar com possíveis erros de singularidade ao calcular a inversa e o determinante:
+    tryCatch({
+        V_rho_inv <- solve(V_rho)
+        log_det_V_rho <- as.numeric(determinant(V_rho, logarithm = TRUE)$modulus)
+        val <- -n/2 * log(2 * pi * sigma) - 1/2 * log_det_V_rho -
+            1/2 * t(epsilon_obs) %*% (1/sigma * V_rho_inv) %*% epsilon_obs
+        return(val)
+    }, error = function(e) {
+        # -Inf retornado para valores problemáticos de rho (-1, 0, 1):
+        return(-Inf)
+    })
+}
+
+# Otimizar a função de log-verossimilhança:
+rho_hat_ML_optim <- optimize(f = log_likelihood, interval = c(-0.99, 0.99),
+                             epsilon_obs = epsilon_obs, sigma = sigma, n = n,
+                             maximum = TRUE)
+
+(rho_hat_ML <- rho_hat_ML_optim$maximum)
+```
+
+Que é um valor próximo ao valor real de $\rho = 0.75$.
+
+# Questão 2
+
+## Pergunta
+
+Considere o modelo de Regressão Linear Simples $Y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i}$, onde $\epsilon_{i} \perp \epsilon_{j}$ para $i \neq j$, mas $\mathrm{Var}(\epsilon_{i}) = \frac{\sigma^{2}}{x_{i}^{2}}$.
+
+- **(a)** Descreva a matriz de covariâncias do vetor aleatório formado pelos erros $\epsilon$ na forma $\sigma^{2}V$.
+- **(b)** Calcule $V^{-1}$.
+- **(c)** Encontre as expressões para os estimadores de Mínimos Quadrados Generalizados de $\beta_{0}$ e $\beta_{1}$.
+- **(d)** Generalize o resultado anterior (expressão dos estimadores) para o caso onde $\mathrm{Var}(\epsilon_{i}) = \sigma^{2}g(x_{i})$, onde $g$ é uma função estritamente positiva.
+
+## Resposta
+
+**a)**
+
+Como $\epsilon_{i} \perp \epsilon_{j}$, temos que os valores que não estão na diagonal principal de $V serão iguais a 0. Por isso, a matriz de covariâncias de $\epsilon$ será:
+
+\begin{equation*}
+\mathrm{Cov}(\epsilon) = \begin{bmatrix}
+\frac{\sigma^{2}}{x_{1}^{2}} & 0 & \cdots & 0 \\
+0 & \frac{\sigma^{2}}{x_{2}^{2}} &  \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 &  \cdots & \frac{\sigma^{2}}{x_{n}^{2}}
+\end{bmatrix} = \sigma^{2} \begin{bmatrix}
+\frac{1}{x_{1}^{2}} & 0 & \cdots & 0 \\
+0 & \frac{1}{x_{2}^{2}} &  \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 &  \cdots & \frac{1}{x_{n}^{2}}
+\end{bmatrix}
+\end{equation*}
+
+Desse modo, a matriz $V$ será dada por:
+
+\begin{equation*}
+V = \begin{bmatrix}
+\frac{1}{x_{1}^{2}} & 0 & \cdots & 0 \\
+0 & \frac{1}{x_{2}^{2}} &  \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 &  \cdots & \frac{1}{x_{n}^{2}}
+\end{bmatrix}
+\end{equation*}
+
+**b)**
+
+Por ser uma matriz diagonal, a inversa de $V$ será:
+
+\begin{equation*}
+V^{-1} = \begin{bmatrix}
+x_{1}^{2} & 0 & \cdots & 0 \\
+0 & x_{2}^{2} &  \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 &  \cdots & x_{n}^{2}
+\end{bmatrix}
+\end{equation*}
+
+**c)**
+
+Como o modelo possui somente o intercepto e uma covariável $x$, temos que a matriz do modelo $X$ será:
+
+\begin{equation*}
+X = \begin{bmatrix}
+1 & x_{1} \\
+1 & x_{2} \\
+\vdots & \vdots \\
+1 & x_{n}
+\end{bmatrix}
+\end{equation*}
+
+Os estimadores de Mínimos Quadrados Generalizados são dados por $(X^{\top}V^{-1}X)^{-1}X^{\top}V^{-1}Y$, que por partes serão:
+
+\begin{align*}
+X^{\top}V^{-1} &= \begin{bmatrix}
+x_{1}^{2} & x_{2}^{2} & \cdots & x_{n}^{2} \\
+x_{1}^{3} & x_{2}^{3} & \cdots & x_{n}^{3}
+\end{bmatrix} \\ \\
+X^{\top}V^{-1}X &= \begin{bmatrix}
+\sum_{i = 1}^{n}x_{i}^{2} & \sum_{i = 1}^{n}x_{i}^{3} \\
+\sum_{i = 1}^{n}x_{i}^{3} & \sum_{i = 1}^{n}x_{i}^{4}
+\end{bmatrix} \\ \\
+X^{\top}V^{-1}Y &= \begin{bmatrix}
+\sum_{i = 1}^{n}x_{i}^{2}Y_{i} \\
+\sum_{i = 1}^{n}x_{i}^{3}Y_{i}
+\end{bmatrix}
+\end{align*}
+
+A inversa de $(X^{\top}V^{-1}X)$ terá valor fechado, e dado por:
+
+\begin{equation*}
+(X^{\top}V^{-1}X)^{-1} = \frac{1}{(\sum x_{i}^{4})(\sum x_{i}^{2}) - (\sum x_{i}^{3})^{2}} \begin{bmatrix}
+\sum_{i = 1}^{n}x_{i}^{4} & -\sum_{i = 1}^{n}x_{i}^{3} \\
+-\sum_{i = 1}^{n}x_{i}^{3} & \sum_{i = 1}^{n}x_{i}^{2}
+\end{bmatrix}
+\end{equation*}
+
+De modo que o Estimador de Mínimos Quadrados Generalizados será:
+
+\begin{equation*}
+\hat{\beta} = \frac{1}{(\sum x_{i}^{4})(\sum x_{i}^{2}) - (\sum x_{i}^{3})^{2}} \begin{bmatrix}
+\sum_{i = 1}^{n}x_{i}^{4} & -\sum_{i = 1}^{n}x_{i}^{3} \\
+-\sum_{i = 1}^{n}x_{i}^{3} & \sum_{i = 1}^{n}x_{i}^{2}
+\end{bmatrix}\begin{bmatrix}
+\sum_{i = 1}^{n}x_{i}^{2}Y_{i} \\
+\sum_{i = 1}^{n}x_{i}^{3}Y_{i}
+\end{bmatrix}
+\end{equation*}
+
+**d)**
+
+Utilizando $\mathrm{Var}(\epsilon_{i}) = \sigma^{2}g(x_{i})$, teremos que a matriz $V^{-1}$ será:
+
+\begin{equation*}
+V^{-1} = \begin{bmatrix}
+\frac{1}{g(x_{1})} & 0 & \cdots & 0 \\
+0 & \frac{1}{g(x_{1})} &  \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 &  \cdots & \frac{1}{g(x_{n})}
+\end{bmatrix}
+\end{equation*}
+
+De modo que:
+
+\begin{align*}
+X^{\top}V^{-1} &= \begin{bmatrix}
+\frac{1}{g(x_{1})} & \frac{1}{g(x_{2})} & \cdots & \frac{1}{g(x_{n})}\\
+\frac{x_{1}}{g(x_{1})} & \frac{x_{2}}{g(x_{2})} & \cdots & \frac{x_{n}}{g(x_{n})}
+\end{bmatrix} \\ \\
+X^{\top}V^{-1}X &= \begin{bmatrix}
+\sum_{i = 1}^{n}\frac{1}{g(x_{i})} & \sum_{i = 1}^{n}\frac{x_{i}}{g(x_{i})} \\
+\sum_{i = 1}^{n}\frac{x_{i}}{g(x_{i})} & \sum_{i = 1}^{n}\frac{x_{i}^{2}}{g(x_{i})}
+\end{bmatrix} \\ \\
+X^{\top}V^{-1}Y &= \begin{bmatrix}
+\sum_{i = 1}^{n}\frac{Y_{i}}{g(x_{i})} \\
+\sum_{i = 1}^{n}\frac{x_{i}Y_{i}}{g(x_{i})}
+\end{bmatrix}
+\end{align*}
+
+Novamente, teremos que $(X^{\top}V^{-1}X)^{-1}$ terá forma fechada e será dado por:
+
+\begin{equation*}
+(X^{\top}V^{-1}X)^{-1} = \frac{1}{\left(\sum\frac{1}{g(x_{i})}\right)\left(\sum\frac{x_{i}^{2}}{g(x_{i})}\right) - \left(\sum\frac{x_{i}}{g(x_{i})}\right)^{2}}   \begin{bmatrix}
+\sum\frac{x_{i}^{2}}{g(x_{i})} & -\sum\frac{x_{i}}{g(x_{i})} \\
+-\sum\frac{x_{i}}{g(x_{i})} & \sum\frac{1}{g(x_{i})}
+\end{bmatrix}
+\end{equation*}
+
+E o estimador generalizado para $\beta$ será:
+
+\begin{equation*}
+\frac{1}{\left(\sum\frac{1}{g(x_{i})}\right)\left(\sum\frac{x_{i}^{2}}{g(x_{i})}\right) - \left(\sum\frac{x_{i}}{g(x_{i})}\right)^{2}}   \begin{bmatrix}
+\sum\frac{x_{i}^{2}}{g(x_{i})} & -\sum\frac{x_{i}}{g(x_{i})} \\
+-\sum\frac{x_{i}}{g(x_{i})} & \sum\frac{1}{g(x_{i})}
+\end{bmatrix}\begin{bmatrix}
+\sum_{i = 1}^{n}\frac{Y_{i}}{g(x_{i})} \\
+\sum_{i = 1}^{n}\frac{x_{i}Y_{i}}{g(x_{i})}
+\end{bmatrix}
+\end{equation*}
+
+# Questão 3
+
+## Pergunta
+
+Considere o problema de Regressão Linear:
+
+\begin{equation*}
+\mathbf{Y} = \mathbf{X}\beta + \epsilon
+\end{equation*}
+
+com $\epsilon \sim N(0, \sigma^{2}V)$, com uma matriz $V$ conhecida. Encontre o estimador de máxima verossimilhança do vetor de coeficientes $\beta$.
+
+## Resposta
+
+Como $Y = X\beta + \epsilon \Rightarrow \epsilon = Y - X\beta$. Substituindo esse valor na verossimilhança da normal multivariada chegamos em:
+
+\begin{equation*}
+L(\beta,\sigma^{2};Y,X) = (2\pi)^{-n/2}|\sigma^{2}V|^{-1/2}\exp\left(-\frac{1}{2}(Y - X\beta)^{\top}(\sigma^{2}V)^{-1}(Y - X\beta)\right)
+\end{equation*}
+
+E sua log-verossimilhança será:
+
+\begin{equation*}
+l(L(\beta,\sigma^{2};Y,X)) = -\frac{n}{2}\log(2\pi) -\frac{n}{2}\log(\sigma^{2}) - \frac{1}{2}\log(|V|) -\frac{1}{2\sigma^{2}}(Y - X\beta)^{\top}V^{-1}(Y - X\beta)
+\end{equation*}
+
+Que deve ser maximizada para $\beta$. Verifique que os termos que não dependem de $\beta$ podem ser suprimidos, pois não irão influenciar na maximização, de modo que ficamos apenas com o termo $(Y - X\beta)^{\top}V^{-1}(Y - X\beta)$, que será maximizado em:
+
+\begin{align*}
+\frac{\partial}{\partial \beta}(Y - X\beta)^{\top}V^{-1}(Y - X\beta) &= 0 \\
+-2X^{\top}V^{-1}(Y - X\hat{\beta}) &= 0 \\
+X^{\top}V^{-1}Y - X^{\top}V^{-1}X\hat{\beta} &= 0 \\
+X^{\top}V^{-1}X\hat{\beta} &= X^{\top}V^{-1}Y \\
+\hat{\beta} &= (X^{\top}V^{-1}X)^{-1}X^{\top}V^{-1}Y
+\end{align*}
+
+Que demonstra que o estimador de máxima verossimilhança é exatamente o Estimador de Mínimos Quadrados Generalizados quando consideramos a matriz $V$ conhecida.
+
+# Questão 4
+
+## Pergunta
+
+Considere o modelo de regressão linear $\mathbf{Y = X}\beta + \epsilon$, com $\epsilon \sim N(0,I_{n})$ e a função objetivo:
+
+\begin{equation*}
+L(\beta;\mathbf{Y,X}) = (Y - X\beta)^{\top}(Y - X\beta) + \lambda \beta^{\top}\beta
+\end{equation*}
+
+- **(a)** Encontre $\hat{\beta}_{r}^{\lambda} = \arg\!\min_{\beta}L(\beta;Y,X)$.
+- **(b)** Calcule o viés de $\hat{\beta}_{r}^{\lambda}$.
+- **(c)** Calcule $\mathrm{Var}(\hat{\beta}_{r}^{\lambda})$.
+- **(d)** Escolha uma matriz $X$ com pelo menos 2 colunas. Calcule, numericamente, o viés e a variância de $\hat{\beta}_{r}^{\lambda}$ para um determinado valor de $\lambda$.
+- **(e)** Refaça o item anterior para diferentes valores de $\lambda$, ilustrando a relação entre viés e variância para diferentes valores de $\lambda$.
+
+## Resposta
+
+**a)**
+
+Expandindo a função objetivo, temos que:
+
+\begin{equation*}
+(Y - X\beta)^{\top}(Y - X\beta) = Y^{\top}Y - 2Y^{\top}X\beta + \beta^{\top}X^{\top}X\beta
+\end{equation*}
+
+De modo que a função objetivo será $L(\beta;Y,X) = Y^{\top}Y - 2Y^{\top}X\beta + \beta^{\top}X^{\top}X\beta + \lambda\beta^{\top}\beta$. Para encontrar o valor que a maximiza, derivaremos com relação a $\beta$ e igualaremos a zero, com o qual teremos:
+
+\begin{align*}
+\frac{\partial}{\partial \beta}L(\beta;Y,X) = -2X^{\top}Y + 2X^{\top}X\beta + 2\lambda\beta &= 0 \\
+X^{\top}X\beta + \lambda\beta &= X^{\top}Y \\
+(X^{\top}X + \lambda I_{p})\beta &= X^{\top}Y \\
+\hat{\beta} &= (X^{\top}X + \lambda I_{p})^{-1}X^{\top}Y
+\end{align*}
+
+Considerando que $I_{p}$ é a matriz identidade com $p$ (número de covariáveis em $X$) colunas. Assim, $\hat{\beta}_{r}^{\lambda} = (X^{\top}X + \lambda I_{p})^{-1}X^{\top}Y$ será o estimador para a regularização *ridge*.
+
+**b)**
+
+Temos que $\mathrm{Viés}(\hat{\beta}_{r}^{\lambda}) = E(\hat{\beta}_{r}^{\lambda}) - \beta$, que será:
+
+\begin{align*}
+E(\hat{\beta}_{r}^{\lambda}) &= E((X^{\top}X + \lambda I_{p})^{-1}X^{\top}Y) \\
+&= E((X^{\top}X + \lambda I_{p})^{-1}X^{\top}(X\beta + \epsilon)) \\
+&= (X^{\top}X + \lambda I_{p})^{-1}X^{\top}X\beta + (X^{\top}X + \lambda I_{p})^{-1}X^{\top}E(\epsilon) \\
+&= (X^{\top}X + \lambda I_{p})^{-1}X^{\top}X\beta
+\end{align*}
+
+Já que $E(\epsilon) = 0$. Assim, o viés será:
+
+\begin{align*}
+\mathrm{Viés}(\hat{\beta}_{r}^{\lambda}) &= E(\hat{\beta}_{r}^{\lambda}) - \beta \\
+&= (X^{\top}X + \lambda I_{p})^{-1}X^{\top}X\beta - \beta \\
+&= ((X^{\top}X + \lambda I_{p})^{-1}X^{\top}X - I_{p})\beta
+\end{align*}
+
+Que será um estimador viciado, a menos que $\lambda = 0$.
+
+**c)**
+
+Teremos que:
+
+\begin{align*}
+\mathrm{Var}(\hat{\beta}_{r}^{\lambda}) &= \mathrm{Var}((X^{\top}X + \lambda I_{p})^{-1}X^{\top}Y) \\
+&= (X^{\top}X + \lambda I_{p})^{-1}X^{\top}\mathrm{Var}(Y)X((X^{\top}X + \lambda I_{p})^{-1})^{\top} \\
+&= \sigma^{2}(X^{\top}X + \lambda I_{p})^{-1}X^{\top}X(X^{\top}X + \lambda I_{p})^{-1}
+\end{align*}
+
+Que coincide com a variância usual de $\hat{\beta}$, quando $\lambda = 0$.
+
+**d)**
+
+Façamos todo o processo computacionalmente:
+
+```{r simul_vies_var}
+# Parâmetros:
+
+# Número de observações:
+n <- 100
+# Número de covariáveis (com intercepto):
+p <- 3
+# Valores verdadeiros dos coeficientes:
+beta_true <- c(1, -1, 2)
+# Variância do erro:
+sigma_sq_erro <- 1
+
+# Geração dos dados:
+
+# Seed para reprodutibilidade:
+set.seed(2)
+
+# Matriz do modelo:
+X_num <- cbind(1, matrix(rnorm(n * (p - 1)), ncol = (p - 1)))
+
+# Erros:
+epsilon_num <- rnorm(n, mean = 0, sd = sqrt(sigma_sq_erro))
+
+# Valores de Y:
+Y_num <- X_num %*% beta_true + epsilon_num
+
+# Escolher um valor de lambda:
+lambda_val <- 0.5
+
+# Calcular beta_hat_ridge para o lambda escolhido:
+I_p <- diag(p)
+(beta_hat_ridge <- solve(t(X_num) %*% X_num + lambda_val * I_p) %*% t(X_num) %*% Y_num)
+
+# Calcular o viés teórico:
+(bias_ridge_teo <- -lambda_val * solve(t(X_num) %*% X_num + lambda_val * I_p) %*% beta_true)
+
+# Calcular a variância teórica:
+(var_ridge_teo <- solve(t(X_num) %*% X_num + lambda_val * I_p) %*%
+     t(X_num) %*% X_num %*% solve(t(X_num) %*% X_num + lambda_val * I_p))
+
+# Calculo aproximado via simulação:
+num_simul <- 1000
+
+beta_hat_ridge_sim <- matrix(0, nrow = p, ncol = num_simul)
+
+for (i in 1:num_simul) {
+  epsilon_sim <- rnorm(n, mean = 0, sd = sqrt(sigma_sq_erro))
+  Y_sim <- X_num %*% beta_true + epsilon_sim
+  beta_hat_ridge_sim[, i] <- solve(t(X_num) %*% X_num + lambda_val * I_p) %*% t(X_num) %*% Y_sim
+}
+
+# Calcular o viés numérico:
+mean_beta_hat_ridge_sim <- rowMeans(beta_hat_ridge_sim)
+bias_ridge_num <- mean_beta_hat_ridge_sim - beta_true
+
+# Comparação entre viés teórico e simulado:
+cbind(Teorico = bias_ridge_teo, Simulado = bias_ridge_num)
+
+# Calcular a variância numérica:
+(var_ridge_num <- cov(t(beta_hat_ridge_sim)))
+
+# Comparação entre variâncias teórica e simulada:
+cbind(Teorica = diag(var_ridge_teo), Simulada = diag(var_ridge_num))
+```
+
+**e)**
+
+Testemos para diferentes valores de $\lambda$, sendo eles $\{0,0.1,0.5,1,5,10\}$:
+
+```{r vies_var}
+# Diferentes valores de lambda:
+lambdas <- c(0, 0.1, 0.5, 1, 5, 10)
+
+bias_simulados <- matrix(NA, nrow = length(lambdas), ncol = p,
+                          dimnames = list(paste("lambda =", lambdas),
+                                          paste("Vies_beta", 0:(p-1))))
+var_simulados <- matrix(NA, nrow = length(lambdas), ncol = p,
+                         dimnames = list(paste("lambda =", lambdas),
+                                         paste("Var_beta", 0:(p-1))))
+
+# Número de simulações para calcular:
+num_simulacoes <- 1000
+
+# Loop para calculo de viés e variância simulados para cada valor de lambda:
+for (k in 1:length(lambdas)) {
+  lambda_atual <- lambdas[k]
+  beta_hat_ridge_sim_k <- matrix(0, nrow = p, ncol = num_simulacoes)
+  for (i in 1:num_simulacoes) {
+      epsilon_sim_k <- rnorm(n, mean = 0, sd = sqrt(sigma_sq_erro))
+      Y_sim_k <- X_num %*% beta_true + epsilon_sim_k
+      beta_hat_ridge_sim_k[, i] <- solve(t(X_num) %*% X_num +
+                                         lambda_atual * I_p) %*%
+          t(X_num) %*% Y_sim_k
+  }
+  # Calcular viés numérico:
+  mean_beta_hat_ridge_sim_k <- rowMeans(beta_hat_ridge_sim_k)
+  bias_simulados[k, ] <- mean_beta_hat_ridge_sim_k - beta_true
+  # Calcular variância numérica:
+  var_simulados[k, ] <- diag(cov(t(beta_hat_ridge_sim_k)))
+}
+
+# Resultados:
+print(bias_simulados)
+print(var_simulados)
+```
+
+Podemos assim perceber que, conforme aumentamos o valor de $\lambda$ o viés aumenta, ao passo que a variância diminui. Para verificar, vejamos graficamente as relações:
+
+```{r graficos}
+# Visualização da relação entre viés e variância:
+
+# Plot do viés (em valor absoluto) vs lambda:
+plot(lambdas, rowSums(abs(bias_simulados)), type = "b", col = "blue",
+     xlab = "Lambda", ylab = "Magnitude do Viés Total",
+     main = "Viés vs Lambda na Regressão Ridge")
+points(lambdas, rowSums(abs(bias_simulados)), col = "blue", pch = 16)
+grid()
+
+# Plot da variância total vs lambda:
+plot(lambdas, rowSums(var_simulados), type = "b", col = "red",
+     xlab = "Lambda", ylab = "Variância Total",
+     main = "Variância vs Lambda na Regressão Ridge")
+points(lambdas, rowSums(var_simulados), col = "red", pch = 16)
+grid()
+
+# Para verificar o trade-off entre viés e variância,  podemos nos
+# focar no Erro Quadrático Médio:
+eqm <- rowSums(bias_simulados^2) + rowSums(var_simulados)
+
+plot(lambdas, eqm, type = "b", col = "purple",
+     xlab = "Lambda", ylab = "EQM Total (Viés^2 + Variância)",
+     main = "Trade-off Viés-Variância na Regressão Ridge (EQM)")
+points(lambdas, eqm, col = "purple", pch = 16)
+grid()
+```

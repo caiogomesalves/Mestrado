@@ -5,7 +5,8 @@ author:
   - "Caio Gomes Alves"
   - "Pedro Francisco Godoy Bernardinelli"
   - "Rafael Ribeiro Santos"
-date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+date: 05/23/2025
+date-format: "D, MMM, YYYY"
 bibliography: "ref.bib"
 format:
   revealjs:
@@ -221,21 +222,31 @@ marginais_campinas %>%
     geom_line() +
     geom_vline(xintercept = 1) +
     facet_wrap(~Ano) +
+    scale_x_continuous(limits = c(NA, 3)) +
     labs(x = "Risco a posteriori", y = "Densidade") +
+    theme_bw()
+```
+
+## Tendência temporal estimada
+
+```{r tend_temp}
+#| echo: false
+data.frame(
+    Ano = 2017:2025,
+    gamma = efeito_temporal_gamma,
+    phi = efeito_temporal_phi
+) %>%
+    pivot_longer(cols = !Ano, names_to = "Efeito") %>%
+    ggplot(aes(x = Ano, y = value)) +
+    geom_line(aes(linetype = Efeito), linewidth = 1.5) +
+    scale_colour_manual(values = c("black", "grey50")) +
+    labs(y = expression(exp(phi[Ano]))) +
     theme_bw()
 ```
 
 ## Mapa animado
 
 ![](anim_mapa.gif)
-
-# Oportunidades para desenvolvimento
-
-## Oportunidades para desenvolvimento
-
-- Explorar outros modelos de interação espaço-temporal;
-- Verificar a inclusão de outras covariáveis;
-- Realizar análise de resíduos para complementar decisão por DIC.
 
 # Referências
 
