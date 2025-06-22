@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.16)  19 MAY 2025 21:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.5.20)  12 JUN 2025 22:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -605,7 +605,7 @@ File: tikzlibrarycalc.code.tex 2023-01-15 v3.1.10 (3.1.10)
 ) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2023-12-10 v1.31 PDF bookmarks (HO)
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2024-11-05 v7.01l Hypertext links for LaTeX
+Package: hyperref 2025-05-20 v7.01m Hypertext links for LaTeX
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
 ) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
@@ -641,7 +641,7 @@ Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 \Hy@linkcounter=\count346
 \Hy@pagecounter=\count347
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2024-11-05 v7.01l Hyperref: PDFDocEncoding definition (HO)
+File: pd1enc.def 2025-05-20 v7.01m Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 ) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
@@ -649,7 +649,7 @@ Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
 \Hy@SavedSpaceFactor=\count348
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
-File: puenc.def 2024-11-05 v7.01l Hyperref: PDF Unicode definition (HO)
+File: puenc.def 2025-05-20 v7.01m Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
 )
@@ -693,16 +693,15 @@ package with kernel methods
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2024-11-05 v7.01l Hyperref driver for pdfTeX
-(/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx.sty
-Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
-with kernel methods
-)
+File: hpdftex.def 2025-05-20 v7.01m Hyperref driver for pdfTeX
 \Fld@listcount=\count354
 \c@bookmark@seq@number=\count355
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
-(/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+(/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
+with kernel methods
+) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 285.
@@ -886,18 +885,18 @@ L3 programming layer <2025-04-29>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 36612 strings out of 471571
- 862891 string characters out of 5519873
- 1344170 words of memory out of 5000000
- 62497 multiletter control sequences out of 15000+600000
+ 36614 strings out of 471571
+ 862927 string characters out of 5519873
+ 1344223 words of memory out of 5000000
+ 62498 multiletter control sequences out of 15000+600000
  696566 words of font info for 87 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  89i,16n,93p,728b,639s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on 03-esperanca.pdf (17 pages, 375564 bytes).
+Output written on 03-esperanca.pdf (17 pages, 376105 bytes).
 PDF statistics:
- 323 PDF objects out of 1000 (max. 8388607)
- 260 compressed objects within 3 object streams
- 84 named destinations out of 1000 (max. 500000)
+ 325 PDF objects out of 1000 (max. 8388607)
+ 262 compressed objects within 3 object streams
+ 85 named destinations out of 1000 (max. 500000)
  117 words of extra memory for PDF output out of 10000 (max. 10000000)
 

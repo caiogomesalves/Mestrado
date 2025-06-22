@@ -1,0 +1,202 @@
+<!-- --- -->
+<!-- title: "Notas de Aula - Capítulo 6" -->
+<!-- subtitle: "Probabilidade" -->
+<!-- author: "Caio Gomes Alves" -->
+<!-- date: "`r format(Sys.Date(), '%d/%m/%Y')`" -->
+<!-- header-includes: -->
+<!--   - \usepackage{amsmath} -->
+<!--   - \usepackage{tikz} -->
+<!--   - \usepackage{pgfplots} -->
+<!--   - \usepackage{caption} -->
+<!--   - \usepackage{subcaption} -->
+<!--   - \usepackage{cancel} -->
+<!--   - \usepackage{mathtools} -->
+<!--   - \usepackage{slashbox} -->
+<!--   - \usepackage{annotate-equations} -->
+<!-- output: -->
+<!--   bookdown::pdf_document2: -->
+<!--     toc: false -->
+<!-- --- -->
+
+# Funções Características
+
+::: {.definition}
+
+$i$ representa o número complexo $(\sqrt{-1}), X \text{ e } Y$ variáveis aleatórias em $(\Omega, \mathcal{A}, P)$. Então $Z = X + iY$ é uma variável aleatória complexa, e define-se sua esperança como $E(Z) = E(X) + iE(Y)$, se $E(X) \text{ e } E(Y)$ são finitas.
+
+:::
+
+**Nota:** Fórmula de Euler: $e^{ix} = \cos(x) + i \sin(x), x \in \mathbb{R}$. Seja $X$ uma variável aleatória, teremos que $e^{iX} = \cos(X) + i \sin(X)$. Além disso, $e^{iX}$ sempre tem esperança finita, pois as funções $\cos(X)$ e $\sin(X)$ são limitadas e $E(X) < \infty$.
+
+::: {.definition}
+
+Seja $X$ uma variável aleatória. A função característica de $X$ é $\varphi:\mathbb{R} \to \mathbb{C}$, com $\varphi(t) = \varphi_{X}(t) = E(e^{itX}), \forall t \in \mathbb{R}$, onde $E(e^{itX}) = E(\cos(tX)) + iE(\sin(tX))$.
+
+:::
+
+**Notas**
+
+a) A chamada integral de Fourier-Stieltjes de $F_{X}$ é definida como:
+
+\begin{align*}
+\varphi_{X}(t) &= E(\cos(tX)) + iE(\sin(tX)) \\
+&= \int \cos(tX)\, dF_{X}(x) + i \int \sin(tX)\, dF_{X}(x) \\
+&= \int e^{itX}\, dF_{X}(x)
+\end{align*}
+
+b) Se $X$ e $Y$ são identicamente distribuídas, $\varphi_{X} = \varphi_{Y}$.
+
+## Propriedades da função característica
+
+- $FC_{1}: |\varphi_{X}(t)| \le 1, \forall t \in \mathbb{R}$;
+
+- $FC_{2}: \varphi_{X}(0) = 1$;
+
+- $FC_{3}:$ Denote por $\bar{c}$ o complexo conjugado de $c$ (ou seja, se $c = x + iy \Rightarrow \bar{c} = x - iy$). Então $\bar{\varphi}_{X}(t) = \varphi_{X}(-t)$;
+
+::: {.proof name="Prova"}
+
+Como $\cos(-tX) = \cos(tX), \sin(-tX) = -\sin(tX)$, teremos:
+
+\begin{align*}
+\varphi_{X}(-t) &= E(e^{i(-t)X}) = E(\cos(-tX)) + iE(\sin(-tX)) \\
+&= E(\cos(tX)) - iE(\sin(tX)) \\
+&= \bar{\varphi}_{X}(t)
+\end{align*}
+
+:::
+
+- $FC_{4}: \varphi_{X}$ é uniformemente contínua na reta;
+
+::: {.proof name="Prova"}
+
+$\varphi$ é uniformemente contínua se verifica: dado $\epsilon > 0, \exists \delta = \delta(\epsilon): \text{ se }|t - s| < \delta \Rightarrow |\varphi_{X}(t) - \varphi_{X}(s)| < \epsilon$. Considere $s$ e $t$:
+
+\begin{align*}
+|\varphi_{X}(t) - \varphi_{X}(s)| &= \left|\int(e^{itx} - e^{isx})\, dF_{X}(x)\right| \\
+&\le \int |e^{itx} - e^{isx}|\, dF_{X}(x) \\
+&\le \int |e^{isx}||e^{i(t-s)x} - 1|\, dF_{X}(x) \\
+&\le \int |e^{i(t-s)x}|\, dF_{X}(x) = h(t-s)
+\end{align*}
+
+Devemos ver que $h(u) \xrightarrow[u \to 0]{}0$ (ou seja, dado $\epsilon > 0, \exists \delta > 0: \text{ se } |u| < \delta \Rightarrow h(u) < \epsilon \Rightarrow h(t - s) < \epsilon$). $h$ pode ser vista como um valor esperado e assim aplicamos o Teorema da Convergência Dominada:
+
+\begin{align*}
+h(u) = \int |e^{iux} - 1|\, dF_{X}(x) &= E(|e^{iux} - 1|) \\
+|e^{iux} - 1| &\le |e^{iux}| + 1 = 2
+\end{align*}
+
+Ou seja, 2 domina $|e^{iux} - 1|$. Por outro lado, $\lim_{u \to 0}|e^{iux} - 1| = 0 \stackrel{TCD}{\Rightarrow}E(|e^{iux} - 1|) \xrightarrow[u \to 0]{}0$.
+
+:::
+
+- $FC_{5}:$ Se $X \perp Y \Rightarrow \varphi_{X+Y}(t) = \varphi_{X}(t).\varphi_{Y}(t)$;
+
+::: {.proof name="Prova"}
+
+\begin{align*}
+\varphi_{X+Y}(t) = E(e^{it(X + Y)}) &= E(e^{itX}e^{itY}) \\
+&\stackrel{ind}{=}E(e^{itX})E(e^{itY}) \\
+&= \varphi_{X}(t)\varphi_{Y}(t)
+\end{align*}
+
+:::
+
+**Notas:**
+
+a) Produto de funções características é função característica;
+
+b) Se $\{X_{i}\}_{i \ge 1}$ são independentes, então $\varphi_{X_{1} + \ldots + X_{n}}(t) = \prod_{i=1}^{n}\varphi_{X_{i}}(t), \forall t \in \mathbb{R}$.
+
+- $FC_{6}: \varphi_{X}$ determina $F_{X}$ (e a volta vale por definição);
+
+**Nota:** Fórmula da Inversão: Seja $X$ variável aleatória, com $F$ a sua função de distribuição e $\varphi$ sua função característica. Se $x$ e $y$ são pontos de continuidade de $F$, com $x < y$, então:
+
+\begin{equation}
+F(y) - F(x) = \frac{1}{2\pi}\lim_{u \to \infty}\int_{-u}^{u}\frac{[e^{-itx} - e^{-ity}]}{it}\varphi(t)\, dt
+(\#eq:formulainversao)
+\end{equation}
+
+Se $\varphi = \varphi_{X}$ e $F = F_{X}$ em \@ref(eq:formulainversao), com $z \in \mathbb{R}, y \downarrow z$ e $x \to -\infty$, do lado esquerdo da fórmula teremos:
+
+\begin{equation*}
+\lim_{x \to -\infty, y \downarrow z}F_{X}(y) - F_{X}(x) = F_{X}(z)
+\end{equation*}
+
+- $FC_{7}:$ $X$ tem distribuição simétrica em 0 $\Leftrightarrow \varphi_{X}(t) \in \mathbb{R}, \forall t \in \mathbb{R}$;
+
+::: {.proof name="Prova"}
+
+$X$ é simétrica em 0 $\Leftrightarrow \forall x \in \mathbb{R}:P(X \le x) = P(X \ge -x) = P(-X \le x) \Leftrightarrow F_{X}(x) = F_{-X}(x) \Leftrightarrow \varphi_{X} = \varphi_{-X}$. Note que:
+
+\begin{align*}
+\varphi_{-X}(t) = \overline{\varphi_{-X}(-t)} &= \overline{E(e^{i(-t)(-X)})} \\
+&= \overline{E(e^{itX})} \\
+&= \overline{\varphi_{X}(t)}
+\end{align*}
+
+Assim, $\varphi_{X}(t) = \overline{\varphi_{X}(t)}$, e se $c = \overline{c}$, então $c$ é real.
+
+:::
+
+- $FC_{8}:$ Se $Y = aX + b \Rightarrow \varphi_{Y}(t) = e^{itb}\varphi_{X}(at)$;
+
+::: {.proof name="Prova"}
+
+\begin{align*}
+\varphi_{Y}(t) &= E(e^{it(aX + b)}) \\
+&= E(e^{itaX}e^{itb}) \\
+&= e^{itb}E(e^{itaX}) \\
+&= e^{itb}\varphi_{X}(at)
+\end{align*}
+
+:::
+
+- $FC_{9}: \varphi_{X}^{(k)}(t_{0}) = \frac{\partial^{k}}{\partial t^{k}}\varphi_{X}(t)\big{|}_{t = t_{0}}, k = 1,2,\ldots$. Se $E(|X|^{n}) < \infty \Rightarrow \varphi_{X}$ possui $n$ derivadas e $\varphi_{X}^{(k)}(t) = \int(ix)^{k}e^{itx}\, dF_{X}(x), k = 1,2,\ldots,n$, e $\varphi_{X}^{(k)}(0) = i^{k}E(X^{k})$.
+
+::: {.proof name="Prova"}
+
+Vejamos que $\varphi_{X}'(t) = \int ixe^{itx}\, dF_{X}(x)$. Se $h \neq 0$, teremos:
+
+\begin{align*}
+\frac{\varphi(t + h) - \varphi(t)}{h} &= \frac{\int e^{i(t + h)x}dF_{X}(x) - \int e^{itx}dF_{X}(x)}{h} \\
+&= \int e^{itx}\frac{[e^{ihx} - 1]}{h}dF_{X}(x) \\
+&= E\left\{e^{itx}\frac{[e^{ihx} - 1]}{h}\right\}
+\end{align*}
+
+Observe que $\frac{e^{ihx} - 1}{h} \xrightarrow[h \to 0]{}ix, \forall x$ (por L'Hôpital), então $e^{itx}\frac{e^{ihx} - 1}{h} \xrightarrow[h \to 0]{}ixe^{itx}$. Além disso:
+
+\begin{equation*}
+\left|\frac{e^{ihx} - 1}{h}\right| = \left|\frac{\int_{0}^{h} ixe^{isx}\, ds}{h}\right| = |x|\left|\frac{\int_{0}^{h} e^{isx}\, ds}{h}\right| \le |x|\frac{\int_{0}^{h}|e^{isx}\, ds|}{h} = |x|
+\end{equation*}
+
+Logo $\left|e^{itX} \frac{[e^{ihx} - 1]}{h}\right| \le |X|$, sendo $|X|$ integrável. Essas são as hipóteses da convergência dominada, logo:
+
+\begin{align*}
+\varphi'(t) = \lim_{h \to 0}\frac{\varphi(t+h) - \varphi(t)}{h} &= \lim_{h \to 0}E\left\{e^{itx}\frac{[e^{ihx} - 1]}{h}\right\} \\
+&= E(iXe^{itX}) \\
+&= \int ixe^{itx}\, dF_{X}(x)
+\end{align*}
+
+:::
+
+::: {.example}
+
+$X \sim Pois(\lambda), p(x) = \frac{\lambda^{n}e^{-\lambda}}{n!}, n = 0,1,\ldots$.
+
+\begin{align*}
+\varphi_{X}(t) = E(e^{itX}) &= \sum_{n=0}^{\infty}e^{itn}\frac{\lambda^{n}e^{-\lambda}}{n!} \\
+&= e^{-\lambda}\sum_{n=0}^{\infty}\frac{(e^{it}\lambda)^{n}}{n!} \\
+&= e^{-\lambda}\exp(e^{it}\lambda) \\
+&= e^{\lambda[e^{it} - 1]}
+\end{align*}
+
+Assim, teremos:
+
+\begin{align*}
+&\varphi_{X}'(0) = i \lambda = iE(X) \Rightarrow E(X) = \lambda \\
+&\varphi_{X}''(0) = i^{2}\lambda(\lambda + 1) = i^{2}E(X^{2}) \Rightarrow E(X^{2}) = \lambda(\lambda + 1) \\
+&Var(X) = E(X^{2}) - (E(X))^{2} = \lambda(\lambda + 1) - \lambda^{2} = \lambda
+\end{align*}
+
+:::

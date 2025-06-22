@@ -1,0 +1,572 @@
+<!-- --- -->
+<!-- title: "Notas de Aula - Capítulo 5" -->
+<!-- subtitle: "Probabilidade" -->
+<!-- author: "Caio Gomes Alves" -->
+<!-- date: "`r format(Sys.Date(), '%d/%m/%Y')`" -->
+<!-- header-includes: -->
+<!--   - \usepackage{amsmath} -->
+<!--   - \usepackage{tikz} -->
+<!--   - \usepackage{pgfplots} -->
+<!--   - \usepackage{caption} -->
+<!--   - \usepackage{subcaption} -->
+<!--   - \usepackage{cancel} -->
+<!--   - \usepackage{mathtools} -->
+<!--   - \usepackage{slashbox} -->
+<!--   - \usepackage{annotate-equations} -->
+<!-- output: -->
+<!--   bookdown::pdf_document2: -->
+<!--     toc: false -->
+<!-- --- -->
+
+# Convergência
+
+::: {.definition #convprob}
+
+$\{Y_{n}\}_{n \ge 1}$ é uma sequência de variáveis aleatórias em $(\Omega, \mathcal{A}, P)$. $Y_{n}$ converge para $Y$ (sendo $Y$ uma variável aleatória em $(\Omega, \mathcal{A}, P)$) em probabilidade se $\forall \epsilon > 0$:
+
+\begin{equation*}
+P(|Y_{n} - Y| \ge \epsilon) \xrightarrow[n \to \infty]{}0
+\end{equation*}
+
+:::
+
+Se $\epsilon > 0$ e $A_{n} = \{\omega: |Y_{n}(\omega) - Y(\omega)| \ge \epsilon\}$, então $\exists n(\epsilon)$ tal que se $n \ge n(\epsilon) \Rightarrow P(A_{n}) = P_{n} \to 0$.
+
+::: {.definition #convqc}
+
+Sob as mesmas condições da definição \@ref(def:convprob), $Y_{n}$ converge quase certamente para $Y$ se $A_{0} = \{\omega : Y_{n}(\omega) \xrightarrow[n \to \infty]{}Y(\omega)\}$ é de probabilidade 1.
+
+:::
+
+**Notas:**
+
+1. A convergência quase certa é uma convergência pontual, com probabilidade 1;
+2. Alguns textos usam a terminologia $Y_{n}(\omega)$ converge para $Y(\omega)$ para quase todo $\omega$;
+3. Convergência quase certa implica em convergência em probabilidade.
+
+::: {.proposition}
+
+Se $Y_{n} \xrightarrow[]{q.c.}Y \Rightarrow Y_{n} \xrightarrow[]{p}Y$.
+
+:::
+
+::: {.proof name="Prova"}
+
+É necessário verificar que se $\epsilon > 0 \Rightarrow P(|Y_{n} - Y| \ge \epsilon) \xrightarrow[n \to \infty]{} 0$, sendo $\epsilon$ arbitrário. Seja $A_{0} = \left\{\omega : Y_{n}(\omega) \xrightarrow[n \to \infty]{}Y(\omega)\right\}$, temos por hipótese que $P(A_{0}) = 1 \Rightarrow \forall \omega \in A_{0}, |Y_{n}(\omega) - Y(\omega)| < \epsilon$ para $n$ suficientemente grande.
+
+Definamos uma sequência $\{A_{n}\}$ tal que $A_{n} = \{\forall k : k \ge n, |Y_{k} - Y| < \epsilon\} \Rightarrow A_{n} = \bigcap_{k=n}^{\infty}\{|Y_{k} - Y| < \epsilon\}$. Pela definição de $A_{0}$, se $\omega \in A_{0} \Rightarrow \omega \in A_{n}$ para algum $n$.
+
+Por construção $\{A_{n}\}_{n \ge 1} : A_{n} \subseteq A_{n+1}$. Assim, $A_{0} \subseteq \bigcup_{n \ge 1}A_{n} = \lim_{n \to \infty}A_{n} \Rightarrow 1 = P(A_{0}) \le P\left(\bigcup_{n \ge 1}A_{n}\right) = \lim_{n \to \infty}P(A_{n}) \le 1 \Rightarrow P(A_{n}) \uparrow 1$. Já que $A_{n} = \bigcap_{k = n}^{\infty}\{|Y_{k} - Y| < \epsilon\} \Rightarrow A_{n} \subseteq \{|Y_{k} - Y| < \epsilon\}$, então:
+
+\begin{equation*}
+P(|Y_{n} - Y| < \epsilon) \xrightarrow[n \to \infty]{} 1 \Leftrightarrow P(|Y_{n} - Y| \ge \epsilon) \xrightarrow[n \to \infty]{} 0 \Rightarrow Y_{n} \xrightarrow[]{p}Y
+\end{equation*}
+
+:::
+
+::: {.example}
+
+Vejamos um caso em que convergência em probabilidade não implica em convergência quase certa. Seja a seguinte sequência:
+
+\begin{center}
+\begin{tikzpicture}[scale=6]
+\usetikzlibrary{decorations.pathreplacing}
+\draw[very thick, black, |-|] (0,0) -- (1,0) node[right] {1};
+\node[left] (0,0) {0};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=5ex}] (0,0)--(1,0) node [ midway, below=1cm] {$I_{1}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, raise=2ex}] (0,0)--(0.5,0) node [midway, above=0.5cm] {$I_{2}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, raise=2ex}] (0.5,0)--(1,0) node [midway, above=0.5cm] {$I_{3}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=1.2ex}] (0,0)--(0.25,0) node [midway, below=0.3cm] {$I_{4}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=1.2ex}] (0.25,0)--(0.5,0) node [midway, below=0.3cm] {$I_{5}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=1.2ex}] (0.5,0)--(0.75,0) node [midway, below=0.3cm] {$I_{6}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=1.2ex}] (0.75,0)--(1,0) node [midway, below=0.3cm] {$I_{7}$};
+    \node at (2,0) {$\Rightarrow I_{2^{m} + i} = \left[\frac{i}{2^{m}},\frac{i+1}{2^{m}}\right], m = 0,1,\ldots, i = 0,1,\ldots, 2^{m}-1$};
+\end{tikzpicture}
+\end{center}
+
+Note que o comprimento de $I_{2^{m} + i} = \frac{1}{2^{m}}$ e que a sequência $\{I_{k}\}$ cobre o intervalo $[0,1]$. Defina $Y_{n} = \begin{cases}
+1 &,\text{se }x \in I_{n} \\
+0 &,\text{se }x \not\in I_{n}
+\end{cases}$ e $X \sim U(0,1)$. Temos que $P(X \in I_{n}) = P(Y_{n} = 1) \xrightarrow[n \to \infty]{}0$, pois $I_{n}$ tem um comprimento que cai na medida que $n$ aumenta. Assim, é natural pensar que o limite possível de $Y_{n}$ é $Y = 0$.
+
+Para verificar a convergência em probabilidade, dado $\epsilon$ arbitrário tal que $\epsilon > 0$, é necessário computar:
+
+\begin{equation*}
+P(|Y_{n} - 0| \ge \epsilon) = P(Y_{n} = 1) \xrightarrow[n \to \infty]{} 0
+\end{equation*}
+
+Logo $Y_{n} \xrightarrow[]{p}0 \; \forall \epsilon$. Veja que, caso $\epsilon > 1: P(|Y_{n}| \ge \epsilon) = P(\emptyset) = 0$. Note que $Y_{n}$ não converge para 0 quase certamente, pois:
+
+\begin{equation*}
+\begin{cases}
+Y_{n}(\omega) = 1 \text{ para um número infinito de }n's \\
+Y_{n}(\omega) = 0 \text{ para um número infinito de }n's
+\end{cases}
+\end{equation*}
+
+:::
+
+## Lei dos Grandes Números
+
+::: {.theorem}
+
+Sejam $X_{1},X_{2},\ldots$ variáveis aleatórias integráveis em $(\Omega, \mathcal{A}, P)$. Seja $S_{n} = X_{1} + \ldots + X_{n}$.
+
+1. $X_{1},X_{2},\ldots$ satisfaz a lei fraca dos grandes números se:
+
+\begin{equation*}
+\frac{S_{n} - E(S_{n})}{n} \xrightarrow[]{p} 0
+\end{equation*}
+
+2. $X_{1},X_{2},\ldots$ satisfaz a lei forte dos grandes números se:
+
+\begin{equation*}
+\frac{S_{n} - E(S_{n})}{n} \xrightarrow[]{q.c.} 0
+\end{equation*}
+
+:::
+
+::: {.theorem name="Lei Fraca de Tchebychev" #leifractcheb}
+
+Sejam $X_{1},X_{2},\ldots,$ variáveis aleatórias independentes 2 a 2, com variâncias finitas e uniformemente limitadas (ou seja, existe $c < \infty : \forall n, Var(X_{n}) \le c$). Então $X_{1},X_{2},\ldots$ satisfazem a Lei Fraca dos Grandes Números:
+
+\begin{equation*}
+\frac{S_{n} - E(S_{n})}{n} \xrightarrow[n \to \infty]{p} 0
+\end{equation*}
+
+:::
+
+::: {.proof name="Prova"}
+
+É necessário provar que dado $\epsilon > 0, P\left(|\frac{S_{n} - E(S_{n})}{n}| \ge \epsilon\right) \xrightarrow[n \to \infty]{} 0$. Calculemos $Var(S_{n})$:
+
+\begin{equation*}
+Var(S_{n}) = Var(X_{1} + \ldots + X_{n}) = \sum_{i=1}^{n}Var(X_{i}) \stackrel{hip}{\le} nc
+\end{equation*}
+
+Aplicamos a Desigualdade de Tchebychev, com $X = S_{n}$ e $\lambda = \epsilon n$:
+
+\begin{equation*}
+P(|S_{n} - E(S_{n})| \ge \epsilon n) \le \frac{Var(S_{n})}{\epsilon^{2}n^{2}} \le \frac{cn}{\epsilon^{2}n^{2}} = \frac{c}{\epsilon^{2}n} \xrightarrow[n \to \infty]{} 0
+\end{equation*}
+
+Observe que não é necessária a condição de independência 2 a 2, basta que os $X_{i}$ sejam não correlacionados.
+
+:::
+
+::: {.corollary name="Lei dos Grandes Números de Bernoulli"}
+
+Seja $X_{1},X_{2},\ldots,$ uma sequência de ensaios de Bernoulli independentes, com a mmesma probabilidade de sucesso, $p$. Seja $S_{n} = X_{1} + \ldots + X_{n}$, o número de sucessos em $n$ ensaios, então:
+
+\begin{equation*}
+\frac{S_{n}}{n} \xrightarrow[]{p} p
+\end{equation*}
+
+:::
+
+::: {.proof name="Prova"}
+
+Sabemos que $X_{n} = 1$ com probabilidade $p$ e $X_{n} = 0$ com probabilidade $(1-p)$, e como os $\{X_{n}\}$ são independentes, implica-se a independência 2 a 2. Além disso, $Var(X_{n}) = p(1-p) \le \frac{1}{4} = c$. Assim, as hipóteses do teorema \@ref(thm:leifractcheb) são válidas, e sendo $E(S_{n}) = E\left(\sum_{i=1}^{n}X_{i}\right) = \sum_{i=1}^{n}E(X_{i}) = np$, temos:
+
+\begin{align*}
+\frac{S_{n} - E(S_{n})}{n} = \frac{S_{n} - np}{n} = &\frac{S_{n}}{n} - p \xrightarrow[]{p} 0 \\
+&\frac{S_{n}}{n} \xrightarrow[]{p} p
+\end{align*}
+
+:::
+
+::: {.theorem name="Lei Fraca de Khintchin"}
+
+Se $X_{1},X_{2},\ldots,$ são independentes, identicamente distribuídos e integráveis, com média comum $\mu$. Então:
+
+\begin{equation*}
+\frac{S_{n}}{n} \xrightarrow[n \to \infty]{p} \mu
+\end{equation*}
+
+:::
+
+::: {.lemma name="Lema de Borel-Cantelli"}
+
+Sejam $A_{1},A_{2},\ldots,$ uma sequência de eventos em $(\Omega, \mathcal{A}, P)$. Defina:
+
+\begin{gather*}
+\lim\sup_{n \to \infty} A_{n} = \bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}A_{k} \\
+\lim\inf_{n \to \infty} A_{n} = \bigcup_{n=1}^{\infty}\bigcap_{k=n}^{\infty}A_{k}
+\end{gather*}
+
+:::
+
+**Notas:**
+
+a) $\lim\sup_{n \to \infty}A_{n} = [A_{n} \text{ ocorre infinitas vezes}]$. Vejamos que se $\omega \in \lim\sup_{n \to \infty}A_{n} \Rightarrow \omega \in \bigcup_{k = n}^{\infty}A_{k}, \forall n$. Se $n = 1, \omega \in \bigcup_{n=1}^{\infty}A_{k} \Rightarrow \exists k_{1} \ge 1 : \omega \in A_{k_{1}}$. Se $n = k_{1} + 1, \omega \in \bigcup_{k = k_{1} + 1}^{\infty}A_{k} \Rightarrow \exists k_{2} > k_{1} : \omega \in A_{k_{2}}$. Continuando desse modo, podemos identificar $k_{1} < k_{2} < \ldots,$ tais que $\omega \in A_{k_{n}} \forall n$. Assim, $\omega$ pertence a um número infinito de $A_{n}$'s;
+
+b) $\lim\inf_{n \to \infty}A_{n} = [\text{ocorrência de } A_{n} \, \forall n \text{ suficientemente grande}]$. Vejamos que se $\omega \in \lim\inf_{n \to \infty}A_{n} \Leftrightarrow \exists n_{0}(\omega) : \omega \in \bigcap_{k=n_{0}}^{\infty}A_{k} \Leftrightarrow \forall k : k \ge n_{0}, \omega \in A_{k}$.
+
+::: {.proposition #somaeventalea}
+
+Sejam $A_{1}, A_{2}, \ldots,$ eventos aleatórios em $(\Omega, \mathcal{A}, P)$:
+
+a) Se $\sum_{n=1}^{\infty}P(A_{n}) < \infty \Rightarrow P\left(\lim\sup_{n \to \infty}A_{n}\right) = 0$;
+
+b) Se $\sum_{n=1}^{\infty}P(A_{n}) = \infty$ e $\{A_{n}\}$ são conjuntamente independentes, então $P\left(\lim\sup_{n \to \infty}A_{n}\right) = 1$.
+
+:::
+
+**Nota:** Se a condição de independência é removida da proposição \@ref(prp:somaeventalea) é removida, a afirmação não é válida.
+
+::: {.proof name="Prova"}
+
+a) Considere que $[A_{n} \text{ ocorre infinitas vezes }] = \bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}A_{k} \Rightarrow [A_{n} \text{ ocorre infinitas vezes}] \subseteq \bigcup_{k=n}^{\infty}A_{k}$. Além disso, $\sum_{n=1}^{\infty}P(A_{n}) < \infty \Rightarrow \sum_{k=n}^{\infty}P(A_{k}) \xrightarrow[n \to \infty]{}0$. Dessa forma:
+
+\begin{align*}
+P([A_{n} \text{ ocorre infinitas vezes}]) \le P\left(\bigcup_{k=n}^{\infty}A_{k}\right) &\le \sum_{k=n}^{\infty}P(A_{k}) \xrightarrow[n \to \infty]{} 0 \\
+P([A_{n} \text{ ocorre infinitas vezes}]) &\le 0 \\
+P\left(\lim\sup_{n \to \infty}A_{n}\right) &= 0
+\end{align*}
+
+b) Já que $[A_{n} \text{ ocorre infinitas vezes}] = \bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}A_{k}$, uma estratégia é verificar $P\left(\bigcup_{k=n}^{\infty}A_{k}\right) = 1$. Logo, ocorre que $P\left(\bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}A_{k}\right) = 1$. Tome $B_{n} = \bigcup_{k=n}^{\infty}A_{k} \Rightarrow B_{n} \supseteq \bigcup_{k=n}^{n+m}A_{k}, \forall m \Rightarrow B_{n}^{c} \subseteq \left(\bigcup_{k=n}^{n+m}A_{k}\right)^{c} = \bigcap_{k=n}^{n+m}A_{k}^{c}$. Logo $1 - P(B_{n}) = P(B_{n}^{c}) \le P\left(\bigcap_{k=n}^{n+m}A_{k}^{c}\right) = \prod_{k=n}^{n+m}P(A_{k}^{c}) = \prod_{k=n}^{n+m}(1 - P(A_{k}))$. Sabemos que $\forall p \in [0,1], 1 - p \le e^{-p}$, assim $1 - P(B_{n}) \le \prod_{k=n}^{n+m}(1 - P(A_{k})) \le \prod_{k=n}^{n+m}\exp(-P(A_{k})) = \exp\left(-\sum_{k=n}^{n+m}P(A_{k})\right)$. Ou seja, $\exp\left(-\sum_{k=n}^{n+m}P(A_{k})\right) \xrightarrow[m \to \infty]{}0$, de modo que $1 - P(B_{n}) \le 0 \Rightarrow P(B_{n}) = 1 \forall n$.
+
+:::
+
+::: {.example}
+
+Sejam $X_{1},X_{2},\ldots,$ variáveis aleatórias independentes e identicamente distribuídas, com $X_{i} \sim Exp(1)$. Vejamos que, $Y_{n} = \frac{X_{n}}{\log(n)},n > 1$, temos:
+
+1) $Y_{n} \xrightarrow[]{p}0$;
+
+2) $Y_{n} \not\xrightarrow[]{q.c}0$.
+
+::: {.proof name="Prova"}
+
+1) Devemos verificar que se $\epsilon > 0, P(|Y_{n}| \ge \epsilon) \xrightarrow[n \to \infty]{} 0$:
+
+\begin{align*}
+P(|Y_{n}| \ge \epsilon) &= P(Y_{n} \ge \epsilon) \\
+&= P(X_{n} \ge \epsilon \log(n)) \\
+&= \exp(-\epsilon \log(n)) \\
+&= n^{-\epsilon} \xrightarrow[n \to \infty]{} 0 \Rightarrow Y_{n} \xrightarrow[]{p} 0
+\end{align*}
+
+2) Quanto à não convergência quase certa a ideia é provar que $P(Y_{n} \ge \epsilon \text{ ocorre infinitas vezes}) = 1 \forall \epsilon > 0$. Seja $A_{n} = [Y_{n} \ge \epsilon]$. Vamos olhar para o evento $[A_{n} \text{ ocorre infinitas vezes}]$, se $\omega \in [A_{n} \text{ ocorre infinitas vezes}] \Rightarrow Y_{n}(\omega) \ge \epsilon$ para um número infinito de $n$'s. Além disso, $\{Y_{n}\}$ é conjuntamente independente, de modo que $\{A_{n}\}$ também será conjuntamente independente. Assim, a hipótese de independência para Borel-Cantelli é válida. Basta checar que $\sum_{n=1}^{\infty}P(A_{n}) = \infty$:
+
+\begin{align*}
+\sum_{n=1}^{\infty}P(A_{n}) &= \sum_{n=1}^{\infty}P(Y_{n} \ge \epsilon) \\
+&= \sum_{n=1}^{\infty}P(X_{n} \ge \epsilon \log(n)) \\
+&= \sum_{n=1}^{\infty}\exp(-\epsilon \log(n)) \\
+&= \sum_{n=1}^{\infty}n^{-\epsilon} = \infty
+\end{align*}
+
+:::
+
+:::
+
+::: {.corollary}
+
+Seja $\{X_{n}\}_{n \ge 1}$ uma sequência de ensaios Bernoulli independentes, cada um com probabilidade de sucesso $p_{n}$. Se $\sum_{n=1}^{\infty}p_{n} < \infty \Rightarrow P\left(\sum_{n=1}^{\infty}X_{n} < \infty\right) = 1$. Se $\sum_{n=1}^{\infty}p_{n} = \infty \Rightarrow P\left(\sum_{n=1}^{\infty}X_{n} = \infty\right) = 1$.
+
+:::
+
+**Nota:** No primeiro caso ocorre um número finito de sucessos quase certamente. No segundo caso, ocorre um número infinito de sucessos quase certamente.
+
+::: {.proof name="Prova"}
+
+Defina $A_{n} = [X_{n} = 1]P(A_{n}) = P(X_{n} = 1) = p_{n}$. Pelo Lema de Borel-Cantelli:
+
+a) $\sum_{n=1}^{\infty}p_{n} < \infty \Rightarrow P(A_{n} \text{ ocorrer infinitas vezes}) = 0$;
+
+b) $\sum_{n=1}^{\infty}p_{n} = \infty \Rightarrow P(A_{n} \text{ ocorrer infinitas vezes}) = 1$;
+
+Temos que:
+
+\begin{equation*}
+[A_{n} \text{ ocorrer infinitas vezes}] = \left[\sum_{n=1}^{\infty}X_{n} = \infty\right] \Rightarrow [A_{n} \text{ ocorrer infinitas vezes}]^{c} = \left[\sum_{n=1}^{\infty}X_{n} < \infty\right]
+\end{equation*}
+
+Já que $P\left(\sum_{n=1}^{\infty}X_{n} = \infty\right) = 0 \Rightarrow P\left(\sum_{n=1}^{\infty}X_{n} < \infty\right) = 1$. Já por (b), como $[A_{n} \text{ infinitas vezes}] = \left[\sum_{n=1}^{\infty}A_{n} = \infty\right] \Rightarrow P\left(\sum_{n=1}^{\infty}X_{n} = \infty\right) = 1$.
+
+:::
+
+::: {.theorem name="Recíproca da Lei Forte de Kolmogorov"}
+
+Sejam $X_{1},X_{2},\ldots,$ variáveis aleatórias independentes e identicamente distribuídas. Se $E(|X_{1}|) = \infty$, então com probabilidade 1 a sequência:
+
+\begin{equation*}
+\frac{|S_{n}|}{n} = \frac{|X_{1} + \ldots + X_{n}|}{n}
+\end{equation*}
+
+não é limitada, para $n = 1,2,\ldots$
+
+:::
+
+**Notas:**
+
+1) O teorema é considerado a recíproca da Lei Forte de Kolmogorov. A Lei citada afirma que, sob o suposto de integrabilidade das variáveis aleatórias $X_{n}, \frac{S_{n}}{n} \xrightarrow[n \to \infty]{}E(X_{1})$ com probabilidade 1, ou seja, quase certamente;
+
+2) O teorema é uma aplicação do Lema de Borel-Cantelli;
+
+3) Lembrando o critério de integrabilidade, $X$ é integrável se e somente se $\sum_{n=1}^{\infty}P(|X_{n}| \ge n) < \infty$.
+
+::: {.proof name="Prova"}
+
+Por hipótese, $E(|X_{1}|) = \infty$, logo $\forall k, k = 1,2,\ldots, E\left(\frac{|X_{1}|}{k}\right) = \infty$. Pela nota 3, temos que $\sum_{n=1}^{\infty}P\left(\frac{|X_{1}|}{k} \ge n\right) = \infty, \forall k$. Como $X_{1},X_{2},\ldots,$ são identicamente distribuídos:
+
+\begin{equation*}
+\infty = \sum_{n=1}^{\infty}P\left(\frac{|X_{1}|}{k} \ge n\right) = \sum_{n=1}^{\infty}P\left(\frac{|X_{n}|}{k} \ge n\right) = \sum_{n=1}^{\infty}P\left(\frac{|X_{n}|}{n} \ge k\right) \;\;\; ,\forall k
+\end{equation*}
+
+Defina $A_{n} = \left[\frac{|X_{n}|}{n} \ge k\right]$. Como $\{X_{n}\}_{n \ge 1}$ são independentes, a sequência $\{A_{n}\}_{n \ge 1}$ será conjuntamente independente. Pelo item (b) do Lema de Borel-Cantelli, como $\infty = \sum_{n=1}^{\infty}P(A_{n})$ e a sequência é conjuntamente independente, $P([A_{n} \text{ ocorrer infinitas vezes}]) = 1$. Defina $B_{k} = \left[\frac{|X_{n}|}{n} \ge k \text{ ocorre infinitas vezes}\right]$, para $k$ fixo. Assim, $P(B_{k}) = 1, \forall k$. Dessa forma, $P\left(\bigcap_{k=1}^{\infty}B_{k}\right) = 1$
+
+Ou seja, $P\left(\left\{\frac{|X_{n}|}{n}\right\} \text{ ser ilimitada}\right) = 1$. Seja $S_{n} = X_{1} + \ldots + X_{n}$ e $S_{0} = 0$. Devemos provar que se $\frac{|X_{n}|}{n}$ é ilimitada, então $\frac{|S_{n}|}{n}$ também será ilimitada. Temos pela desigualdade triangular que:
+
+\begin{equation*}
+\frac{|X_{n}|}{n} = \frac{|S_{n} - S_{n-1}|}{n} \le \frac{|S_{n}|}{n} + \frac{|S_{n-1}|}{n}
+\end{equation*}
+
+Como $\frac{|X_{n}|}{n}$ é ilimitada, a relação indica que $\frac{|S_{n}|}{n} \text{ ou } \frac{|S_{n-1}|}{n}$ é ilimitada. Note que $\left\{\frac{|S_{n-1}|}{n-1}\right\}_{n \ge 2}$ forma a sequência $\left\{\frac{|S_{n}|}{n}\right\}_{n \ge 1}$. Se $n \ge 2, \frac{|S_{n-1}|}{n} = \frac{|S_{n-1}|}{(n-1)}\frac{(n-1)}{n}$, e $\frac{(n-1)}{n} \in \left[\frac{1}{2},1\right)$. Dessa forma, $\frac{|S_{n-1}|}{n}$ é ilimitada se e somente se $\frac{|S_{n}|}{n}$ é ilimitada, logo $\frac{|S_{n}|}{n}$ é ilimitada com probabilidade 1.
+
+:::
+
+::: {.proposition name="Desigualdade de Kolmogorov"}
+
+Sejam $X_{1},X_{2},\ldots,X_{n}$ variáveis aleatórias independentes, com $E(X_{k}) = 0, Var(X_{k}) < \infty, \forall k$. Então, para todo $\lambda > 0$:
+
+\begin{equation*}
+P\left(\max_{1 \le k \le n}\{|S_{k}|\} \ge \lambda\right) \le \frac{Var(S_{n})}{\lambda^{2}} = \frac{\sum_{k=1}^{n}Var(X_{k})}{\lambda^{2}}
+\end{equation*}
+
+Onde $S_{n} = X_{1} + \ldots + X_{n}$.
+
+:::
+
+::: {.proof name="Prova"}
+
+Primeiro, vejamos que se $X$ é uma variável aleatória, $X \ge 0$, podemos definir $X \ge X.I_{[X \ge c]}$. Assim:
+
+\begin{align*}
+S_{n}^{2} &\ge S_{n}^{2}I_{[S^{2} \ge \lambda^{2}]} \ge \lambda^{2}I_{[S^{2} \ge \lambda^{2}]} \\ \\
+E(S_{n}^{2}) &\ge \lambda^{2}E(I_{[S^{2} \ge \lambda^{2}]}) = \lambda^{2}P(S_{n}^{2} \ge \lambda^{2}) \\
+P(S_{n}^{2} \ge \lambda^{2}) &\le \frac{E(S_{n}^{2})}{\lambda^{2}} \\
+P(S_{n}^{2} \ge \lambda^{2}) &\le \frac{Var(S_{n})}{\lambda^{2}} \\
+P(|S_{n}| \ge \lambda) &\le \frac{Var(S_{n})}{\lambda^{2}}
+\end{align*}
+
+Defina $A = \{\max_{1 \le k \le n}S_{k}^{2} \ge \lambda^{2}\}$. Sejam $A_{1} = [S_{1}^{2} \ge \lambda^{2}], A_{2} = [S_{1}^{2} < \lambda^{2}, S_{2}^{2} \ge \lambda^{2}], \ldots, A_{k} = [S_{1}^{2} < \lambda^{2}, \ldots, S_{k-1}^{2} < \lambda^{2}, S_{k} \ge \lambda^{2}], \ldots$. Temos que os $\{A_{k}\}$ são disjuntos dois a dois e que $A = \bigcup_{k=1}^{n}A_{k}$. Assim, $I_{A} = \sum_{k=1}^{n}I_{A_{k}}$ de modo que $S_{n}^{2} \ge S_{n}^{2}I_{A} = S_{n}^{2}\sum_{k=1}^{n}I_{A_{k}} \Rightarrow E(S_{n}^{2}) \ge \sum_{k=1}^{n}E(S_{n}^{2}I_{A_{k}})$. Note que $S_{n}^{2} = (S_{n} - S_{k} + S_{k})^{2} = (S_{n} - S_{k})^{2} + S_{k}^{2} + 2S_{k}(S_{n} - S_{k}) \ge S_{k}^{2} + 2S_{k}(S_{n} - S_{k})$. Assim:
+
+\begin{align*}
+E(S_{n}^{2})I_{A_{k}} &\ge E(S_{k}^{2}I_{A_{k}}) + 2E\{(S_{n} - S_{k})S_{k}I_{A_{k}}\} \\
+E\{(S_{n} - S_{k})S_{k}I_{A_{k}}\} &= E(S_{n} - S_{k})E(S_{k}I_{A_{k}}) \\
+&= 0E(S_{k}I_{A_{k}}) \\
+&= 0
+\end{align*}
+
+Assim, substituindo teremos:
+
+\begin{align*}
+E(S_{n}^{2}I_{A_{k}}) &\ge E(S_{n}^{2}I_{A_{k}}) \\
+&\ge \lambda^{2}E(I_{A_{k}}) = \lambda^{2}P(A_{k})
+\end{align*}
+
+De modo que:
+
+\begin{equation*}
+E(S_{n}^{2}) \ge \sum_{k=1}^{n}\lambda^{2}P(A_{k}) = \lambda^{2}P(A) \Rightarrow P(A) \le \frac{E(S_{n}^{2})}{\lambda^{2}} = \frac{Var(S_{n})}{\lambda^{2}}
+\end{equation*}
+
+:::
+
+## Leis de Kolmogorov
+
+::: {.theorem name="1ª Lei Forte de Kolmogorov"}
+
+Sejam $X_{1},X_{2},\ldots,$ variáveis aleatórias independentes e integráveis. Suponha que $\sum_{n=1}^{\infty}\frac{Var(X_{n})}{n^{2}} < \infty$. Então $\{X_{n}\}_{n \ge 1}$ satisfaz a Lei Forte dos Grandes Números, ou seja:
+
+\begin{equation*}
+\frac{X_{1} + \ldots + X_{n}}{n} - \frac{[E(X_{1}) + \ldots + E(X_{n})]}{n} \xrightarrow[]{q.c.}0
+\end{equation*}
+
+:::
+
+::: {.corollary}
+
+A Lei Forte de Kolmogorov é satisfeita por toda sequência de variáveis aleatórias independentes e uniformemente limitadas.
+
+:::
+
+::: {.proof name="Prova"}
+
+Uma sequência uniformemente limitada é definida: $\forall X_{n} \; \exists c$, constante, tal que $|X_{n}| \le c \; \forall n$. Tal propriedade garante que $E(|X_{n}|) \le c$, ou seja, temos a integrabilidade, basta verificar a finitude da soma das variâncias:
+
+\begin{equation*}
+Var(X_{n}) \le E(X_{n}^{2}) \le c^{2} \Rightarrow \frac{\sum_{n=1}^{\infty}Var(X_{n})}{n} \le \frac{\sum_{n=1}^{\infty}c^{2}}{n^{2}} = c^{2}\sum_{n=1}^{\infty}\frac{1}{n^{2}} < \infty
+\end{equation*}
+
+Desse modo, a soma das variâncias é finita, então vale o corolário.
+
+:::
+
+::: {.example}
+
+Sejam $X_{n} = \begin{cases}
+1 &,p_{n} \\
+0 &,1-p_{n}
+\end{cases}, X_{n} \sim Ber(p_{n})$, com os $\{X_{n}\}_{n \ge 1}$ independentes. Como $|X_{n}| \le 1 \;\forall n$, a sequência é uniformemente limitada, de modo que se aplica o corolário:
+
+\begin{equation*}
+\frac{S_{n}}{n} - \frac{(p_{1} + \ldots + p_{n})}{n} \xrightarrow[]{q.c.} 0
+\end{equation*}
+
+Particularmente, se $p_{n} = p  \; \forall n$, então:
+
+\begin{equation*}
+\frac{S_{n}}{n} \xrightarrow[]{q.c.} p \Leftrightarrow P\left(\frac{S_{n}}{n} \xrightarrow[n \to \infty]{}p\right) = 1
+\end{equation*}
+
+:::
+
+::: {.corollary name="Lei Forte de Borel"}
+
+Sejam $X_{1},X_{2},\ldots,$ variáveis aleatórias independentes e identicamente distribuídas, tais que $P(X_{n} = 1) = p$ e $P(X_{n} = 0) = (1 - p)$. Então:
+
+\begin{equation*}
+\frac{S_{n}}{n} \xrightarrow[]{q.c.}p
+\end{equation*}
+
+:::
+
+::: {.proof name="Prova (Teorema da 1ª Lei Forte de Kolmogorov)"}
+
+Seja $M_{n} = \max_{2^{n} < k \le 2^{n+1}}\frac{|S_{k}|}{k}$. Vejamos pela desigualdade de Kolmogorov que:
+
+\begin{equation*}
+P(M_{n} \ge \frac{1}{m}) = P\left(\max_{2^{n} < k \le 2^{n+1}}\frac{|S_{k}|}{k} \ge \frac{1}{m}\right) = P\left(\max_{2^{n} < k \le 2^{n+1}}|S_{k}| \ge \frac{k}{m}\right) \le P\left(\max_{1 < k \le 2^{n+1}}|S_{k}| \ge \frac{2^{n}}{m}\right)
+\end{equation*}
+
+E aplicando a desigualdade teremos:
+
+\begin{equation*}
+P\left(\max_{1 < k \le 2^{n+1}}|S_{k}| \ge \frac{2^{n}}{m}\right) \le \frac{m^{2}}{4^{n}}\sum_{k=1}^{2^{n+1}}Var(X_{k})
+\end{equation*}
+
+Defina $A_{n} = \left\{\max_{2^{n} < k \le 2^{n+1}}\frac{|S_{k}|}{k} \ge \frac{1}{m}\right\} = \left[M_{n} \ge \frac{1}{m}\right]$. Vamos verificar que $\sum_{n=1}^{\infty}P(A_{n}) < \infty$:
+
+\begin{align}
+\sum_{n=1}^{\infty}P(A_{n}) \le m^{2}\sum_{n=1}^{\infty}\frac{1}{4^{n}}\sum_{k=1}^{2^{n+1}}Var(X_{k}) &= m^{2}\sum_{k=1}^{\infty}\;\sum_{n:2^{n+1} \ge k}\frac{1}{4^{n}}Var(X_{k})  \nonumber \\
+&= m^{2}\sum_{k=1}^{\infty}Var(X_{k})\sum_{n:2^{n+1} \ge k}\frac{1}{4^{n}}
+(\#eq:sumprobconv)
+\end{align}
+
+Desenvolvendo a série geométrica teremos:
+
+\begin{equation*}
+\sum_{n:2^{n+1} \ge k}\frac{1}{4^{n}} = \frac{4}{3}.\frac{1}{4^{J(k)}} = \frac{4}{3}.\frac{1}{2^{J(k)}}.\frac{1}{2^{J(k)}}\;\;\; , J(k) = \left(\frac{\ln(k/2)}{ln(2)}\right)
+\end{equation*}
+
+Note que $2^{J(k) + 1} \ge k \Leftrightarrow \frac{1}{2.2^{J(k)}} \le \frac{1}{k} \Leftrightarrow \frac{1}{2^{J(k)}} \le \frac{2}{k}$, de modo que:
+
+\begin{equation*}
+\frac{4}{3}.\frac{1}{2^{J(k)}}.\frac{1}{2^{J(k)}} \le \frac{4}{3}.\frac{4}{k^{2}} = \frac{16}{3k^{2}}
+\end{equation*}
+
+Assim, substituindo esse resultado em \@ref(eq:sumprobconv):
+
+\begin{align*}
+\sum_{n=1}^{\infty}P(A_{n}) &\le m^{2}\sum_{k=1}^{\infty}Var(X_{k})\sum_{n:2^{n+1} \ge k}\frac{1}{4^{n}} \\
+&\le m^{2}\sum_{k=1}^{\infty}Var(X_{k})\frac{16}{3k^{2}} < \infty
+\end{align*}
+
+Pelo Lema de Borel-Cantelli, $P([A_{n} \text{ ocorre infinitas vezes}]) = 0$, logo sendo $A_{n} = \left[M_{n} \ge \frac{1}{m}\right]$ para todo $m$, a probabilidade de $M_{n}$ superar $\frac{1}{m}$ infinitas vezes é nula, assim seu complemento tem probabilidade 1. Logo $P\left(M_{n} \ge \frac{1}{m} \text{ para um número finito de vezes}\right) = 1$. Sendo $B_{m} = \left[M_{n} \ge \frac{1}{m} \text{ para um número finito de }n's\right]$, então $P(B_{m}) = 1 \Rightarrow P\left(\bigcap_{m=1}^{\infty}B_{m}\right) = 1$.
+
+Se $\omega \in \bigcap_{m=1}^{\infty}B_{m} \Leftrightarrow \forall m, M_{n}(\omega) \ge \frac{1}{m}$ para finitos $n$'s $\Leftrightarrow \forall m, 0 \le M_{n}(\omega) < \frac{1}{m}$ se $n$ é suficientemente grande $\Leftrightarrow M_{n}(\omega) \xrightarrow[n \to \infty]{}0; \bigcap_{m=1}^{\infty}B_{m} = [M_{n} \to 0]$, ou seja, $P([M_{n} \to 0]) = 1$.
+
+:::
+
+::: {.lemma #sumvarfinita}
+
+Seja $X$ uma variável aleatória com distribuição $f$. Então:
+
+\begin{equation*}
+\sum_{n=1}^{\infty}\left\{\frac{1}{n^{2}}\int_{-n}^{n}x^{2}dF_{X}(x)\right\} < \infty
+\end{equation*}
+
+:::
+
+::: {.theorem name="Lei Forte de Kolmogorov"}
+
+Sejam $X_{1},X_{2},\ldots,$ variáveis aleatórias independentes e identicamente distribuídas, integráveis e com esperanças $E(X_{n}) = \mu$. Então:
+
+\begin{equation*}
+\frac{X_{1} + \ldots + X_{n}}{n} \xrightarrow[]{q.c.}\mu
+\end{equation*}
+
+:::
+
+**Nota:** Basta supor $\mu = 0$. No caso geral, defina $U_{n} = X_{n} - \mu$.
+
+::: {.proof name="Prova"}
+
+Defina $Y_{n} = \begin{cases}
+X_{n} &, -n < X_{n} \le n \\
+0 &, c.c.
+\end{cases}$, logo $Y_{n} = X_{n}I_{[-n < X_{n} \le n]}$. Defina $Z_{n} = X_{n} - Y_{n}$, logo $\frac{X_{1} + \ldots + X_{n}}{n} = \frac{Y_{1} + \ldots + Y_{n}}{n} + \frac{Z_{1} + \ldots + Z_{n}}{n}$.
+
+Para provar precisamos mostrar que:
+
+a) Vamos usar Borel-Cantelli para provar que $\frac{Z_{1} + \ldots + Z_{n}}{n} \xrightarrow[]{q.c.}0$;
+
+b) Vamos usar a 1ª Lei Forte de Kolmogorov para provar que $\frac{Y_{1} + \ldots + Y_{n}}{n} - \frac{(E(Y_1) + \ldots + E(Y_{n}))}{n} \xrightarrow[]{q.c.}0$;
+
+c) Usaremos a convergência dominada para provar que $\frac{(E(Y_1) + \ldots + E(Y_{n}))}{n} \to 0$.
+
+Caso (a), (b) e (c) forem válidos, então o teorema está provado, pois sendo:
+
+\begin{equation*}
+A = \left[\frac{Z_{1} + \ldots + Z_{n}}{n} \to 0\right], \; \; \; B = \left[\frac{Y_{1} + \ldots + Y_{n}}{n} - \frac{(E(Y_1) + \ldots + E(Y_{n}))}{n}\right]
+\end{equation*}
+
+$P(A) = 1, P(B) = 1 \Rightarrow P(A \cap B) = 1$.
+
+**a)**
+
+Seja $A_{n} = [Z_{n} \neq 0]$. Teremos que $[Z_{n} \neq 0] \Leftrightarrow [X_{n} \neq Y_{n}] \Leftrightarrow [X_{n} \not\in (-n,n]]$. Assim:
+
+\begin{equation*}
+P(A_{n}) = P(Z_{n} \neq 0) = P(X_{n} \not\in (-n,n]) \le P(|X_{n}| \ge n)
+\end{equation*}
+
+Logo $\sum_{n=1}^{\infty}P(A_{n}) = \sum_{n=1}^{\infty}P(Z_{n} \neq 0) \le \sum_{n=1}^{\infty}P(|X_{n}| \ge n) \stackrel{iid}{=} \sum_{n=1}^{\infty}P(|X_{1}| \ge n) < \infty$, pois $X_{1}$ é integrável. Ou seja, como $\sum_{n=1}^{\infty}P(A_{n}) < \infty$, por Borel-Cantelli temos que $P(A_{n} \text{ ocorrer infinitas vezes}) = 0$. Pelo complemento teremos que $P(Z_{n} \neq 0 \text{ para um número finito de }n's) = 1 \Rightarrow P(Z_{n} = 0, \forall n \text{ suficientemente grande}) = 1$, de modo que $P\left(\frac{Z_{1} + \ldots + Z_{n}}{n} \to 0\right) = 1$.
+
+**b)**
+
+Devemos verificar que $\sum_{n=1}^{\infty}\frac{Var(Y_{n})}{n} < \infty$. Temos que:
+
+\begin{align*}
+Var(Y_{n}) \le E(Y_{n}^{2}) &= E(X_{n}^{2}I_{[-n < X_{n} \le n]}) \\
+&= \int x^{2}I_{[-n < X_{n} \le n]}(x)\, dF(x) \\
+&= \int_{-n}^{n}x^{2}\, dF(x)
+\end{align*}
+
+Logo, aplicando o lema \@ref(lem:sumvarfinita), teremos:
+
+\begin{equation*}
+\sum_{n=1}^{\infty}\frac{Var(Y_{n})}{n} \le \sum_{n=1}^{\infty}\frac{1}{n^{2}}\int_{-n}^{n}x^{2} \, dF(x) \stackrel{Lema}{<} \infty
+\end{equation*}
+
+Assim, $\{Y_{n}\}$ verifica a 1ª Lei Forte de Kolmogorov.
+
+**c)**
+
+Note primeiramente que as hipóteses do Teorema da Convergência Dominada são aplicáveis para $\{Y_{n}\}$. Fixo $n = 1, Y_{1} = X_{1}I_{[-n < X_{1} \le n]}, |Y_{1}| \le |X_{1}|$, sendo $X_{1}$ integrável por hipótese. Além disso, $Y_{1} = X_{1}I_{[-n < X_{1} \le n]} \xrightarrow[n \to \infty]{}X_{1}$, de modo que $Y_{1} \xrightarrow[n \to \infty]{}X_{1}$. Pelo Teorema da Convergência Dominada:
+
+\begin{equation*}
+E(Y_{n}) = E(X_{n}I_{[-n < X_{n} \le n]}) = E(X_{n}I_{[-n < X_{1} \le n]}) \to E(X_{1}) = 0
+\end{equation*}
+
+:::
+
+\newpage
+
+## Exercícios
+
+TODO
+
+\newpage

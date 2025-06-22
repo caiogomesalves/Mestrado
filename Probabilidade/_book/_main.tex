@@ -82,12 +82,12 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Notas de Aulas - MI401},
+  pdftitle={Notas de Aula - Capítulo 4},
   pdfauthor={Caio Gomes Alves},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Notas de Aulas - MI401}
+\title{Notas de Aula - Capítulo 4}
 \usepackage{etoolbox}
 \makeatletter
 \providecommand{\subtitle}[1]{% add subtitle to \maketitle
@@ -96,7 +96,7 @@
 \makeatother
 \subtitle{Probabilidade}
 \author{Caio Gomes Alves}
-\date{05/2025}
+\date{18/06/2025}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[section]
@@ -3287,7 +3287,7 @@ Pelo teorema do Jacobiano, temos que:
 \int \ldots \int_{A}f(x_{1}, \ldots, x_{n})dx_{1} \ldots dx_{n} = \int \ldots \int_{g(A)}f(h_{1}(y_{1}, \ldots, y_{n}), \ldots , h_{n}(y_{1}, \ldots, y_{n}))|J(\underbar{x}, \underbar{y})|dy_{1} \ldots dy_{n}
 \end{equation*}
 
-Se \(f\) é integrável em \(A\), com \(A \subseteq G_{0}\) e \(h = g^{-1}\). Assim, usando os valores do exemplo \ref{exm:motivacaoexponencial}, temos que \(X_{1} \sim exp(1), X_{2} \sim exp(1), X_{1} \perp X_{2}\), com densidade conjunta dada por \$ f\_\{X\_\{1\}X\_\{2\}\}(x\_\{1\},x\_\{2\}) = e\^{}\{-x\_\{1\} + x\_\{2\}\}\$, de modo que:
+Se \(f\) é integrável em \(A\), com \(A \subseteq G_{0}\) e \(h = g^{-1}\). Assim, usando os valores do exemplo \ref{exm:motivacaoexponencial}, temos que \(X_{1} \sim exp(1), X_{2} \sim exp(1), X_{1} \perp X_{2}\), com densidade conjunta dada por \(f_{X_{1}X_{2}}(x_{1},x_{2}) = e^{-x_{1} + x_{2}}\), de modo que:
 
 \begin{align*}
 f(h_{1}(y_{1},y_{2}),h_{2}(y_{1},y_{2}))|J(\underbar{x},\underbar{y})| &= f\left(\frac{y_{1}y_{2}}{y_{2} + 1},\frac{y_{1}}{y_{2} + 1}\right)\big{|}-y_{1}(y_{2} + 1)^{-2}\big{|} \\
@@ -4424,8 +4424,8 @@ P(T_{1} > 2T_{2}) &= \int_{0}^{\infty}\int_{2t_{2}}^{\infty}f(t_{1},t_{2})dt_{1}
 &= \int_{0}^{\infty}\lambda e^{-\lambda t_{2}}\left(-e^{-\lambda t_{1}}\Big{|}_{2t_{2}}^{\infty}\right)dt_{2} \\
 &= \int_{0}^{\infty}\lambda e^{-\lambda t_{2}}e^{-2\lambda t_{2}}dt_{2} \\
 &= \int_{0}^{\infty}\lambda e^{-3\lambda t_{2}}dt_{2} \\
-&= \frac{1}{3}\left(-e^{-3\lambda t_{2}}\Big{|}_{0}^{\infty}\right) \\
-&= \frac{1}{3+}
+&= \frac{\lambda}{3\lambda}\left(-e^{-3\lambda t_{2}}\Big{|}_{0}^{\infty}\right) \\
+&= \frac{1}{3}
 \end{align*}
 \end{proof}
 
@@ -4500,6 +4500,282 @@ y+1 & -1 \le y < 0 \\
 \end{equation*}
 
 E com isso, podemos facilmente ver que \(f(x,y) \neq f_{X}(x)f_{Y}(y)\), de modo que \(X\) e \(Y\) não serão independentes.
+\end{proof}
+
+\begin{exercise}[BJ 2.33]
+Suponhamos que \(X\) e \(Y\) tenham distribuição conjunta dada pela seguinte tabela:
+
+\begin{center}
+\begin{tabular}{|l||*{3}{c|}c|c|c|c|c|c|}\hline
+\backslashbox{$X$}{$Y$}
+&\makebox[1em]{1}&\makebox[1em]{2}&\makebox[1em]{3}\\\hline\hline
+1 & 0 & 1/5 & 0 \\ \hline
+2 & 1/5 & 1/5 & 1/5 \\ \hline
+3 & 0 & 1/5 & 0 \\ \hline
+\end{tabular}
+\end{center}
+
+(Por exemplo, \(P(X=1,Y=1) = 0\) e \(P(X=2,Y=1) = 1/5\).)
+
+\textbf{a)} Determine as distribuições marginais de \(X\) e \(Y\).
+
+\textbf{b)} \(X\) e \(Y\) são independentes? Por quê?
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Temos que as marginais serão dadas por:
+
+\begin{align*}
+P(X = x) &= \sum_{i=1}^{3}P(X = x,Y = i) = \begin{cases}
+\frac{1}{5} & ,x=1 \\
+\frac{3}{5} & ,x=2 \\
+\frac{1}{5} & ,x=3
+\end{cases} \\
+P(Y = y) &= \sum_{i=1}^{3}P(X = i,Y = y) = \begin{cases}
+\frac{1}{5} & ,y=1 \\
+\frac{3}{5} & ,y=2 \\
+\frac{1}{5} & ,y=3
+\end{cases}
+\end{align*}
+
+\textbf{b)}
+
+É fácil ver que \(X\) e \(Y\) não são independentes, pois \(P(X = i, Y = j) \neq P(X = i)P(Y = j), \forall i,j = 1,2,3\).
+\end{proof}
+
+\begin{exercise}[BJ 2.34]
+Sejam \(X\) e \(Y\) variáveis aleatórias independentes com distribuição uniforme em \([\theta - 1/2, \theta + 1/2]\), onde \(\theta \in \mathbb{R}\). Prove que a distribuição de \(X -Y\) não depende de \(\theta\), achando sua densidade.
+\end{exercise}
+
+\begin{exercise}[BJ 2.35]
+Sejam \(X_{1},\ldots,X_{n}\) variáveis aleatórias independentes com densidade comum de Rayleigh com parâmetro \(\theta > 0\):
+
+\begin{equation*}
+f(x) = \begin{cases}
+\frac{x}{\theta^{2}}\exp\left(-\frac{x^{2}}{2\theta^{2}}\right) & x>0 \\
+0 & x\le 0
+\end{cases}
+\end{equation*}
+
+\textbf{a)} Determine a densidade conjunta de \(Y_{1},\ldots,Y_{n}\), em que \(Y_{i} = X_{i}^{2}\).
+
+\textbf{b)} Qual a distribuição de \(U = \min_{1 \le i \le n}X_{i}\)?
+
+\textbf{c)} Calcule a distribuição de \(Z = \frac{X_{1}}{X_{2}}\).
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Como os \(X_{i}\)'s são independentes, sabemos que os \(Y_{i}\)'s também o serão, de modo que \(f_{Y_{1} \ldots Y_{n}}(y_{1},\ldots,y_{n}) = \prod_{i=1}^{n}f_{Y_{i}}(y_{i})\), que podemos encontrar como segue:
+
+\begin{align*}
+F_{Y}(y) &= P(X^{2} \le y) = P(X \le \sqrt{y}) \\
+&= \int_{0}^{\sqrt{y}}\frac{x}{\theta^{2}}\exp\left(-\frac{x^{2}}{2\theta^{2}}\right)dx \Rightarrow \begin{bmatrix}
+u = x^{2} \\
+du = 2xdx
+\end{bmatrix} \\
+&= \int_{0}^{y}\frac{1}{2\theta^{2}}\exp\left(-\frac{u}{2\theta^{2}}\right)du \\
+&= \frac{1}{2\theta^{2}}\left(-2\theta^{2}\exp\left(-\frac{u}{2\theta^{2}}\right)\Big{|}_{0}^{y}\right) \\
+&= 1 - \exp\left(-\frac{y}{2\theta^{2}}\right) \\
+f_{Y}(y) &= \frac{\partial}{\partial y}F_{Y}(y) = \frac{1}{2\theta^{2}}\exp\left(-\frac{y}{2\theta^{2}}\right)
+\end{align*}
+
+Podemos ver que, cada um dos \(Y_{i} \sim \mathrm{Exp}\left(\frac{1}{2\theta^{2}}\right)\), de modo que a densidade conjunta será:
+
+\begin{equation*}
+f_{Y_{1} \ldots Y_{n}}(y_{1},\ldots,y_{n}) = \prod_{i=1}^{n} = \frac{1}{2\theta^{2}}\exp\left(-\frac{y_{i}}{2\theta^{2}}\right) = \left(\frac{1}{2\theta^{2}}\right)^{n}\exp\left(-\frac{1}{2\theta^{2}}\sum_{i=1}^{n}y_{i}\right)
+\end{equation*}
+
+\textbf{b)}
+
+\begin{align*}
+P(U \le u) = P\left(\min_{1 \le i \le n}X_{i} \le u\right) &= 1 - P\left(\min_{1 \le i \le n}X_{i} > u\right) \\
+&= 1 - P(X_{1} > u, \ldots, X_{n} > u) \\
+&\stackrel{\text{ind}}{=} 1 - \prod_{i=1}^{n}P(X_{i} > u) \\
+&\stackrel{\text{iid}}{=} 1 - \left(P(X > u)\right)^{n} \\
+&= 1 - \left(\int_{u}^{\infty}\frac{x}{\theta^{2}}\exp\left(-\frac{x^{2}}{2\theta^{2}}\right)dx\right)^{n} \\
+&= 1 - \left(\exp\left(-\frac{u^{2}}{2\theta^{2}}\right)\right)^{n} \\
+&= 1 - \exp\left(-\frac{nu^{2}}{2\theta^{2}}\right) \\
+f_{U}(u) &= \frac{\partial}{\partial u}F_{U}(u) \\
+&= \frac{nu}{\theta^{2}}\exp\left(-\frac{nu^{2}}{2\theta^{2}}\right)
+\end{align*}
+
+Podemos perceber que \(U \sim \mathrm{Rayleigh}\left(\frac{\sqrt{n}}{\theta}\right)\).
+
+\textbf{c)}
+
+Podemos inicialmente encontrar a distribuição acumulada de \(Z\):
+
+\begin{align*}
+P(Z \le z) &= P(X_{1} \le X_{2}z) \\
+&= \int_{0}^{\infty}\int_{0}^{x_{2}z}f(x_{1},x_{2})dx_{1}dx_{2} \\
+&\stackrel{\text{ind}}{=} \int_{0}^{\infty}\int_{0}^{x_{2}z}\frac{x_{1}}{\theta^{2}}\exp\left(-\frac{x_{1}^{2}}{2\theta^{2}}\right)\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)dx_{1}dx_{2} \\
+&= \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)\int_{0}^{x_{2}z}\frac{x_{1}}{\theta^{2}}\exp\left(-\frac{x_{1}^{2}}{2\theta^{2}}\right)dx_{1}dx_{2} \Rightarrow \begin{bmatrix}
+u = \frac{x_{1}^{2}}{2\theta^{2}} \\
+du = \frac{x_{1}}{\theta^{2}}dx_{1}
+\end{bmatrix} \\
+&= \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)\int_{0}^{\frac{x_{2}^{2}z^{2}}{2\theta^{2}}}\exp\left(-u\right)dudx_{2} \\
+&= \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)\left(1 - \exp\left(-\frac{x_{2}^{2}z^{2}}{2\theta^{2}}\right)\right)dx_{2} \\
+&= \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}}{2\theta^{2}}\right)dx_{2} - \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}(1 + z^{2})}{2\theta^{2}}\right)dx_{2} \\
+&= 1 - \int_{0}^{\infty}\frac{x_{2}}{\theta^{2}}\exp\left(-\frac{x_{2}^{2}(1 + z^{2})}{2\theta^{2}}\right)dx_{2} \Rightarrow \begin{bmatrix}
+v = \frac{x_{2}^{2}(1+z^{2})}{2\theta^{2}} \\
+dv = \frac{x_{2}(1+z^{2})}{\theta^{2}}dx_{2}
+\end{bmatrix} \\
+&= 1 - \int_{0}^{\infty}\frac{1}{(1+z^{2})}\exp(-v)dv \\
+F_{Z}(z) &= 1 - \frac{1}{(1 + z^{2})}
+\end{align*}
+
+De modo que sua densidade será:
+
+\begin{equation*}
+f_{Z}(z) = \frac{\partial}{\partial z}F_{Z}(z) = \frac{2z}{(1 + z^{2})^{2}}
+\end{equation*}
+\end{proof}
+
+\begin{exercise}[BJ 2.36]
+Sejam as variáveis \(X_{1},\ldots,X_{n}\) independentes e exponenciais com, respectivamente, parâmetros \(\alpha_{1},\ldots,\alpha_{n}\).
+
+\textbf{a)} Mostre que a distribuição de \(Y = \min_{1 \le i \le n}X_{i}\) é exponencial. Qual o parâmetro?
+
+\textbf{b)} Prove que para \(k = 1,\ldots,n\):
+
+\begin{equation*}
+P\left(X_{k} = \min_{1 \le i \le n}X_{i}\right) = \frac{\alpha_{k}}{\alpha_{1} + \ldots + \alpha_{n}}
+\end{equation*}
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Como todos os \(X_{i} \sim \mathrm{Exp}(\alpha_{i})\), com \(X_{i} \perp X_{j}, \forall i \neq j\), teremos que:
+
+\begin{align*}
+P(Y \le y) &= P\left(\min_{1 \le i \le 1}X_{i} \le y\right) = 1 - P\left(\min_{1 \le i \le 1}X_{i} > y\right) \\
+&= 1 - P(X_{1} > y, \ldots, X_{n} > y) \\
+&\stackrel{\text{ind}}{=} 1 - \prod_{i=1}^{n}P(X_{i} > y) \\
+&= 1 - \prod_{i=1}^{n}(\exp(-\alpha_{i}y)) \\
+&= 1 - \exp\left(-y\sum_{i=1}^{n}\alpha_{i}\right)
+\end{align*}
+
+Assim, temos que \(Y \sim \mathrm{Exp}\left(\sum_{i=1}^{n}\alpha_{i}\right)\).
+
+\textbf{b)}
+
+Seja \(Z = \min_{i \neq k}X_{i}\). Veja que \([X_{k} = \min_{1 \le i \le n}X_{i}] \perp [Z]\), de modo que a densidade conjunta de ambos será:
+
+\begin{align*}
+f_{X_{k}Z}(x_{k},z) = \alpha_{k}\sum_{i \neq k}\alpha_{i}\exp\left(-\alpha_{k}x_{k} - z\sum_{i \neq k}\alpha_{i}\right)
+\end{align*}
+
+Dessa forma, podemos ver que \(P\left(X_{k} = \min_{1 \le i \le n}X_{i}\right) = P(X_{k} < Z)\). Assim, podemos encontrar essa probabilidade por meio da seguinte integral:
+
+\begin{align*}
+P(X_{k} < z) &= \int_{0}^{\infty}\int_{0}^{z}\alpha_{k}\sum_{i \neq k}\alpha_{i}\exp\left(-\alpha_{k}x_{k} - z\sum_{i \neq k}\alpha_{i}\right)dx_{k}dz \\
+&= \int_{0}^{\infty}\alpha_{k}\sum_{i \neq k}\alpha_{i}\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)\int_{0}^{z}\exp(-\alpha_{k}x_{k})dx_{k}dz \\
+&= \int_{0}^{\infty}\alpha_{k}\sum_{i \neq k}\alpha_{i}\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)\frac{1}{\alpha_{k}}\left(-\exp(-\alpha_{k}x_{k})\Big{|}_{0}^{z}\right)dz \\
+&= \sum_{i \neq k}\alpha_{i}\int_{0}^{\infty}\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)(1-\exp(-z\alpha_{k}))dz \\
+&= \sum_{i \neq k}\alpha_{i}\left(\int_{0}^{\infty}\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)dz - \int_{0}^{\infty}\exp\left(-z\sum_{i=1}^{n}\alpha_{i}\right)dz\right) \\
+&= \sum_{i \neq k}\alpha_{i}\left(\frac{-\exp\left(-z\sum_{i \neq k}\alpha_{i}\right)}{\sum_{i \neq k}\alpha_{i}}\Big{|}_{0}^{\infty} - \frac{-\exp\left(-z\sum_{i=1}^{n}\alpha_{i}\right)}{\sum_{i = 1}^{n}\alpha_{i}}\Big{|}_{0}^{\infty}\right) \\
+&= \sum_{i \neq k}\alpha_{i}\left(\frac{1}{\sum_{i \neq k}\alpha_{i}} - \frac{1}{\sum_{i = 1}^{n}\alpha_{i}}\right) \\
+&= \frac{\sum_{i=1}^{n}\alpha_{i} - \sum_{i \neq k}\alpha_{i}}{\sum_{i=1}^{n}\alpha_{i}} =  \frac{\alpha_{k}}{\sum_{i=1}^{n}\alpha_{i}}
+\end{align*}
+\end{proof}
+
+\begin{exercise}[BJ 2.37]
+\protect\hypertarget{exr:exer237}{}\label{exr:exer237}Seja \(X\) uma variável aleatória cuja função de distribuição \(F\) é uma função contínua na reta. Prove que a distribuição de \(Y = F(X)\) é \(U(0,1)\).
+\end{exercise}
+
+\begin{proof}[Resposta]
+Vejamos que:
+
+\begin{align*}
+F_{Y}(y) = P(Y \le y) &= P(F_{X}(x) \le y) \\
+&= P(x \le F_{X}^{-1}(y)) \\
+&= F_{X}(F_{X}^{-1}(y)) = y
+\end{align*}
+
+De modo que \(F_{Y}(y) = y\). Ainda, caso \(y < 0, P(F_{X}(x) \le y) = 0\) e de maneira similar, caso \(y > 1, P(F_{X}(x) \le y) = 1\), de modo que a distribuição de \(Y\) será:
+
+\begin{equation*}
+F_{Y}(y) = \begin{cases}
+0 &, y < 0 \\
+y &, 0 \le y \le 1 \\
+1 &, y > 1
+\end{cases} \Rightarrow Y \sim U(0,1)
+\end{equation*}
+\end{proof}
+
+\begin{exercise}[BJ 2.38]
+\textbf{a)} As variáveis \(X, Y\) e \(Z\) são independentes, cada uma uniformemente distribuída no intervalo \([0,1]\). Determine \(P(X < Y < Z)\) e \(P(X \le Y \le Z)\).
+
+\textbf{b)} Se \(X,Y\) e \(Z\) são independentes e identicamente distribuídas, e a função de distribuição comum \(F\) é contínua, qual a \(P(X < Y < Z)\)?
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Vejamos que o evento \((x < y < z)\) implica que \(x < y\) e \(y < z\). Como as variáveis são independentes, temos que a distribuição conjunta é igual a 1, e a probabilidade desse evento será:
+
+\begin{align*}
+P(X < Y < Z) &= \int_{0}^{1}\int_{0}^{x}\int_{0}^{z}1dzdydx \\
+&= \int_{0}^{1}\int_{0}^{x}ydydx \\
+&= \int_{0}^{1}\frac{x^{2}}{2}dx \\
+&= \frac{x^{3}}{6}\Big{|}_{0}^{1} = \frac{1}{6}
+\end{align*}
+
+E como \(P(X = Y) = P(Y = Z) = P(X = Z) = 0\) (pela continuidade no vazio), teremos que \(P(X \le Y \le Z) = P(X < Y < Z) = \frac{1}{6}\).
+
+\textbf{b)}
+
+Por ser crescente e contínua, teremos que \(X < Y < Z \Leftrightarrow F(X) < F(Y) < F(Z)\), e como \(F \sim U(0,1)\) (pelo exercício \ref{exr:exer237}), teremos que:
+
+\begin{align*}
+P(X < Y < Z) &= P(F(X) < F(Y) < F(Z)) \\
+&= \frac{1}{6}
+\end{align*}
+
+Pelo resultado obtido em \textbf{(a)}.
+\end{proof}
+
+\begin{exercise}[BJ 2.39]
+\protect\hypertarget{exr:exer239}{}\label{exr:exer239}\textbf{a)} Sejam \(X\) e \(Y\) independentes com distribuição de Poisson tendo, respectivamente, parâmetros \(\lambda_{1}\) e \(\lambda_{2}\). Mostre que \(X + Y \sim \mathrm{Poisson}(\lambda_{1} + \lambda_{2})\).
+
+\textbf{b)} Mostre que se \(X_{1},\ldots,X_{n}\) são independentes tais que \(X_{i} \sim \mathrm{Poisson}(\lambda_{i}),i=1,\ldots,n\), então \(X_{1} + \ldots + X_{n} \sim \mathrm{Poisson}(\lambda_{1} + \ldots + \lambda_{n})\).
+\end{exercise}
+
+\begin{proof}[Resposta]
+\textbf{a)}
+
+Como \(X \perp Y\), temos que a densidade conjunta será:
+
+\begin{equation*}
+P(X=x,Y=y) = \frac{e^{-\lambda_{1}}\lambda_{1}^{x}}{x!}\frac{e^{-\lambda_{2}}\lambda_{2}^{y}}{y!}
+\end{equation*}
+
+Dessa forma, seja \(X+Y = Z \Rightarrow Y = Z-X\), de modo que:
+
+\begin{align*}
+P(Z=z) = P(X+Y = z) &= P(Y = z-x) \\
+&= \sum_{i=0}^{\infty}P(X = i,Y = z-i) \\
+&\stackrel{\text{ind}}{=} \sum_{i=0}^{\infty}P(X = i)P(Y = z-i) \\
+&= \sum_{i=0}^{z}\frac{e^{-\lambda_{1}}\lambda_{1}^{i}}{i}\frac{e^{-\lambda_{2}}\lambda_{2}^{(z-i)}}{(z-i)!} \\
+&= e^{-(\lambda_{1} + \lambda_{2})}\sum_{i=0}^{z}\frac{\lambda_{1}^{i}\lambda_{2}^{(z-i)}}{i!(z-i)!} \\
+&= \frac{e^{-(\lambda_{1} + \lambda_{2})}}{z!}\sum_{i=0}^{z}\lambda_{1}^{i}\lambda_{2}^{(z-i)}\frac{z!}{i!(z-i)!} \\
+&= \frac{e^{-(\lambda_{1} + \lambda_{2})}}{z!}\sum_{i=0}^{z}\binom{z}{i}\lambda_{1}^{i}\lambda_{2}^{(z-i)} \\
+&= \frac{e^{-(\lambda_{1} + \lambda_{2})}(\lambda_{1} + \lambda_{2})^{z}}{z!}\underbrace{\sum_{i=0}^{z}\binom{z}{i}\left(\frac{\lambda_{1}}{\lambda_{1} + \lambda_{2}}\right)^{i}\left(\frac{\lambda_{2}}{\lambda_{1} + \lambda_{2}}\right)^{(z-i)}}_{\sum_{i=1}^{z}\mathrm{Binom}\left(z,\frac{\lambda_{1}}{\lambda_{1} + \lambda_{2}}\right) = 1} \\
+&= \frac{e^{-(\lambda_{1} + \lambda_{2})}(\lambda_{1} + \lambda_{2})^{z}}{z!}
+\end{align*}
+
+Assim, \(X + Y \sim \mathrm{Poisson}(\lambda_{1} + \lambda_{2})\).
+
+\textbf{b)}
+
+Provemos por indução. Em \textbf{(a)} provamos para \(n = 2\). Consideremos que \(X_{i} \sim \mathrm{Poisson}(\lambda_{i}), \forall i = 1,\ldots,n\) e que (por hipótese) \(Z = \sum_{i=1}^{n}X_{i} \sim \mathrm{Poisson}\left(\sum_{i=1}^{n}\lambda_{i}\right)\). Seja \(X_{n+1} \sim \mathrm{Poisson}(\lambda_{n+1})\).
+
+Pelo que foi visto em \textbf{(a)}, a soma de duas variáveis aleatórias com distribuição Poisson resulta em uma variável aleatória com distribuição Poisson, com parâmetro igual à soma dos parâmetros das variáveis somadas. Assim, \(Z + X_{n+1} \sim \mathrm{Poisson}\left((\sum_{i=1}^{n}\lambda_{i}) + \lambda_{n+1}\right) = \mathrm{Poisson}\left(\sum_{i=1}^{n+1}\lambda_{i}\right)\), que vale para todo \(n \in \mathbb{N}\).
 \end{proof}
 
 \newpage
@@ -4827,7 +5103,7 @@ E(|X|^{p}) \ge |E(X)|^{p}
 Seja \(X\) uma variável aleatória, \(\varphi\) uma função mensurável e \(Y = \varphi(X)\). Assim, \(Y\) é uma variável aleatória, cuja esperança é \(E(Y) = \int ydF_{\varphi(X)}(y) = \int_{0}^{\infty}[1 - F_{\varphi(X)}(y)]dy - \int_{-\infty}^{0}F_{\varphi(X)}(y)dy\).
 
 \begin{theorem}
-Se \(X\) é uma variável aleatória e \(\varphi\) uma função mensurável, com \(Y = \varphi(X)\):
+\protect\hypertarget{thm:espfunc}{}\label{thm:espfunc}Se \(X\) é uma variável aleatória e \(\varphi\) uma função mensurável, com \(Y = \varphi(X)\):
 
 \begin{equation*}
 E(Y) = E(\varphi(X)) = \int\varphi(x)dF_{X}(x)
@@ -5098,7 +5374,7 @@ E(\varphi(\underbar{X})) = \sum_{i}\varphi(\underbar{x}_{i})P(\underbar{x}_{i})
 Caso contínuo: Seja \(\underbar{X}\) contínuo, com densidade \(f(x_{1},\ldots,x_{n})\). Então:
 
 \begin{equation*}
-E(\varphi(\underbar{X})) = \int \cdots \int f(x_{1},\ldots,x_{n})dx_{1}\ldots dx_{n}
+E(\varphi(\underbar{X})) = \int \cdots \int \varphi(x_{1},\ldots,x_{n}) f(x_{1},\ldots,x_{n})dx_{1}\ldots dx_{n}
 \end{equation*}
 \end{theorem}
 
@@ -5447,5 +5723,1034 @@ Ou seja, \(\sum_{m=1}^{\infty}a_{mn} \underset{n \to \infty}{\uparrow} \sum_{m=1
 TODO
 
 \newpage
+
+\hypertarget{condicionalidade}{%
+\section{Condicionalidade}\label{condicionalidade}}
+
+\hypertarget{definiuxe7uxe3o-1}{%
+\subsection{Definição}\label{definiuxe7uxe3o-1}}
+
+Se \(P(A) > 0\), defina \(P(X \in B|A) = \frac{P([X \in B] \cap A)}{P(A)}\). Verifique que essa fórmula satisfaz as condições de probabilidade. Se \(P(A) > 0, B = \{\omega : X(\omega) \le x\}\), então:
+
+\begin{align*}
+F_{X}(x|A) &= P(X \le x|A) = \frac{P([X \le x] \cap A)}{P(A)}, \forall x \in \mathbb{R} \\
+E(X|A) &= \int xdF_{X}(x|A)
+\end{align*}
+
+\begin{proposition}[Lei das probabilidades totais]
+Seja um espaço de probabilidades \((\Omega,\mathcal{A},P)\). \(\forall B \in \mathcal{A}, P(X \in B) = \sum_{n}P(A_{n})P(X \in B |A_{n})\), de modo que:
+
+\begin{align*}
+F_{X}(x) = P(X \le x) &= \sum_{n}P(A_{n})P(X \le x|A_{n}) \\
+&= \sum_{n}P(A_{n})F_{X}(x|A_{n})
+\end{align*}
+\end{proposition}
+
+Se \(E(X)\) existe, teremos:
+
+\begin{align*}
+E(X) = \int xdF_{X}(x) &= \int xd\left(\sum_{n}P(A_{n})F_{X}(x|A_{n})\right) \\
+&= \sum_{n}P(A_{n})\int xdF_{X}(x|A_{n}) \\
+&= \sum_{n}P(A_{n})E(X|A_{n})
+\end{align*}
+
+\begin{example}
+Seja \(X \sim U(-1,1), A_{1} = [X \ge 0], A_{2} = [X < 0]\). Ache a distribuição de \(X|A_{1}\). Seja \(B\) um boreliano em \([-1,1]\), então:
+
+\begin{equation*}
+P(X \in B|A_{1}) = \frac{P([X \in B] \cap [X \ge 0])}{P(X \ge 0)} = \frac{\frac{1}{2}\text{comprimento}(B \cap [0,1])}{\frac{1}{2}}
+\end{equation*}
+
+Assim, \(X|A_{1} \sim U(0,1)\) e de maneira similar, \(X|A_{2} \sim U(-1,0)\), e \(E(X|A_{1}) = \frac{1}{2}, E(X|A_{2}) = -\frac{1}{2}\). Assim:
+
+\begin{align*}
+E(X) &= P(A_{1})E(X|A_{1}) + P(A_{2})E(X|A_{2}) \\
+&= \frac{1}{2}\cdot\frac{1}{2} - \frac{1}{2}\cdot\frac{1}{2} \\
+&= 0
+\end{align*}
+\end{example}
+
+Seja \(Y\) uma variável aleatória discreta e denote os valores dela como \(y_{1},y_{2},\ldots\). Defina \(A_{n} = [Y = y_{n}]\) e \(X\) a variável aleatória em \((\Omega, \mathcal{A}, P)\). Então, para \(B \in \mathcal{A}, P(X \in B|Y = y_{n}),\forall B \in \mathcal{A}\):
+
+\begin{align*}
+P(X \in B) &= \sum_{n}P(Y = y_{n})P(X \in B|Y = y_n) \\
+F_{X}(x) &= \sum_{n}P(Y = y_{n})F_{X}(x|Y = y_{n}),\forall x \in \mathbb{R} \\
+E(X) &= \sum_{n}P(Y = y_{n})E(X|Y = y_{n})
+\end{align*}
+
+Aplicando a integral de Stieltjes:
+
+\begin{align*}
+P(X \in B) &= \int P(X \in B|Y = y)dF_{Y}(y) \\
+F_{X}(x) &= \int F_{X}(x|Y = y)dF_{Y}(y) \\
+E(X) &= \int E(X|Y = y)dF_{Y}(y)
+\end{align*}
+
+Note que, para o caso contínuo teremos:
+
+\begin{equation*}
+dF_{Y}(y) = f_{Y}(y)dy
+\end{equation*}
+
+\textbf{Nota:} Suponha \(\varphi(Y) = E(X|Y)\), ou seja, para cada valor de \(Y, E(X|Y = y)\) é um ponto específico. Lembrando o teorema \ref{thm:espfunc}: \(E(\varphi(Y)) = \int \varphi(y)dF_{Y}(y)\). Logo:
+
+\begin{equation*}
+E(\varphi(Y)) = \int \varphi(y)dF_{Y}(y) = \int E(X|Y = y)dF_{Y}(y) = E(E(X|Y)) = E(X)
+\end{equation*}
+
+\begin{example}
+Jogador 1 lança uma moeda honesta \(n\) vezes, obtendo \(k\) caras, \(0 \le k \le n\). Depois, o jogador 2 lança a moeda \(k\) vezes. Seja \(X\) o número de caras do jogador 2. Determinar \(E(X)\) supondo independência entre os lançamentos.
+
+Seja \(Y\) o número de caras nos \(n\) lançamentos do jogador 1. Sabemos que \(Y \sim Bin\left(n, \frac{1}{2}\right) \stackrel{\text{Ind}}{\Rightarrow}X|Y = k \sim Bin\left(k, \frac{1}{2}\right)\). Desse modo:
+
+\begin{gather*}
+E(X|Y = k) = \frac{k}{2} \Rightarrow E(X|Y) = \frac{Y}{2} \\
+E(X) = E(E(X|Y)) = E\left(\frac{Y}{2}\right) = \frac{1}{2}E(Y) = \frac{n}{2}
+\end{gather*}
+\end{example}
+
+\hypertarget{distribuiuxe7uxe3o-condicional}{%
+\subsection{Distribuição condicional}\label{distribuiuxe7uxe3o-condicional}}
+
+Como redefinimos as noções de probabilidade condicional quando \(P(Y = y) = 0\)? Postulamos \(P(X \in \mathcal{B}|Y = y) = \int_{\mathcal{B}}f(x|y)dx\), onde:
+
+\begin{equation*}
+f(x|y) = \frac{f(x,y)}{\int_{-\infty}^{\infty}f(x,y)dx} = \frac{f(x,y)}{f_{Y}(y)}
+\end{equation*}
+
+Sendo \(f(x,y)\) a densidade conjunta entre \(X \text{ e } Y\) e \(f_{Y}(y)\) a densidade marginal de \(Y\).
+
+\textbf{Nota:} \(\int_{-\infty}^{\infty}f(x|y)dx = \frac{1}{f_{Y}(y)}\left(\int_{-\infty}^{\infty}f(x,y)dx\right) = \frac{f_{Y}(y)}{f_{Y}(y)} = 1\) e \(f(x|y) \ge 0 \; \forall x\). Então \(f(x|y)\) é densidade de probabilidade. Sendo assim, podemos escrever:
+
+\begin{equation}
+F_{X}(x|Y = y) = \int_{-\infty}^{x}f(s|y)ds
+\label{eq:acumuladacond}
+\end{equation}
+
+Além disso, temos que \(F_{X,Y}(x,y) = \int_{-\infty}^{y}F_{X}(x|Y = t)dF_{Y}(t)\). Assim, vejamos que essa noção é aplicada à equação \eqref{eq:acumuladacond} na formulação de \(F_{X}(x|Y = y)\) para identificar \(F_{X,Y}(x,y)\). Note que:
+
+\begin{align*}
+\int_{-\infty}^{y}F_{X}(x|Y = t)dF_{Y}(t) &= \int_{-\infty}^{y}\left(\int_{-\infty}^{x}f(s|t)ds\right)dF_{Y}(t) \\
+&= \int_{-\infty}^{y}\left(\int_{-\infty}^{x}\frac{f(s,t)}{f_{Y}(t)}ds\right)f_{Y}(t)dt \\
+&= \int_{-\infty}^{y}\int_{-\infty}^{x}f(s,t) \, ds\, dt \\
+&= F_{X,Y}(x,y)
+\end{align*}
+
+\begin{theorem}
+Sejam \(X\) e \(Y\) variáveis aleatórias em \((\Omega, \mathcal{A}, P)\). Então existe uma distribuição condicional (regular) para \(X\) dado \(Y\). Existe apenas uma distribuição no sentido de que duas distribuições condicionais são iguais quase certamente. Isto é, se \(P_{1}(X \in \mathcal{B}|Y = y)\) e \(P_{2}(X \in \mathcal{B}|Y = y)\) são ambas distribuições condicionais para \(X\) dado \(Y\), então existe \(B_{0}\) boreliano, tal que \(P(Y \in B_{0}) = 1\) e \(P_{1}(X \in \mathcal{B}|Y = y) = P_{2}(X \in \mathcal{B}|Y = y) \forall B \in \mathcal{B}\) (\(\sigma\)-álgebra no espaço induzido pelo condicional).
+\end{theorem}
+
+\hypertarget{princuxedpio-da-substituiuxe7uxe3o}{%
+\subsection{Princípio da Substituição}\label{princuxedpio-da-substituiuxe7uxe3o}}
+
+\begin{proposition}
+Se \(X\) e \(Y\) são variáveis aleatórias em \((\Omega, \mathcal{A}, P), \varphi(x,y)\) uma função mensurável e a deistribuição condicional de \(X\) dado \(Y\) é \(P(X \in B|Y = y) \forall B \in \mathcal{B}\) e \(y \in \mathbb{R}\), então a distribuição condicional de \(\varphi(x,y)\) dado \(Y\) é:
+
+\begin{equation*}
+P(\varphi(X,Y) \in B|Y = y) = P(\varphi(X,y) \in B|Y = y) = P(X \in \{x : \varphi(x,y) \in B\}|Y = y)
+\end{equation*}
+\end{proposition}
+
+\begin{proof}[Prova (caso discreto)]
+Suponha \(P(Y = y_{n}) = P(y_{n}) \ge 0\) e \(\sum_{n}P(y_{n}) = 1\). Seja \(B \in \mathcal{B}\), então:
+
+\begin{align*}
+P(\varphi(X,Y) \in B|Y = y_{n}) &= \frac{P(\varphi(X,Y) \in B, Y = y_{n})}{P(Y = y_{n})} \\
+&= \frac{P(\varphi(X,y_{n}) \in B, Y = y_{n})}{P(Y = y_{n})} \\
+&= \frac{P(X \in \{x : \varphi(x,y_{n}) \in B\},Y = y_{n})}{P(Y = y_{n})} = P(X \in \{x : \varphi(x,y_{n}) \in B\}|Y = y_{n})
+\end{align*}
+\end{proof}
+
+\hypertarget{esperanuxe7a-condicional}{%
+\subsection{Esperança condicional}\label{esperanuxe7a-condicional}}
+
+Sejam \(X\) e \(Y\) variáveis aleatórias em \((\Omega, \mathcal{A}, P)\) a esperança condicional de \(X\) dado \(Y = y\) é:
+
+\begin{equation*}
+E(X|Y = y) = \int x \, dF_{X|Y}(x|Y = y)
+\end{equation*}
+
+\begin{theorem}
+\protect\hypertarget{thm:integrabespcond}{}\label{thm:integrabespcond}Se \(X\) é integrável, então a esperança \(E(X|Y = y)\) existe e é finita quase certamente, ou seja, existe \(B_{0}\) boreliano tal que \(P(Y \in B_{0}) = 1\) e que \(E(X|Y = y)\) é finita para \(y \in B_{0}\).
+\end{theorem}
+
+A prova do teorema \ref{thm:integrabespcond} é baseada no Teorema de Radon-Nikodym.
+
+\textbf{Notas:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(i)} \(E(X) = E(E(X|Y))\). No caso contínuo, \(E(X) = \int E(X|Y = y)\, dF_{Y}(y)\). Note que:
+\end{itemize}
+
+\begin{align*}
+E(X|Y = y) &= \int x \, dF_{X}(x|Y = y) \\
+&= \int_{-\infty}^{\infty}xf(x|y)dx
+\end{align*}
+
+Logo, teremos que:
+
+\begin{align*}
+E(E(X|Y)) &= \int E(X|Y = y) \, dF_{Y}(y) \\
+&= \int_{-\infty}^{\infty}\left(\int_{-\infty}^{\infty}x\frac{f(x,y)}{f_{Y}(y)}\, dx\right)f_{Y}(y) \, dy \\
+&= \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}xf(x,y)\, dx \, dy \\
+&= \int_{-\infty}^{\infty}xf_{X}(x) \, dx = E(X)
+\end{align*}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(ii)} Propriedades da esperança condicional:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(EC_{1}:\) \(E(X) = E(E(X|Y))\);
+  \item
+    \(EC_{2}:\) Se \(X = c\), constante, \(E(X|Y) = c\);
+  \item
+    \(EC_{3}:\) Se \(X_{1} \le X_{2} \Rightarrow E(X_{1}|Y) \le E(X_{2}|Y)\);
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Se \(a \le X \le b \Rightarrow a \le E(X|Y) \le b\), sendo \(a,b\) constantes.
+    \end{itemize}
+  \item
+    \(EC_{4}(\text{Linearidade}):\) \(E(aX_{1} + bX_{2}|Y) = aE(X_{1}|Y) + bE(X_{2}|Y)\);
+  \item
+    \(EC_{5}(\text{Desigualdade de Jensen}):\) Se \(\varphi\) é convexa, então:
+    \begin{equation*}
+    \varphi((E(X|Y))) \le E(\varphi(X)|Y)
+    \end{equation*}
+  \item
+    \(EC_{6}(\text{Teorema da Convergência Monótona}):\) Se \(X_{n} \ge 0 \,\forall n\) e \(X_{n} \uparrow X \Rightarrow E(X_{n}|Y) \uparrow E(X|Y)\);
+  \item
+    \(EC_{7}(\text{Teorema da Convergência Dominada}):\) Se \(X_{n} \to X, \exists X_{0}\) integrável tal que \(|X_{n}| \le X_{0} \Rightarrow \lim_{n \to \infty}E(X_{n}|Y) = E(X|Y)\).
+  \end{itemize}
+\end{itemize}
+
+\begin{proposition}
+Se \(\varphi(x,y)\) é integrável, então \(E(\varphi(X,Y)|Y = y) = E(\varphi(X,y)|Y = y) = \int \varphi(x,y) \, dF_{X}(x|Y = y)\).
+\end{proposition}
+
+A prova da proposição é por meio da aplicação direta do princípio da substituição.
+
+\textbf{Notas:}
+
+\begin{itemize}
+\tightlist
+\item
+  Se \(X\) é integrável, pela Desigualdade de Jensen temos:
+\end{itemize}
+
+\begin{equation*}
+[E(X|Y)]^{2} \le E(X^{2}|Y)
+\end{equation*}
+
+A diferença entre \(E(X^{2}|Y) - [E(X|Y)]^{2}\) é a variância condicional de \(X|Y\).
+
+\begin{itemize}
+\tightlist
+\item
+  Considere \(X_{1},X_{2},\ldots,X_{n}\) independentes, identicamente distribuídas e integráveis. Seja \(S = X_{1} + \ldots + X_{n}\). Então:
+\end{itemize}
+
+\begin{equation*}
+E(X_{i}|S) = \frac{S}{n} \,\,\, ,\forall i = 1,\ldots,n
+\end{equation*}
+
+\begin{proof}[Prova]
+Sejam os vetores \((X_{1},\ldots,X_{n})\) e \((X_{i},\ldots,X_{i-1},X_{1},X_{i+1},\ldots,X_{n})\), que tem a mesma distribuição. Dada a função \(f, f(X_{1},\ldots,X_{n}) \sim f(X_{i},\ldots,X_{i-1},X_{1},X_{i+1},\ldots,X_{n})\), que \(f:R^{n} \to R^{2}\), com \(f(y_{1},\ldots,y_{n}) = \left(y_{1},\sum_{i=1}^{n}y_{i}\right)\). Então \((X_{1}|S) \sim (X_{i}|S) \; \forall i \Rightarrow X_{1}|S \sim X_{i}|S\), isto é, que \(\forall B\) boreliano e \(\forall s\) valor de \(S\):
+
+\begin{align*}
+P(X_{1} \in B|S = s) = P(X_{i} \in B|S = s) \; \forall i &\Rightarrow E(X_{1}|S = s) = E(X_{i}|S = s) \; \forall i \\
+E(X_{1}|S = s) = \frac{1}{n}\sum_{j=1}^{n}E(X_{j}|S = s) &\Rightarrow E(X_{i}|S = s) = \frac{1}{n}\sum_{j=1}^{n}E(X_{j}|S = s) \\
+nE(X_{i}|S = s) &= \sum_{j=1}^{n}E(X_{j}|S = s) \\
+&= E\left(\sum_{j=1}^{n}X_{j}|S = s\right) \\
+&= E(S|S = s) = S \\
+E(X_{i}|S) = \frac{S}{n}
+\end{align*}
+\end{proof}
+
+\newpage
+
+\hypertarget{exercuxedcios-3}{%
+\subsection{Exercícios}\label{exercuxedcios-3}}
+
+TODO
+
+\newpage
+
+\hypertarget{converguxeancia-1}{%
+\section{Convergência}\label{converguxeancia-1}}
+
+\begin{definition}
+\protect\hypertarget{def:convprob}{}\label{def:convprob}\(\{Y_{n}\}_{n \ge 1}\) é uma sequência de variáveis aleatórias em \((\Omega, \mathcal{A}, P)\). \(Y_{n}\) converge para \(Y\) (sendo \(Y\) uma variável aleatória em \((\Omega, \mathcal{A}, P)\)) em probabilidade se \(\forall \epsilon > 0\):
+
+\begin{equation*}
+P(|Y_{n} - Y| \ge \epsilon) \xrightarrow[n \to \infty]{}0
+\end{equation*}
+\end{definition}
+
+Se \(\epsilon > 0\) e \(A_{n} = \{\omega: |Y_{n}(\omega) - Y(\omega)| \ge \epsilon\}\), então \(\exists n(\epsilon)\) tal que se \(n \ge n(\epsilon) \Rightarrow P(A_{n}) = P_{n} \to 0\).
+
+\begin{definition}
+\protect\hypertarget{def:convqc}{}\label{def:convqc}Sob as mesmas condições da definição \ref{def:convprob}, \(Y_{n}\) converge quase certamente para \(Y\) se \(A_{0} = \{\omega : Y_{n}(\omega) \xrightarrow[n \to \infty]{}Y(\omega)\}\) é de probabilidade 1.
+\end{definition}
+
+\textbf{Notas:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  A convergência quase certa é uma convergência pontual, com probabilidade 1;
+\item
+  Alguns textos usam a terminologia \(Y_{n}(\omega)\) converge para \(Y(\omega)\) para quase todo \(\omega\);
+\item
+  Convergência quase certa implica em convergência em probabilidade.
+\end{enumerate}
+
+\begin{proposition}
+Se \(Y_{n} \xrightarrow[]{q.c.}Y \Rightarrow Y_{n} \xrightarrow[]{p}Y\).
+\end{proposition}
+
+\begin{proof}[Prova]
+É necessário verificar que se \(\epsilon > 0 \Rightarrow P(|Y_{n} - Y| \ge \epsilon) \xrightarrow[n \to \infty]{} 0\), sendo \(\epsilon\) arbitrário. Seja \(A_{0} = \left\{\omega : Y_{n}(\omega) \xrightarrow[n \to \infty]{}Y(\omega)\right\}\), temos por hipótese que \(P(A_{0}) = 1 \Rightarrow \forall \omega \in A_{0}, |Y_{n}(\omega) - Y(\omega)| < \epsilon\) para \(n\) suficientemente grande.
+
+Definamos uma sequência \(\{A_{n}\}\) tal que \(A_{n} = \{\forall k : k \ge n, |Y_{k} - Y| < \epsilon\} \Rightarrow A_{n} = \bigcap_{k=n}^{\infty}\{|Y_{k} - Y| < \epsilon\}\). Pela definição de \(A_{0}\), se \(\omega \in A_{0} \Rightarrow \omega \in A_{n}\) para algum \(n\).
+
+Por construção \(\{A_{n}\}_{n \ge 1} : A_{n} \subseteq A_{n+1}\). Assim, \(A_{0} \subseteq \bigcup_{n \ge 1}A_{n} = \lim_{n \to \infty}A_{n} \Rightarrow 1 = P(A_{0}) \le P\left(\bigcup_{n \ge 1}A_{n}\right) = \lim_{n \to \infty}P(A_{n}) \le 1 \Rightarrow P(A_{n}) \uparrow 1\). Já que \(A_{n} = \bigcap_{k = n}^{\infty}\{|Y_{k} - Y| < \epsilon\} \Rightarrow A_{n} \subseteq \{|Y_{k} - Y| < \epsilon\}\), então:
+
+\begin{equation*}
+P(|Y_{n} - Y| < \epsilon) \xrightarrow[n \to \infty]{} 1 \Leftrightarrow P(|Y_{n} - Y| \ge \epsilon) \xrightarrow[n \to \infty]{} 0 \Rightarrow Y_{n} \xrightarrow[]{p}Y
+\end{equation*}
+\end{proof}
+
+\begin{example}
+Vejamos um caso em que convergência em probabilidade não implica em convergência quase certa. Seja a seguinte sequência:
+
+\begin{center}
+\begin{tikzpicture}[scale=6]
+\usetikzlibrary{decorations.pathreplacing}
+\draw[very thick, black, |-|] (0,0) -- (1,0) node[right] {1};
+\node[left] (0,0) {0};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=5ex}] (0,0)--(1,0) node [ midway, below=1cm] {$I_{1}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, raise=2ex}] (0,0)--(0.5,0) node [midway, above=0.5cm] {$I_{2}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, raise=2ex}] (0.5,0)--(1,0) node [midway, above=0.5cm] {$I_{3}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=1.2ex}] (0,0)--(0.25,0) node [midway, below=0.3cm] {$I_{4}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=1.2ex}] (0.25,0)--(0.5,0) node [midway, below=0.3cm] {$I_{5}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=1.2ex}] (0.5,0)--(0.75,0) node [midway, below=0.3cm] {$I_{6}$};
+    \draw [very thick,decorate, black, decoration={brace, amplitude=5pt, mirror, raise=1.2ex}] (0.75,0)--(1,0) node [midway, below=0.3cm] {$I_{7}$};
+    \node at (2,0) {$\Rightarrow I_{2^{m} + i} = \left[\frac{i}{2^{m}},\frac{i+1}{2^{m}}\right], m = 0,1,\ldots, i = 0,1,\ldots, 2^{m}-1$};
+\end{tikzpicture}
+\end{center}
+
+Note que o comprimento de \(I_{2^{m} + i} = \frac{1}{2^{m}}\) e que a sequência \(\{I_{k}\}\) cobre o intervalo \([0,1]\). Defina \(Y_{n} = \begin{cases} 1 &,\text{se }x \in I_{n} \\ 0 &,\text{se }x \not\in I_{n} \end{cases}\) e \(X \sim U(0,1)\). Temos que \(P(X \in I_{n}) = P(Y_{n} = 1) \xrightarrow[n \to \infty]{}0\), pois \(I_{n}\) tem um comprimento que cai na medida que \(n\) aumenta. Assim, é natural pensar que o limite possível de \(Y_{n}\) é \(Y = 0\).
+
+Para verificar a convergência em probabilidade, dado \(\epsilon\) arbitrário tal que \(\epsilon > 0\), é necessário computar:
+
+\begin{equation*}
+P(|Y_{n} - 0| \ge \epsilon) = P(Y_{n} = 1) \xrightarrow[n \to \infty]{} 0
+\end{equation*}
+
+Logo \(Y_{n} \xrightarrow[]{p}0 \; \forall \epsilon\). Veja que, caso \(\epsilon > 1: P(|Y_{n}| \ge \epsilon) = P(\emptyset) = 0\). Note que \(Y_{n}\) não converge para 0 quase certamente, pois:
+
+\begin{equation*}
+\begin{cases}
+Y_{n}(\omega) = 1 \text{ para um número infinito de }n's \\
+Y_{n}(\omega) = 0 \text{ para um número infinito de }n's
+\end{cases}
+\end{equation*}
+\end{example}
+
+\hypertarget{lei-dos-grandes-nuxfameros}{%
+\subsection{Lei dos Grandes Números}\label{lei-dos-grandes-nuxfameros}}
+
+\begin{theorem}
+Sejam \(X_{1},X_{2},\ldots\) variáveis aleatórias integráveis em \((\Omega, \mathcal{A}, P)\). Seja \(S_{n} = X_{1} + \ldots + X_{n}\).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(X_{1},X_{2},\ldots\) satisfaz a lei fraca dos grandes números se:
+\end{enumerate}
+
+\begin{equation*}
+\frac{S_{n} - E(S_{n})}{n} \xrightarrow[]{p} 0
+\end{equation*}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \(X_{1},X_{2},\ldots\) satisfaz a lei forte dos grandes números se:
+\end{enumerate}
+
+\begin{equation*}
+\frac{S_{n} - E(S_{n})}{n} \xrightarrow[]{q.c.} 0
+\end{equation*}
+\end{theorem}
+
+\begin{theorem}[Lei Fraca de Tchebychev]
+\protect\hypertarget{thm:leifractcheb}{}\label{thm:leifractcheb}Sejam \(X_{1},X_{2},\ldots,\) variáveis aleatórias independentes 2 a 2, com variâncias finitas e uniformemente limitadas (ou seja, existe \(c < \infty : \forall n, Var(X_{n}) \le c\)). Então \(X_{1},X_{2},\ldots\) satisfazem a Lei Fraca dos Grandes Números:
+
+\begin{equation*}
+\frac{S_{n} - E(S_{n})}{n} \xrightarrow[n \to \infty]{p} 0
+\end{equation*}
+\end{theorem}
+
+\begin{proof}[Prova]
+É necessário provar que dado \(\epsilon > 0, P\left(|\frac{S_{n} - E(S_{n})}{n}| \ge \epsilon\right) \xrightarrow[n \to \infty]{} 0\). Calculemos \(Var(S_{n})\):
+
+\begin{equation*}
+Var(S_{n}) = Var(X_{1} + \ldots + X_{n}) = \sum_{i=1}^{n}Var(X_{i}) \stackrel{hip}{\le} nc
+\end{equation*}
+
+Aplicamos a Desigualdade de Tchebychev, com \(X = S_{n}\) e \(\lambda = \epsilon n\):
+
+\begin{equation*}
+P(|S_{n} - E(S_{n})| \ge \epsilon n) \le \frac{Var(S_{n})}{\epsilon^{2}n^{2}} \le \frac{cn}{\epsilon^{2}n^{2}} = \frac{c}{\epsilon^{2}n} \xrightarrow[n \to \infty]{} 0
+\end{equation*}
+
+Observe que não é necessária a condição de independência 2 a 2, basta que os \(X_{i}\) sejam não correlacionados.
+\end{proof}
+
+\begin{corollary}[Lei dos Grandes Números de Bernoulli]
+Seja \(X_{1},X_{2},\ldots,\) uma sequência de ensaios de Bernoulli independentes, com a mmesma probabilidade de sucesso, \(p\). Seja \(S_{n} = X_{1} + \ldots + X_{n}\), o número de sucessos em \(n\) ensaios, então:
+
+\begin{equation*}
+\frac{S_{n}}{n} \xrightarrow[]{p} p
+\end{equation*}
+\end{corollary}
+
+\begin{proof}[Prova]
+Sabemos que \(X_{n} = 1\) com probabilidade \(p\) e \(X_{n} = 0\) com probabilidade \((1-p)\), e como os \(\{X_{n}\}\) são independentes, implica-se a independência 2 a 2. Além disso, \(Var(X_{n}) = p(1-p) \le \frac{1}{4} = c\). Assim, as hipóteses do teorema \ref{thm:leifractcheb} são válidas, e sendo \(E(S_{n}) = E\left(\sum_{i=1}^{n}X_{i}\right) = \sum_{i=1}^{n}E(X_{i}) = np\), temos:
+
+\begin{align*}
+\frac{S_{n} - E(S_{n})}{n} = \frac{S_{n} - np}{n} = &\frac{S_{n}}{n} - p \xrightarrow[]{p} 0 \\
+&\frac{S_{n}}{n} \xrightarrow[]{p} p
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Lei Fraca de Khintchin]
+Se \(X_{1},X_{2},\ldots,\) são independentes, identicamente distribuídos e integráveis, com média comum \(\mu\). Então:
+
+\begin{equation*}
+\frac{S_{n}}{n} \xrightarrow[n \to \infty]{p} \mu
+\end{equation*}
+\end{theorem}
+
+\begin{lemma}[Lema de Borel-Cantelli]
+Sejam \(A_{1},A_{2},\ldots,\) uma sequência de eventos em \((\Omega, \mathcal{A}, P)\). Defina:
+
+\begin{gather*}
+\lim\sup_{n \to \infty} A_{n} = \bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}A_{k} \\
+\lim\inf_{n \to \infty} A_{n} = \bigcup_{n=1}^{\infty}\bigcap_{k=n}^{\infty}A_{k}
+\end{gather*}
+\end{lemma}
+
+\textbf{Notas:}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  \(\lim\sup_{n \to \infty}A_{n} = [A_{n} \text{ ocorre infinitas vezes}]\). Vejamos que se \(\omega \in \lim\sup_{n \to \infty}A_{n} \Rightarrow \omega \in \bigcup_{k = n}^{\infty}A_{k}, \forall n\). Se \(n = 1, \omega \in \bigcup_{n=1}^{\infty}A_{k} \Rightarrow \exists k_{1} \ge 1 : \omega \in A_{k_{1}}\). Se \(n = k_{1} + 1, \omega \in \bigcup_{k = k_{1} + 1}^{\infty}A_{k} \Rightarrow \exists k_{2} > k_{1} : \omega \in A_{k_{2}}\). Continuando desse modo, podemos identificar \(k_{1} < k_{2} < \ldots,\) tais que \(\omega \in A_{k_{n}} \forall n\). Assim, \(\omega\) pertence a um número infinito de \(A_{n}\)'s;
+\item
+  \(\lim\inf_{n \to \infty}A_{n} = [\text{ocorrência de } A_{n} \, \forall n \text{ suficientemente grande}]\). Vejamos que se \(\omega \in \lim\inf_{n \to \infty}A_{n} \Leftrightarrow \exists n_{0}(\omega) : \omega \in \bigcap_{k=n_{0}}^{\infty}A_{k} \Leftrightarrow \forall k : k \ge n_{0}, \omega \in A_{k}\).
+\end{enumerate}
+
+\begin{proposition}
+\protect\hypertarget{prp:somaeventalea}{}\label{prp:somaeventalea}
+
+Sejam \(A_{1}, A_{2}, \ldots,\) eventos aleatórios em \((\Omega, \mathcal{A}, P)\):
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Se \(\sum_{n=1}^{\infty}P(A_{n}) < \infty \Rightarrow P\left(\lim\sup_{n \to \infty}A_{n}\right) = 0\);
+\item
+  Se \(\sum_{n=1}^{\infty}P(A_{n}) = \infty\) e \(\{A_{n}\}\) são conjuntamente independentes, então \(P\left(\lim\sup_{n \to \infty}A_{n}\right) = 1\).
+\end{enumerate}
+
+\end{proposition}
+
+\textbf{Nota:} Se a condição de independência é removida da proposição \ref{prp:somaeventalea} é removida, a afirmação não é válida.
+
+\begin{proof}[Prova]
+\leavevmode
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  Considere que \([A_{n} \text{ ocorre infinitas vezes }] = \bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}A_{k} \Rightarrow [A_{n} \text{ ocorre infinitas vezes}] \subseteq \bigcup_{k=n}^{\infty}A_{k}\). Além disso, \(\sum_{n=1}^{\infty}P(A_{n}) < \infty \Rightarrow \sum_{k=n}^{\infty}P(A_{k}) \xrightarrow[n \to \infty]{}0\). Dessa forma:
+\end{enumerate}
+
+\begin{align*}
+P([A_{n} \text{ ocorre infinitas vezes}]) \le P\left(\bigcup_{k=n}^{\infty}A_{k}\right) &\le \sum_{k=n}^{\infty}P(A_{k}) \xrightarrow[n \to \infty]{} 0 \\
+P([A_{n} \text{ ocorre infinitas vezes}]) &\le 0 \\
+P\left(\lim\sup_{n \to \infty}A_{n}\right) &= 0
+\end{align*}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Já que \([A_{n} \text{ ocorre infinitas vezes}] = \bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}A_{k}\), uma estratégia é verificar \(P\left(\bigcup_{k=n}^{\infty}A_{k}\right) = 1\). Logo, ocorre que \(P\left(\bigcap_{n=1}^{\infty}\bigcup_{k=n}^{\infty}A_{k}\right) = 1\). Tome \(B_{n} = \bigcup_{k=n}^{\infty}A_{k} \Rightarrow B_{n} \supseteq \bigcup_{k=n}^{n+m}A_{k}, \forall m \Rightarrow B_{n}^{c} \subseteq \left(\bigcup_{k=n}^{n+m}A_{k}\right)^{c} = \bigcap_{k=n}^{n+m}A_{k}^{c}\). Logo \(1 - P(B_{n}) = P(B_{n}^{c}) \le P\left(\bigcap_{k=n}^{n+m}A_{k}^{c}\right) = \prod_{k=n}^{n+m}P(A_{k}^{c}) = \prod_{k=n}^{n+m}(1 - P(A_{k}))\). Sabemos que \(\forall p \in [0,1], 1 - p \le e^{-p}\), assim \(1 - P(B_{n}) \le \prod_{k=n}^{n+m}(1 - P(A_{k})) \le \prod_{k=n}^{n+m}\exp(-P(A_{k})) = \exp\left(-\sum_{k=n}^{n+m}P(A_{k})\right)\). Ou seja, \(\exp\left(-\sum_{k=n}^{n+m}P(A_{k})\right) \xrightarrow[m \to \infty]{}0\), de modo que \(1 - P(B_{n}) \le 0 \Rightarrow P(B_{n}) = 1 \forall n\).
+\end{enumerate}
+
+\end{proof}
+
+\begin{example}
+
+Sejam \(X_{1},X_{2},\ldots,\) variáveis aleatórias independentes e identicamente distribuídas, com \(X_{i} \sim Exp(1)\). Vejamos que, \(Y_{n} = \frac{X_{n}}{\log(n)},n > 1\), temos:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\item
+  \(Y_{n} \xrightarrow[]{p}0\);
+\item
+  \(Y_{n} \not\xrightarrow[]{q.c}0\).
+\end{enumerate}
+
+\begin{proof}[Prova]
+\leavevmode
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Devemos verificar que se \(\epsilon > 0, P(|Y_{n}| \ge \epsilon) \xrightarrow[n \to \infty]{} 0\):
+\end{enumerate}
+
+\begin{align*}
+P(|Y_{n}| \ge \epsilon) &= P(Y_{n} \ge \epsilon) \\
+&= P(X_{n} \ge \epsilon \log(n)) \\
+&= \exp(-\epsilon \log(n)) \\
+&= n^{-\epsilon} \xrightarrow[n \to \infty]{} 0 \Rightarrow Y_{n} \xrightarrow[]{p} 0
+\end{align*}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Quanto à não convergência quase certa a ideia é provar que \(P(Y_{n} \ge \epsilon \text{ ocorre infinitas vezes}) = 1 \forall \epsilon > 0\). Seja \(A_{n} = [Y_{n} \ge \epsilon]\). Vamos olhar para o evento \([A_{n} \text{ ocorre infinitas vezes}]\), se \(\omega \in [A_{n} \text{ ocorre infinitas vezes}] \Rightarrow Y_{n}(\omega) \ge \epsilon\) para um número infinito de \(n\)'s. Além disso, \(\{Y_{n}\}\) é conjuntamente independente, de modo que \(\{A_{n}\}\) também será conjuntamente independente. Assim, a hipótese de independência para Borel-Cantelli é válida. Basta checar que \(\sum_{n=1}^{\infty}P(A_{n}) = \infty\):
+\end{enumerate}
+
+\begin{align*}
+\sum_{n=1}^{\infty}P(A_{n}) &= \sum_{n=1}^{\infty}P(Y_{n} \ge \epsilon) \\
+&= \sum_{n=1}^{\infty}P(X_{n} \ge \epsilon \log(n)) \\
+&= \sum_{n=1}^{\infty}\exp(-\epsilon \log(n)) \\
+&= \sum_{n=1}^{\infty}n^{-\epsilon} = \infty
+\end{align*}
+
+\end{proof}
+
+\end{example}
+
+\begin{corollary}
+Seja \(\{X_{n}\}_{n \ge 1}\) uma sequência de ensaios Bernoulli independentes, cada um com probabilidade de sucesso \(p_{n}\). Se \(\sum_{n=1}^{\infty}p_{n} < \infty \Rightarrow P\left(\sum_{n=1}^{\infty}X_{n} < \infty\right) = 1\). Se \(\sum_{n=1}^{\infty}p_{n} = \infty \Rightarrow P\left(\sum_{n=1}^{\infty}X_{n} = \infty\right) = 1\).
+\end{corollary}
+
+\textbf{Nota:} No primeiro caso ocorre um número finito de sucessos quase certamente. No segundo caso, ocorre um número infinito de sucessos quase certamente.
+
+\begin{proof}[Prova]
+Defina \(A_{n} = [X_{n} = 1]P(A_{n}) = P(X_{n} = 1) = p_{n}\). Pelo Lema de Borel-Cantelli:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  \(\sum_{n=1}^{\infty}p_{n} < \infty \Rightarrow P(A_{n} \text{ ocorrer infinitas vezes}) = 0\);
+\item
+  \(\sum_{n=1}^{\infty}p_{n} = \infty \Rightarrow P(A_{n} \text{ ocorrer infinitas vezes}) = 1\);
+\end{enumerate}
+
+Temos que:
+
+\begin{equation*}
+[A_{n} \text{ ocorrer infinitas vezes}] = \left[\sum_{n=1}^{\infty}X_{n} = \infty\right] \Rightarrow [A_{n} \text{ ocorrer infinitas vezes}]^{c} = \left[\sum_{n=1}^{\infty}X_{n} < \infty\right]
+\end{equation*}
+
+Já que \(P\left(\sum_{n=1}^{\infty}X_{n} = \infty\right) = 0 \Rightarrow P\left(\sum_{n=1}^{\infty}X_{n} < \infty\right) = 1\). Já por (b), como \([A_{n} \text{ infinitas vezes}] = \left[\sum_{n=1}^{\infty}A_{n} = \infty\right] \Rightarrow P\left(\sum_{n=1}^{\infty}X_{n} = \infty\right) = 1\).
+\end{proof}
+
+\begin{theorem}[Recíproca da Lei Forte de Kolmogorov]
+Sejam \(X_{1},X_{2},\ldots,\) variáveis aleatórias independentes e identicamente distribuídas. Se \(E(|X_{1}|) = \infty\), então com probabilidade 1 a sequência:
+
+\begin{equation*}
+\frac{|S_{n}|}{n} = \frac{|X_{1} + \ldots + X_{n}|}{n}
+\end{equation*}
+
+não é limitada, para \(n = 1,2,\ldots\)
+\end{theorem}
+
+\textbf{Notas:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\item
+  O teorema é considerado a recíproca da Lei Forte de Kolmogorov. A Lei citada afirma que, sob o suposto de integrabilidade das variáveis aleatórias \(X_{n}, \frac{S_{n}}{n} \xrightarrow[n \to \infty]{}E(X_{1})\) com probabilidade 1, ou seja, quase certamente;
+\item
+  O teorema é uma aplicação do Lema de Borel-Cantelli;
+\item
+  Lembrando o critério de integrabilidade, \(X\) é integrável se e somente se \(\sum_{n=1}^{\infty}P(|X_{n}| \ge n) < \infty\).
+\end{enumerate}
+
+\begin{proof}[Prova]
+Por hipótese, \(E(|X_{1}|) = \infty\), logo \(\forall k, k = 1,2,\ldots, E\left(\frac{|X_{1}|}{k}\right) = \infty\). Pela nota 3, temos que \(\sum_{n=1}^{\infty}P\left(\frac{|X_{1}|}{k} \ge n\right) = \infty, \forall k\). Como \(X_{1},X_{2},\ldots,\) são identicamente distribuídos:
+
+\begin{equation*}
+\infty = \sum_{n=1}^{\infty}P\left(\frac{|X_{1}|}{k} \ge n\right) = \sum_{n=1}^{\infty}P\left(\frac{|X_{n}|}{k} \ge n\right) = \sum_{n=1}^{\infty}P\left(\frac{|X_{n}|}{n} \ge k\right) \;\;\; ,\forall k
+\end{equation*}
+
+Defina \(A_{n} = \left[\frac{|X_{n}|}{n} \ge k\right]\). Como \(\{X_{n}\}_{n \ge 1}\) são independentes, a sequência \(\{A_{n}\}_{n \ge 1}\) será conjuntamente independente. Pelo item (b) do Lema de Borel-Cantelli, como \(\infty = \sum_{n=1}^{\infty}P(A_{n})\) e a sequência é conjuntamente independente, \(P([A_{n} \text{ ocorrer infinitas vezes}]) = 1\). Defina \(B_{k} = \left[\frac{|X_{n}|}{n} \ge k \text{ ocorre infinitas vezes}\right]\), para \(k\) fixo. Assim, \(P(B_{k}) = 1, \forall k\). Dessa forma, \(P\left(\bigcap_{k=1}^{\infty}B_{k}\right) = 1\)
+
+Ou seja, \(P\left(\left\{\frac{|X_{n}|}{n}\right\} \text{ ser ilimitada}\right) = 1\). Seja \(S_{n} = X_{1} + \ldots + X_{n}\) e \(S_{0} = 0\). Devemos provar que se \(\frac{|X_{n}|}{n}\) é ilimitada, então \(\frac{|S_{n}|}{n}\) também será ilimitada. Temos pela desigualdade triangular que:
+
+\begin{equation*}
+\frac{|X_{n}|}{n} = \frac{|S_{n} - S_{n-1}|}{n} \le \frac{|S_{n}|}{n} + \frac{|S_{n-1}|}{n}
+\end{equation*}
+
+Como \(\frac{|X_{n}|}{n}\) é ilimitada, a relação indica que \(\frac{|S_{n}|}{n} \text{ ou } \frac{|S_{n-1}|}{n}\) é ilimitada. Note que \(\left\{\frac{|S_{n-1}|}{n-1}\right\}_{n \ge 2}\) forma a sequência \(\left\{\frac{|S_{n}|}{n}\right\}_{n \ge 1}\). Se \(n \ge 2, \frac{|S_{n-1}|}{n} = \frac{|S_{n-1}|}{(n-1)}\frac{(n-1)}{n}\), e \(\frac{(n-1)}{n} \in \left[\frac{1}{2},1\right)\). Dessa forma, \(\frac{|S_{n-1}|}{n}\) é ilimitada se e somente se \(\frac{|S_{n}|}{n}\) é ilimitada, logo \(\frac{|S_{n}|}{n}\) é ilimitada com probabilidade 1.
+\end{proof}
+
+\begin{proposition}[Desigualdade de Kolmogorov]
+Sejam \(X_{1},X_{2},\ldots,X_{n}\) variáveis aleatórias independentes, com \(E(X_{k}) = 0, Var(X_{k}) < \infty, \forall k\). Então, para todo \(\lambda > 0\):
+
+\begin{equation*}
+P\left(\max_{1 \le k \le n}\{|S_{k}|\} \ge \lambda\right) \le \frac{Var(S_{n})}{\lambda^{2}} = \frac{\sum_{k=1}^{n}Var(X_{k})}{\lambda^{2}}
+\end{equation*}
+
+Onde \(S_{n} = X_{1} + \ldots + X_{n}\).
+\end{proposition}
+
+\begin{proof}[Prova]
+Primeiro, vejamos que se \(X\) é uma variável aleatória, \(X \ge 0\), podemos definir \(X \ge X.I_{[X \ge c]}\). Assim:
+
+\begin{align*}
+S_{n}^{2} &\ge S_{n}^{2}I_{[S^{2} \ge \lambda^{2}]} \ge \lambda^{2}I_{[S^{2} \ge \lambda^{2}]} \\ \\
+E(S_{n}^{2}) &\ge \lambda^{2}E(I_{[S^{2} \ge \lambda^{2}]}) = \lambda^{2}P(S_{n}^{2} \ge \lambda^{2}) \\
+P(S_{n}^{2} \ge \lambda^{2}) &\le \frac{E(S_{n}^{2})}{\lambda^{2}} \\
+P(S_{n}^{2} \ge \lambda^{2}) &\le \frac{Var(S_{n})}{\lambda^{2}} \\
+P(|S_{n}| \ge \lambda) &\le \frac{Var(S_{n})}{\lambda^{2}}
+\end{align*}
+
+Defina \(A = \{\max_{1 \le k \le n}S_{k}^{2} \ge \lambda^{2}\}\). Sejam \(A_{1} = [S_{1}^{2} \ge \lambda^{2}], A_{2} = [S_{1}^{2} < \lambda^{2}, S_{2}^{2} \ge \lambda^{2}], \ldots, A_{k} = [S_{1}^{2} < \lambda^{2}, \ldots, S_{k-1}^{2} < \lambda^{2}, S_{k} \ge \lambda^{2}], \ldots\). Temos que os \(\{A_{k}\}\) são disjuntos dois a dois e que \(A = \bigcup_{k=1}^{n}A_{k}\). Assim, \(I_{A} = \sum_{k=1}^{n}I_{A_{k}}\) de modo que \(S_{n}^{2} \ge S_{n}^{2}I_{A} = S_{n}^{2}\sum_{k=1}^{n}I_{A_{k}} \Rightarrow E(S_{n}^{2}) \ge \sum_{k=1}^{n}E(S_{n}^{2}I_{A_{k}})\). Note que \(S_{n}^{2} = (S_{n} - S_{k} + S_{k})^{2} = (S_{n} - S_{k})^{2} + S_{k}^{2} + 2S_{k}(S_{n} - S_{k}) \ge S_{k}^{2} + 2S_{k}(S_{n} - S_{k})\). Assim:
+
+\begin{align*}
+E(S_{n}^{2})I_{A_{k}} &\ge E(S_{k}^{2}I_{A_{k}}) + 2E\{(S_{n} - S_{k})S_{k}I_{A_{k}}\} \\
+E\{(S_{n} - S_{k})S_{k}I_{A_{k}}\} &= E(S_{n} - S_{k})E(S_{k}I_{A_{k}}) \\
+&= 0E(S_{k}I_{A_{k}}) \\
+&= 0
+\end{align*}
+
+Assim, substituindo teremos:
+
+\begin{align*}
+E(S_{n}^{2}I_{A_{k}}) &\ge E(S_{n}^{2}I_{A_{k}}) \\
+&\ge \lambda^{2}E(I_{A_{k}}) = \lambda^{2}P(A_{k})
+\end{align*}
+
+De modo que:
+
+\begin{equation*}
+E(S_{n}^{2}) \ge \sum_{k=1}^{n}\lambda^{2}P(A_{k}) = \lambda^{2}P(A) \Rightarrow P(A) \le \frac{E(S_{n}^{2})}{\lambda^{2}} = \frac{Var(S_{n})}{\lambda^{2}}
+\end{equation*}
+\end{proof}
+
+\hypertarget{leis-de-kolmogorov}{%
+\subsection{Leis de Kolmogorov}\label{leis-de-kolmogorov}}
+
+\begin{theorem}[1ª Lei Forte de Kolmogorov]
+Sejam \(X_{1},X_{2},\ldots,\) variáveis aleatórias independentes e integráveis. Suponha que \(\sum_{n=1}^{\infty}\frac{Var(X_{n})}{n^{2}} < \infty\). Então \(\{X_{n}\}_{n \ge 1}\) satisfaz a Lei Forte dos Grandes Números, ou seja:
+
+\begin{equation*}
+\frac{X_{1} + \ldots + X_{n}}{n} - \frac{[E(X_{1}) + \ldots + E(X_{n})]}{n} \xrightarrow[]{q.c.}0
+\end{equation*}
+\end{theorem}
+
+\begin{corollary}
+A Lei Forte de Kolmogorov é satisfeita por toda sequência de variáveis aleatórias independentes e uniformemente limitadas.
+\end{corollary}
+
+\begin{proof}[Prova]
+Uma sequência uniformemente limitada é definida: \(\forall X_{n} \; \exists c\), constante, tal que \(|X_{n}| \le c \; \forall n\). Tal propriedade garante que \(E(|X_{n}|) \le c\), ou seja, temos a integrabilidade, basta verificar a finitude da soma das variâncias:
+
+\begin{equation*}
+Var(X_{n}) \le E(X_{n}^{2}) \le c^{2} \Rightarrow \frac{\sum_{n=1}^{\infty}Var(X_{n})}{n} \le \frac{\sum_{n=1}^{\infty}c^{2}}{n^{2}} = c^{2}\sum_{n=1}^{\infty}\frac{1}{n^{2}} < \infty
+\end{equation*}
+
+Desse modo, a soma das variâncias é finita, então vale o corolário.
+\end{proof}
+
+\begin{example}
+Sejam \(X_{n} = \begin{cases} 1 &,p_{n} \\ 0 &,1-p_{n} \end{cases}, X_{n} \sim Ber(p_{n})\), com os \(\{X_{n}\}_{n \ge 1}\) independentes. Como \(|X_{n}| \le 1 \;\forall n\), a sequência é uniformemente limitada, de modo que se aplica o corolário:
+
+\begin{equation*}
+\frac{S_{n}}{n} - \frac{(p_{1} + \ldots + p_{n})}{n} \xrightarrow[]{q.c.} 0
+\end{equation*}
+
+Particularmente, se \(p_{n} = p \; \forall n\), então:
+
+\begin{equation*}
+\frac{S_{n}}{n} \xrightarrow[]{q.c.} p \Leftrightarrow P\left(\frac{S_{n}}{n} \xrightarrow[n \to \infty]{}p\right) = 1
+\end{equation*}
+\end{example}
+
+\begin{corollary}[Lei Forte de Borel]
+Sejam \(X_{1},X_{2},\ldots,\) variáveis aleatórias independentes e identicamente distribuídas, tais que \(P(X_{n} = 1) = p\) e \(P(X_{n} = 0) = (1 - p)\). Então:
+
+\begin{equation*}
+\frac{S_{n}}{n} \xrightarrow[]{q.c.}p
+\end{equation*}
+\end{corollary}
+
+\begin{proof}[Prova (Teorema da 1ª Lei Forte de Kolmogorov)]
+Seja \(M_{n} = \max_{2^{n} < k \le 2^{n+1}}\frac{|S_{k}|}{k}\). Vejamos pela desigualdade de Kolmogorov que:
+
+\begin{equation*}
+P(M_{n} \ge \frac{1}{m}) = P\left(\max_{2^{n} < k \le 2^{n+1}}\frac{|S_{k}|}{k} \ge \frac{1}{m}\right) = P\left(\max_{2^{n} < k \le 2^{n+1}}|S_{k}| \ge \frac{k}{m}\right) \le P\left(\max_{1 < k \le 2^{n+1}}|S_{k}| \ge \frac{2^{n}}{m}\right)
+\end{equation*}
+
+E aplicando a desigualdade teremos:
+
+\begin{equation*}
+P\left(\max_{1 < k \le 2^{n+1}}|S_{k}| \ge \frac{2^{n}}{m}\right) \le \frac{m^{2}}{4^{n}}\sum_{k=1}^{2^{n+1}}Var(X_{k})
+\end{equation*}
+
+Defina \(A_{n} = \left\{\max_{2^{n} < k \le 2^{n+1}}\frac{|S_{k}|}{k} \ge \frac{1}{m}\right\} = \left[M_{n} \ge \frac{1}{m}\right]\). Vamos verificar que \(\sum_{n=1}^{\infty}P(A_{n}) < \infty\):
+
+\begin{align}
+\sum_{n=1}^{\infty}P(A_{n}) \le m^{2}\sum_{n=1}^{\infty}\frac{1}{4^{n}}\sum_{k=1}^{2^{n+1}}Var(X_{k}) &= m^{2}\sum_{k=1}^{\infty}\;\sum_{n:2^{n+1} \ge k}\frac{1}{4^{n}}Var(X_{k})  \nonumber \\
+&= m^{2}\sum_{k=1}^{\infty}Var(X_{k})\sum_{n:2^{n+1} \ge k}\frac{1}{4^{n}}
+\label{eq:sumprobconv}
+\end{align}
+
+Desenvolvendo a série geométrica teremos:
+
+\begin{equation*}
+\sum_{n:2^{n+1} \ge k}\frac{1}{4^{n}} = \frac{4}{3}.\frac{1}{4^{J(k)}} = \frac{4}{3}.\frac{1}{2^{J(k)}}.\frac{1}{2^{J(k)}}\;\;\; , J(k) = \left(\frac{\ln(k/2)}{ln(2)}\right)
+\end{equation*}
+
+Note que \(2^{J(k) + 1} \ge k \Leftrightarrow \frac{1}{2.2^{J(k)}} \le \frac{1}{k} \Leftrightarrow \frac{1}{2^{J(k)}} \le \frac{2}{k}\), de modo que:
+
+\begin{equation*}
+\frac{4}{3}.\frac{1}{2^{J(k)}}.\frac{1}{2^{J(k)}} \le \frac{4}{3}.\frac{4}{k^{2}} = \frac{16}{3k^{2}}
+\end{equation*}
+
+Assim, substituindo esse resultado em \eqref{eq:sumprobconv}:
+
+\begin{align*}
+\sum_{n=1}^{\infty}P(A_{n}) &\le m^{2}\sum_{k=1}^{\infty}Var(X_{k})\sum_{n:2^{n+1} \ge k}\frac{1}{4^{n}} \\
+&\le m^{2}\sum_{k=1}^{\infty}Var(X_{k})\frac{16}{3k^{2}} < \infty
+\end{align*}
+
+Pelo Lema de Borel-Cantelli, \(P([A_{n} \text{ ocorre infinitas vezes}]) = 0\), logo sendo \(A_{n} = \left[M_{n} \ge \frac{1}{m}\right]\) para todo \(m\), a probabilidade de \(M_{n}\) superar \(\frac{1}{m}\) infinitas vezes é nula, assim seu complemento tem probabilidade 1. Logo \(P\left(M_{n} \ge \frac{1}{m} \text{ para um número finito de vezes}\right) = 1\). Sendo \(B_{m} = \left[M_{n} \ge \frac{1}{m} \text{ para um número finito de }n's\right]\), então \(P(B_{m}) = 1 \Rightarrow P\left(\bigcap_{m=1}^{\infty}B_{m}\right) = 1\).
+
+Se \(\omega \in \bigcap_{m=1}^{\infty}B_{m} \Leftrightarrow \forall m, M_{n}(\omega) \ge \frac{1}{m}\) para finitos \(n\)'s \(\Leftrightarrow \forall m, 0 \le M_{n}(\omega) < \frac{1}{m}\) se \(n\) é suficientemente grande \(\Leftrightarrow M_{n}(\omega) \xrightarrow[n \to \infty]{}0; \bigcap_{m=1}^{\infty}B_{m} = [M_{n} \to 0]\), ou seja, \(P([M_{n} \to 0]) = 1\).
+\end{proof}
+
+\begin{lemma}
+\protect\hypertarget{lem:sumvarfinita}{}\label{lem:sumvarfinita}Seja \(X\) uma variável aleatória com distribuição \(f\). Então:
+
+\begin{equation*}
+\sum_{n=1}^{\infty}\left\{\frac{1}{n^{2}}\int_{-n}^{n}x^{2}dF_{X}(x)\right\} < \infty
+\end{equation*}
+\end{lemma}
+
+\begin{theorem}[Lei Forte de Kolmogorov]
+Sejam \(X_{1},X_{2},\ldots,\) variáveis aleatórias independentes e identicamente distribuídas, integráveis e com esperanças \(E(X_{n}) = \mu\). Então:
+
+\begin{equation*}
+\frac{X_{1} + \ldots + X_{n}}{n} \xrightarrow[]{q.c.}\mu
+\end{equation*}
+\end{theorem}
+
+\textbf{Nota:} Basta supor \(\mu = 0\). No caso geral, defina \(U_{n} = X_{n} - \mu\).
+
+\begin{proof}[Prova]
+Defina \(Y_{n} = \begin{cases} X_{n} &, -n < X_{n} \le n \\ 0 &, c.c. \end{cases}\), logo \(Y_{n} = X_{n}I_{[-n < X_{n} \le n]}\). Defina \(Z_{n} = X_{n} - Y_{n}\), logo \(\frac{X_{1} + \ldots + X_{n}}{n} = \frac{Y_{1} + \ldots + Y_{n}}{n} + \frac{Z_{1} + \ldots + Z_{n}}{n}\).
+
+Para provar precisamos mostrar que:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Vamos usar Borel-Cantelli para provar que \(\frac{Z_{1} + \ldots + Z_{n}}{n} \xrightarrow[]{q.c.}0\);
+\item
+  Vamos usar a 1ª Lei Forte de Kolmogorov para provar que \(\frac{Y_{1} + \ldots + Y_{n}}{n} - \frac{(E(Y_1) + \ldots + E(Y_{n}))}{n} \xrightarrow[]{q.c.}0\);
+\item
+  Usaremos a convergência dominada para provar que \(\frac{(E(Y_1) + \ldots + E(Y_{n}))}{n} \to 0\).
+\end{enumerate}
+
+Caso (a), (b) e (c) forem válidos, então o teorema está provado, pois sendo:
+
+\begin{equation*}
+A = \left[\frac{Z_{1} + \ldots + Z_{n}}{n} \to 0\right], \; \; \; B = \left[\frac{Y_{1} + \ldots + Y_{n}}{n} - \frac{(E(Y_1) + \ldots + E(Y_{n}))}{n}\right]
+\end{equation*}
+
+\(P(A) = 1, P(B) = 1 \Rightarrow P(A \cap B) = 1\).
+
+\textbf{a)}
+
+Seja \(A_{n} = [Z_{n} \neq 0]\). Teremos que \([Z_{n} \neq 0] \Leftrightarrow [X_{n} \neq Y_{n}] \Leftrightarrow [X_{n} \not\in (-n,n]]\). Assim:
+
+\begin{equation*}
+P(A_{n}) = P(Z_{n} \neq 0) = P(X_{n} \not\in (-n,n]) \le P(|X_{n}| \ge n)
+\end{equation*}
+
+Logo \(\sum_{n=1}^{\infty}P(A_{n}) = \sum_{n=1}^{\infty}P(Z_{n} \neq 0) \le \sum_{n=1}^{\infty}P(|X_{n}| \ge n) \stackrel{iid}{=} \sum_{n=1}^{\infty}P(|X_{1}| \ge n) < \infty\), pois \(X_{1}\) é integrável. Ou seja, como \(\sum_{n=1}^{\infty}P(A_{n}) < \infty\), por Borel-Cantelli temos que \(P(A_{n} \text{ ocorrer infinitas vezes}) = 0\). Pelo complemento teremos que \(P(Z_{n} \neq 0 \text{ para um número finito de }n's) = 1 \Rightarrow P(Z_{n} = 0, \forall n \text{ suficientemente grande}) = 1\), de modo que \(P\left(\frac{Z_{1} + \ldots + Z_{n}}{n} \to 0\right) = 1\).
+
+\textbf{b)}
+
+Devemos verificar que \(\sum_{n=1}^{\infty}\frac{Var(Y_{n})}{n} < \infty\). Temos que:
+
+\begin{align*}
+Var(Y_{n}) \le E(Y_{n}^{2}) &= E(X_{n}^{2}I_{[-n < X_{n} \le n]}) \\
+&= \int x^{2}I_{[-n < X_{n} \le n]}(x)\, dF(x) \\
+&= \int_{-n}^{n}x^{2}\, dF(x)
+\end{align*}
+
+Logo, aplicando o lema \ref{lem:sumvarfinita}, teremos:
+
+\begin{equation*}
+\sum_{n=1}^{\infty}\frac{Var(Y_{n})}{n} \le \sum_{n=1}^{\infty}\frac{1}{n^{2}}\int_{-n}^{n}x^{2} \, dF(x) \stackrel{Lema}{<} \infty
+\end{equation*}
+
+Assim, \(\{Y_{n}\}\) verifica a 1ª Lei Forte de Kolmogorov.
+
+\textbf{c)}
+
+Note primeiramente que as hipóteses do Teorema da Convergência Dominada são aplicáveis para \(\{Y_{n}\}\). Fixo \(n = 1, Y_{1} = X_{1}I_{[-n < X_{1} \le n]}, |Y_{1}| \le |X_{1}|\), sendo \(X_{1}\) integrável por hipótese. Além disso, \(Y_{1} = X_{1}I_{[-n < X_{1} \le n]} \xrightarrow[n \to \infty]{}X_{1}\), de modo que \(Y_{1} \xrightarrow[n \to \infty]{}X_{1}\). Pelo Teorema da Convergência Dominada:
+
+\begin{equation*}
+E(Y_{n}) = E(X_{n}I_{[-n < X_{n} \le n]}) = E(X_{n}I_{[-n < X_{1} \le n]}) \to E(X_{1}) = 0
+\end{equation*}
+\end{proof}
+
+\newpage
+
+\hypertarget{exercuxedcios-4}{%
+\subsection{Exercícios}\label{exercuxedcios-4}}
+
+TODO
+
+\newpage
+
+\hypertarget{funuxe7uxf5es-caracteruxedsticas}{%
+\section{Funções Características}\label{funuxe7uxf5es-caracteruxedsticas}}
+
+\begin{definition}
+\(i\) representa o número complexo \((\sqrt{-1}), X \text{ e } Y\) variáveis aleatórias em \((\Omega, \mathcal{A}, P)\). Então \(Z = X + iY\) é uma variável aleatória complexa, e define-se sua esperança como \(E(Z) = E(X) + iE(Y)\), se \(E(X) \text{ e } E(Y)\) são finitas.
+\end{definition}
+
+\textbf{Nota:} Fórmula de Euler: \(e^{ix} = \cos(x) + i \sin(x), x \in \mathbb{R}\). Seja \(X\) uma variável aleatória, teremos que \(e^{iX} = \cos(X) + i \sin(X)\). Além disso, \(e^{iX}\) sempre tem esperança finita, pois as funções \(\cos(X)\) e \(\sin(X)\) são limitadas e \(E(X) < \infty\).
+
+\begin{definition}
+Seja \(X\) uma variável aleatória. A função característica de \(X\) é \(\varphi:\mathbb{R} \to \mathbb{C}\), com \(\varphi(t) = \varphi_{X}(t) = E(e^{itX}), \forall t \in \mathbb{R}\), onde \(E(e^{itX}) = E(\cos(tX)) + iE(\sin(tX))\).
+\end{definition}
+
+\textbf{Notas}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\tightlist
+\item
+  A chamada integral de Fourier-Stieltjes de \(F_{X}\) é definida como:
+\end{enumerate}
+
+\begin{align*}
+\varphi_{X}(t) &= E(\cos(tX)) + iE(\sin(tX)) \\
+&= \int \cos(tX)\, dF_{X}(x) + i \int \sin(tX)\, dF_{X}(x) \\
+&= \int e^{itX}\, dF_{X}(x)
+\end{align*}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Se \(X\) e \(Y\) são identicamente distribuídas, \(\varphi_{X} = \varphi_{Y}\).
+\end{enumerate}
+
+\hypertarget{propriedades-da-funuxe7uxe3o-caracteruxedstica}{%
+\subsection{Propriedades da função característica}\label{propriedades-da-funuxe7uxe3o-caracteruxedstica}}
+
+\begin{itemize}
+\item
+  \(FC_{1}: |\varphi_{X}(t)| \le 1, \forall t \in \mathbb{R}\);
+\item
+  \(FC_{2}: \varphi_{X}(0) = 1\);
+\item
+  \(FC_{3}:\) Denote por \(\bar{c}\) o complexo conjugado de \(c\) (ou seja, se \(c = x + iy \Rightarrow \bar{c} = x - iy\)). Então \(\bar{\varphi}_{X}(t) = \varphi_{X}(-t)\);
+\end{itemize}
+
+\begin{proof}[Prova]
+Como \(\cos(-tX) = \cos(tX), \sin(-tX) = -\sin(tX)\), teremos:
+
+\begin{align*}
+\varphi_{X}(-t) &= E(e^{i(-t)X}) = E(\cos(-tX)) + iE(\sin(-tX)) \\
+&= E(\cos(tX)) - iE(\sin(tX)) \\
+&= \bar{\varphi}_{X}(t)
+\end{align*}
+\end{proof}
+
+\begin{itemize}
+\tightlist
+\item
+  \(FC_{4}: \varphi_{X}\) é uniformemente contínua na reta;
+\end{itemize}
+
+\begin{proof}[Prova]
+\(\varphi\) é uniformemente contínua se verifica: dado \(\epsilon > 0, \exists \delta = \delta(\epsilon): \text{ se }|t - s| < \delta \Rightarrow |\varphi_{X}(t) - \varphi_{X}(s)| < \epsilon\). Considere \(s\) e \(t\):
+
+\begin{align*}
+|\varphi_{X}(t) - \varphi_{X}(s)| &= \left|\int(e^{itx} - e^{isx})\, dF_{X}(x)\right| \\
+&\le \int |e^{itx} - e^{isx}|\, dF_{X}(x) \\
+&\le \int |e^{isx}||e^{i(t-s)x} - 1|\, dF_{X}(x) \\
+&\le \int |e^{i(t-s)x}|\, dF_{X}(x) = h(t-s)
+\end{align*}
+
+Devemos ver que \(h(u) \xrightarrow[u \to 0]{}0\) (ou seja, dado \(\epsilon > 0, \exists \delta > 0: \text{ se } |u| < \delta \Rightarrow h(u) < \epsilon \Rightarrow h(t - s) < \epsilon\)). \(h\) pode ser vista como um valor esperado e assim aplicamos o Teorema da Convergência Dominada:
+
+\begin{align*}
+h(u) = \int |e^{iux} - 1|\, dF_{X}(x) &= E(|e^{iux} - 1|) \\
+|e^{iux} - 1| &\le |e^{iux}| + 1 = 2
+\end{align*}
+
+Ou seja, 2 domina \(|e^{iux} - 1|\). Por outro lado, \(\lim_{u \to 0}|e^{iux} - 1| = 0 \stackrel{TCD}{\Rightarrow}E(|e^{iux} - 1|) \xrightarrow[u \to 0]{}0\).
+\end{proof}
+
+\begin{itemize}
+\tightlist
+\item
+  \(FC_{5}:\) Se \(X \perp Y \Rightarrow \varphi_{X+Y}(t) = \varphi_{X}(t).\varphi_{Y}(t)\);
+\end{itemize}
+
+\begin{proof}[Prova]
+\begin{align*}
+\varphi_{X+Y}(t) = E(e^{it(X + Y)}) &= E(e^{itX}e^{itY}) \\
+&\stackrel{ind}{=}E(e^{itX})E(e^{itY}) \\
+&= \varphi_{X}(t)\varphi_{Y}(t)
+\end{align*}
+\end{proof}
+
+\textbf{Notas:}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Produto de funções características é função característica;
+\item
+  Se \(\{X_{i}\}_{i \ge 1}\) são independentes, então \(\varphi_{X_{1} + \ldots + X_{n}}(t) = \prod_{i=1}^{n}\varphi_{X_{i}}(t), \forall t \in \mathbb{R}\).
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \(FC_{6}: \varphi_{X}\) determina \(F_{X}\) (e a volta vale por definição);
+\end{itemize}
+
+\textbf{Nota:} Fórmula da Inversão: Seja \(X\) variável aleatória, com \(F\) a sua função de distribuição e \(\varphi\) sua função característica. Se \(x\) e \(y\) são pontos de continuidade de \(F\), com \(x < y\), então:
+
+\begin{equation}
+F(y) - F(x) = \frac{1}{2\pi}\lim_{u \to \infty}\int_{-u}^{u}\frac{[e^{-itx} - e^{-ity}]}{it}\varphi(t)\, dt
+\label{eq:formulainversao}
+\end{equation}
+
+Se \(\varphi = \varphi_{X}\) e \(F = F_{X}\) em \eqref{eq:formulainversao}, com \(z \in \mathbb{R}, y \downarrow z\) e \(x \to -\infty\), do lado esquerdo da fórmula teremos:
+
+\begin{equation*}
+\lim_{x \to -\infty, y \downarrow z}F_{X}(y) - F_{X}(x) = F_{X}(z)
+\end{equation*}
+
+\begin{itemize}
+\tightlist
+\item
+  \(FC_{7}:\) \(X\) tem distribuição simétrica em 0 \(\Leftrightarrow \varphi_{X}(t) \in \mathbb{R}, \forall t \in \mathbb{R}\);
+\end{itemize}
+
+\begin{proof}[Prova]
+\(X\) é simétrica em 0 \(\Leftrightarrow \forall x \in \mathbb{R}:P(X \le x) = P(X \ge -x) = P(-X \le x) \Leftrightarrow F_{X}(x) = F_{-X}(x) \Leftrightarrow \varphi_{X} = \varphi_{-X}\). Note que:
+
+\begin{align*}
+\varphi_{-X}(t) = \overline{\varphi_{-X}(-t)} &= \overline{E(e^{i(-t)(-X)})} \\
+&= \overline{E(e^{itX})} \\
+&= \overline{\varphi_{X}(t)}
+\end{align*}
+
+Assim, \(\varphi_{X}(t) = \overline{\varphi_{X}(t)}\), e se \(c = \overline{c}\), então \(c\) é real.
+\end{proof}
+
+\begin{itemize}
+\tightlist
+\item
+  \(FC_{8}:\) Se \(Y = aX + b \Rightarrow \varphi_{Y}(t) = e^{itb}\varphi_{X}(at)\);
+\end{itemize}
+
+\begin{proof}[Prova]
+\begin{align*}
+\varphi_{Y}(t) &= E(e^{it(aX + b)}) \\
+&= E(e^{itaX}e^{itb}) \\
+&= e^{itb}E(e^{itaX}) \\
+&= e^{itb}\varphi_{X}(at)
+\end{align*}
+\end{proof}
+
+\begin{itemize}
+\tightlist
+\item
+  \(FC_{9}: \varphi_{X}^{(k)}(t_{0}) = \frac{\partial^{k}}{\partial t^{k}}\varphi_{X}(t)\big{|}_{t = t_{0}}, k = 1,2,\ldots\). Se \(E(|X|^{n}) < \infty \Rightarrow \varphi_{X}\) possui \(n\) derivadas e \(\varphi_{X}^{(k)}(t) = \int(ix)^{k}e^{itx}\, dF_{X}(x), k = 1,2,\ldots,n\), e \(\varphi_{X}^{(k)}(0) = i^{k}E(X^{k})\).
+\end{itemize}
+
+\begin{proof}[Prova]
+Vejamos que \(\varphi_{X}'(t) = \int ixe^{itx}\, dF_{X}(x)\). Se \(h \neq 0\), teremos:
+
+\begin{align*}
+\frac{\varphi(t + h) - \varphi(t)}{h} &= \frac{\int e^{i(t + h)x}dF_{X}(x) - \int e^{itx}dF_{X}(x)}{h} \\
+&= \int e^{itx}\frac{[e^{ihx} - 1]}{h}dF_{X}(x) \\
+&= E\left\{e^{itx}\frac{[e^{ihx} - 1]}{h}\right\}
+\end{align*}
+
+Observe que \(\frac{e^{ihx} - 1}{h} \xrightarrow[h \to 0]{}ix, \forall x\) (por L'Hôpital), então \(e^{itx}\frac{e^{ihx} - 1}{h} \xrightarrow[h \to 0]{}ixe^{itx}\). Além disso:
+
+\begin{equation*}
+\left|\frac{e^{ihx} - 1}{h}\right| = \left|\frac{\int_{0}^{h} ixe^{isx}\, ds}{h}\right| = |x|\left|\frac{\int_{0}^{h} e^{isx}\, ds}{h}\right| \le |x|\frac{\int_{0}^{h}|e^{isx}\, ds|}{h} = |x|
+\end{equation*}
+
+Logo \(\left|e^{itX} \frac{[e^{ihx} - 1]}{h}\right| \le |X|\), sendo \(|X|\) integrável. Essas são as hipóteses da convergência dominada, logo:
+
+\begin{align*}
+\varphi'(t) = \lim_{h \to 0}\frac{\varphi(t+h) - \varphi(t)}{h} &= \lim_{h \to 0}E\left\{e^{itx}\frac{[e^{ihx} - 1]}{h}\right\} \\
+&= E(iXe^{itX}) \\
+&= \int ixe^{itx}\, dF_{X}(x)
+\end{align*}
+\end{proof}
+
+\begin{example}
+\(X \sim Pois(\lambda), p(x) = \frac{\lambda^{n}e^{-\lambda}}{n!}, n = 0,1,\ldots\).
+
+\begin{align*}
+\varphi_{X}(t) = E(e^{itX}) &= \sum_{n=0}^{\infty}e^{itn}\frac{\lambda^{n}e^{-\lambda}}{n!} \\
+&= e^{-\lambda}\sum_{n=0}^{\infty}\frac{(e^{it}\lambda)^{n}}{n!} \\
+&= e^{-\lambda}\exp(e^{it}\lambda) \\
+&= e^{\lambda[e^{it} - 1]}
+\end{align*}
+
+Assim, teremos:
+
+\begin{align*}
+&\varphi_{X}'(0) = i \lambda = iE(X) \Rightarrow E(X) = \lambda \\
+&\varphi_{X}''(0) = i^{2}\lambda(\lambda + 1) = i^{2}E(X^{2}) \Rightarrow E(X^{2}) = \lambda(\lambda + 1) \\
+&Var(X) = E(X^{2}) - (E(X))^{2} = \lambda(\lambda + 1) - \lambda^{2} = \lambda
+\end{align*}
+\end{example}
 
 \end{document}

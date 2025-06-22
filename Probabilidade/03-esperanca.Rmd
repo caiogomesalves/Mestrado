@@ -1,22 +1,22 @@
----
-title: "Notas de Aula - Capítulo 3"
-subtitle: "Probabilidade"
-author: "Caio Gomes Alves"
-date: "`r format(Sys.Date(), '%d/%m/%Y')`"
-header-includes:
-  - \usepackage{amsmath}
-  - \usepackage{tikz}
-  - \usepackage{pgfplots}
-  - \usepackage{caption}
-  - \usepackage{subcaption}
-  - \usepackage{cancel}
-  - \usepackage{mathtools}
-  - \usepackage{slashbox}
-  - \usepackage{annotate-equations}
-output:
-  bookdown::pdf_document2:
-    toc: false
----
+<!-- --- -->
+<!-- title: "Notas de Aula - Capítulo 3" -->
+<!-- subtitle: "Probabilidade" -->
+<!-- author: "Caio Gomes Alves" -->
+<!-- date: "`r format(Sys.Date(), '%d/%m/%Y')`" -->
+<!-- header-includes: -->
+<!--   - \usepackage{amsmath} -->
+<!--   - \usepackage{tikz} -->
+<!--   - \usepackage{pgfplots} -->
+<!--   - \usepackage{caption} -->
+<!--   - \usepackage{subcaption} -->
+<!--   - \usepackage{cancel} -->
+<!--   - \usepackage{mathtools} -->
+<!--   - \usepackage{slashbox} -->
+<!--   - \usepackage{annotate-equations} -->
+<!-- output: -->
+<!--   bookdown::pdf_document2: -->
+<!--     toc: false -->
+<!-- --- -->
 
 # Esperança
 
@@ -321,7 +321,7 @@ E(|X|^{p}) \ge |E(X)|^{p}
 
 Seja $X$ uma variável aleatória, $\varphi$ uma função mensurável e $Y = \varphi(X)$. Assim, $Y$ é uma variável aleatória, cuja esperança é $E(Y) = \int ydF_{\varphi(X)}(y) = \int_{0}^{\infty}[1 - F_{\varphi(X)}(y)]dy - \int_{-\infty}^{0}F_{\varphi(X)}(y)dy$.
 
-::: {.theorem}
+::: {.theorem #espfunc}
 
 Se $X$ é uma variável aleatória e $\varphi$ uma função mensurável, com $Y = \varphi(X)$:
 

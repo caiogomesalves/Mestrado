@@ -1,0 +1,258 @@
+---
+title: "Notas de Aula - Capítulo 4"
+subtitle: "Probabilidade"
+author: "Caio Gomes Alves"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+header-includes:
+  - \usepackage{amsmath}
+  - \usepackage{tikz}
+  - \usepackage{pgfplots}
+  - \usepackage{caption}
+  - \usepackage{subcaption}
+  - \usepackage{cancel}
+  - \usepackage{mathtools}
+  - \usepackage{slashbox}
+  - \usepackage{annotate-equations}
+output:
+  bookdown::pdf_document2:
+    toc: false
+---
+
+# Condicionalidade
+
+## Definição
+
+Se $P(A) > 0$, defina $P(X \in B|A) = \frac{P([X \in B] \cap A)}{P(A)}$. Verifique que essa fórmula satisfaz as condições de probabilidade. Se $P(A) > 0, B = \{\omega : X(\omega) \le x\}$, então:
+
+\begin{align*}
+F_{X}(x|A) &= P(X \le x|A) = \frac{P([X \le x] \cap A)}{P(A)}, \forall x \in \mathbb{R} \\
+E(X|A) &= \int xdF_{X}(x|A)
+\end{align*}
+
+::: {.proposition name="Lei das probabilidades totais"}
+
+Seja um espaço de probabilidades $(\Omega,\mathcal{A},P)$. $\forall B \in \mathcal{A}, P(X \in B) = \sum_{n}P(A_{n})P(X \in B |A_{n})$, de modo que:
+
+\begin{align*}
+F_{X}(x) = P(X \le x) &= \sum_{n}P(A_{n})P(X \le x|A_{n}) \\
+&= \sum_{n}P(A_{n})F_{X}(x|A_{n})
+\end{align*}
+
+:::
+
+Se $E(X)$ existe, teremos:
+
+\begin{align*}
+E(X) = \int xdF_{X}(x) &= \int xd\left(\sum_{n}P(A_{n})F_{X}(x|A_{n})\right) \\
+&= \sum_{n}P(A_{n})\int xdF_{X}(x|A_{n}) \\
+&= \sum_{n}P(A_{n})E(X|A_{n})
+\end{align*}
+
+::: {.example}
+
+Seja $X \sim U(-1,1), A_{1} = [X \ge 0], A_{2} = [X < 0]$. Ache a distribuição de $X|A_{1}$. Seja $B$ um boreliano em $[-1,1]$, então:
+
+\begin{equation*}
+P(X \in B|A_{1}) = \frac{P([X \in B] \cap [X \ge 0])}{P(X \ge 0)} = \frac{\frac{1}{2}\text{comprimento}(B \cap [0,1])}{\frac{1}{2}}
+\end{equation*}
+
+Assim, $X|A_{1} \sim U(0,1)$ e de maneira similar, $X|A_{2} \sim U(-1,0)$, e $E(X|A_{1}) = \frac{1}{2}, E(X|A_{2}) = -\frac{1}{2}$. Assim:
+
+\begin{align*}
+E(X) &= P(A_{1})E(X|A_{1}) + P(A_{2})E(X|A_{2}) \\
+&= \frac{1}{2}\cdot\frac{1}{2} - \frac{1}{2}\cdot\frac{1}{2} \\
+&= 0
+\end{align*}
+
+:::
+
+Seja $Y$ uma variável aleatória discreta e denote os valores dela como $y_{1},y_{2},\ldots$. Defina $A_{n} = [Y = y_{n}]$ e $X$ a variável aleatória em $(\Omega, \mathcal{A}, P)$. Então, para $B \in \mathcal{A}, P(X \in B|Y = y_{n}),\forall B \in \mathcal{A}$:
+
+\begin{align*}
+P(X \in B) &= \sum_{n}P(Y = y_{n})P(X \in B|Y = y_n) \\
+F_{X}(x) &= \sum_{n}P(Y = y_{n})F_{X}(x|Y = y_{n}),\forall x \in \mathbb{R} \\
+E(X) &= \sum_{n}P(Y = y_{n})E(X|Y = y_{n})
+\end{align*}
+
+Aplicando a integral de Stieltjes:
+
+\begin{align*}
+P(X \in B) &= \int P(X \in B|Y = y)dF_{Y}(y) \\
+F_{X}(x) &= \int F_{X}(x|Y = y)dF_{Y}(y) \\
+E(X) &= \int E(X|Y = y)dF_{Y}(y)
+\end{align*}
+
+Note que, para o caso contínuo teremos:
+
+\begin{equation*}
+dF_{Y}(y) = f_{Y}(y)dy
+\end{equation*}
+
+**Nota:** Suponha $\varphi(Y) = E(X|Y)$, ou seja, para cada valor de $Y, E(X|Y = y)$ é um ponto específico. Lembrando o teorema \@ref(thm:espfunc): $E(\varphi(Y)) = \int \varphi(y)dF_{Y}(y)$. Logo:
+
+\begin{equation*}
+E(\varphi(Y)) = \int \varphi(y)dF_{Y}(y) = \int E(X|Y = y)dF_{Y}(y) = E(E(X|Y)) = E(X)
+\end{equation*}
+
+::: {.example}
+
+Jogador 1 lança uma moeda honesta $n$ vezes, obtendo $k$ caras, $0 \le k \le n$. Depois, o jogador 2 lança a moeda $k$ vezes. Seja $X$ o número de caras do jogador 2. Determinar $E(X)$ supondo independência entre os lançamentos.
+
+Seja $Y$ o número de caras nos $n$ lançamentos do jogador 1. Sabemos que $Y \sim Bin\left(n, \frac{1}{2}\right) \stackrel{\text{Ind}}{\Rightarrow}X|Y = k \sim Bin\left(k, \frac{1}{2}\right)$. Desse modo:
+
+\begin{gather*}
+E(X|Y = k) = \frac{k}{2} \Rightarrow E(X|Y) = \frac{Y}{2} \\
+E(X) = E(E(X|Y)) = E\left(\frac{Y}{2}\right) = \frac{1}{2}E(Y) = \frac{n}{2}
+\end{gather*}
+
+:::
+
+## Distribuição condicional
+
+Como redefinimos as noções de probabilidade condicional quando $P(Y = y) = 0$? Postulamos $P(X \in \mathcal{B}|Y = y) = \int_{\mathcal{B}}f(x|y)dx$, onde:
+
+\begin{equation*}
+f(x|y) = \frac{f(x,y)}{\int_{-\infty}^{\infty}f(x,y)dx} = \frac{f(x,y)}{f_{Y}(y)}
+\end{equation*}
+
+Sendo $f(x,y)$ a densidade conjunta entre $X \text{ e } Y$ e $f_{Y}(y)$ a densidade marginal de $Y$.
+
+**Nota:** $\int_{-\infty}^{\infty}f(x|y)dx = \frac{1}{f_{Y}(y)}\left(\int_{-\infty}^{\infty}f(x,y)dx\right) = \frac{f_{Y}(y)}{f_{Y}(y)} = 1$ e $f(x|y) \ge 0 \; \forall x$. Então $f(x|y)$ é densidade de probabilidade. Sendo assim, podemos escrever:
+
+\begin{equation}
+F_{X}(x|Y = y) = \int_{-\infty}^{x}f(s|y)ds
+(\#eq:acumuladacond)
+\end{equation}
+
+Além disso, temos que $F_{X,Y}(x,y) = \int_{-\infty}^{y}F_{X}(x|Y = t)dF_{Y}(t)$. Assim, vejamos que essa noção é aplicada à equação \@ref(eq:acumuladacond) na formulação de $F_{X}(x|Y = y)$ para identificar $F_{X,Y}(x,y)$. Note que:
+
+\begin{align*}
+\int_{-\infty}^{y}F_{X}(x|Y = t)dF_{Y}(t) &= \int_{-\infty}^{y}\left(\int_{-\infty}^{x}f(s|t)ds\right)dF_{Y}(t) \\
+&= \int_{-\infty}^{y}\left(\int_{-\infty}^{x}\frac{f(s,t)}{f_{Y}(t)}ds\right)f_{Y}(t)dt \\
+&= \int_{-\infty}^{y}\int_{-\infty}^{x}f(s,t) \, ds\, dt \\
+&= F_{X,Y}(x,y)
+\end{align*}
+
+::: {.theorem}
+
+Sejam $X$ e $Y$ variáveis aleatórias em $(\Omega, \mathcal{A}, P)$. Então existe uma distribuição condicional (regular) para $X$ dado $Y$. Existe apenas uma distribuição no sentido de que duas distribuições condicionais são iguais quase certamente. Isto é, se $P_{1}(X \in \mathcal{B}|Y = y)$ e $P_{2}(X \in \mathcal{B}|Y = y)$ são ambas distribuições condicionais para $X$ dado $Y$, então existe $B_{0}$ boreliano, tal que $P(Y \in B_{0}) = 1$ e $P_{1}(X \in \mathcal{B}|Y = y) = P_{2}(X \in \mathcal{B}|Y = y) \forall B \in \mathcal{B}$ ($\sigma$-álgebra no espaço induzido pelo condicional).
+
+:::
+
+## Princípio da Substituição
+
+::: {.proposition}
+
+Se $X$ e $Y$ são variáveis aleatórias em $(\Omega, \mathcal{A}, P), \varphi(x,y)$ uma função mensurável e a deistribuição condicional de $X$ dado $Y$ é $P(X \in B|Y = y) \forall B \in \mathcal{B}$ e $y \in \mathbb{R}$, então a distribuição condicional de $\varphi(x,y)$ dado $Y$ é:
+
+\begin{equation*}
+P(\varphi(X,Y) \in B|Y = y) = P(\varphi(X,y) \in B|Y = y) = P(X \in \{x : \varphi(x,y) \in B\}|Y = y)
+\end{equation*}
+
+:::
+
+::: {.proof name="Prova (caso discreto)"}
+
+Suponha $P(Y = y_{n}) = P(y_{n}) \ge 0$ e $\sum_{n}P(y_{n}) = 1$. Seja $B \in \mathcal{B}$, então:
+
+\begin{align*}
+P(\varphi(X,Y) \in B|Y = y_{n}) &= \frac{P(\varphi(X,Y) \in B, Y = y_{n})}{P(Y = y_{n})} \\
+&= \frac{P(\varphi(X,y_{n}) \in B, Y = y_{n})}{P(Y = y_{n})} \\
+&= \frac{P(X \in \{x : \varphi(x,y_{n}) \in B\},Y = y_{n})}{P(Y = y_{n})} = P(X \in \{x : \varphi(x,y_{n}) \in B\}|Y = y_{n})
+\end{align*}
+
+:::
+
+## Esperança condicional
+
+Sejam $X$ e $Y$ variáveis aleatórias em $(\Omega, \mathcal{A}, P)$ a esperança condicional de $X$ dado $Y = y$ é:
+
+\begin{equation*}
+E(X|Y = y) = \int x \, dF_{X|Y}(x|Y = y)
+\end{equation*}
+
+::: {.theorem #integrabespcond}
+
+Se $X$ é integrável, então a esperança $E(X|Y = y)$ existe e é finita quase certamente, ou seja, existe $B_{0}$ boreliano tal que $P(Y \in B_{0}) = 1$ e que $E(X|Y = y)$ é finita para $y \in B_{0}$.
+
+:::
+
+A prova do teorema \@ref(thm:integrabespcond) é baseada no Teorema de Radon-Nikodym.
+
+**Notas:**
+
+- **(i)** $E(X) = E(E(X|Y))$. No caso contínuo, $E(X) = \int E(X|Y = y)\, dF_{Y}(y)$. Note que:
+
+\begin{align*}
+E(X|Y = y) &= \int x \, dF_{X}(x|Y = y) \\
+&= \int_{-\infty}^{\infty}xf(x|y)dx
+\end{align*}
+
+Logo, teremos que:
+
+\begin{align*}
+E(E(X|Y)) &= \int E(X|Y = y) \, dF_{Y}(y) \\
+&= \int_{-\infty}^{\infty}\left(\int_{-\infty}^{\infty}x\frac{f(x,y)}{f_{Y}(y)}\, dx\right)f_{Y}(y) \, dy \\
+&= \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}xf(x,y)\, dx \, dy \\
+&= \int_{-\infty}^{\infty}xf_{X}(x) \, dx = E(X)
+\end{align*}
+
+- **(ii)** Propriedades da esperança condicional:
+  - $EC_{1}:$ $E(X) = E(E(X|Y))$;
+  - $EC_{2}:$ Se $X = c$, constante, $E(X|Y) = c$;
+  - $EC_{3}:$ Se $X_{1} \le X_{2} \Rightarrow E(X_{1}|Y) \le E(X_{2}|Y)$;
+    - Se $a \le X \le b \Rightarrow a \le E(X|Y) \le b$, sendo $a,b$ constantes.
+  - $EC_{4}(\text{Linearidade}):$ $E(aX_{1} + bX_{2}|Y) = aE(X_{1}|Y) + bE(X_{2}|Y)$;
+  - $EC_{5}(\text{Desigualdade de Jensen}):$ Se $\varphi$ é convexa, então:
+\begin{equation*}
+\varphi((E(X|Y))) \le E(\varphi(X)|Y)
+\end{equation*}
+  - $EC_{6}(\text{Teorema da Convergência Monótona}):$ Se $X_{n} \ge 0 \,\forall n$ e $X_{n} \uparrow X \Rightarrow E(X_{n}|Y) \uparrow E(X|Y)$;
+  - $EC_{7}(\text{Teorema da Convergência Dominada}):$ Se $X_{n} \to X, \exists X_{0}$ integrável tal que $|X_{n}| \le X_{0} \Rightarrow \lim_{n \to \infty}E(X_{n}|Y) = E(X|Y)$.
+
+::: {.proposition}
+
+Se $\varphi(x,y)$ é integrável, então $E(\varphi(X,Y)|Y = y) = E(\varphi(X,y)|Y = y) = \int \varphi(x,y) \, dF_{X}(x|Y = y)$.
+
+:::
+
+A prova da proposição é por meio da aplicação direta do princípio da substituição.
+
+**Notas:**
+
+- Se $X$ é integrável, pela Desigualdade de Jensen temos:
+
+\begin{equation*}
+[E(X|Y)]^{2} \le E(X^{2}|Y)
+\end{equation*}
+
+A diferença entre $E(X^{2}|Y) - [E(X|Y)]^{2}$ é a variância condicional de $X|Y$.
+
+- Considere $X_{1},X_{2},\ldots,X_{n}$ independentes, identicamente distribuídas e integráveis. Seja $S = X_{1} + \ldots + X_{n}$. Então:
+
+\begin{equation*}
+E(X_{i}|S) = \frac{S}{n} \,\,\, ,\forall i = 1,\ldots,n
+\end{equation*}
+
+::: {.proof name="Prova"}
+
+Sejam os vetores $(X_{1},\ldots,X_{n})$ e $(X_{i},\ldots,X_{i-1},X_{1},X_{i+1},\ldots,X_{n})$, que tem a mesma distribuição. Dada a função $f, f(X_{1},\ldots,X_{n}) \sim f(X_{i},\ldots,X_{i-1},X_{1},X_{i+1},\ldots,X_{n})$, que $f:R^{n} \to R^{2}$, com $f(y_{1},\ldots,y_{n}) = \left(y_{1},\sum_{i=1}^{n}y_{i}\right)$. Então $(X_{1}|S) \sim (X_{i}|S) \; \forall i \Rightarrow X_{1}|S \sim X_{i}|S$, isto é, que $\forall B$ boreliano e $\forall s$ valor de $S$:
+
+\begin{align*}
+P(X_{1} \in B|S = s) = P(X_{i} \in B|S = s) \; \forall i &\Rightarrow E(X_{1}|S = s) = E(X_{i}|S = s) \; \forall i \\
+E(X_{1}|S = s) = \frac{1}{n}\sum_{j=1}^{n}E(X_{j}|S = s) &\Rightarrow E(X_{i}|S = s) = \frac{1}{n}\sum_{j=1}^{n}E(X_{j}|S = s) \\
+nE(X_{i}|S = s) &= \sum_{j=1}^{n}E(X_{j}|S = s) \\
+&= E\left(\sum_{j=1}^{n}X_{j}|S = s\right) \\
+&= E(S|S = s) = S \\
+E(X_{i}|S) = \frac{S}{n}
+\end{align*}
+
+:::
+
+\newpage
+
+## Exercícios
+
+TODO
+
+\newpage

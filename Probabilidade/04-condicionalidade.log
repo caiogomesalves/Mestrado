@@ -2,8 +2,8 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded forma
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**_main.tex
-(./_main.tex
+**04-condicionalidade.tex
+(./04-condicionalidade.tex
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-05-26>
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/base/article.cls
@@ -431,11 +431,7 @@ File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \tikz@expandcount=\count331
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
-File: tikzlibrarycalc.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
-File: tikzlibrarypositioning.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/pgfplots/pgfplots.sty (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/pgfplots/pgfplots.revision.tex)
+))) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/pgfplots/pgfplots.sty (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/pgfplots/pgfplots.revision.tex)
 Package: pgfplots 2021/05/15 v1.18.1 Data Visualization (1.18.1)
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/pgfplots/pgfplots.code.tex (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/pgfplots/pgfplotscore.code.tex
 \t@pgfplots@toka=\toks40
@@ -602,6 +598,8 @@ Package: xparse 2024-08-16 L3 Experimental document command parser
 \l__sn_y_dim=\dimen327
 \l__sn_xa_dim=\dimen328
 \l__sn_ya_dim=\dimen329
+) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
+File: tikzlibrarycalc.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
 \c@eqnannotatenode=\count347
 ) (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/bookmark/bookmark.sty
@@ -733,30 +731,30 @@ Package: amsthm 2020/05/29 v2.20.6
 \c@example=\count366
 \c@exercise=\count367
 \c@hypothesis=\count368
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 118.
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 116.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) (./_main.aux)
-\openout1 = `_main.aux'.
+) (./04-condicionalidade.aux)
+\openout1 = `04-condicionalidade.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 118.
-LaTeX Font Info:    ... okay on input line 118.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 116.
+LaTeX Font Info:    ... okay on input line 116.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -799,446 +797,97 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 
 
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable tick labels; missing features). Consider writing \pgfplotsset{compat=1.18} into your preamble.
- on input line 118.
+ on input line 116.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 118.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 120.
+Package hyperref Info: Link coloring OFF on input line 116.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 118.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 120.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 118.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 120.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 118.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 120.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 118.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 120.
+(Font)              <12> on input line 118.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 120.
+(Font)              <8> on input line 118.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 120.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 120.
+(Font)              <6> on input line 118.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 118.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 120.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 118.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 171.
+(Font)              <10> on input line 125.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 171.
+(Font)              <7> on input line 125.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 171.
+(Font)              <5> on input line 125.
 
 
 [1
 
-{/home/caiogomesalves/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}] (./_main.toc
+{/home/caiogomesalves/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
 
-[2
-
-])
-\tf@toc=\write4
-\openout4 = `_main.toc'.
+LaTeX Warning: Reference `thm:espfunc' on page 2 undefined on input line 187.
 
 
+
+[2]
 
 [3]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 229.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 276.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
+Underfull \hbox (badness 1331) in paragraph at lines 327--328
+[][]\T1/lmr/bx/n/10 Proposition 1.3. []\T1/lmr/m/it/10 Se $\OML/lmm/m/it/10 '\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x; y\OT1/lmr/m/n/10 )$ \T1/lmr/m/it/10 é in-te-grável, en-tão $\OML/lmm/m/it/10 E\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 '\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 X; Y\OT1/lmr/m/n/10 )\OMS/lmsy/m/n/10 j\OML/lmm/m/it/10 Y \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 y\OT1/lmr/m/n/10 ) = \OML/lmm/m/it/10 E\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 '\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 X; y\OT1/lmr/m/n/10 )\OMS/lmsy/m/n/10 j\OML/lmm/m/it/10 Y \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 y\OT1/lmr/m/n/10 ) =
+ []
+
+
 
 [4{/home/caiogomesalves/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
 
 [5]
 
-[6]
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-
-Package caption Warning: \setcaptiontype
-(caption)                outside box or environment on input line 476.
-See the caption package documentation for explanation.
-
-
-Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 476.
-See the caption package documentation for explanation.
-
-
-Overfull \hbox (0.51534pt too wide) in paragraph at lines 475--476
-[][] 
- []
-
-
-
-[7]
-Underfull \hbox (badness 5175) in paragraph at lines 557--558
-[][]\T1/lmr/bx/n/10 Definition 2.7. []$\OML/lmm/m/it/10 P$ \T1/lmr/m/n/10 definida em uma $\OML/lmm/m/it/10 ^^[$\T1/lmr/m/n/10 -álgebra $\OMS/lmsy/m/n/10 A$\T1/lmr/m/n/10 , sat-is-fazendo os ax-iomas de Kol-mogorov
- []
-
-
-
-[8]
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-Missing character: There is no ; in font nullfont!
-
-
-[9]
-
-[10]
-
-[11]
-
-[12]
-
-[13]
-
-[14]
-
-[15]
-
-[16]
-
-[17]
-
-[18]
-
-[19]
-
-[20]
-
-[21]
-
-[22]
-Overfull \hbox (5.65408pt too wide) detected at line 1706
-\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 i\OT1/lmr/m/n/10 )  [] \OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 A[]\OT1/lmr/m/n/10 ) \OMS/lmsy/m/n/10 ^^@ [] \OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 A[] \OMS/lmsy/m/n/10 \ \OML/lmm/m/it/10 A[]\OT1/lmr/m/n/10 ) \OMS/lmsy/m/n/10 ^^T \OML/lmm/m/it/10 P [] \OMS/lmsy/m/n/10 ^^T [] \OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 A[]\OT1/lmr/m/n/10 ) \OMS/lmsy/m/n/10 ^^@ [] \OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 A[] \OMS/lmsy/m/n/10 \ \OML/lmm/m/it/10 A[]\OT1/lmr/m/n/10 ) + [] \OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 A[] \OMS/lmsy/m/n/10 \ \OML/lmm/m/it/10 A[] \OMS/lmsy/m/n/10 \ \OML/lmm/m/it/10 A[]\OT1/lmr/m/n/10 )
- []
-
-
-
-[23]
-Overfull \hbox (18.95952pt too wide) detected at line 1761
-[]
- []
-
-LaTeX Font Info:    Trying to load font information for T1+lmss on input line 1762.
-(/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/t1lmss.fd
-File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Overfull \hbox (26.126pt too wide) detected at line 1772
-[]
- []
-
-
-
-[24]
-
-[25]
-
-[26]
-
-[27]
-
-[28]
-
-[29]
-
-[30]
-
-[31]
-
-[32]
-
-[33]
-Missing character: There is no . in font nullfont!
-Missing character: There is no 0 in font nullfont!
-Missing character: There is no 1 in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no t in font nullfont!
-Missing character: There is no . in font nullfont!
-Missing character: There is no 0 in font nullfont!
-Missing character: There is no 1 in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no t in font nullfont!
-Missing character: There is no . in font nullfont!
-Missing character: There is no 0 in font nullfont!
-Missing character: There is no 1 in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no t in font nullfont!
-
-
-[34]
-
-[35]
-
-[36]
-Missing character: There is no . in font nullfont!
-Missing character: There is no 0 in font nullfont!
-Missing character: There is no 1 in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no t in font nullfont!
-
-
-[37]
-Underfull \hbox (badness 6559) in paragraph at lines 2775--2776
-[]\T1/lmr/bx/n/10 b) \T1/lmr/m/n/10 Se para o ve-tor aleatório $\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 X[]; [] ; X[]\OT1/lmr/m/n/10 )$\T1/lmr/m/n/10 , $\OML/lmm/m/it/10 F$ \T1/lmr/m/n/10 é dada pela forma $\OML/lmm/m/it/10 F\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) =
- []
-
-
-Underfull \hbox (badness 6876) in paragraph at lines 2792--2793
-[]\T1/lmr/bx/it/10 b) \T1/lmr/m/it/10 Se $[]$ é ab-so-lu-ta-mente con-tínuo com den-si-dade $\OML/lmm/m/it/10 f$\T1/lmr/m/it/10 , $\OML/lmm/m/it/10 P[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 B\OT1/lmr/m/n/10 ) = \OML/lmm/m/it/10 P\OT1/lmr/m/n/10 ([] \OMS/lmsy/m/n/10 2 \OML/lmm/m/it/10 B\OT1/lmr/m/n/10 ) =
- []
-
-
-
-[38]
-Underfull \hbox (badness 1442) in paragraph at lines 2821--2822
-[]\T1/lmr/bx/it/10 b) \T1/lmr/m/it/10 Se ex-is-tem funções $\OML/lmm/m/it/10 F[]; [] ; F[]$ \T1/lmr/m/it/10 tais que $[][] \OML/lmm/m/it/10 F[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x\OT1/lmr/m/n/10 ) = 1\OML/lmm/m/it/10 ; \OMS/lmsy/m/n/10 8\OML/lmm/m/it/10 i$ \T1/lmr/m/it/10 e $\OML/lmm/m/it/10 F[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) =
- []
-
-
-
-[39]
-Underfull \hbox (badness 5817) in paragraph at lines 2877--2878
-[]\T1/lmr/bx/it/10 b) \T1/lmr/m/it/10 Se $\OML/lmm/m/it/10 X[]; [] ; X[]$ \T1/lmr/m/it/10 tem den-si-dade con-junta $\OML/lmm/m/it/10 f[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) : \OML/lmm/m/it/10 f[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) =
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2888--2889
-[]\T1/lmr/bx/n/10 a) \T1/lmr/m/n/10 Como con-se-quên-cia da proposição []3.5[], temos que: $\OML/lmm/m/it/10 F[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) =
- []
-
-
-Underfull \hbox (badness 1635) in paragraph at lines 2925--2927
-[]\T1/lmr/bx/n/10 a) \T1/lmr/m/n/10 Se $\OML/lmm/m/it/10 F\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x; y\OT1/lmr/m/n/10 )$ \T1/lmr/m/n/10 é a função de dis-tribuição acu-mu-lada con-junta de $\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 X; Y\OT1/lmr/m/n/10 )$\T1/lmr/m/n/10 , en-tão $\OML/lmm/m/it/10 F[]\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x\OT1/lmr/m/n/10 ) =
- []
-
-
-
-[40]
-Missing character: There is no . in font nullfont!
-Missing character: There is no 0 in font nullfont!
-Missing character: There is no 1 in font nullfont!
-Missing character: There is no p in font nullfont!
-Missing character: There is no t in font nullfont!
-
-
-[41]
-
-[42]
-
-[43]
-
-[44]
-Underfull \hbox (badness 6032) in paragraph at lines 3232--3233
-\T1/lmr/m/n/10 Seja $\OML/lmm/m/it/10 g \OT1/lmr/m/n/10 : \OML/lmm/m/it/10 G[] \OMS/lmsy/m/n/10 ! \OML/lmm/m/it/10 G$\T1/lmr/m/n/10 , com $\OML/lmm/m/it/10 G; G[] \OMS/lmsy/m/n/10 ^^R \U/msb/m/n/10 R[]$ \T1/lmr/m/n/10 e am-bos aber-tos. En-tão $\OML/lmm/m/it/10 g\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x[]; [] ; x[]\OT1/lmr/m/n/10 ) =
- []
-
-
-
-[45]
-
-[46]
-
-[47]
-
-[48]
-<_main_files/figure-latex/distacummoeda-1.pdf, id=587, 469.755pt x 325.215pt>
-File: _main_files/figure-latex/distacummoeda-1.pdf Graphic file (type pdf)
-<use _main_files/figure-latex/distacummoeda-1.pdf>
-Package pdftex.def Info: _main_files/figure-latex/distacummoeda-1.pdf  used on input line 3474.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 3474--3475
-[][]
- []
-
-<_main_files/figure-latex/distacumx-1.pdf, id=588, 469.755pt x 325.215pt>
-File: _main_files/figure-latex/distacumx-1.pdf Graphic file (type pdf)
-<use _main_files/figure-latex/distacumx-1.pdf>
-Package pdftex.def Info: _main_files/figure-latex/distacumx-1.pdf  used on input line 3484.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 3484--3485
-[][]
- []
-
-
-
-[49 <./_main_files/figure-latex/distacummoeda-1.pdf>]
-
-[50 <./_main_files/figure-latex/distacumx-1.pdf>]
-
-[51]
-
-[52]
-
-[53]
-
-[54]
-
-[55]
-Overfull \hbox (18.08302pt too wide) detected at line 3948
-[]
- []
-
-
-
-[56]
-
-[57]
-
-[58]
-
-[59]
-
-[60]
-
-[61]
-
-[62]
-
-[63]
-
-[64]
-
-[65]
-
-[66]
-
-[67]
-
-[68]
-
-[69]
-
-[70]
-
-[71]
-
-[72]
-
-[73]
-
-[74]
-
-[75]
-
-[76]
-
-[77]
-
-[78]
-
-[79]
-
-[80]
-
-[81]
-
-[82]
-
-[83]
-
-[84]
-
-[85]
-
-[86]
-
-[87]
-
-[88]
-
-[89]
-Underfull \hbox (badness 1331) in paragraph at lines 5935--5936
-[][]\T1/lmr/bx/n/10 Proposition 5.3. []\T1/lmr/m/it/10 Se $\OML/lmm/m/it/10 '\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 x; y\OT1/lmr/m/n/10 )$ \T1/lmr/m/it/10 é in-te-grável, en-tão $\OML/lmm/m/it/10 E\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 '\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 X; Y\OT1/lmr/m/n/10 )\OMS/lmsy/m/n/10 j\OML/lmm/m/it/10 Y \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 y\OT1/lmr/m/n/10 ) = \OML/lmm/m/it/10 E\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 '\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 X; y\OT1/lmr/m/n/10 )\OMS/lmsy/m/n/10 j\OML/lmm/m/it/10 Y \OT1/lmr/m/n/10 = \OML/lmm/m/it/10 y\OT1/lmr/m/n/10 ) =
- []
-
-
-
-[90]
-
-[91]
-Overfull \hbox (6.83376pt too wide) in paragraph at lines 6048--6049
- [] 
- []
-
-
-
-[92]
-
-[93]
-
-[94]
-
-[95]
-
-[96]
-
-[97]
-
-[98]
-Underfull \hbox (badness 1231) in paragraph at lines 6509--6510
-\OT1/lmr/m/n/10 0$\T1/lmr/m/n/10 . Pelo com-ple-mento ter-e-mos que $\OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 Z[] \OMS/lmsy/m/n/10 6\OT1/lmr/m/n/10 = 0[]\OML/lmm/m/it/10 n[]s\OT1/lmr/m/n/10 ) = 1 \OMS/lmsy/m/n/10 ) \OML/lmm/m/it/10 P\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 Z[] \OT1/lmr/m/n/10 =
- []
-
-
-
-[99]
-
-[100]
-
-[101]
-
-[102]
-
-[103] (./_main.aux)
+[6] (./04-condicionalidade.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-05-26>
  ***********
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 38431 strings out of 469867
- 899984 string characters out of 5483572
- 1385639 words of memory out of 5000000
- 65533 multiletter control sequences out of 15000+600000
- 720801 words of font info for 97 fonts, out of 8000000 for 9000
+ 36535 strings out of 469867
+ 861871 string characters out of 5483572
+ 1353723 words of memory out of 5000000
+ 64184 multiletter control sequences out of 15000+600000
+ 683474 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 89i,19n,93p,1055b,2358s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/latxfont/line10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on _main.pdf (103 pages, 766780 bytes).
+ 89i,10n,93p,735b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on 04-condicionalidade.pdf (6 pages, 242393 bytes).
 PDF statistics:
- 1392 PDF objects out of 1440 (max. 8388607)
- 1216 compressed objects within 13 object streams
- 555 named destinations out of 1000 (max. 500000)
- 349 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 169 PDF objects out of 1000 (max. 8388607)
+ 128 compressed objects within 2 object streams
+ 28 named destinations out of 1000 (max. 500000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
