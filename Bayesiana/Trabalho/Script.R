@@ -64,6 +64,9 @@ nb_sp <- poly2nb(mapa_sp_total)
 
 nb2INLA("mapa_sp.adj", nb_sp)
 
+plot(st_geometry(read_sf("Malha/SP_Municipios_2023.shp")), border = "lightgray")
+plot.nb(nb_sp, st_geometry(read_sf("Malha/SP_Municipios_2023.shp")), add = T)
+
 # Grafo para INLA:
 g <- inla.read.graph(filename = "mapa_sp.adj")
 
@@ -227,8 +230,13 @@ ggpubr::ggarrange(plotlist = posterioris_hiper_sp)
 # Valores ajustados para cada cidade e ano:
 modelo_2$summary.fitted.values
 
-# Média do Risco Relativo a Posteriori:
+# Moda do Risco Relativo a Posteriori:
 mapa_sp_total$RRAP <- modelo_2$summary.fitted.values[, "mode"]
+
+# Moda do Risco Relativo para outros modelos:
+mapa_sp_total$RRAP1 <- modelo_1$summary.fitted.values[, "mode"]
+mapa_sp_total$RRAP3 <- modelo_3$summary.fitted.values[, "mode"]
+mapa_sp_total$RRAP4 <- modelo_4$summary.fitted.values[, "mode"]
 
 mapa_sp_total$RRAP_L <- modelo_2$summary.fitted.values[, "0.025quant"]
 mapa_sp_total$RRAP_U <- modelo_2$summary.fitted.values[, "0.975quant"]
@@ -246,8 +254,47 @@ mapa_geral <- mapa_sp_total %>%
           legend.background = element_rect(fill = 'transparent'),
           panel.border = element_blank())
 
+mapa_geral1 <- mapa_sp_total %>%
+    ggplot(aes(fill = RRAP1)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral") +
+    facet_wrap(~Ano) +
+    labs(fill = "Risco relativo") +
+    ggpubr::theme_classic2() +
+    theme(panel.background = element_blank(),
+          plot.background = element_blank(),
+          legend.background = element_rect(fill = 'transparent'),
+          panel.border = element_blank())
+
+mapa_geral3 <- mapa_sp_total %>%
+    ggplot(aes(fill = RRAP3)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral") +
+    facet_wrap(~Ano) +
+    labs(fill = "Risco relativo") +
+    ggpubr::theme_classic2() +
+    theme(panel.background = element_blank(),
+          plot.background = element_blank(),
+          legend.background = element_rect(fill = 'transparent'),
+          panel.border = element_blank())
+
+mapa_geral4 <- mapa_sp_total %>%
+    ggplot(aes(fill = RRAP4)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral") +
+    facet_wrap(~Ano) +
+    labs(fill = "Risco relativo") +
+    ggpubr::theme_classic2() +
+    theme(panel.background = element_blank(),
+          plot.background = element_blank(),
+          legend.background = element_rect(fill = 'transparent'),
+          panel.border = element_blank())
+
 # Arquivo para inclusão no pôster:
 ggsave("rrap_2017_2025.png", mapa_geral, bg = "transparent")
+
+# Arquivo para inclusão no pôster:
+ggsave("rrap_2017_2025_1.png", mapa_geral1, bg = "transparent")
 
 # Quantis da distribuição à posteriori:
 mapa_sp_total %>%
