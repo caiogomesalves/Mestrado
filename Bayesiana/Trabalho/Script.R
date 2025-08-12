@@ -437,3 +437,18 @@ modelo_pand <- inla(formula_pand, family = "poisson",
                     E = E, control.predictor = list(compute = T, link = 1),
                     control.compute = list(return.marginals.predictor = T,
                                            dic = T))
+mapa_animado <- mapa_sp_total %>%
+    ggplot(aes(fill = RRAP)) +
+    geom_sf() +
+    scale_fill_distiller(palette = "Spectral") +
+    ggpubr::theme_classic2() +
+    theme(panel.background = element_blank(),
+          plot.background = element_blank(),
+          legend.background = element_rect(fill = 'transparent'),
+          panel.border = element_blank()) +
+    labs(fill = "Risco relativo", title = "Ano: {frame_time}") +
+    gganimate::transition_time(
+                   Ano
+               )
+
+gganimate::anim_save(filename = "risco_2017_2025.gif", mapa_animado)
