@@ -1,0 +1,72 @@
+\documentclass{2ssmeeting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% POR FAVOR, NÃO FAÇA MUDANÇAS NESSE PADRÃO QUE ACARRETEM  EM
+%% ALTERAÇÃO NA FORMATAÇÃO FINAL DO TEXTO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% POR FAVOR, ESCOLHA CONFORME O CASO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[brazil]{babel} % texto em português
+% \usepackage[english]{babel} % texto em inglês
+
+%\usepackage[latin1]{inputenc} % acentuação em Português ISO-8859-1
+\usepackage[utf8]{inputenc} % acentuação em Português UTF-8
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% POR FAVOR, NÃO ALTERAR
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[T1]{fontenc}
+\usepackage{float}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{indentfirst}
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\usepackage{url}
+\usepackage{csquotes}
+\setlength{\parindent}{0em}
+% Ambientes pré-definidos
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TÍTULO E AUTORES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Modelagem espaço-temporal bayesiana do risco de roubo de celulares nos municípios de São Paulo utilizando INLA: estimação e predição}
+
+% Se necessário, você deve acrescentar ou remover autores no comando abaixo. Se os autores pertencerem a mesma instituição é possível colocar apenas uma vez a instituição.
+
+\author{
+    {\large Caio Gomes Alves}\thanks{c267583@dac.unicamp.br}\\
+    {\small \textit{IMECC - UNICAMP}} \\
+    {\large Pedro Francisco Godoy Bernardinelli}\thanks{p251570@dac.unicamp.br}\\
+    {\small \textit{IMECC - UNICAMP}} \\
+    {\large Rafael Ribeiro Santos}\thanks{r243464@dac.unicamp.br}\\
+    {\small \textit{IMECC - UNICAMP}}
+}
+\criartitulo
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RESUMO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{1cm}
+
+\textbf{RESUMO}
+
+\vspace{1cm}
+
+Este trabalho apresenta uma modelagem espaço-temporal bayesiana para estimar o risco de roubo de celulares em 645 municípios do estado de São Paulo entre 2017 e 2024. Utilizando dados da Secretaria de Segurança Pública , a pesquisa empregou o método Integrated Nested Laplace Approximations (INLA) para ajustar um modelo de regressão Poisson, que inclui efeitos aleatórios espaciais e temporais, além de um termo de interação. O uso do INLA, que é mais rápido e preciso que o MCMC, permitiu obter as distribuições a posteriori marginais para cada parâmetro. A seleção do melhor modelo foi realizada com base no Deviance Information Criterion (DIC) e na minimização do erro quadrático médio de predição, resultando na escolha do modelo com interação do Tipo II, que aninha o efeito espacial no efeito temporal. Os resultados mostraram um declínio acentuado no risco de roubo de celulares durante os anos da pandemia de COVID-19, seguido por um crescimento posterior que se prevê continuar em 2025. Além disso, a análise espacial revelou um deslocamento do risco, que em 2017 estava mais concentrado no interior do estado e em 2024 se moveu para o litoral e a região metropolitana de São Paulo. A moda a posteriori foi usada como o valor predito para o risco, com mapas representando municípios mais seguros (risco relativo < 1) e mais perigosos (risco relativo > 1). O estudo conclui que a metodologia bayesiana com INLA é eficaz para analisar dados de criminalidade, fornecendo insights importantes para o combate ao crime.
+
+\vspace{1.5em}
+
+{\bf Palavras-chave:} Estatística Espacial; INLA; Modelos Mistos; Risco; Espaço-temporal.
+
+\end{document}

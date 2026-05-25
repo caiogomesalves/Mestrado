@@ -1,0 +1,5 @@
+- [ ] #dissertacao  Criar apresentação para reunião com orientadores 📅 2026-01-28
+	- [x] #dissertacao  Ver com Prof. Guilherme quais informações são necessárias na apresentação. ⏫ 📅 2026-01-22 ✅ 2026-01-23
+	- [ ] Estudar simulação de [[Hawkes Process]] (caso base/somente na reta e caso espacial);
+- [ ] #dissertacao Aprender sobre [[Hawkes Process]]📅 2026-01-28
+- [ ] #dissertacao Aprender a usar os pacotes ETAS e PtProcess

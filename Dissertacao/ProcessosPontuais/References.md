@@ -1,0 +1,2 @@
+* Møller, Jesper, e Rasmus Plenge Waagepetersen. _Statistical Inference and Simulation for Spatial Point Processes_. Repr, Chapman & Hall/CRC, 2004. Monographs on Statistics and Applied Probability 100;
+* Laub, Patrick J. _The Elements of Hawkes Processes_. Contribuição de Young Lee e Thomas Taimre, Springer International Publishing AG, 2022
