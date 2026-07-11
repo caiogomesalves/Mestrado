@@ -97,7 +97,86 @@ log_lik_etas <- function(params, df_eventos, matriz_p_ij, prob_total, raster_mu,
     return(-log_lik_completa)
 }
 
-# Gradiente da log-verossimilhança:
+# # Log-verossimilhança do modelo:
+# log_lik_etas <- function(params, df_eventos, matriz_p_ij, prob_total, raster_mu, x_grid, y_grid, M0 = 4, T_max = 10) {
+#     n <- nrow(df_eventos)
+#     nu_par <- params["nu"]
+#     log_disparo_total <- 0
+#     mu_base_valores <- func_nu(raster_mu, df_eventos, x_grid, y_grid)[, 1]
+#     for (j in 1:n) {
+#         rho_j <- pmax(0, 1 - prob_total[j])
+#         mu_j <- nu_par * mu_base_valores[j]
+#         log_contrib_j <- rho_j * log(pmax(mu_j, 1e-15))
+#         if (j > 1) {
+#             p_ij <- matriz_p_ij[[j]]
+#             if (length(p_ij) > 0 && sum(p_ij) > 0) {
+#                 i_indices <- 1:(j - 1)
+#                 g_val <- g_func(df_eventos$time[j] - df_eventos$time[i_indices], params["c"], params["p"])
+#                 kappa_val <- kappa_func(df_eventos$mag[i_indices], M0, params["A"], params["alpha"])
+#                 f_val <- f_spatial(
+#                 (df_eventos$x[j] - df_eventos$x[i_indices])^2 + (df_eventos$y[j] - df_eventos$y[i_indices])^2,
+#                 df_eventos$mag[i_indices], M0, params["D"], params["alpha"]
+#                 )
+#                 intensidade_ij <- kappa_val * g_val * f_val
+#                 log_contrib_j <- log_contrib_j + sum(p_ij * log(pmax(intensidade_ij, 1e-15)))
+#             }
+#         }
+#         log_disparo_total <- log_disparo_total + log_contrib_j
+#     }
+#     integral_background <- nu_par * T_max
+#     integral_clustering <- sum(kappa_func(df_eventos$mag, M0, params["A"], params["alpha"]))
+#     log_lik_completa <- log_disparo_total - (integral_background + integral_clustering)
+#     return(-log_lik_completa)
+# }
+
+# # Gradiente da log-verossimilhança:
+# gradiente_etas_completo <- function(params, df_eventos, matriz_p_ij, prob_total, T_max = 10, M0 = 4, ...) {
+#     nu_par <- params["nu"]
+#     A      <- params["A"]
+#     alpha  <- params["alpha"]
+#     cc     <- params["c"]
+#     pp     <- params["p"]
+#     D      <- params["D"]
+#     n <- nrow(df_eventos)
+#     rho <- pmax(0, 1 - prob_total)
+#     grad_nu <- -(sum(rho) / nu_par) + T_max
+#     sum_p_ij <- 0
+#     sum_alpha_term <- 0
+#     sum_c_term <- 0
+#     sum_p_term <- 0
+#     sum_D_term <- 0
+#     for (j in 2:n) {
+#         p_ij <- matriz_p_ij[[j]]
+#         if (length(p_ij) == 0 || sum(p_ij) == 0) next
+#         i_indices <- 1:(j - 1)
+#         dt <- df_eventos$time[j] - df_eventos$time[i_indices]
+#         dist2 <- (df_eventos$x[j] - df_eventos$x[i_indices])^2 + (df_eventos$y[j] - df_eventos$y[i_indices])^2
+#         dm <- df_eventos$mag[i_indices] - M0
+#         sum_p_ij <- sum_p_ij + sum(p_ij)
+#         sigma2 <- D * exp(alpha * dm)
+#         deriv_alpha <- dm - (dist2 / (2 * sigma2))
+#         sum_alpha_term <- sum_alpha_term + sum(p_ij * deriv_alpha)
+#         deriv_c <- ((pp - 1) / cc) - (pp / (dt + cc))
+#         sum_c_term <- sum_c_term + sum(p_ij * deriv_c)
+#         deriv_p <- (1 / (pp - 1)) + log(cc) - log(dt + cc)
+#         sum_p_term <- sum_p_term + sum(p_ij * deriv_p)
+#         deriv_D <- -(1 / D) + (dist2 / (2 * D * sigma2))
+#         sum_D_term <- sum_D_term + sum(p_ij * deriv_D)
+#     }
+#     dm_all <- df_eventos$mag - M0
+#     exp_alpha_all <- exp(alpha * dm_all)
+#     int_A <- sum(exp_alpha_all)
+#     int_alpha <- sum(A * dm_all * exp_alpha_all)
+#     grad_A     <- -(sum_p_ij / A) + int_A
+#     grad_alpha <- -sum_alpha_term + int_alpha
+#     grad_c     <- -sum_c_term
+#     grad_p     <- -sum_p_term
+#     grad_D     <- -sum_D_term
+#     return(c("nu" = grad_nu, "A" = grad_A, "alpha" = grad_alpha,
+#              "c" = grad_c, "p" = grad_p, "D" = grad_D))
+# }
+
+# Gradiente da log-verossimilhança ajustado:
 gradiente_etas_completo <- function(params, df_eventos, matriz_p_ij, prob_total, T_max = 10, M0 = 4, ...) {
     A      <- params["A"]
     alpha  <- params["alpha"]
@@ -201,7 +280,7 @@ peru <- read_xlsx("Inst_Peru.xlsx") %>%
         prof = as.numeric(prof),
         mag = as.numeric(mag)
     ) %>%
-    filter(mag >= 4.5)
+    filter(mag >= 4)
 
 # Catálogo para pacote ETAS:
 peru.quakes <- catalog(peru)
@@ -246,7 +325,7 @@ d_j_peru <- d_j(peru.quakes$longlat.coord[, c("long", "lat")])
 #----Estimação dos parents/offspring e de background rate----
 
 # Definir o número de núcleos:
-num_cores <- 15
+num_cores <- 12
 
 t1 <- Sys.time()
 
@@ -278,41 +357,74 @@ prob_total <- probabilidades %>%
     do.call(c, .)
 
 # Estima o background rate:
-r <- estimate_background_kernel(x_grid,
-                                y_grid,
+r <- estimate_background_kernel(seq(min(peru.quakes$longlat.coord$long), max(peru.quakes$longlat.coord$long), length.out = 128),
+                                seq(min(peru.quakes$longlat.coord$lat), max(peru.quakes$longlat.coord$lat), length.out = 128),
                                 data.frame(x = peru$long,
                                            y = peru$lat,
                                            rho = prob_total),
                                 d_j_peru,
                                 T_total = max(peru.quakes$rtperiod))
 
-rel_clust <- estimate_relative_clustering(x_grid,
-                                          y_grid,
+rel_clust <- estimate_relative_clustering(seq(min(peru.quakes$longlat.coord$long), max(peru.quakes$longlat.coord$long), length.out = 128),
+                                          seq(min(peru.quakes$longlat.coord$lat), max(peru.quakes$longlat.coord$lat), length.out = 128),
                                           data.frame(x = peru$long,
                                                      y = peru$lat,
                                                      rho = prob_total),
                                           d_j_peru)$C
 
-hessianas <- list()
+# Bloco 1: Otimiza apenas os parâmetros temporais (c e p)
+theta_temp_1 <- optim(
+    par = theta_peru[c("c", "p")],
+    fn = function(params_temp) {
+        theta_full <- theta_peru
+        theta_full["c"] <- params_temp[1]
+        theta_full["p"] <- params_temp[2]
+        return(log_lik_etas(theta_full, df_temp, probabilidades, prob_total, r, x_grid, y_grid, M0 = 4, T_max = max(peru.quakes$rtperiod)))
+    },
+    method = "L-BFGS-B",
+    lower = c(1e-6, 1.001),
+    upper = c(10, 10),
+    control = list(maxit = 500)
+)
+theta_peru["c"] <- theta_temp_1$par[1]
+theta_peru["p"] <- theta_temp_1$par[2]
 
-# Otimiza os parâmetros theta:
-otimizacao <- optim(theta_peru,
-                    log_lik_etas,
-                    gr = gradiente_etas_completo,
-                    df_eventos = df_temp,
-                    matriz_p_ij = probabilidades,
-                    prob_total = prob_total,
-                    raster_mu = r, x_grid = x_grid, y_grid = y_grid,
-                    method = "L-BFGS-B",
-                    lower = c(1e-6, 1e-6, 1e-6, 1.001, 1e-6),
-                    upper = c(15, 10, 15, 15, 15),
-                    control = list(maxit = 1000),
-                    hessian = T)
+# Bloco 2: Otimiza os parâmetros de produtividade e espacial (A, alpha, D) integrados
+theta_temp_2 <- optim(
+    par = theta_peru[c("A", "alpha", "D")],
+    fn = function(params_spat) {
+        theta_full <- theta_peru
+        theta_full["A"] <- params_spat[1]
+        theta_full["alpha"] <- params_spat[2]
+        theta_full["D"] <- params_spat[3]
+        return(log_lik_etas(theta_full, df_temp, probabilidades, prob_total, r, x_grid, y_grid, M0 = 4, T_max = max(peru.quakes$rtperiod)))
+    },
+    method = "L-BFGS-B",
+    lower = c(1e-6, 1e-6, 1e-6),
+    upper = c(15, 10, 15),
+    control = list(maxit = 500)
+)
+theta_peru["A"] <- theta_temp_2$par[1]
+theta_peru["alpha"] <- theta_temp_2$par[2]
+theta_peru["D"] <- theta_temp_2$par[3]
 
+# Bloco 3: Otimização final simultânea apenas para "polir" o resultado (com o gradiente analítico):
+otimizacao <- optim(
+    par = theta_peru,
+    fn = log_lik_etas,
+    gr = gradiente_etas_completo,
+    df_eventos = df_temp,
+    matriz_p_ij = probabilidades,
+    prob_total = prob_total,
+    raster_mu = r, x_grid = x_grid, y_grid = y_grid,
+    M0 = 4, T_max = max(peru.quakes$rtperiod),
+    method = "L-BFGS-B",
+    lower = c(1e-6, 1e-6, 1e-6, 1.001, 1e-6),
+    upper = c(15, 10, 15, 15, 15),
+    control = list(maxit = 1000)
+)
 theta_peru <- otimizacao$par
 thetas[[2]] <- theta_peru
-
-hessianas[[1]] <- otimizacao$hessian
 
 rast_rel_clust[[1]] <- rel_clust
 
@@ -345,24 +457,60 @@ while ((any(abs(rasters[[i]] - rasters[[i - 1]]) > 1e-3)) & (any(abs(thetas[[i]]
         lapply(sum) %>%
         do.call(c, .)
     # Estima parâmetros theta:
-    otimizacao <- optim(theta_peru,
-                        log_lik_etas,
-                        gr = gradiente_etas_completo,
-                        df_eventos = df_temp,
-                        matriz_p_ij = probabilidades,
-                        prob_total = prob_total,
-                        raster_mu = r, x_grid = x_grid, y_grid = y_grid,
-                        method = "L-BFGS-B",
-                        lower = c(1e-6, 1e-6, 1e-6, 1.001, 1e-6),
-                        upper = c(15, 10, 15, 15, 15),
-                        control = list(maxit = 1000),
-                        hessian = T)
+    # Bloco 1:
+    theta_temp_1 <- optim(
+        par = theta_peru[c("c", "p")],
+        fn = function(params_temp) {
+        theta_full <- theta_peru
+        theta_full["c"] <- params_temp[1]
+        theta_full["p"] <- params_temp[2]
+        return(log_lik_etas(theta_full, df_temp, probabilidades, prob_total, r, x_grid, y_grid, M0 = 4, T_max = max(peru.quakes$rtperiod)))
+    },
+    method = "L-BFGS-B",
+    lower = c(1e-6, 1.001),
+    upper = c(10, 10),
+    control = list(maxit = 500)
+    )
+    theta_peru["c"] <- theta_temp_1$par[1]
+    theta_peru["p"] <- theta_temp_1$par[2]
+    # Bloco 2:
+    theta_temp_2 <- optim(
+        par = theta_peru[c("A", "alpha", "D")],
+        fn = function(params_spat) {
+        theta_full <- theta_peru
+        theta_full["A"] <- params_spat[1]
+        theta_full["alpha"] <- params_spat[2]
+        theta_full["D"] <- params_spat[3]
+        return(log_lik_etas(theta_full, df_temp, probabilidades, prob_total, r, x_grid, y_grid, M0 = 4, T_max = max(peru.quakes$rtperiod)))
+    },
+    method = "L-BFGS-B",
+    lower = c(1e-6, 1e-6, 1e-6),
+    upper = c(15, 10, 15),
+    control = list(maxit = 500)
+    )
+    theta_peru["A"] <- theta_temp_2$par[1]
+    theta_peru["alpha"] <- theta_temp_2$par[2]
+    theta_peru["D"] <- theta_temp_2$par[3]
+    # Bloco 3:
+    otimizacao <- optim(
+        par = theta_peru,
+        fn = log_lik_etas,
+        gr = gradiente_etas_completo,
+        df_eventos = df_temp,
+        matriz_p_ij = probabilidades,
+        prob_total = prob_total,
+        raster_mu = r, x_grid = x_grid, y_grid = y_grid,
+        M0 = 4, T_max = max(peru.quakes$rtperiod),
+        method = "L-BFGS-B",
+        lower = c(1e-6, 1e-6, 1e-6, 1.001, 1e-6),
+        upper = c(15, 10, 15, 15, 15),
+        control = list(maxit = 1000)
+    )
     theta_peru <- otimizacao$par
     thetas[[i + 1]] <- theta_peru
-    hessianas[[i]] <- otimizacao$hessian
     # Estima background rate:
-    r <- estimate_background_kernel(x_grid,
-                                    y_grid,
+    r <- estimate_background_kernel(seq(min(peru.quakes$longlat.coord$long), max(peru.quakes$longlat.coord$long), length.out = 128),
+                                    seq(min(peru.quakes$longlat.coord$lat), max(peru.quakes$longlat.coord$lat), length.out = 128),
                                     data.frame(x = peru$long,
                                                y = peru$lat,
                                                rho = prob_total),
@@ -370,8 +518,8 @@ while ((any(abs(rasters[[i]] - rasters[[i - 1]]) > 1e-3)) & (any(abs(thetas[[i]]
                                     T_total = max(peru.quakes$rtperiod))
     rasters[[i + 1]] <- r
     # Estima clustering relativo:
-    rel_clust <- estimate_relative_clustering(x_grid,
-                                              y_grid,
+    rel_clust <- estimate_relative_clustering(seq(min(peru.quakes$longlat.coord$long), max(peru.quakes$longlat.coord$long), length.out = 128),
+                                              seq(min(peru.quakes$longlat.coord$lat), max(peru.quakes$longlat.coord$lat), length.out = 128),
                                               data.frame(x = peru$long,
                                                          y = peru$lat,
                                                          rho = prob_total),
@@ -397,10 +545,16 @@ save(
     thetas,
     probabilidades,
     prob_total,
-    hessianas,
     t1, t2,
-    file = "resultados_thinning_final_hessiana.RData",
+    file = "resultados_thinning_final_block.RData",
     compress = TRUE
 )
+
+#if (exists("r") && !is.null(r)) {
+#    terra::writeRaster(r, "background_rate_final.tif", overwrite = TRUE)
+#}
+#if (exists("rel_clust") && !is.null(rel_clust)) {
+#    terra::writeRaster(rel_clust, "relative_clustering_final.tif", overwrite = TRUE)
+#}
 
 print("Execução finalizada com sucesso. Arquivos salvos.")

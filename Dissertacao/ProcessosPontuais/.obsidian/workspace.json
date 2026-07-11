@@ -35,7 +35,8 @@
               "title": "Point Process"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       },
       {
         "id": "e5d7da8822e51dda",
@@ -57,12 +58,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tarefas 10-04.md",
+                "file": "Poisson Process.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Tarefas 10-04"
+              "title": "Poisson Process"
             }
           }
         ],
@@ -226,13 +227,14 @@
       "bases:Criar nova base": false
     }
   },
-  "active": "d54b359163d1c6e4",
+  "active": "1faf3d5def0c024e",
   "lastOpenFiles": [
-    "Sem título.md",
-    "Tarefas 10-04.md",
-    "Strauss Process.md",
     "Poisson Process.md",
+    "Processo de Cox.md",
     "Point Process.md",
+    "Tarefas 10-04.md",
+    "Sem título.md",
+    "Strauss Process.md",
     "Neyman-Scott Process.md",
     "Hawkes Process.md",
     "References.md",
@@ -240,7 +242,6 @@
     "Untitled.canvas",
     "Processos de Hawkes.md",
     "Complete Spatial Randomness.md",
-    "Processo de Neyman-Scott.md",
-    "Processo de Cox.md"
+    "Processo de Neyman-Scott.md"
   ]
 }

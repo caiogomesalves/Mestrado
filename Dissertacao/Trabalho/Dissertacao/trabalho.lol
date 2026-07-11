@@ -1,0 +1,2 @@
+\contentsline {lstlisting}{\numberline {{\fontfamily {lmr}\selectfont Source code 1\hfill \textendash \hfill }}{\fontfamily {lmr}\selectfont Exemplo de código em C++ usando o pacote \texttt {listings} e que tem título longo ocupando mais de uma linha}}{44}{lstlisting.1}%
+\contentsline {lstlisting}{\numberline {{\fontfamily {lmr}\selectfont Source code 99\hfill \textendash \hfill }}{\fontfamily {lmr}\selectfont Exemplo de código em C++ usando o pacote \texttt {listings}}}{45}{lstlisting.99}%

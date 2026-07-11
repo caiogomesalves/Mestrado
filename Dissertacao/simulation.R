@@ -401,12 +401,19 @@ plot(catalogo_dados_homog)
 
 set.seed(5050)
 sim_dados_homog_1 <- simulate_hawkes_etas_zhuang(
-  T_max = 10,
+  T_max = 1000,
   X_lim = c(min(peru.quakes$longlat.coord$long), max(peru.quakes$longlat.coord$long)),
   Y_lim = c(min(peru.quakes$longlat.coord$lat), max(peru.quakes$longlat.coord$lat)),
-  mu = 0.01, u_fn = rast_peru, u_max = max(im_peru),
-  A = 0.5, alpha = 1, c_par = 0.2, p_par = 1.15,
-  d_par = 0.002, beta = 2, m_min = 4
+  mu = mu_global,
+  u_fn = terra::rast(rasters[[length(rasters)]]%>%as.im(W=owin(xrange = c(min(peru.quakes$longlat.coord$long), max(peru.quakes$longlat.coord$long)),
+                                                               yrange = c(min(peru.quakes$longlat.coord$lat), max(peru.quakes$longlat.coord$lat))))),
+  u_max = max(rasters[[length(rasters)]]),
+  A = thetas[[length(thetas)]]["A"],
+  alpha = thetas[[length(thetas)]]["alpha"],
+  c_par = thetas[[length(thetas)]]["c"],
+  p_par = thetas[[length(thetas)]]["p"],
+  d_par = thetas[[length(thetas)]]["D"],
+  beta = beta_GR, m_min = 4
 )
 
 catalogo_dados_homog_1 <- catalog(
@@ -590,3 +597,512 @@ ggplot(grid %>% mutate(veros = veros,
                                          .default = veros)),
        aes(x = A, y = c, fill = veros)) +
     geom_tile()
+
+#----Teste----
+
+theta_estimado <- thetas[[length(thetas)]]
+
+set.seed(5050)
+dados_simulados <- simulate_hawkes_etas_zhuang(
+    T_max = max(peru.quakes$rtperiod),
+    X_lim = range(peru.quakes$region.poly$long),
+    Y_lim = range(peru.quakes$region.poly$lat),
+    mu = mu_global,
+    u_fn = terra::rast(rasters[[length(rasters)]] %>%
+                       as.im(W = owin(xrange = range(peru.quakes$region.poly$long),
+                                      yrange = range(peru.quakes$region.poly$lat)))),
+    u_max = max(rasters[[length(rasters)]]),
+    A = theta_estimado["A"], alpha = theta_estimado["alpha"],
+    c_par = theta_estimado["c"], p_par = theta_estimado["p"],
+    d_par = theta_estimado["D"],
+    beta = 2, m_min = 4
+)
+
+catalogo_dados_simulados <- catalog(
+    dados_simulados %>%
+    mutate(t = ddays(t),
+           data = POSIXct(1) + t,
+           long = x, lat = y,
+           mag = m,
+           date = date(data),
+           time = format(data, format = "%H:%M:%S"))
+)
+
+plot(catalogo_dados_simulados)
+
+lambda_total_bg <- sum(rasters[[length(rasters)]])
+
+# Parâmetros e sementes prévias...
+beta_GR <- nrow(peru)/sum((peru$mag - 4))
+
+# 1. Simular Background
+n_bg <- rpois(1, lambda_total_bg)
+df_sim <- data.frame(
+  id = 1:n_bg,
+  parent_id = 0, # 0 indica background
+  generation = 0,
+  time = runif(n_bg, 0, T_max),
+  # sample_locations() é uma função sua para sortear (x,y) pelo raster de probabilidades
+  x = ...,
+  y = ...,
+  mag = M0 + rexp(n_bg, rate = beta_GR)
+)
+
+# Fila de pais para a próxima iteração
+pais_atuais <- df_sim
+
+# 2. Simular Ramificações
+geracao_atual <- 1
+id_counter <- n_bg
+
+while(nrow(pais_atuais) > 0) {
+
+  # Quantos filhos CADA pai produzirá?
+  n_filhos <- rpois(nrow(pais_atuais), A * exp(alpha * (pais_atuais$mag - M0)))
+
+  # Filtra apenas os pais que tiveram ao menos 1 filho
+  pais_férteis <- pais_atuais[n_filhos > 0, ]
+  n_filhos <- n_filhos[n_filhos > 0]
+
+  if(length(n_filhos) == 0) break # Extinção atingida
+
+  # Expande as linhas dos pais férteis para parear com cada filho
+  # ex: se o pai 3 teve 2 filhos, a linha dele é duplicada
+  df_filhos <- pais_férteis[rep(seq_len(nrow(pais_férteis)), n_filhos), ]
+
+  # Gera deltas temporais (Omori inversa)
+  u <- runif(nrow(df_filhos))
+  dt <- c * (u^(-1 / (p - 1)) - 1)
+  df_filhos$time <- df_filhos$time + dt
+
+  # Gera deltas espaciais (Normal dependente da magnitude)
+  sigma <- sqrt(D * exp(alpha * (df_filhos$mag - M0)))
+  dx <- rnorm(nrow(df_filhos), mean = 0, sd = sigma)
+  dy <- rnorm(nrow(df_filhos), mean = 0, sd = sigma)
+  df_filhos$x <- df_filhos$x + dx
+  df_filhos$y <- df_filhos$y + dy
+
+  # Novas magnitudes
+  df_filhos$mag <- M0 + rexp(nrow(df_filhos), rate = beta_GR)
+
+  # Atualiza metadados
+  df_filhos$parent_id <- df_filhos$id
+  df_filhos$id <- (id_counter + 1):(id_counter + nrow(df_filhos))
+  df_filhos$generation <- geracao_atual
+
+  # FILTRO: Mantém apenas filhos dentro da caixa de tempo e espaço
+  df_filhos <- subset(df_filhos, time <= T_max & x >= x_min & x <= x_max & y >= y_min & y <= y_max)
+
+  # Acumula no catálogo principal
+  df_sim <- rbind(df_sim, df_filhos)
+
+  # Define os filhos sobreviventes como a próxima geração de pais
+  pais_atuais <- df_filhos
+  id_counter <- max(df_sim$id)
+  geracao_atual <- geracao_atual + 1
+}
+
+# Ordena o catálogo final por tempo de ocorrência
+df_sim <- df_sim[order(df_sim$time), ]
+
+#====Simulador Pareto====
+# =============================================================================
+# Simulação de catálogo ETAS espaço-temporal (kernel de Pareto)
+# via representação de ramificação (cluster representation de Hawkes & Oakes, 1974)
+#
+# Ideia central:
+#   Cada evento i (background ou réplica) gera um número de "filhos" diretos
+#   que é Poisson(kappa(m_i)), pois g(.) e f(.) sao densidades normalizadas
+#   (integram a 1 sobre [0,Inf) e R^2, respectivamente). Isso e' exato --
+#   nao e' uma aproximacao por thinning generico, e' a representacao teorica
+#   do proprio processo (Hawkes & Oakes, 1974; Zhuang, Ogata & Vere-Jones, 2004).
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# Checagem de criticidade (razao de ramificacao esperada)
+# n_bar = A * beta / (beta - alpha), com beta = b*log(10) (Gutenberg-Richter)
+# Precisa de beta > alpha para a razao ser finita, e n_bar < 1 para o processo
+# ser subcritico (catalogo nao explode, media de eventos finita).
+# Ver Helmstetter & Sornette (2002) para essa formula da razao de ramificacao.
+# -----------------------------------------------------------------------------
+verificar_criticidade <- function(theta, b) {
+  A <- unname(theta["A"]); alpha <- unname(theta["alpha"])
+  beta <- b * log(10)
+  if (beta <= alpha) {
+    warning(sprintf(
+      "beta (%.3f) <= alpha (%.3f): razao de ramificacao e' infinita/mal definida. ",
+      beta, alpha),
+      "A distribuicao de magnitudes tem cauda mais pesada que o decaimento ",
+      "da produtividade -- catalogo pode explodir numericamente.")
+    return(invisible(NULL))
+  }
+  n_bar <- A * beta / (beta - alpha)
+  msg <- sprintf("Razao de ramificacao estimada: n = %.4f", n_bar)
+  if (n_bar >= 1) {
+    warning(msg, " -- processo SUPERCRITICO (n >= 1). ",
+            "O numero esperado de eventos e' infinito/instavel; a simulacao ",
+            "provavelmente vai bater no limite de geracoes ou demorar muito.")
+  } else {
+    message(msg, " (subcritico, processo estavel)")
+  }
+  invisible(n_bar)
+}
+
+
+# -----------------------------------------------------------------------------
+# Funcao principal de simulacao
+# -----------------------------------------------------------------------------
+simular_catalogo_etas <- function(
+                                  theta,                          # vetor nomeado: A, alpha, c, p, D, q, gamma
+                                  M0      = 4.5,                  # magnitude de corte (completude)
+                                  b       = 1.0,                  # valor-b de Gutenberg-Richter p/ magnitudes
+                                  Mmax    = NULL,                 # Magnitude maxima (NULL = sem truncamento)
+                                  T_max,                          # Janela temporal de simulacao [0, T_max]
+                                  mu_type = c("constant", "raster"),
+                                  mu_const  = NULL,               # Usado se mu_type == "constant" (eventos/dia/grau^2)
+                                  mu_raster = NULL,               # Usado se mu_type == "raster" (matriz nx x ny)
+                                  x_grid = NULL, y_grid = NULL,   # Necessarios se mu_type == "raster"
+                                  xlim = NULL, ylim = NULL,       # Janela espacial (usada se mu_type == "constant")
+                                  max_geracoes = 75,              # Trava de seguranca contra explosão
+                                  checar_criticidade = TRUE,
+                                  semente = NULL
+                                  ) {
+    if (!is.null(semente)){
+        set.seed(semente)
+    }
+    mu_type <- match.arg(mu_type)
+    if (checar_criticidade){
+        verificar_criticidade(theta, b)
+    }
+    A     <- unname(theta["A"])
+    alpha <- unname(theta["alpha"])
+    cc    <- unname(theta["c"])
+    pp    <- unname(theta["p"])
+    D     <- unname(theta["D"])
+    q     <- unname(theta["q"])
+    gamma <- unname(theta["gamma"])
+    # Garante que valores sejam próprios para densidades:
+    stopifnot(pp > 1, q > 1)
+    # ---- Magnitudes: Gutenberg-Richter (truncada se Mmax fornecido) ----
+    simular_magnitudes <- function(n) {
+        if (n == 0) return(numeric(0))
+        beta <- b * log(10)
+        if (is.null(Mmax)) {
+            M0 - log(runif(n)) / beta
+        } else {
+            u <- runif(n)
+            Fmax <- 1 - exp(-beta * (Mmax - M0))
+            M0 - log(1 - u * Fmax) / beta
+        }
+    }
+    # ---- Localizacao de background a partir de um raster (grid) ----
+    amostrar_local_raster <- function(n) {
+        # Caso nenhuma observação retorna data frame vazio:
+        if (n == 0){
+            return(data.frame(x = numeric(0), y = numeric(0)))
+        }
+        n_x <- length(x_grid)
+        n_y <- length(y_grid)
+        probs <- as.vector(mu_raster)
+        probs <- probs / sum(probs)
+        idx <- sample.int(length(probs), size = n, replace = TRUE, prob = probs)
+        col_idx <- ((idx - 1) %/% n_x) + 1
+        row_idx <- ((idx - 1) %% n_x) + 1
+        dx <- diff(x_grid)[1]; dy <- diff(y_grid)[1]
+        x <- x_grid[row_idx] + runif(n, -dx / 2, dx / 2)
+        y <- y_grid[col_idx] + runif(n, -dy / 2, dy / 2)
+        data.frame(x = x, y = y)
+    }
+    # ---- Deslocamento espacial de replicas: kernel de Pareto isotropico ----
+    # CDF do raio (obtida integrando f(x,y) em coordenadas polares):
+    #   F(r) = 1 - (1 + r^2/S)^{-(q-1)}   =>   r^2 = S * [(1-u)^{-1/(q-1)} - 1]
+    simular_offset_espacial <- function(mag) {
+        n <- length(mag)
+        if (n == 0) {
+            return(data.frame(dx = numeric(0), dy = numeric(0)))
+        }
+        S_i <- D * exp(gamma * (mag - M0))
+        u   <- runif(n)
+        r2  <- S_i * ((1 - u)^(-1 / (q - 1)) - 1)
+        r   <- sqrt(r2)
+        ang <- runif(n, 0, 2 * pi)
+        data.frame(dx = r * cos(ang), dy = r * sin(ang))
+    }
+    # ---- Deslocamento temporal: Omori-Utsu (CDF inversa) ----
+    # F(t) = 1 - (c/(t+c))^{p-1}   =>   t = c * [(1-u)^{-1/(p-1)} - 1]
+    simular_offset_temporal <- function(n) {
+        if (n == 0) return(numeric(0))
+        u <- runif(n)
+        cc * ((1 - u)^(-1 / (pp - 1)) - 1)
+    }
+    # ---- 1. Eventos de background (geracao 0) ----
+    if (mu_type == "constant") {
+        stopifnot(!is.null(mu_const), !is.null(xlim), !is.null(ylim))
+        area <- diff(xlim) * diff(ylim)
+        n_bg <- rpois(1, mu_const * area * T_max)
+        x0 <- runif(n_bg, xlim[1], xlim[2])
+        y0 <- runif(n_bg, ylim[1], ylim[2])
+    } else {
+        stopifnot(!is.null(mu_raster), !is.null(x_grid), !is.null(y_grid))
+        dxg <- diff(x_grid)[1]
+        dyg <- diff(y_grid)[1]
+        # Integral aproximada de mu(x,y):
+        mu_total <- sum(mu_raster) * dxg * dyg
+        n_bg <- rpois(1, mu_total * T_max)
+        loc <- amostrar_local_raster(n_bg)
+        x0 <- loc$x
+        y0 <- loc$y
+    }
+    t0 <- runif(n_bg, 0, T_max)
+    m0 <- simular_magnitudes(n_bg)
+    catalogo <- data.frame(
+        id = seq_len(n_bg), parent = 0L, geracao = 0L,
+        time = t0, x = x0, y = y0, mag = m0
+    )
+    # ---- 2. Processar réplicas geração por geração (fila / BFS) ----
+    proximo_id <- n_bg + 1L
+    fila <- catalogo
+    g_final <- 0L
+    if (n_bg > 0) {
+        for (g in seq_len(max_geracoes)) {
+            g_final <- g
+            if (nrow(fila) == 0){
+                break
+            }
+            kappa_vals <- A * exp(alpha * (fila$mag - M0))
+            n_filhos   <- rpois(nrow(fila), kappa_vals)
+            if (sum(n_filhos) == 0){
+                break
+            }
+            idx_pais <- rep(seq_len(nrow(fila)), times = n_filhos)
+            pais <- fila[idx_pais, , drop = FALSE]
+            mags_filhos <- simular_magnitudes(nrow(pais))
+            dt          <- simular_offset_temporal(nrow(pais))
+            off_esp     <- simular_offset_espacial(pais$mag)
+            filhos <- data.frame(
+                id      = proximo_id + seq_len(nrow(pais)) - 1L,
+                parent  = pais$id,
+                geracao = g,
+                time    = pais$time + dt,
+                x       = pais$x + off_esp$dx,
+                y       = pais$y + off_esp$dy,
+                mag     = mags_filhos
+            )
+            proximo_id <- proximo_id + nrow(filhos)
+            # Descarta filhos fora da janela temporal
+            filhos <- filhos[filhos$time <= T_max, , drop = FALSE]
+            catalogo <- rbind(catalogo, filhos)
+            fila <- filhos
+        }
+        if (g_final == max_geracoes && nrow(fila) > 0) {
+            warning("Número máximo de gerações atingido -- verifique a razão de ",
+                    "ramificação (verificar_criticidade) antes de confiar no catálogo.")
+        }
+    }
+    catalogo <- catalogo[order(catalogo$time), ]
+    rownames(catalogo) <- NULL
+    attr(catalogo, "theta_verdadeiro") <- theta
+    attr(catalogo, "M0") <- M0
+    attr(catalogo, "b")  <- b
+    catalogo
+}
+
+# =============================================================================
+# Exemplo de uso: estudo de recuperacao de parametros
+# =============================================================================
+if (FALSE) {
+
+  theta_verdadeiro <- c(
+    A = 0.05, alpha = 1.8,
+    c = 0.01, p = 1.15,
+    D = 0.02, q = 1.6, gamma = 1.0
+  )
+
+  verificar_criticidade(theta_verdadeiro, b = 1.0)
+
+  set.seed(123)
+  cat_sim <- simular_catalogo_etas(
+    theta   = thetas[[length(thetas)]],
+    M0      = 4.5,
+    b       = 1.0,
+    Mmax    = 10,
+    T_max   = 20000,                 # 10 anos, por exemplo
+    mu_type = "raster",
+    mu_raster = rasters[[length(rasters)]],
+    x_grid = x_grid, y_grid = y_grid,
+    # mu_const = 0.002,                # ajuste para gerar um numero razoavel de eventos
+    # xlim = c(-80, -68), ylim = c(-18, 0),   # aprox. janela do Peru
+    semente = 5050
+  )
+
+  nrow(cat_sim)
+  table(cat_sim$geracao)            # quantos eventos por geracao (deve decair)
+  mean(cat_sim$parent == 0)         # fracao de background observada
+
+  # Depois: rode SUA rotina de ajuste (thinning_pareto_zurich.R) em cat_sim
+  # e compare theta_estimado vs theta_verdadeiro -- idealmente repetindo
+  # varias vezes (ex: 100-500 replicas) para ver vies e variancia do estimador,
+  # nao so' uma unica simulacao.
+
+  # Para usar o SEU raster de background real (mais realista, reproduz
+  # inclusive os efeitos de borda que discutimos):
+  #
+  # cat_sim2 <- simular_catalogo_etas(
+  #   theta = theta_verdadeiro, M0 = 4.5, b = 1.0, T_max = 3650,
+  #   mu_type = "raster", mu_raster = rasters[[length(rasters)]],
+  #   x_grid = x_grid, y_grid = y_grid
+  # )
+}
+
+#====Simulações Irã====
+thetas_ajustados_iran <- list()
+backgrounds_iran <- list()
+
+for (k in 1:10) {
+    cat_sim_iran <- simular_catalogo_etas(
+        theta   = thetas_iran[[length(thetas_iran)]],
+        M0      = 4.5,
+        b       = 2.0,
+        Mmax    = 10,
+        T_max   = 3650,
+        mu_type = "raster",
+        mu_raster = rasters_iran[[length(rasters_iran)]],
+        x_grid = x_grid_iran,
+        y_grid = y_grid_iran,
+        semente = k
+    )
+    cat_temp_iran <- catalog(
+        cat_sim_iran %>%
+        mutate(t = ddays(time),
+               data = POSIXct(1) + t,
+               long = x, lat = y,
+               date = date(data),
+               time = format(data, format = "%H:%M:%S")),
+        region.poly = iran.cat$region.poly
+    )
+    theta_iran_simu <- c("A" = 0.23, "alpha" = 2.8, "c" = 0.022,
+                         "p" = 1.12, "D" = 0.012, "q" = 2.3, "gamma" = 0.03)
+    thetas_iran_temp <- list()
+    thetas_iran_temp[[1]] <- theta_iran_simu
+    # Número total de eventos:
+    n_events_iran_simu <- nrow(cat_temp_iran$revents)
+    # Definir as sequências do grid explicitamente
+    x_grid_iran <- seq(min(iran.cat$longlat.coord$long), max(iran.cat$longlat.coord$long), length.out = 128)
+    y_grid_iran <- seq(min(iran.cat$longlat.coord$lat), max(iran.cat$longlat.coord$lat), length.out = 128)
+    # Raster inicial:
+    r_iran_temp <- matrix(1, nrow = 128, ncol = 128)
+    # Na lista de rasters, guardaremos as matrizes:
+    rasters_iran_temp <- list()
+    rasters_iran_temp[[1]] <- r_iran_temp
+    # Data.frame com os eventos para funções:
+    df_temp_iran_temp <- data.frame(x = cat_temp_iran$longlat.coord$long,
+                                    y = cat_temp_iran$longlat.coord$lat,
+                                    mag = cat_temp_iran$revents[, "mm"] + 4.5,
+                                    time = cat_temp_iran$revents[, "tt"])
+    df_temp_iran_temp$time <- df_temp_iran_temp$time - min(df_temp_iran_temp$time)
+    # Distâncias para kernel adaptativo:
+    d_j_iran_temp <- d_j(cat_temp_iran$longlat.coord[, c("long", "lat")])
+    num_cores <- 8
+    # Paralelização do cálculo de probabilidades:
+    probabilidades_iran_temp <- mclapply(1:n_events_iran_simu, function(j) {
+        # Primeiro evento tem probabilidade 0 de ser descendente:
+        if (j == 1) return(numeric(0))
+        # Vetor de índices dos antecessores:
+        i_indices <- 1:(j - 1)
+        # Denominador comum para cada evento j:
+        denom <- lambda_total(
+            df_temp_iran_temp$time[j], df_temp_iran_temp$x[j], df_temp_iran_temp$y[j], df_temp_iran_temp$mag[j],
+            4.5, df_temp_iran_temp, theta_iran_simu, r_iran_temp, x_grid_iran, y_grid_iran
+        )
+        # Computação do numerador para todos os antecessores:
+        numeradores <- kappa_func(df_temp_iran_temp$mag[i_indices], 4.5, theta_iran_simu["A"], theta_iran_simu["alpha"]) *
+            g_func(df_temp_iran_temp$time[j] - df_temp_iran_temp$time[i_indices], theta_iran_simu["c"], theta_iran_simu["p"]) *
+            f_spatial(
+            (df_temp_iran_temp$x[j] - df_temp_iran_temp$x[i_indices])^2 + (df_temp_iran_temp$y[j] - df_temp_iran_temp$y[i_indices])^2,
+            df_temp_iran_temp$mag[i_indices], 4.5, theta_iran_simu["D"], theta_iran_simu["q"], theta_iran_simu["gamma"]
+            )
+        # Retorna o vetor p_{i,j} para o evento j:
+        return(numeradores / denom)
+    }, mc.cores = num_cores)
+    # Probabilidades totais:
+    prob_total_iran_temp <- probabilidades_iran_temp %>%
+        lapply(sum) %>%
+        do.call(c, .)
+    # Estima o background rate:
+    r_iran_temp <- estimate_background_kernel(x_grid_iran,
+                                              y_grid_iran,
+                                              data.frame(x = cat_temp_iran$longlat.coord$long,
+                                                         y = cat_temp_iran$longlat.coord$lat,
+                                                         rho = prob_total_iran_temp),
+                                              d_j_iran_temp,
+                                              T_total = max(df_temp_iran_temp$time))
+    otimizacao_iran_temp <- optim(theta_iran_simu,
+                                  log_lik_etas,
+                                  gr = gradiente_etas_completo,
+                                  df_eventos = df_temp_iran_temp,
+                                  matriz_p_ij = probabilidades_iran_temp,
+                                  prob_total = prob_total_iran_temp,
+                                  raster_mu = r_iran_temp, x_grid = x_grid_iran, y_grid = y_grid_iran,
+                                  method = "L-BFGS-B",
+                                  lower = c(1e-6, 1e-6, 1e-6, 1.001, 1e-6, 1.001, 1e-6),
+                                  upper = c(15, 10, 15, 15, 15, 15, 10),
+                                  control = list(maxit = 1000),
+                                  hessian = T)
+    theta_iran_simu <- otimizacao_iran_temp$par
+    thetas_iran_temp[[2]] <- theta_iran_simu
+    rasters_iran_temp[[2]] <- r_iran_temp
+    i <- 2
+    # Considerando tolerância de 10e-6:
+    while ((any(abs(rasters_iran_temp[[i]] - rasters_iran_temp[[i - 1]]) > 1e-3)) | (any(abs(thetas_iran_temp[[i]] - thetas_iran_temp[[i - 1]]) > 1e-3))) {
+        # Calcula pares de probabilidades:
+        probabilidades_iran_temp <- mclapply(1:n_events_iran_simu, function(j) {
+            if (j == 1) return(numeric(0))
+            i_indices <- 1:(j - 1)
+            denom <- lambda_total(
+                df_temp_iran_temp$time[j], df_temp_iran_temp$x[j], df_temp_iran_temp$y[j], df_temp_iran_temp$mag[j],
+                4.5, df_temp_iran_temp, theta_iran_simu, r_iran_temp, x_grid_iran, y_grid_iran
+            )
+            numeradores <- kappa_func(df_temp_iran_temp$mag[i_indices], 4.5, theta_iran_simu["A"], theta_iran_simu["alpha"]) *
+                g_func(df_temp_iran_temp$time[j] - df_temp_iran_temp$time[i_indices], theta_iran_simu["c"], theta_iran_simu["p"]) *
+                f_spatial(
+                (df_temp_iran_temp$x[j] - df_temp_iran_temp$x[i_indices])^2 + (df_temp_iran_temp$y[j] - df_temp_iran_temp$y[i_indices])^2,
+                df_temp_iran_temp$mag[i_indices], 4.5, theta_iran_simu["D"], theta_iran_simu["q"], theta_iran_simu["gamma"]
+                )
+            return(numeradores / denom)
+        }, mc.cores = num_cores)
+        # Calcula probabilidades totais:
+        prob_total_iran_temp <- probabilidades_iran_temp %>%
+            lapply(sum) %>%
+            do.call(c, .)
+        # Estima parâmetros theta:
+        otimizacao_iran_temp <- optim(theta_iran_simu,
+                                      log_lik_etas,
+                                      gr = gradiente_etas_completo,
+                                      df_eventos = df_temp_iran_temp,
+                                      matriz_p_ij = probabilidades_iran_temp,
+                                      prob_total = prob_total_iran_temp,
+                                      raster_mu = r_iran_temp, x_grid = x_grid_iran, y_grid = y_grid_iran,
+                                      method = "L-BFGS-B",
+                                      lower = c(1e-6, 1e-6, 1e-6, 1.001, 1e-6, 1.001, 1e-6),
+                                      upper = c(15, 10, 15, 15, 15, 15, 10),
+                                      control = list(maxit = 1000),
+                                      hessian = T)
+        theta_iran_simu <- otimizacao_iran_temp$par
+        thetas_iran_temp[[i + 1]] <- theta_iran_simu
+        # Estima background rate:
+        r_iran_temp <- estimate_background_kernel(x_grid_iran,
+                                                  y_grid_iran,
+                                                  data.frame(x = cat_temp_iran$longlat.coord$long,
+                                                             y = cat_temp_iran$longlat.coord$lat,
+                                                             rho = prob_total_iran_temp),
+                                                  d_j_iran_temp,
+                                                  T_total = max(df_temp_iran_temp$time))
+        rasters_iran_temp[[i + 1]] <- r_iran_temp
+        print(i + 1)
+        # Atualiza índice:
+        i <- i + 1
+    }
+    thetas_ajustados_iran[[k]] <- thetas_iran_temp[[length(thetas_iran_temp)]]
+    backgrounds_iran[[k]] <- rasters_iran_temp[[length(rasters_iran_temp)]]
+}
