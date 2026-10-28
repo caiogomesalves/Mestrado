@@ -9,7 +9,7 @@
 %% 1.3 or later is part of all distributions of LaTeX version 2005/12/01 or later.
 %%
 %% This work has the LPPL maintenance status `maintained'.
-%% 
+%%
 %% The Current Maintainer of this work is Fábio Rodrigues Silva, gfabinhomat@gmail.com
 %%
 %% Further information about abnTeX2 are available on http://www.abntex.net.br
@@ -23,7 +23,7 @@
 	12pt,			% tamanho da fonte
 	openright,		% capítulos começam em pág ímpar (insere página vazia caso preciso)
 	oneside,		% impressão em anverso (norma CCPG).
-	a4paper,		% tamanho do papel. 
+	a4paper,		% tamanho do papel.
 	% -- opções da classe abntex2 --
 	%chapter=TITLE,		% títulos de capítulos convertidos em letras maiúsculas
 	%section=TITLE,		% títulos de seções convertidos em letras maiúsculas
@@ -128,11 +128,9 @@ Inserir aqui os agradecimentos. ATENÇÃO ALUNO BOLSISTA: você precisa menciona
 \begin{epigrafe}
     \vspace*{\fill}
     \begin{flushright}
-	\textit{``Não vos amoldeis às estruturas deste mundo, \\
-	    mas transformai-vos pela renovação da mente, \\
-	    a fim de distinguir qual é a vontade de Deus: \\
-	    o que é bom, o que Lhe é agradável, o que é perfeito.\\
-	    (Bíblia Sagrada, Romanos 12, 2)
+      \textit{``If you can solve your problem, then what is the need of worrying? \\
+        If you cannot solve it, then what is the use of worrying'' \\
+        Shantideva
 	}
     \end{flushright}
 \end{epigrafe}
@@ -228,13 +226,14 @@ Inserir aqui os agradecimentos. ATENÇÃO ALUNO BOLSISTA: você precisa menciona
 % \part{Resultados}
 % \include{capitulo6}
 % \include{capitulo7}
+\include{point_processes}
 % --------------------
 % INÍCIO DOS EXEMPLOS
 % --------------------
 % No âmbito do Modelo Canônico, os comandos a seguir apresentam um sucinto resumo de como
 % esta classe pode ser usada. Oriente a construção do seu trabalho com base nestes comandos.
 % ---
-\include{abntex2-modelo-exemplos}
+% \include{abntex2-modelo-exemplos}
 % ---
 % --------------------
 % FIM DOS EXEMPLOS
@@ -257,7 +256,6 @@ Inserir aqui os agradecimentos. ATENÇÃO ALUNO BOLSISTA: você precisa menciona
 % ----------------------------------------------------------
 % ----------------------------------------------------------
 % REFERÊNCIAS
-\nocite{masolo2010}
 \bibliography{abntex2-modelo-references}
 % ----------------------------------------------------------
 % ----------------------------------------------------------

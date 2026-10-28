@@ -27,6 +27,7 @@ G_omori <- function(u, cc, pp) {
     u <- pmax(u, 0)
     1 - (cc / (u + cc))^(pp - 1)
 }
+
 G_omori_inv <- function(y, cc, pp) {
     cc * ((1 - y)^(-1 / (pp - 1)) - 1)
 }
@@ -328,18 +329,40 @@ agregar_previsao_espacial <- function(previsoes, x_grid, y_grid) {
 
 #====Predição Irã====
 
+# Predições de um theta único:
 simulacoes_iran <- gerar_previsoes_etas(catalogo_historico = iran.cat,
                                         theta = thetas_iran[[length(thetas_iran)]],
                                         M0 = 4.5, b = 2, Mmax = 10,
-                                        T0 = max(iran.cat$rtperiod), horizonte = 200,
+                                        T0 = max(iran.cat$rtperiod), horizonte = 210,
                                         mu_type = "raster",
                                         mu_raster = rasters_iran[[length(rasters_iran)]],
                                         x_grid = x_grid_iran, y_grid = y_grid_iran,
                                         n_sim = 1000,
-                                        semente = 123)
+                                        semente = 5050)
 
 pred_temp_iran <- agregar_previsao_temporal(simulacoes_iran, 30)
 
 pred_espac_iran <- agregar_previsao_espacial(simulacoes_iran, x_grid_iran, y_grid_iran)
 
-pred_espac_iran$contagem_media %>% matrix(nrow = 128) %>% as.im() %>% plot()
+# Predições de thetas gerados por bootstrap:
+simulacoes_iran_boot <- gerar_previsoes_etas(catalogo_historico = iran.cat,
+                                             theta = thetas_ajustados_iran,
+                                             M0 = 4.5, b = 2, Mmax = 10,
+                                             T0 = max(iran.cat$rtperiod), horizonte = 210,
+                                             mu_type = "raster",
+                                             mu_raster = rasters_iran[[length(rasters_iran)]],
+                                             x_grid = x_grid_iran, y_grid = y_grid_iran,
+                                             n_sim = 1000,
+                                             semente = 5050)
+
+pred_temp_iran_boot <- agregar_previsao_temporal(simulacoes_iran_boot, 30)
+
+pred_espac_iran_boot <- agregar_previsao_espacial(simulacoes_iran_boot, x_grid_iran, y_grid_iran)
+
+#====Comparação de predições espaciais====
+
+max_pred <- max(c(pred_espac_iran$contagem_media, pred_espac_iran_boot$contagem_media))
+
+par(mfrow = c(1, 2))
+pred_espac_iran$contagem_media %>% matrix(nrow = 128) %>% fields::image.plot(asp = T, zlim = c(0, max_pred))
+pred_espac_iran_boot$contagem_media %>% matrix(nrow = 128) %>% fields::image.plot(asp = T, zlim = c(0, max_pred))

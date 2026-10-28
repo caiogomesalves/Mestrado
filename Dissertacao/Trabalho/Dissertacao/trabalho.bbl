@@ -5,11 +5,12 @@
 \providecommand{\abntbstabout}[1]{}
 \abntbstabout{v-1.9.7 }
 
-\bibitem[Araujo 2012]{araujo2012}
-\abntrefinfo{Araujo}{ARAUJO}{2012}
-{ARAUJO, L.~C.
-\emph{Configura{\c c}{\~a}o}: uma perspectiva de {A}rquitetura da {I}nforma{\c c}{\~a}o da {E}scola de {B}ras{\'\i}lia.
-Disserta\c{c}\~{a}o (Mestrado) --- Universidade de Bras{\'\i}lia, Bras{\'\i}lia, mar. 2012.}
+\bibitem[Allen e Melgar 2019]{allen_2019}
+\abntrefinfo{Allen e Melgar}{ALLEN; MELGAR}{2019}
+{ALLEN, R.~M.; MELGAR, D. Earthquake {Early} {Warning}: {Advances}, {Scientific} {Challenges}, and {Societal} {Needs}.
+\emph{Annual Review of Earth and Planetary Sciences}, v.~47, n.~1, p. 361--388, maio 2019.
+ISSN 0084-6597, 1545-4495.
+Dispon{\'\i}vel em: \url{https://www.annualreviews.org/doi/10.1146/annurev-earth-053018-060457}.}
 
 \bibitem[Araujo 2015]{abntex2classe}
 \abntrefinfo{Araujo}{ARAUJO}{2015a}
@@ -31,57 +32,94 @@ Disserta\c{c}\~{a}o (Mestrado) --- Universidade de Bras{\'\i}lia, Bras{\'\i}lia,
 {\underline{\ \ \ \ \ \ \ \ }. \emph{O pacote abntex2cite: t{\'o}picos espec{\'\i}ficos da ABNT NBR 10520:2002 e o estilo bibliogr{\'a}fico alfab{\'e}tico (sistema autor-data)}.
 [S.l.], 2015. Dispon{\'\i}vel em: \url{http://www.abntex.net.br/}.}
 
-\bibitem[Associa{\c c}\~ao Brasileira de Normas T\'ecnicas 2002]{NBR10520:2002}
-\abntrefinfo{ABNT}{ABNT}{2002}
-{ASSOCIA{\c C}\~AO BRASILEIRA DE NORMAS T\'ECNICAS. \emph{{NBR} 10520}: Informa{\c c}\~ao e documenta{\c c}\~ao --- apresenta{\c c}\~ao de cita{\c c}\~oes em documentos.
-Rio de Janeiro, 2002. 7~p.}
-
 \bibitem[Associa{\c c}\~ao Brasileira de Normas T\'ecnicas 2003]{NBR6028:2003}
 \abntrefinfo{ABNT}{ABNT}{2003}
-{\underline{\ \ \ \ \ \ \ \ }. \emph{{NBR} 6028}: Resumo - apresenta{\c c}{\~a}o.
+{ASSOCIA{\c C}\~AO BRASILEIRA DE NORMAS T\'ECNICAS. \emph{{NBR} 6028}: Resumo - apresenta{\c c}{\~a}o.
 Rio de Janeiro, 2003. 2~p.}
-
-\bibitem[Associa{\c c}\~ao Brasileira de Normas T\'ecnicas 2005]{NBR14724:2005}
-\abntrefinfo{ABNT}{ABNT}{2005}
-{\underline{\ \ \ \ \ \ \ \ }. \emph{{NBR} 14724}: Informa{\c c}\~ao e documenta{\c c}\~ao --- trabalhos acad\^emicos --- apresenta{\c c}\~ao.
-Rio de Janeiro, 2005. 9~p.}
-
-\bibitem[Associa{\c c}\~ao Brasileira de Normas T\'ecnicas 2011]{NBR14724:2011}
-\abntrefinfo{ABNT}{ABNT}{2011}
-{\underline{\ \ \ \ \ \ \ \ }. \emph{{NBR} 14724}: Informa{\c c}\~ao e documenta{\c c}\~ao --- trabalhos acad\^emicos --- apresenta{\c c}\~ao.
-Rio de Janeiro, 2011. 15~p. Substitui a Ref.~\citeonline{NBR14724:2005}.}
-
-\bibitem[Associa{\c c}\~ao Brasileira de Normas T\'ecnicas 2012]{NBR6024:2012}
-\abntrefinfo{ABNT}{ABNT}{2012}
-{\underline{\ \ \ \ \ \ \ \ }. \emph{{NBR} 6024}: Numera{\c c}\~ao progressiva das se{\c c}\~oes de um documento.
-Rio de Janeiro, 2012. 4~p.}
-
-\bibitem[Braams 2008]{babel}
-\abntrefinfo{Braams}{BRAAMS}{2008}
-{BRAAMS, J. \emph{Babel, a multilingual package for use with LATEX's standard document classes}.
-[S.l.], 2008. Dispon{\'\i}vel em: \url{http://mirrors.ctan.org/info/babel/babel.pdf}. Acesso em: 17 fev. 2013.}
 
 \bibitem[Comiss{\~a}o Central de P{\'o}s-Gradua{\c c}{\~a}o -- Universidade Estadual de Campinas 2025]{CCPG:006:2025}
 \abntrefinfo{CCPG--UNICAMP}{CCPG--UNICAMP}{2025}
 {COMISS{\~A}O CENTRAL DE P{\'O}S-GRADUA{\c C}{\~A}O -- UNIVERSIDADE ESTADUAL DE CAMPINAS. \emph{Informa\c{c}{\~a}o CCPG/06/2025}.
 Campinas, 2025. 27~p. Dispon{\'\i}vel em: \url{https://prpg.unicamp.br/documentos-e-normas/normas/instrucoes-normativas/}. Acesso em: 06 fev. 2026.}
 
-\bibitem[IBGE 1993]{ibge1993}
-\abntrefinfo{IBGE}{IBGE}{1993}
-{IBGE. \emph{Normas de apresenta{\c c}{\~a}o tabular}. 3. ed. Rio de Janeiro: Centro de Documenta{\c c}{\~a}o e Dissemina{\c c}{\~a}o de Informa{\c c}{\~o}es. Funda{\c c}{\~a}o Intituto Brasileiro de Geografia e Estat{\'\i}stica, 1993. Acesso em: 21 ago 2013.}
+\bibitem[Daley e Vere-Jones 2003]{daley_jones_2003}
+\abntrefinfo{Daley e Vere-Jones}{DALEY; VERE-JONES}{2003}
+{DALEY, D.~J.; VERE-JONES, D. \emph{An introduction to the theory of point processes}. 2nd ed. ed. New York: Springer, 2003.
+ISBN 9780387955414 9780387213378 9780387498355.}
 
-\bibitem[Masolo 2010]{masolo2010}
-\abntrefinfo{Masolo}{MASOLO}{2010}
-{MASOLO, C. Understanding ontological levels. In:  LIN, F.; SATTLER, U. (Ed.). \emph{Proceedings of the Twelfth International Conference on the Principles of Knowledge Representation and Reasoning (KR 2010)}. AAAI Press, 2010. p. 258--268. Dispon{\'\i}vel em: \url{http://wiki.loa-cnr.it/Papers/kr10v0.7.pdf}. Acesso em: 2 jan. 2012.}
+\bibitem[Gutenberg e Richter 1944]{gutenberg_1944}
+\abntrefinfo{Gutenberg e Richter}{GUTENBERG; RICHTER}{1944}
+{GUTENBERG, B.; RICHTER, C.~F. Frequency of earthquakes in {California}*.
+\emph{Bulletin of the Seismological Society of America}, v.~34, n.~4, p. 185--188, out. 1944.
+ISSN 1943-3573, 0037-1106.
+Dispon{\'\i}vel em: \url{https://pubs.geoscienceworld.org/ssa/bssa/article/34/4/185/101140/Frequency-of-earthquakes-in-California}.}
 
-\bibitem[{van} Gigch e Pipino 1986]{van86}
-\abntrefinfo{{van} Gigch e Pipino}{{van} GIGCH; PIPINO}{1986}
-{{van} GIGCH, J.~P.; PIPINO, L.~L. In search for a paradigm for the discipline of information systems.
-\emph{Future Computing Systems}, v.~1, n.~1, p. 71--97, 1986.}
+\bibitem[Hawkes 1971]{hawkes_1971a}
+\abntrefinfo{Hawkes}{HAWKES}{1971a}
+{HAWKES, A.~G. Point {Spectra} of {Some} {Mutually} {Exciting} {Point} {Processes}.
+\emph{Journal of the Royal Statistical Society Series B: Statistical Methodology}, v.~33, n.~3, p. 438--443, out. 1971.
+ISSN 1369-7412, 1467-9868.
+Dispon{\'\i}vel em: \url{https://academic.oup.com/jrsssb/article/33/3/438/7027167}.}
+
+\bibitem[Hawkes 1971]{hawkes_1971b}
+\abntrefinfo{Hawkes}{HAWKES}{1971b}
+{\underline{\ \ \ \ \ \ \ \ }. Spectra of some self-exciting and mutually exciting point processes.
+\emph{Biometrika}, v.~58, n.~1, p. 83--90, 1971.
+ISSN 0006-3444, 1464-3510.
+Dispon{\'\i}vel em: \url{https://academic.oup.com/biomet/article-lookup/doi/10.1093/biomet/58.1.83}.}
+
+\bibitem[Ludwig et al. 2025]{ludwig_2025}
+\abntrefinfo{Ludwig et al.}{LUDWIG et al.}{2025}
+{LUDWIG, G.; WANG, Y.; CHU, T.; WANG, H.; ZHU, J. Bayesian analysis and variable selection for spatial count data with an application to {Rio} de {Janeiro} gun violence.
+\emph{Spatial Statistics}, v.~67, p. 100890, jun. 2025.
+ISSN 22116753.
+Dispon{\'\i}vel em: \url{https://linkinghub.elsevier.com/retrieve/pii/S2211675325000120}.}
+
+\bibitem[Mohler et al. 2011]{mohler_2011}
+\abntrefinfo{Mohler et al.}{MOHLER et al.}{2011}
+{MOHLER, G.~O.; SHORT, M.~B.; BRANTINGHAM, P.~J.; SCHOENBERG, F.~P.; TITA, G.~E. Self-{Exciting} {Point} {Process} {Modeling} of {Crime}.
+\emph{Journal of the American Statistical Association}, v.~106, n.~493, p. 100--108, mar. 2011.
+ISSN 0162-1459, 1537-274X.
+Dispon{\'\i}vel em: \url{http://www.tandfonline.com/doi/abs/10.1198/jasa.2011.ap09546}.}
+
+\bibitem[Ogata 1978]{ogata_1978}
+\abntrefinfo{Ogata}{OGATA}{1978}
+{OGATA, Y. The asymptotic behaviour of maximum likelihood estimators for stationary point processes.
+\emph{Annals of the Institute of Statistical Mathematics}, v.~30, n.~2, p. 243--261, dez. 1978.
+ISSN 0020-3157, 1572-9052.
+Dispon{\'\i}vel em: \url{http://link.springer.com/10.1007/BF02480216}.}
+
+\bibitem[Ogata 1988]{ogata_1988}
+\abntrefinfo{Ogata}{OGATA}{1988}
+{\underline{\ \ \ \ \ \ \ \ }. Statistical {Models} for {Earthquake} {Occurrences} and {Residual} {Analysis} for {Point} {Processes}.
+\emph{Journal of the American Statistical Association}, v.~83, n.~401, p. 9--27, mar. 1988.
+ISSN 0162-1459, 1537-274X.
+Dispon{\'\i}vel em: \url{http://www.tandfonline.com/doi/abs/10.1080/01621459.1988.10478560}.}
+
+\bibitem[Ogata 1998]{ogata_1998}
+\abntrefinfo{Ogata}{OGATA}{1998}
+{\underline{\ \ \ \ \ \ \ \ }. Space-{Time} {Point}-{Process} {Models} for {Earthquake} {Occurrences}.
+\emph{Annals of the Institute of Statistical Mathematics}, v.~50, n.~2, p. 379--402, jun. 1998.
+ISSN 0020-3157, 1572-9052.
+Dispon{\'\i}vel em: \url{https://link.springer.com/10.1023/A:1003403601725}.}
+
+\bibitem[Utsu et al. 1995]{utsu_1995}
+\abntrefinfo{Utsu et al.}{UTSU et al.}{1995}
+{UTSU, T.; OGATA, Y.; S, R.; {Matsu'ura}. The {Centenary} of the {Omori} {Formula} for a {Decay} {Law} of {Aftershock} {Activity}.
+\emph{Journal of Physics of the Earth}, v.~43, n.~1, p. 1--33, 1995.
+ISSN 1884-2305, 0022-3743.
+Dispon{\'\i}vel em: \url{http://www.jstage.jst.go.jp/article/jpe1952/43/1/43\_1\_1/\_article}.}
 
 \bibitem[Wilson e Madsen 2010]{memoir}
 \abntrefinfo{Wilson e Madsen}{WILSON; MADSEN}{2010}
 {WILSON, P.; MADSEN, L. \emph{The Memoir Class for Configurable Typesetting - User Guide}.
 Normandy Park, WA, 2010. Dispon{\'\i}vel em: \url{http://mirrors.ctan.org/macros/latex/contrib/memoir/memman.pdf}. Acesso em: 19 dez. 2012.}
+
+\bibitem[Zhuang, Ogata e Vere-Jones 2002]{zhuang_2002}
+\abntrefinfo{Zhuang, Ogata e Vere-Jones}{ZHUANG; OGATA; VERE-JONES}{2002}
+{ZHUANG, J.; OGATA, Y.; VERE-JONES, D. Stochastic {Declustering} of {Space}-{Time} {Earthquake} {Occurrences}.
+\emph{Journal of the American Statistical Association}, v.~97, n.~458, p. 369--380, jun. 2002.
+ISSN 0162-1459, 1537-274X.
+Dispon{\'\i}vel em: \url{http://www.tandfonline.com/doi/abs/10.1198/016214502760046925}.}
 
 \end{thebibliography}

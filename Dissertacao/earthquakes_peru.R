@@ -648,3 +648,18 @@ aj_teste_homog_2 <- etas(catalogo_teste,
 plot(aj_teste)
 
 rates(aj_teste)
+
+#Teste
+
+acum_teste <- function(x, t1, t2) {
+    1/(1 + exp(-t2 * (x - t1)))
+}
+
+sim_teste <- function(u, t1, t2) {
+    -(1/t2) * log((1 - u)/u) + t1
+}
+
+u <- runif(1000)
+
+ecdf(sim_teste(u, 5, 5)) %>% plot()
+curve(acum_teste(x, 5, 5), add = T, col = "red")

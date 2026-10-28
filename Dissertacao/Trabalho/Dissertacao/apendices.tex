@@ -1,3 +1,38 @@
+\chapter{Cumulative distributions of $g(t)$ and $f(x,y)$}
+\label{append-acum}
+
+Considering the formulation of the probability density functions $g(t)$ and $f(x,y)$, in \autoref{sec-hawkes_proc}, we can calculate their cumulative distribution function as such
+
+\begin{align*}
+  G(T) = \int_{0}^{T}g(t)dt &= \int_{0}^{T}(p-1)c^{p-1}(t + c)^{-p}dt \\
+                            &= (p - 1)c^{p - 1}\int_{0}^{T}(t + c)^{-p}dt \\
+                            &= (p - 1)c^{p - 1}\left[\left.\frac{(t + c)^{1 - p}}{1 - p}\right|_{0}^{T}\right] \\
+                            &= (p - 1)c^{p - 1}\left[\frac{(T + c)^{1 - p}}{1 - p} + \frac{c^{1 - p}}{p - 1}\right] \\
+                            &= 1 - \frac{(p - 1)c^{p - 1}}{(p - 1)}(T + c)^{1 - p} \\
+                            &= 1 - \frac{c^{p - 1}}{(T + c)^{p - 1}} \\
+                            &= 1 - \left(\frac{c}{T + c}\right)^{p - 1}.
+\end{align*}
+
+With this result, we can see that this is indeed a cumulative probability function, as $\lim_{T \to 0}G(T) = 0$ and $\lim_{T \to \infty}G(T) = 1$. For $f(x,y)$, consider the spherical coordinates $x = r\cos(\theta)$ and $y = r\sin(\theta)$ and $D[\gamma(m - m_{0})] = Q$. With those, we have
+
+\begin{align*}
+  F(R) = \int_{0}^{2\pi}\int_{0}^{R}f(r)dr\, d\theta &= \int_{0}^{2\pi}\int_{0}^{R}\frac{(q-1)}{\pi Q}\left(1 + \frac{r^{2}}{Q}\right)^{-q}r\, dr\, d\theta \\
+                                                     &= \frac{(q - 1)}{\pi Q}\left(\int_{0}^{2\pi}d\theta\right)\left(\int_{0}^{R}r\left(1 + \frac{r^{2}}{Q}\right)dr\right) \\
+                                                     &= \frac{2(q - 1)}{Q}\int_{0}^{R}r\left(1 + \frac{r^{2}}{Q}\right)dr.
+\end{align*}
+
+Let $u = 1 + \frac{r^{2}}{Q}$, so that $du = \frac{2r}{Q}dr$ and $r\, dr = \frac{Q}{2}du$. Using substitution, we have
+
+\begin{align*}
+  F(R) &= \frac{2(q - 1)}{Q}\int_{1}^{1 + \frac{R^{2}}{Q}}u^{-q}\left(\frac{Q}{2}\right)du \\
+       &= (q - 1)\int_{1}^{1 + \frac{R^{2}}{Q}}u^{-q}du \\
+       &= (q - 1)\left(\left. \frac{u^{1 - q}}{1 - q}\right|_{1}^{1 + \frac{R^{2}}{Q}}\right) \\
+       &= \left. -u^{1 - q}\right|_{1}^{1 + \frac{R^{2}}{Q}} \\
+       &= 1 - \left(1 + \frac{R^{2}}{Q}\right)^{1 - q},
+\end{align*}
+
+\noindent that is a valid cumulative probability function, as $\lim_{R^{2} \to 0} = 0$ and $\lim_{R^{2} \to \infty} = 1$.
+
 \chapter{Quisque libero justo}
 
 \lipsum[50]

@@ -202,7 +202,6 @@ res_bg_pearson <- eval.im((densidade_obs_bg - densidade_esp_bg) / sqrt(densidade
 plot(res_bg_pearson, main = "Resíduos de Pearson (Apenas Background)", col = topo.colors(256))
 contour(res_bg_pearson, add = TRUE, col = "black", alpha = 0.5)
 
-
 #====Erros-padrão====
 
 hessianas[[length(hessianas)]]
@@ -210,17 +209,3 @@ hessianas[[length(hessianas)]]
 matriz_covariancia <- solve(hessianas[[length(hessianas)]])
 
 erros_padrao <- sqrt(diag(matriz_covariancia))
-
-#====Simulação com pacote====
-
-bkgd <- list(x = x_grid,
-             y = y_grid,
-             bkgd = rasters[[length(rasters)]])
-
-simetas(c(thetas[[length(thetas)]], "beta" = 3.122028),
-        bkgd,
-        sim.start = 0,
-        sim.length = 10000,
-        mag.threshold = 4.5,
-        region.poly = peru.quakes$region.poly) %>%
-    plot()

@@ -3,7 +3,7 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: trabalho.aux
 A level-1 auxiliary file: resumos.aux
 A level-1 auxiliary file: introducao.aux
-A level-1 auxiliary file: abntex2-modelo-exemplos.aux
+A level-1 auxiliary file: point_processes.aux
 A level-1 auxiliary file: considfinais.aux
 A level-1 auxiliary file: apendices.aux
 A level-1 auxiliary file: anexos.aux
@@ -28,44 +28,44 @@ Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 | Em caso de dúvidas ou problemas com este estilo procure |
 | http://www.abntex.net.br/                               |
 +---------------------------------------------------------+
-You've used 19 entries,
+You've used 22 entries,
             6714 wiz_defined-function locations,
-            1297 strings with 12084 characters,
-and the built_in function-call counts, 16794 in all, are:
-= -- 1961
-> -- 195
-< -- 336
-+ -- 449
-- -- 63
-* -- 1007
-:= -- 2117
-add.period$ -- 72
-call.type$ -- 19
-change.case$ -- 119
-chr.to.int$ -- 24
-cite$ -- 16
-duplicate$ -- 1507
-empty$ -- 1008
-format.name$ -- 293
-if$ -- 3649
-int.to.chr$ -- 5
+            1342 strings with 13483 characters,
+and the built_in function-call counts, 34093 in all, are:
+= -- 4238
+> -- 482
+< -- 1003
++ -- 1191
+- -- 145
+* -- 2095
+:= -- 4128
+add.period$ -- 91
+call.type$ -- 22
+change.case$ -- 187
+chr.to.int$ -- 56
+cite$ -- 19
+duplicate$ -- 3659
+empty$ -- 1179
+format.name$ -- 704
+if$ -- 6712
+int.to.chr$ -- 6
 int.to.str$ -- 1
-missing$ -- 273
-newline$ -- 87
-num.names$ -- 51
-pop$ -- 275
+missing$ -- 352
+newline$ -- 125
+num.names$ -- 85
+pop$ -- 377
 preamble$ -- 1
-purify$ -- 59
+purify$ -- 78
 quote$ -- 0
-skip$ -- 1608
+skip$ -- 3714
 stack$ -- 1
-substring$ -- 703
-swap$ -- 537
-text.length$ -- 12
+substring$ -- 1554
+swap$ -- 1354
+text.length$ -- 49
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 5
+type$ -- 0
 warning$ -- 0
-while$ -- 80
+while$ -- 145
 width$ -- 0
-write$ -- 261
+write$ -- 340

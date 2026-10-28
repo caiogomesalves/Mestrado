@@ -1,0 +1,749 @@
+---
+output:
+  stevetemplates::article:
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+title: "Simulação do Brasileirão 2026"
+author:
+- name: Caio Gomes Alves
+  affiliation: Instituto de Matemática, Estatística e Computação Científica - UNICAMP
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+# bibliography: ref.bib
+# biblio-style: apsr
+---
+
+```{r setup, include = F}
+library(tidyverse)
+library(parallel)
+library(purrr)
+library(knitr)
+```
+
+# Simulação do Campeonato
+
+## Construção da tabela
+
+Para a simulação, vejamos primeiro como se comportam os valores de $\theta$ e $\phi$ para cada um dos times:
+
+```{r criacao_taxas}
+dados_bras <- read.csv("~/Downloads/brasileirao_2026.csv")
+
+# Criando as taxas theta e phi:
+taxas_estimadas <- left_join(
+    # Taxas dos mandantes:
+    (dados_bras %>%
+    mutate(time = time_mandante) %>%
+    group_by(time) %>%
+    summarise(theta_m = mean(gols_mandante, na.rm = T),
+              phi_v = mean(gols_visitante, na.rm = T))),
+    # Taxas dos visitantes:
+    (dados_bras %>%
+    mutate(time = time_visitante) %>%
+    group_by(time) %>%
+    summarise(theta_v = mean(gols_visitante, na.rm = T),
+              phi_m = mean(gols_mandante, na.rm = T))),
+    # Agrupa por time:
+    by = "time")
+```
+
+```{r tabela_taxas, echo = F}
+taxas_estimadas %>%
+    select("Time" = time, everything()) %>%
+    kable()
+```
+
+Com isso, podemos criar uma função que adiciona os valores das taxas calculadas em cada uma das linhas das rodadas do campeonato, criando um data.frame aumentado, que será usado na simulação:
+
+```{r dados_completos}
+cria_df_taxas <- function(df, taxas) {
+    times <- unique(taxas$time)
+    df_mandante <- left_join(df, (taxas %>%
+                                  select(time_mandante = time,
+                                         theta_m, phi_m)), by = "time_mandante") %>%
+        select(theta_m, phi_m)
+    df_visitante <- left_join(df, (taxas %>%
+                                   select(time_visitante = time,
+                                          theta_v, phi_v)), by = "time_visitante") %>%
+        select(theta_v, phi_v)
+    df_completo <- cbind(df, df_mandante, df_visitante)
+    return(df_completo)
+}
+
+df_completo <- cria_df_taxas(dados_bras, taxas_estimadas)
+```
+
+Com o data.frame completo, separaremos em jogos realizados (que não precisam passar por simulação) e jogos a realizar (que terão os placares simulados usando os valores de $\theta$ e $\phi$ calculados anteriormente):
+
+```{r separacao_base}
+jogos_realizados <- df_completo %>% filter(!is.na(gols_mandante))
+jogos_futuros <- df_completo %>% filter(is.na(gols_mandante))
+```
+
+A função que calcula a pontuação do campeonato deve considerar os casos de vitória/empate/derrota, além de calcular os fatores de desempate (número de vitórias, saldo de gols e quantidade de gols marcados):
+
+```{r calcula_tabela}
+calcula_tabela <- function(df) {
+    df %>%
+        mutate(
+            # Pontos do mandante:
+            pts_m = case_when(gols_mandante > gols_visitante ~ 3,
+                              gols_mandante == gols_visitante ~ 1,
+                              TRUE ~ 0),
+            # Pontos do visitante:
+            pts_v = case_when(gols_visitante > gols_mandante ~ 3,
+                              gols_mandante == gols_visitante ~ 1,
+                              TRUE ~ 0),
+            vit_m = ifelse(gols_mandante > gols_visitante, 1, 0),
+            vit_v = ifelse(gols_visitante > gols_mandante, 1, 0)
+        ) %>%
+        # Junta ambos os casos:
+        pivot_longer(cols = c(time_mandante, time_visitante),
+                     names_to = "mando", values_to = "time") %>%
+        mutate(
+            pontos = ifelse(mando == "time_mandante", pts_m, pts_v),
+            vitorias = ifelse(mando == "time_mandante", vit_m, vit_v),
+            gols_pro = ifelse(mando == "time_mandante", gols_mandante,
+                              gols_visitante),
+            gols_contra = ifelse(mando == "time_mandante", gols_visitante,
+                                 gols_mandante),
+            saldo = gols_pro - gols_contra
+        ) %>%
+        group_by(time) %>%
+        # Sumariza os valores necessários para compor o campeonato:
+        summarise(across(c(pontos, vitorias, saldo, gols_pro),
+                         sum, na.rm = T), .groups = "drop")
+}
+
+# Resultado até a 25ª rodada:
+tabela_base <- calcula_tabela(jogos_realizados)
+```
+
+```{r tabela_25rodada, echo = F}
+tabela_base %>%
+    arrange(desc(pontos), desc(vitorias), desc(saldo), desc(gols_pro)) %>%
+    mutate(posicao = row_number()) %>%
+    kable()
+```
+
+Com isso, agora construímos uma função que calcula os jogos restantes usando os dados de $\texttt{jogos\_futuros}$, concatena as linhas com os jogos já realizados, e calcula a tabela final do campeonato:
+
+```{r simula_rodadas_restantes}
+simula_rodadas_restantes <- function(...) {
+    sim_futuros <- jogos_futuros %>%
+        mutate(
+            # Poissons uando os valores calculados:
+            gols_mandante = rpois(n(), (theta_m + phi_v)/2),
+            gols_visitante = rpois(n(), (theta_v + phi_m)/2)
+        )
+    # Calcula as pontuações dos jogos simulados:
+    tabela_simulada <- calcula_tabela(sim_futuros)
+    # Junta com a pontuação dos jogos realizados:
+    tabela_final <- bind_rows(tabela_base, tabela_simulada) %>%
+        group_by(time) %>%
+        summarise(across(everything(), sum, na.rm = T), .groups = "drop") %>%
+        arrange(desc(pontos), desc(vitorias), desc(saldo), desc(gols_pro)) %>%
+        mutate(posicao = row_number())
+    # Retorna uma lista com informações para responder a todas as perguntas:
+    list(
+        campeao = tabela_final$time[1],
+        pontos_campeao = tabela_final$pontos[1],
+        rebaixados = tabela_final$time[17:20],
+        pontos_todos = tabela_final %>% select(time, pontos, posicao)
+    )
+}
+```
+
+## Simulação das Rodadas Restantes
+
+Com todas essas funções construídas, podemos realizar as simulações das rodadas faltantes. Como trabalho em um ambiente Linux, o uso paralelizado da função $\texttt{mclapply}$, do pacote $\texttt{parallel}$ se dá de maneira direta:
+
+```{r simulacao_base, eval = F}
+# Número de simulações:
+n_simulacoes <- 10000
+# Seed para reprodutibilidade:
+set.seed(5050)
+# Simulação usando o mclapply:
+resultados <- mclapply(1:n_simulacoes, simula_rodadas_restantes,
+                       mc.cores = 10)
+```
+
+```{r simulacao_resultados, echo = F}
+load("resultados.RData")
+```
+
+\newpage
+
+# Perguntas
+
+## 1. Qual a probabilidade de cada time ser campeão?
+
+Com os resultados das `r n_simulacoes`, podemos contar quantas vezes cada time aparece como campeão, e ranqueá-los:
+
+```{r perg1}
+left_join(
+    data.frame(Time = unique(jogos_futuros$time_mandante) %>% sort()),
+    lapply(resultados, function(x){x$campeao}) %>%
+    unlist() %>%
+    table() %>%
+    as.data.frame() %>%
+    mutate(Freq = Freq/n_simulacoes) %>%
+    select("Time" = ".","Freq"), by = "Time") %>%
+    arrange(desc(Freq)) %>%
+    mutate(Freq = case_when(is.na(Freq) ~ 0,
+                            .default = Freq),
+           Freq = scales::percent(Freq)) %>%
+    select(Time, "Prob_Camp" = Freq) %>%
+    kable()
+```
+
+\newpage
+
+## 2. Qual a probabilidade de cada time ser rebaixado?
+
+Semelhante ao caso anterior, a função retorna os 4 times que foram rebaixados em cada simulação, podemos contar quantas vezes cada um aparece e ranqueá-los:
+
+```{r perg2}
+left_join(
+    data.frame(Time = unique(jogos_futuros$time_mandante) %>% sort()),
+    lapply(resultados, function(x){x$rebaixados}) %>%
+    unlist() %>%
+    table() %>%
+    as.data.frame() %>%
+    mutate(Freq = Freq/(4 * n_simulacoes)) %>%
+    select("Time" = ".","Freq"), by = "Time") %>%
+    arrange(desc(Freq)) %>%
+    mutate(Freq = case_when(is.na(Freq) ~ 0,
+                            .default = Freq),
+           Freq = scales::percent(Freq)) %>%
+    select(Time, "Prob_Reb" = Freq) %>%
+    kable()
+```
+
+\newpage
+
+## 3. Qual a probabilidade do campeonato ser decidido pelos critérios de desempate?
+
+Para que ocorra uma decisão por desempate, é necessário que o primeiro e o segundo colocado tenham a mesma pontuação no final do campeonato. Como a função retorna a pontuação final, podemos calcular a probabilidade utilizando uma função indicadora:
+
+```{r perg3}
+((sapply(resultados, function(x) {x$pontos_todos[1, 2] == x$pontos_todos[2, 2]}) %>%
+    sum())/n_simulacoes) %>% scales::percent(accuracy = 0.01)
+```
+
+## 4. Qual o valor esperado do número de pontos do campeão?
+
+Aqui, consideremos o valor esperado como a média dos pontos obtidos pelo campeão de cada uma das simulações:
+
+```{r perg4}
+sapply(resultados, function(x) {x$pontos_campeao}) %>%
+    mean()
+```
+
+\newpage
+
+## 5. Quantos pontos uma qualquer equipe precisa fazer para ter pelo menos 90% de chance de ser o campeão?
+
+Neste caso, avaliemos a distribuição da pontuação de cada um dos vice-campeões (independentemente de quem o foi), e vejamos como o quantil 0.9 se comporta:
+
+```{r perg5, echo = F}
+hist(lapply(resultados, function(x) {x$pontos_todos[2, 2]}) %>%
+    unlist(),
+     main = "Distribuição dos pontos dos vice-campeões",
+     xlab = "Pontos")
+```
+
+Assim, precisamos extrair o quantil 0.9, usando a função $\texttt{quantile()}$:
+
+```{r perg5_2}
+quantile(lapply(resultados, function(x) {x$pontos_todos[2, 2]}) %>%
+         unlist(), 0.9)
+```
+
+\newpage
+
+## 6. Quantos pontos são necessários que um time qualquer faça para ter pelo menos 95% de chance de não ser rebaixado?
+
+Semelhante ao caso anterior, vejamos como se comporta a pontuação do 17º colocado na tabela (visto que é ele o time que foi rebaixado com maior pontuação):
+
+```{r perg6, echo = F}
+hist(lapply(resultados, function(x) {x$pontos_todos[17, 2]}) %>%
+    unlist(),
+     main = "Distribuição dos pontos dos 17º colocados",
+     xlab = "Pontos")
+```
+
+Assim, precisamos extrair o quantil 0.95, usando a função $\texttt{quantile()}$:
+
+```{r perg6_2}
+quantile(lapply(resultados, function(x) {x$pontos_todos[17, 2]}) %>%
+    unlist(), 0.95)
+```
+
+\newpage
+
+# Bootstrap
+
+Se quisermos avaliar a variabilidade inerente para os $\theta$'s e $\phi$'s, podemos fazer um estudo de reamostragem por bootstrap, e recalcular esses valores uma quantidade suficientemente grande de vezes.
+
+```{r bootstrap, cache = T}
+# Número de amostras bootstrap:
+B <- 1000
+
+# Matrizes com os valores de cada estimativa:
+boot_theta_m <- matrix(NA, nrow = B,
+                       ncol = length(unique(jogos_realizados$time_mandante)),
+                       dimnames = list(NULL,
+                                       unique(jogos_realizados$time_mandante) %>% sort()))
+boot_theta_v <- matrix(NA, nrow = B,
+                       ncol = length(unique(jogos_realizados$time_mandante)),
+                       dimnames = list(NULL,
+                                       unique(jogos_realizados$time_mandante) %>% sort()))
+boot_phi_m <- matrix(NA, nrow = B,
+                     ncol = length(unique(jogos_realizados$time_mandante)),
+                     dimnames = list(NULL,
+                                     unique(jogos_realizados$time_mandante) %>% sort()))
+boot_phi_v <- matrix(NA, nrow = B,
+                     ncol = length(unique(jogos_realizados$time_mandante)),
+                     dimnames = list(NULL,
+                                     unique(jogos_realizados$time_mandante) %>% sort()))
+
+# Seed para reprodutibilidade:
+set.seed(5050)
+
+# Bootstrap
+for(i in 1:B) {
+    # Extrai uma amostra com reposição dos jogos realizados:
+    amostra <- jogos_realizados[sample(1:nrow(jogos_realizados),
+                                       replace = TRUE), ]
+    # Recalcula as taxas:
+    taxas_estimadas_boot <- left_join(
+    (amostra %>%
+     mutate(time = time_mandante) %>%
+     group_by(time) %>%
+     summarise(theta_m = mean(gols_mandante, na.rm = T),
+               phi_v = mean(gols_visitante, na.rm = T))),
+    (amostra %>%
+     mutate(time = time_visitante) %>%
+     group_by(time) %>%
+     summarise(theta_v = mean(gols_visitante, na.rm = T),
+               phi_m = mean(gols_mandante, na.rm = T))), by = "time")
+    # Aplica os valores por linha nas matrizes:
+    boot_theta_m[i, ] <- taxas_estimadas_boot$theta_m
+    boot_theta_v[i, ] <- taxas_estimadas_boot$theta_v
+    boot_phi_m[i, ] <- taxas_estimadas_boot$phi_m
+    boot_phi_v[i, ] <- taxas_estimadas_boot$phi_v
+}
+```
+
+Com isso, podemos construir boxplots para cada uma das taxas estimadas, considerando cada time. Neles, teremos ideia da variabilidade por meio do intervalo interquantílico e mediana das reamostras bootstrap. Além disso, o valor original será colocado como um ponto vermelho, para título de comparação.
+
+```{r graf_bootstrap1, echo = F, fig.width = 6, fig.height = 10, fig.align = "center"}
+ordem_theta_m <- boot_theta_m %>%
+    apply(2, median) %>%
+    sort() %>%
+    names()
+
+gboot1 <- stack(as.data.frame(boot_theta_m)) %>%
+    mutate(ind = factor(ind, levels = ordem_theta_m)) %>%
+    ggplot(aes(x = ind, y = values)) +
+    geom_boxplot() +
+    geom_point(data = taxas_estimadas %>%
+                   mutate(time = factor(time, levels = ordem_theta_v)),
+               aes(x = time, y = theta_m), colour = "red") +
+    ggpubr::theme_pubclean() +
+    labs(x = "Times", y = expression(theta[m])) +
+    theme(axis.text.x = element_text(angle = 90))
+
+ordem_theta_v <- boot_theta_v %>%
+    apply(2, median) %>%
+    sort() %>%
+    names()
+
+gboot2 <- stack(as.data.frame(boot_theta_v)) %>%
+    mutate(ind = factor(ind, levels = ordem_theta_v)) %>%
+    ggplot(aes(x = ind, y = values)) +
+    geom_boxplot() +
+    geom_point(data = taxas_estimadas %>%
+                   mutate(time = factor(time, levels = ordem_theta_v)),
+               aes(x = time, y = theta_v), colour = "red") +
+    ggpubr::theme_pubclean() +
+    labs(x = "Times", y = expression(theta[v])) +
+    theme(axis.text.x = element_text(angle = 90))
+
+ggpubr::ggarrange(plotlist = list(gboot1, gboot2),
+                  nrow = 2)
+```
+
+\newpage
+
+```{r graf_bootstrap2, echo = F, fig.width = 6, fig.height = 10, fig.align = "center"}
+ordem_phi_m <- boot_phi_m %>%
+    apply(2, median) %>%
+    sort() %>%
+    names()
+
+gboot3 <- stack(as.data.frame(boot_phi_m)) %>%
+    mutate(ind = factor(ind, levels = ordem_phi_m)) %>%
+    ggplot(aes(x = ind, y = values)) +
+    geom_boxplot() +
+    geom_point(data = taxas_estimadas %>%
+                   mutate(time = factor(time, levels = ordem_theta_v)),
+               aes(x = time, y = phi_m), colour = "red") +
+    ggpubr::theme_pubclean() +
+    labs(x = "Times", y = expression(Phi[m])) +
+    theme(axis.text.x = element_text(angle = 90))
+
+ordem_phi_v <- boot_phi_v %>%
+    apply(2, median) %>%
+    sort() %>%
+    names()
+
+gboot4 <- stack(as.data.frame(boot_phi_v)) %>%
+    mutate(ind = factor(ind, levels = ordem_phi_v)) %>%
+    ggplot(aes(x = ind, y = values)) +
+    geom_boxplot() +
+    geom_point(data = taxas_estimadas %>%
+                   mutate(time = factor(time, levels = ordem_theta_v)),
+               aes(x = time, y = phi_v), colour = "red") +
+    ggpubr::theme_pubclean() +
+    labs(x = "Times", y = expression(Phi[v])) +
+    theme(axis.text.x = element_text(angle = 90))
+
+ggpubr::ggarrange(plotlist = list(gboot3, gboot4),
+                  nrow = 2)
+```
+
+# Atividade Extra
+
+Uma maneira de aprimorar as estimativas, seria por meio de uma taxa para simulação que não seja fixa, mas que se adapte conforme o campeonato evolui. Para isso, o mais usual é utilizar uma média móvel, com uma janela fixa (por exemplo, considerar a média das $k$ últimas partidas), porém essa abordagem desconsidera os jogos mais antigos, em favor dos novos.
+
+Uma maneira de mitigar isso, é por meio de Médias Móveis Exponencialmente Ponderadas (*Exponentially Weighted Moving Averages*, ou **EWMA**), que considera todas as partidas anteriores, com pesos que decaem de maneira exponencial. Assim, pondera-se o último jogo com mais importância, mas sem descartar os jogos passados.
+
+```{r funcoes_ewma}
+# O parâmetro alpha controla o "esquecimento" do modelo,
+# alpha = 0.2 significa que o jogo atual tem 20% de peso
+# na nova taxa, e o histórico 80%:
+alpha <- 0.20
+
+calcula_ewma <- function(vetor_gols) {
+    accumulate(vetor_gols, ~ alpha * .y + (1 - alpha) * .x,
+               .init = vetor_gols[1])[-1]
+}
+
+# Criamos o histórico de maneira linear, pois agora
+# não há mais importância se o time atuou como mandante
+# ou visitante em cada partida:
+taxas_finais_ewma <- jogos_realizados %>%
+    pivot_longer(
+        cols = c(time_mandante, time_visitante),
+        names_to = "mando",
+        values_to = "time"
+    ) %>%
+    mutate(
+        gols_feitos = ifelse(mando == "time_mandante",
+                             gols_mandante, gols_visitante),
+        gols_sofridos = ifelse(mando == "time_mandante",
+                               gols_visitante, gols_mandante)
+    ) %>%
+    arrange(time, rodada) %>%
+    group_by(time) %>%
+    mutate(
+        theta_hist = calcula_ewma(gols_feitos),
+        phi_hist = calcula_ewma(gols_sofridos)
+    ) %>%
+    # Pegamos apenas o valor da taxa na última rodada jogada
+    # pelo time para projetar o futuro:
+    slice_tail(n = 1) %>%
+    select(time, theta_ewma = theta_hist, phi_ewma = phi_hist) %>%
+    ungroup()
+
+taxas_finais_ewma %>%
+    kable()
+
+# Juntamos as taxas atualizadas com a tabela
+# de jogos ainda não realizados:
+jogos_futuros_ewma <- jogos_futuros %>%
+    select(-c(theta_m, theta_v, phi_m, phi_v)) %>%
+    left_join(
+        taxas_finais_ewma %>% rename(time_mandante = time,
+                                     theta_m = theta_ewma,
+                                     phi_m = phi_ewma),
+        by = "time_mandante"
+    ) %>%
+    left_join(
+        taxas_finais_ewma %>% rename(time_visitante = time,
+                                     theta_v = theta_ewma,
+                                     phi_v = phi_ewma),
+        by = "time_visitante"
+    )
+
+# Para simular, usamos um esquema semelhante ao anterior,
+# porém com as taxas adaptativas:
+simula_campeonato_ewma <- function(...) {
+  sim_futuros <- jogos_futuros_ewma %>%
+    mutate(
+        gols_mandante = rpois(n(), (theta_m + phi_v)/2),
+        gols_visitante = rpois(n(), (theta_v + phi_m)/2)
+    )
+  tabela_simulada <- calcula_tabela(sim_futuros)
+  # Junta o passado real com o futuro simulado e aplica os critérios de desempate
+  tabela_final <- bind_rows(tabela_base, tabela_simulada) %>%
+      group_by(time) %>%
+      summarise(across(everything(), sum), .groups = "drop") %>%
+      arrange(desc(pontos), desc(vitorias), desc(saldo), desc(gols_pro)) %>%
+      mutate(posicao = row_number())
+  list(
+      campeao = tabela_final$time[1],
+      pontos_campeao = tabela_final$pontos[1],
+      vice = tabela_final$time[2],
+      pontos_vice = tabela_final$pontos[2],
+      rebaixados = tabela_final$time[17:20],
+      pontos_todos = tabela_final %>% select(time, pontos, posicao)
+  )
+}
+```
+
+Para ver como se comportariam as taxas adaptativas, rodemos uma simulação considerando os times paranaenses no campeonato:
+
+\newpage
+
+```{r simula_times_pr, echo = F, fig.width = 6, fig.height = 10, fig.align = "center"}
+# Seed:
+set.seed(123)
+
+# Considera os jogos do Athletico-PR e Coritiba
+g_theta <- (jogos_realizados %>%
+    pivot_longer(
+        cols = c(time_mandante, time_visitante),
+        names_to = "mando",
+        values_to = "time"
+    ) %>%
+    mutate(
+        gols_feitos = ifelse(mando == "time_mandante",
+                             gols_mandante, gols_visitante),
+        gols_sofridos = ifelse(mando == "time_mandante",
+                               gols_visitante, gols_mandante)
+    ) %>%
+    arrange(time, rodada) %>%
+    bind_rows(
+    (jogos_futuros_ewma %>%
+     mutate(
+         gols_mandante = rpois(n(), (theta_m + phi_v)/2),
+         gols_visitante = rpois(n(), (theta_v + phi_m)/2)
+     ) %>%
+     pivot_longer(
+         cols = c(time_mandante, time_visitante),
+         names_to = "mando",
+         values_to = "time"
+     ) %>%
+     mutate(
+         gols_feitos = ifelse(mando == "time_mandante",
+                              gols_mandante, gols_visitante),
+         gols_sofridos = ifelse(mando == "time_mandante",
+                                gols_visitante, gols_mandante)
+     ) %>%
+     arrange(time, rodada))) %>%
+    group_by(time) %>%
+    mutate(
+        theta_hist = calcula_ewma(gols_feitos),
+        phi_hist = calcula_ewma(gols_sofridos)
+    ) %>%
+    filter(time %in% c("Athletico-PR", "Coritiba")) %>%
+    mutate(rod = case_when(rodada >= 26 ~ "Simulado",
+                           .default = "Real")) %>%
+    ggplot(aes(x = rodada, y = theta_hist, colour = time, shape = rod)) +
+    geom_point() +
+    geom_line() +
+    scale_colour_manual(values = c("#CC0000", "#009E73")) +
+    labs(y = expression(theta), x = "Rodada",
+         colour = "Time", shape = "Valor") +
+    theme_bw())
+
+set.seed(123)
+# Considera os jogos do Athletico-PR e Coritiba
+g_phi <- (jogos_realizados %>%
+    pivot_longer(
+        cols = c(time_mandante, time_visitante),
+        names_to = "mando",
+        values_to = "time"
+    ) %>%
+    mutate(
+        gols_feitos = ifelse(mando == "time_mandante",
+                             gols_mandante, gols_visitante),
+        gols_sofridos = ifelse(mando == "time_mandante",
+                               gols_visitante, gols_mandante)
+    ) %>%
+    arrange(time, rodada) %>%
+    bind_rows(
+    (jogos_futuros_ewma %>%
+     mutate(
+         gols_mandante = rpois(n(), (theta_m + phi_v)/2),
+         gols_visitante = rpois(n(), (theta_v + phi_m)/2)
+     ) %>%
+     pivot_longer(
+         cols = c(time_mandante, time_visitante),
+         names_to = "mando",
+         values_to = "time"
+     ) %>%
+     mutate(
+         gols_feitos = ifelse(mando == "time_mandante",
+                              gols_mandante, gols_visitante),
+         gols_sofridos = ifelse(mando == "time_mandante",
+                                gols_visitante, gols_mandante)
+     ) %>%
+     arrange(time, rodada))) %>%
+    group_by(time) %>%
+    mutate(
+        theta_hist = calcula_ewma(gols_feitos),
+        phi_hist = calcula_ewma(gols_sofridos)
+    ) %>%
+    filter(time %in% c("Athletico-PR", "Coritiba")) %>%
+    mutate(rod = case_when(rodada >= 26 ~ "Simulado",
+                           .default = "Real")) %>%
+    ggplot(aes(x = rodada, y = phi_hist, colour = time, shape = rod)) +
+    geom_point() +
+    geom_line() +
+    scale_colour_manual(values = c("#CC0000", "#009E73")) +
+    labs(y = expression(Phi), x = "Rodada",
+         colour = "Time", shape = "Valor") +
+    theme_bw())
+
+ggpubr::ggarrange(plotlist = list(g_theta, g_phi),
+                  nrow = 2)
+```
+
+Com isso, realizemos a simulação uma quantidade grande de vezes, considerando agora a taxa adaptativa, e comparemos os resultados obtidos:
+
+```{r simulacao_ewma, cache = T}
+resultados_mc <- mclapply(1:n_simulacoes, simula_campeonato_ewma,
+                          mc.cores = detectCores() - 2)
+```
+
+## 1. Qual a probabilidade de cada time ser campeão?
+
+```{r perg1_comp, echo = F}
+left_join(
+    data.frame(Time = unique(jogos_futuros$time_mandante) %>% sort()),
+    lapply(resultados, function(x){x$campeao}) %>%
+    unlist() %>%
+    table() %>%
+    as.data.frame() %>%
+    mutate(Freq = Freq/n_simulacoes) %>%
+    select("Time" = ".","Freq_Ori" = "Freq"), by = "Time") %>%
+    left_join(lapply(resultados_mc, function(x){x$campeao}) %>%
+    unlist() %>%
+    table() %>%
+    as.data.frame() %>%
+    mutate(Freq = Freq/100000) %>%
+    select("Time" = ".","Freq_Adap" = "Freq")) %>%
+    arrange(desc(Freq_Adap)) %>%
+    mutate(Freq_Ori = case_when(is.na(Freq_Ori) ~ 0,
+                                .default = Freq_Ori),
+           Freq_Adap = case_when(is.na(Freq_Adap) ~ 0,
+                                .default = Freq_Adap),
+           Freq_Ori = scales::percent(Freq_Ori),
+           Freq_Adap = scales::percent(Freq_Adap)) %>%
+    kable()
+```
+
+\newpage
+
+## 2. Qual a probabilidade de cada time ser rebaixado?
+
+```{r perg2_comp, echo = F}
+left_join(
+    data.frame(Time = unique(jogos_futuros$time_mandante) %>% sort()),
+    lapply(resultados, function(x){x$rebaixados}) %>%
+    unlist() %>%
+    table() %>%
+    as.data.frame() %>%
+    mutate(Freq = Freq/(4 * n_simulacoes)) %>%
+    select("Time" = ".","Freq_Ori" = "Freq"), by = "Time") %>%
+    left_join(lapply(resultados_mc, function(x){x$rebaixados}) %>%
+    unlist() %>%
+    table() %>%
+    as.data.frame() %>%
+    mutate(Freq = Freq/400000) %>%
+    select("Time" = ".","Freq_Adap" = "Freq")) %>%
+    arrange(desc(Freq_Adap)) %>%
+    mutate(Freq_Ori = case_when(is.na(Freq_Ori) ~ 0,
+                                .default = Freq_Ori),
+           Freq_Adap = case_when(is.na(Freq_Adap) ~ 0,
+                                .default = Freq_Adap),
+           Freq_Ori = scales::percent(Freq_Ori),
+           Freq_Adap = scales::percent(Freq_Adap)) %>%
+    kable()
+```
+
+\newpage
+
+## 3. Qual a probabilidade do campeonato ser decidido pelos critérios de desempate?
+
+```{r perg3_comp, echo = F}
+print("Original:")
+((sapply(resultados, function(x) {x$pontos_todos[1, 2] == x$pontos_todos[2, 2]}) %>%
+    sum())/n_simulacoes) %>% scales::percent(accuracy = 0.01)
+
+print("Adaptativo:")
+((lapply(resultados_mc, function(x) {x$pontos_todos[1, 2] == x$pontos_todos[2, 2]}) %>% unlist() %>%
+    sum())/(10 * n_simulacoes)) %>% scales::percent(accuracy = 0.01)
+```
+
+## 4. Qual o valor esperado do número de pontos do campeão?
+
+```{r perg4_comp, echo = F}
+print("Original:")
+sapply(resultados, function(x) {x$pontos_campeao}) %>%
+    mean()
+
+print("Adaptativo:")
+sapply(resultados_mc, function(x) {x$pontos_campeao}) %>%
+    mean()
+```
+
+\newpage
+
+## 5. Quantos pontos uma qualquer equipe precisa fazer para ter pelo menos 90% de chance de ser o campeão?
+
+```{r perg5_comp, echo = F}
+hist(lapply(resultados_mc, function(x) {x$pontos_todos[2, 2]}) %>%
+    unlist(),
+     main = "Distribuição dos pontos dos vice-campeões",
+     xlab = "Pontos")
+```
+
+```{r perg5_2_comp, echo = F}
+print("Original:")
+quantile(lapply(resultados, function(x) {x$pontos_todos[2, 2]}) %>%
+         unlist(), 0.9)
+
+print("Adaptativo:")
+quantile(lapply(resultados_mc, function(x) {x$pontos_todos[2, 2]}) %>%
+         unlist(), 0.9)
+```
+
+\newpage
+
+## 6. Quantos pontos são necessários que um time qualquer faça para ter pelo menos 95% de chance de não ser rebaixado?
+
+```{r perg6_comp, echo = F}
+hist(lapply(resultados_mc, function(x) {x$pontos_todos[17, 2]}) %>%
+    unlist(),
+     main = "Distribuição dos pontos dos 17º colocados",
+     xlab = "Pontos")
+```
+
+```{r perg6_2_comp, echo = F}
+print("Original:")
+quantile(lapply(resultados, function(x) {x$pontos_todos[17, 2]}) %>%
+    unlist(), 0.95)
+
+print("Adaptativo:")
+quantile(lapply(resultados_mc, function(x) {x$pontos_todos[17, 2]}) %>%
+    unlist(), 0.95)
+```

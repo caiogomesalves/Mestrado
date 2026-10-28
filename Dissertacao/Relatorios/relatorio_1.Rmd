@@ -1,0 +1,543 @@
+---
+output:
+  stevetemplates::article:
+    citation_package: natbib
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+title: "Resultados preliminares"
+author:
+- name: Caio Gomes Alves
+  affiliation: Instituto de Matemática, Estatística e Computação Científica - UNICAMP
+# abstract: "This document provides an introduction to R Markdown, argues for its..."
+# keywords: "pandoc, r markdown, knitr"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+bibliography: ref.bib
+biblio-style: apsr
+---
+
+```{r setup, include = F}
+library(knitr)
+library(tidyverse)
+source("~/Mestrado/Dissertacao/functions.R")
+load("~/resultados_ajuste_iran.RData")
+load("~/resultados_sensibilidade_iran.RData")
+theta_matrix_final_1 <- theta_matrix_final
+resumo_oat_1 <- resumo_oat
+resumo_lhs_1 <- resumo_lhs
+erro_relativo_1 <- erro_relativo
+background_medio_1 <- (Reduce("+", backgrounds_finais_sens))/120
+load("~/resultados_sensibilidade_iran_3.RData")
+theta_matrix_final_2 <- theta_matrix_final
+resumo_oat_2 <- resumo_oat
+resumo_lhs_2 <- resumo_lhs
+erro_relativo_2 <- erro_relativo
+background_medio_2 <- (Reduce("+", backgrounds_finais_sens))/120
+```
+
+# Mudanças na modelagem
+
+## Parametrização
+
+Para que a comparação entre o método proposto e o já existente pelo pacote \texttt{ETAS} seja mais direta, a parametrização do modelo foi ajustada para seguir a de \cite{Jalilian_2019}, como segue:
+
+\begin{equation}
+\lambda_{\theta}(t,x,y|\mathcal{H}_{t}) = \mu(x,y) + \sum_{i: t_{i} < t}\kappa_{A,\alpha}(m_{i})g_{c,p}(t - t_{i})f_{D,\gamma,q}(x - x_{i}, y - y_{i}, m_{i})
+\end{equation}
+
+Onde:
+
+\begin{align*}
+\kappa_{A,\alpha}(m_{i}) &= A \, \mathrm{exp}\left(\alpha(m_{i} - m_{0})\right) \\ \\
+g_{c,p}(t - t_{i}) &= \frac{p-1}{c}\left(1 + \frac{t - t_{i}}{c}\right)^{-p} \\ \\
+f_{D,\gamma,q}(x - x_{i},y - y_{i}; m_{i}) &= \frac{q - 1}{\pi D \mathrm{exp}\left(\gamma(m_{i} - m_{0})\right)}\left(1 + \frac{(x - x_{i})^{2} + (y - y_{i})^{2}}{D \mathrm{exp}\left(\gamma(m_{i} - m_{0})\right)}\right)
+\end{align*}
+
+Assim, tanto a produtividade $\kappa(m_{i})$ quanto a distribuição da Lei de Omori Modificada $g(t - t_{i})$ seguem as mesmas parametrizações anteriores, mudando a distribuição espacial dos *aftershocks* para uma radialmente simétrica e isotrópica $f(x - x_{i}, y - y_{i};m_{i})$, como proposta por \cite{Ogata_1988}. O *background rate* $\mu(x,y)$ é estimado de maneira semi-paramétrica, por um *kernel* adaptativo e condicional às probabilidades de ser pai/filho.
+
+Uma diferença para o que é feito pelo pacote \texttt{ETAS} é que o mesmo considera a distribuição das magnitudes (marcas) como seguindo uma distribuição exponencial com parâmetro $\beta$ a ser estimada. No método proposto, é considerada a Lei de Gutenberg-Richter e a modificação de Utsu, como segue:
+
+\begin{align*}
+\log_{10}(N) &= a - b \times m \\
+\hat{b} &= \frac{\log_{10}(e)}{\left(\bar{m} - m_{0}\right)}
+\end{align*}
+
+Onde $a$ é uma constante não que não precisa ser estimada, $\bar{m}$ é a média das magnitudes maiores do que $m_{0}$ no catálogo, enquanto que $\hat{b}$ é estimado de maneira separada dos demais parâmetros do modelo (devido à independência das marcas que é suposição do modelo).
+
+A log-verossimilhança do modelo foi implementada pela função \texttt{log_lik_etas} e depende das probabilidades de ser pai/filho, estimadas no passo E. O gradiente da log-verossimilhança também foi implementado e atualizado para incluir os novos parâmetros, por meio da função \texttt{gradiente_etas_completo}. Ambos são usados no passo M, por meio da função \texttt{optim}, utilizando o método L-BFGS-B que impõe restrições de caixa para que não ocorram escapes do espaço paramétrico.
+
+## Otimização do cálculo de probabilidades
+
+O cálculo principal do passo E do algoritmo EM implementado se dá por meio das seguintes contas:
+
+\begin{align*}
+p_{i,j} &= \begin{cases}
+\frac{\kappa(m_{i})g(t_{j} - t_{i})f(x_{j} - x_{i},y_{j} - y_{i};m_{i})}{\lambda_{\theta}(t_{j},x_{j},y_{j}|\mathcal{H}_{t_{j}})}, & t_{j} > t_{i} \\
+0 & t_{j} \le t_{i}
+\end{cases} \\
+p_{j} &= \sum_{i: t_{i} < t_{j}}p_{i,j}, \,\,\, j = 1,\ldots,N
+\end{align*}
+
+Que calcula a probabilidade $p_{i,j}$ de um evento $j$ ser filho de um evento $i$, e a probabilidade $p_{j}$ de um evento ser filho independentemente de quem seja o pai. Anteriormente, a função implementada (\texttt{calcular_probabilidades}) fazia a chamada de funções externas repetidamente, sendo que a mesma podia ser feita apenas uma vez. A nova implementação está como segue:
+
+```{r calc_prob, eval = F}
+# Calcula as probabilidades p_ij (passo E do EM):
+calcular_probabilidades <- function(df_eventos, theta, M0, raster_mu,
+                                    x_grid, y_grid, num_cores = 1) {
+    n <- nrow(df_eventos)
+    # Valores do background rate (mu) para todos os eventos:
+    mu_vals <- func_nu(raster_mu, df_eventos, x_grid, y_grid)$lyr.1
+    # Cálculo paralelizado pelo mclapply:
+    probabilidades <- mclapply(1:n, function(j) {
+        # Primeiro evento tem probabilidade 0 de ser descendente:
+        if (j == 1) return(numeric(0))
+        # Atualiza o índice de cada evento:
+        i_indices <- 1:(j - 1)
+        numeradores <- kappa_func(df_eventos$mag[i_indices], M0, theta["A"], theta["alpha"]) *
+            g_func(df_eventos$time[j] - df_eventos$time[i_indices], theta["c"], theta["p"]) *
+            f_spatial(
+            (df_eventos$x[j] - df_eventos$x[i_indices])^2 +
+            (df_eventos$y[j] - df_eventos$y[i_indices])^2,
+            df_eventos$mag[i_indices], M0, theta["D"], theta["q"], theta["gamma"]
+            )
+        denom <- mu_vals[j] + sum(numeradores)
+        return(numeradores / denom)
+    }, mc.cores = num_cores)
+    prob_total <- vapply(probabilidades, sum, numeric(1))
+    # Retorna as probabilidades individuais e totais de cada evento:
+    list(probabilidades = probabilidades, prob_total = prob_total)
+}
+```
+
+Com a nova implementação, o tempo necessário para calcular o passo E foi reduzido drasticamente, acelerando assim o processo de modelagem como um todo.
+
+# Análise de Resíduos
+
+Podemos verificar a qualidade do ajuste realizado por meio dos resíduos do modelo. Para isso, avaliam-se duas dimensões: temporal e espacial. A partir de agora, todas as análises serão feitas para o catálogo do Irã, usado por Jalilian no artigo do pacote \texttt{etas}.
+
+## Temporais
+
+Para a parte temporal, podemos usar a intensidade condicional temporal que é dada pela integral da intensidade completa no espaço, que é dada por:
+
+\begin{equation}
+\int_{0}^{\Delta t}g(s)\, ds = 1 - \left(\frac{c}{\Delta t + c}\right)^{p - 1}
+\end{equation}
+
+Podemos assim calcular $\tau$ (a intensidade acumulada) para qualquer tempo, por meio da função \texttt{calcular_tau}. Sejam os tempos de dois eventos seguidos $t_{i}$ e $t_{j}$, então $\tau_{i,j} = \int_{t_{i}}^{t_{j}}g(s)\, ds = 1 - \left(\frac{c}{(t_{j} - t_{i}) + c}\right)^{p-1}$. Se o modelo estiver bem ajustado (no sentido dos parâmetros temporais $c$ e $p$), então $U_{i,j} = 1 - \exp(-\tau_{i,j})$, com $U \sim \mathrm{Unif}(0,1)$.
+
+Com os valores ajustados (`r thetas_iran[[length(thetas_iran)]][c("c", "p")]`), teremos que:
+
+```{r resid_temp, echo = F}
+# Taxa global de background (Eventos/dia em toda a região):
+mu_global_iran <- sum(pmax(0, 1 - prob_total_iran)) / max(df_temp_iran$time)
+
+# Tau_j para os tempos dos eventos:
+tau_j_iran <- calcular_tau(df_temp_iran$time, df_temp_iran, thetas_iran[[length(thetas_iran)]], mu_global_iran, M0 = 4.5)
+
+# Calcular U_j:
+delta_tau_iran <- diff(c(0, tau_j_iran))
+U_j_iran <- 1 - exp(-delta_tau_iran)
+
+par(mfrow = c(1, 2))
+
+# Gráfico A: tau_j vs j
+plot(1:length(tau_j_iran), tau_j_iran, type = "l", col = "blue", lwd = 2,
+     xlab = "Número do Evento (j)", ylab = expression(tau[j]),
+     main = "Tempos Transformados", asp = 1,
+     ylim = c(0, nrow(iran.cat$X$data)))
+abline(a = 0, b = 1, col = "red", lty = 2)
+
+# Gráfico B: Q-Q Plot de U_j
+plot(sort(U_j_iran), qunif(ppoints(length(U_j_iran))), pch = 20, col = "darkgreen",
+     xlab = "Empírico", ylab = "Teórico",
+     main = "Q-Q Plot de U_j", asp = 1,
+     ylim = c(0, 1))
+abline(a = 0, b = 1, col = "red", lty = 2)
+```
+
+Podemos ver que os tempos transformados e o Q-Q Plot apresentam ajustes ótimos, podendo ser feito o teste de Kolmogorov-Smirnov para testar se $U_{j}$ é uniformemente distribuído:
+
+```{r ks_teste, echo = F}
+ks.test(U_j_iran, punif)
+```
+
+Além disso, podemos fazer uma análise de resíduos por *bins*. Isso é feito por meio da diferença entre a quantidade de terrremotos ocorridos em cada intervalo e a quantidade esperada dada pelo modelo (calculada da mesma forma que anteriormente, porém com os limites sendo os de cada intervalo). Após isso, para serem normalizados, divide-se pela raiz quadrada da quantidade esperada e, caso o modelo esteja bem ajustado, não deve pode aparentar nenhuma forma de padrão temporal. Para 100 *bins*, teremos:
+
+```{r resid_temp_bin, echo = F, messages = F}
+# Número de caixas (bins) de tempo
+n_temp_iran <- 100
+janelas_tempo_iran <- seq(0, max(df_temp_iran$time), length.out = n_temp_iran + 1)
+
+# Contagem de eventos em cada janela:
+obs_temp_iran <- hist(df_temp_iran$time, breaks = janelas_tempo_iran, plot = FALSE)$counts
+
+# Contagens esperadas pela diferença do tau nos limites da janela:
+tau_limites_iran <- calcular_tau(janelas_tempo_iran, df_temp_iran, thetas_iran[[length(thetas_iran)]], mu_global_iran, M0 = 4.5)
+esp_temp_iran <- diff(tau_limites_iran)
+
+# Resíduos de Pearson Temporais:
+res_temp_pearson_iran <- (obs_temp_iran - esp_temp_iran) / sqrt(esp_temp_iran)
+
+# Resíduos Temporais:
+par(mfrow = c(1, 1))
+plot(janelas_tempo_iran[-1], res_temp_pearson_iran, type = "h", lwd = 2, col = "purple",
+     xlab = "Tempo (dias)", ylab = "Resíduos de Pearson",
+     main = "Resíduos Temporais Suavizados")
+abline(h = 0, col = "black")
+abline(h = c(-2, 2), col = "red", lty = 2)
+```
+
+## Espaciais
+
+A mesma ideia é feita para a dimensão espacial, sendo avaliada a diferença entre a quantidade de terremotos ocorridos em um *pixel* no *grid* da região de interesse, e a quantidade esperada dada pelo modelo. Para isso, é necessário criar a densidade espacial esperada gerada pelo *background rate* (que depende da probabilidade de ser pai/filho estimada pelo passo E do EM), que é dependente somente dos pais.
+
+Após isso, todos os eventos contribuem para a intensidade condicional, usando os parâmetros estimados pelo modelo. Com isso, temos que a quantidade esperada pelo modelo será dada pela soma da contribuição do *background* com a intensidade condicional de cada evento.
+
+Caso o modelo esteja bem ajustado, não deve ser possível identificar nenhuma forma de padrão espacialmente distribuído. Os resultados são os seguintes:
+
+```{r resid_espac, echo = F, fig.align = "center"}
+# Definir os pontos observados:
+pontos_iran <- ppp(df_temp_iran$x, df_temp_iran$y,
+                   window = owin(x_grid_iran[c(1, length(x_grid_iran))],
+                                 y_grid_iran[c(1, length(y_grid_iran))]),
+              marks = pmax(0, 1 - prob_total_iran))
+
+# Criar a densidade espacial esperada pelo Background:
+cell_area_iran <- diff(x_grid_iran)[1] * diff(y_grid_iran)[1]
+matriz_esperada_iran <- (rasters_iran[[length(rasters_iran)]] / (sum(rasters_iran[[length(rasters_iran)]]) * cell_area_iran)) * (mu_global_iran * max(df_temp_iran$time))
+
+# Extrair os 7 parâmetros do modelo convergido
+A_iran <- thetas_iran[[length(thetas_iran)]]["A"]
+alpha_iran <- thetas_iran[[length(thetas_iran)]]["alpha"]
+D_iran <- thetas_iran[[length(thetas_iran)]]["D"]
+q_par_iran <- thetas_iran[[length(thetas_iran)]]["q"]
+gamma_par_iran <- thetas_iran[[length(thetas_iran)]]["gamma"]
+
+M0 <- 4.5
+
+# Sobrepor a nuvem espacial para todos os eventos:
+for(i in 1:nrow(df_temp_iran)) {
+    xi_iran <- df_temp_iran$x[i]
+    yi_iran <- df_temp_iran$y[i]
+    mi_iran <- df_temp_iran$mag[i]
+    # Produtividade esperada do evento:
+    k_i_iran <- A_iran * exp(alpha_iran * (mi_iran - M0))
+    # Fator de escala espacial S_i:
+    S_i_iran <- D_iran * exp(gamma_par_iran * (mi_iran - M0))
+    # Matriz de distâncias ao quadrado:
+    dx2_iran <- (x_grid_iran - xi_iran)^2
+    dy2_iran <- (y_grid_iran - yi_iran)^2
+    dist2_matrix_iran <- outer(dx2_iran, dy2_iran, "+")
+    # Kernel de Pareto Bivariado Isotrópico (Fórmula do pacote ETAS)
+    term1_iran <- (q_par_iran - 1) / (pi * S_i_iran)
+    term2_iran <- (1 + (dist2_matrix_iran / S_i_iran))^(-q_par_iran)
+    kernel_esp_iran <- k_i_iran * term1_iran * term2_iran
+    matriz_esperada_iran <- matriz_esperada_iran + kernel_esp_iran
+}
+
+densidade_esp_iran <- im(t(matriz_esperada_iran), xcol = x_grid_iran, yrow = y_grid_iran)
+
+# Criar a densidade observada, forçando o alinhamento com xy:
+densidade_obs_iran <- density(pontos_iran, sigma = bw.diggle(pontos_iran), xy = densidade_esp_iran,
+                              weights = pontos_iran$marks)
+
+# Calcular os resíduos de Pearson:
+epsilon <- 1e-10
+res_spat_pearson_iran <- eval.im((densidade_obs_iran - densidade_esp_iran) / sqrt(densidade_esp_iran + epsilon))
+
+# Visualização:
+
+# min_val <- min(res_spat_pearson_iran)
+# max_val <- max(res_spat_pearson_iran)
+#
+# max_abs <- max(abs(c(min_val, max_val)))
+# sym_breaks <- seq(-max_abs, max_abs, length.out = 257)
+#
+# # 2. Build a dedicated colourmap object mapping the breaks to the Oslo palette
+# col_map <- colourmap(
+#     col = hcl.colors(256, palette = "Viridis", rev = F),
+#   breaks = sym_breaks
+# )
+
+plot(res_spat_pearson_iran, main = "Resíduos Espaciais Totais de Pearson", col = topo.colors(256))
+```
+
+Há regiões em que ocorreram eventos mas com pouca quantidade esperada (dada pelos pontos amarelos), enquanto que há uma região com valores esperados altos, mas poucos eventos ocorridos. Isso provavelmente ocorre pelo tamanho do *grid* (feito em 128 por 128 *pixels*), que caso fosse menor não teria uma região com subestimação.
+
+# Erro-padrão dos estimadores
+
+## Via Hessiana
+
+Como o gradiente da função de log-verossimilhança é dado para o \texttt{optim()}, ao final da otimização o valor da hessiana pode ser extraído, e pelo fato da verossimilhança ser fatorável, o resultado é uma matriz hessiana $\hat{H}_{\theta}$ bloco-diagonal, com parâmetros que não tem correlação tendo valor 0.
+
+Assim, o erro-padrão de cada estimativa pode ser calculado de forma:
+
+\begin{equation}
+EP(\theta) = \sqrt{\mathrm{diag}\left(\hat{H}_{\theta}^{-1}\right)}
+\end{equation}
+
+Para o catálogo do Irã (usado para título de comparação entre o método proposto e o de \cite{Jalilian_2019}), temos que a hessiana ao final do último passo é:
+
+```{r hessiana_iran, echo = F}
+hessianas_iran[[length(hessianas_iran)]]
+```
+
+Vale notar que a mesma é realmente bloco-diagonal, como esperado pela forma da verossimilhança. O erro-padrão estimado para cada parâmetro, junto com o valor estimado, será:
+
+```{r estimativas_iran, echo = F}
+est_iran <- thetas_iran[[length(thetas_iran)]]
+ep_iran <- sqrt(diag(solve(hessianas_iran[[length(hessianas_iran)]])))
+
+val_iran <- rbind(est_iran, ep_iran)
+
+row.names(val_iran) = c("Estimativas", "Erro-Padrão")
+val_iran
+```
+
+Os valores usados como chute inicial foram $\theta = (A = 0.23, \alpha = 2.8, c = 0.022, p = 1.12, D = 0.012, q = 2.3, \gamma = 0.03)$, que são os mesmos usados no *paper* \cite{Jalilian_2019}. Para título de comparação, os valores das estimativas e erros-padrões associados quando usada a função \texttt{etas} são:
+
+```{r estimativas_iran_etas, echo = F}
+iran.fit %>% print()
+```
+
+Podemos ver que os valores estimados por ambos os métodos foram (relativamente) próximos, mas com erros-padrões muito diferentes.
+
+## Via *bootstrap*
+
+Vale citar que a estimativa do erro-padrão dos estimadores obtida por meio da hessiana do passo M subestima a verdadeira variabilidade, como demonstrada por \cite{Louis_1982}. Isso ocorre pois a quantidade de observações efetiva é menor do que a usada para maximizar a função objetivo, que usa a verossimilhança completa ao invés da parcial.
+
+Uma forma de "prevenir" esse problema seria simular várias amostras *bootstrap* de catálogos usando os valores estimados pelo modelo (tanto de *background rate* quanto de $\hat{\theta}$), reajustar o modelo para cada uma das amostras, e utilizar os resultados para calcular o erro-padrão *bootstrap* (além de outras quantidades, como viés e intervalos de confiança *bootstrap*).
+
+Por isso, um estudo de simulação foi feito, com 100 amostras *bootstrap* geradas a partir das estimativas finais de $\hat\mu(x,y)$ e $\hat{\theta}$, com diferentes sementes, utilizando $\hat{b} = 2$ (aproximadamente o valor estimado para a Lei de Gutenberg-Richter, dado por $2.009878$) e a função \texttt{simular_catalogo_etas}. Para cada uma das $b = 1,\ldots,100$ amostras o valor de $\hat{\theta}^{(b)}$ foi extraído, juntamente com o $\hat{\mu}(x,y)^{(b)}$. Todas convergiram após 11 a 18 iterações, sem nenhuma falha.
+
+Os valores dos erro-padrão e viés *bootstrap* são dados por:
+
+```{r valores_bootstrap, echo = F}
+val_iran_2 <- val_iran %>%
+    rbind(bootstrap_se_iran, bootstrap_bias_iran)
+
+rownames(val_iran_2) = c("Est", "EP", "EPB", "ViésB")
+val_iran_2
+```
+
+As duas primeiras linhas são os valores estimados pelo modelo e seu erro-padrão usual (calculado via hessiana). Podemos ver que para todos os parâmetros, o erro-padrão *bootstrap* é maior do que o usual. Os intervalos de confiança *bootstrap* serão:
+
+```{r ci_bootstrap, echo = F}
+bootstrap_ci_iran
+```
+
+Para $\gamma$ ocorre um problema em que muitas simulações geraram valores de terremotos muito próximos do limiar ($m_{0} = 4.5$), de modo que o modelo não detecta influência das magnitudes no aumento de dispersão espacial dos *aftershocks*. Assim, o quantil 2.5% desse parâmetro captura o limiar do espaço paramétrico do \texttt{optim} (definido em 10^{-10}).
+
+# Predição
+
+Para a predição de eventos futuros (algo complicado de ser feito, como explicitado em \cite{Veen_2008}, \cite{Ogata_1988} e \cite{Ogata_1998}, por exemplo), podemos usar uma metodologia baseada na simulação de catálogos futuros, condicional ao histórico dado pelo catálogo real, ao *background rate* estimado e ao conjunto de parâmetros obtidos pelo modelo.
+
+Com esse método, é gerado um catálogo "expandido", com os eventos já ocorridos e novos que ocorrem após o tempo final $T$. Geram-se várias simulações, cada uma gerando uma possível realização do futuro, e agrega-se os valores temporal/espacialmente, para serem feitas predições do tipo: quantos eventos ocorrerão em $[T, T + \Delta t]$, e onde os mesmos possuem maiores chances de ocorrência.
+
+Foi implementada uma função chamada \texttt{simular_previsao_etas} que realiza esse processo utilizando o catálogo passado, $\hat{\mu}(x,y), \hat{\theta}$ e um valor de horizonte (quantos dias serão simulados após o tempo final $T$). Outra função foi implementada, chamada \texttt{gerar_previsoes_etas}, recebendo os mesmos objetos e usando \texttt{simular_previsao_etas} internamente. O valor de $\hat{\theta}$ usado pode ser um único vetor (para a estimativa pontual, por exemplo), ou uma lista de vetores (para as réplicas *bootstrap*, por exemplo), que é sorteada em cada simulação. Dessa forma, é possível propagar a incerteza da estimação de $\hat{\theta}$ na predição, aproveitando os valores obtidos no estudo de simulação.
+
+As predições (temporais e espaciais) são posteriormente agregadas usando as funções \texttt{agregar_previsao_temporal} e \texttt{agregar_previsao_espacial}, que extraem as informações de cada uma das simulações e retornam estatísticas como:
+
+- Quantidade média de eventos por período de tempo (deixei 30 dias por padrão, para predição a nível de meses), bem como mediana e percentis (2.5% e 97.5%);
+- Contagem média de eventos por célula/*pixel* do *grid* de interesse, bem como a probabilidade de que ao menos um evento tenha ocorrido na célula (calculada de maneira empírica, usando que $P(N_{\mathrm{celula}} \ge 1) = 1 - \exp(-\hat{\lambda}_{\mathrm{celula}})$, com $\hat{\lambda}_{celula}$ sendo estimada como a contagem média na célula).
+
+## Usando um único $\theta$
+
+Para o catálogo de terremotos no Irã, simulei 1.000 predições após o tempo final, usando os valores de $\hat{\theta}$ (`r thetas_iran[[length(thetas_iran)]]`), em um horizonte de 210 dias (7 meses). Os valores temporais agregados para os 210 dias, mês a mês foram:
+
+```{r pred_temp_unico, echo = F, cache = T}
+# Predições de um theta único:
+simulacoes_iran <- gerar_previsoes_etas(catalogo_historico = iran.cat,
+                                        theta = thetas_iran[[length(thetas_iran)]],
+                                        M0 = 4.5, b = 2, Mmax = 10,
+                                        T0 = max(iran.cat$rtperiod), horizonte = 210,
+                                        mu_type = "raster",
+                                        mu_raster = rasters_iran[[length(rasters_iran)]],
+                                        x_grid = x_grid_iran, y_grid = y_grid_iran,
+                                        n_sim = 1000,
+                                        semente = 5050)
+
+pred_temp_iran <- agregar_previsao_temporal(simulacoes_iran, 30)
+
+pred_espac_iran <- agregar_previsao_espacial(simulacoes_iran, x_grid_iran, y_grid_iran)
+
+# Predições de thetas gerados por bootstrap:
+simulacoes_iran_boot <- gerar_previsoes_etas(catalogo_historico = iran.cat,
+                                             theta = thetas_ajustados_iran,
+                                             M0 = 4.5, b = 2, Mmax = 10,
+                                             T0 = max(iran.cat$rtperiod), horizonte = 210,
+                                             mu_type = "raster",
+                                             mu_raster = rasters_iran[[length(rasters_iran)]],
+                                             x_grid = x_grid_iran, y_grid = y_grid_iran,
+                                             n_sim = 1000,
+                                             semente = 5050)
+
+pred_temp_iran_boot <- agregar_previsao_temporal(simulacoes_iran_boot, 30)
+
+pred_espac_iran_boot <- agregar_previsao_espacial(simulacoes_iran_boot, x_grid_iran, y_grid_iran)
+
+pred_temp_iran
+```
+
+Ou seja, a quantidade média esperada para cada mês é de aproximadamente 5 eventos/mês (o valor observado pelo catálogo completo é de aproximadamente 5.40 eventos/mês, com os últimos 12 meses tendo (`r (cut(iran.cat$X$data$t, seq(0, max(iran.cat$rtperiod), by = 30)) %>% table() %>% as.numeric())[(462-12):462]`) eventos). Ou seja, a predição foi capaz de capturar o comportamento da quantidade de eventos ocorrendo em períodos de tempo futuros ao fim do período de observação.
+
+Para a predição espacial, temos que o mapa da contagem média por célula e a probabilidade de ao menos um evento será:
+
+```{r mapa_pred_unico, echo = F}
+grid_iran <- expand.grid(x = x_grid_iran, y = y_grid_iran)
+grid_iran$pred_med_1 <- as.vector(pred_espac_iran$contagem_media)
+grid_iran$pred_prob_1 <- as.vector(pred_espac_iran$contagem_media)
+grid_iran$pred_med_boot <- as.vector(pred_espac_iran_boot$contagem_media)
+grid_iran$pred_prob_boot <- as.vector(pred_espac_iran_boot$contagem_media)
+z_max <- max(grid_iran$pred_med_1, grid_iran$pred_med_boot,
+             grid_iran$pred_prob_1, grid_iran$pred_prob_boot)
+
+par(mfrow = c(1, 2))
+fields::quilt.plot(grid_iran$x, grid_iran$y, grid_iran$pred_med_1, nx = 128, ny = 128, asp = T, main = "Média", zlim = c(0, z_max))
+maps::map("world", add = T, col = "grey50")
+fields::quilt.plot(grid_iran$x, grid_iran$y, grid_iran$pred_prob_1, nx = 128, ny = 128, asp = T, main = "P(N >= 1)", zlim = c(0, z_max))
+maps::map("world", add = T, col = "grey50")
+```
+
+## Usando os $\theta$ *bootstrap*
+
+Quando usamos os valores de vários $\hat{\theta}^{(b)}$ estimados por meio de um *bootstrap*, aumentamos a incerteza presente na predição, mas os resultados são apresentados da mesma maneira. Teremos que a predição temporal será:
+
+```{r pred_temp_boot, echo = F}
+pred_temp_iran_boot
+```
+
+Neste caso, o valor médio por mês é um pouco menor do que no caso anterior, provavelmente devido à quantidade de simulações em que $\hat{\theta}^{(b)}$ possui valores que diminuem a intensidade condicional. De maneira similar, teremos que espacialmente:
+
+```{r mapa_pred_boot, echo = F}
+par(mfrow = c(1, 2))
+fields::quilt.plot(grid_iran$x, grid_iran$y, grid_iran$pred_med_boot, nx = 128, ny = 128, asp = T, main = "Média", zlim = c(0, z_max))
+maps::map("world", add = T, col = "grey50")
+fields::quilt.plot(grid_iran$x, grid_iran$y, grid_iran$pred_prob_boot, nx = 128, ny = 128, asp = T, main = "P(N >= 1)", zlim = c(0, z_max))
+maps::map("world", add = T, col = "grey50")
+```
+
+# Sensibilidade
+
+Um dos principais problemas apontados pelo autor, é que a função \texttt{etas} é extremamente sensível à escolha de chute inicial para os parâmetros. Para verificar se o mesmo ocorre com o método proposto, foi realizado um estudo de sensibilidade, variando o valor inicial de $\theta$ em cada iteração.
+
+Os catálogos foram contruídos usando a função \texttt{simular_catalogo_etas}, com $\theta = (A = 0.5, \alpha = 1.5, c = 0.25, p = 1.5, D = 0.1, q = 2, \gamma = 0.1)$, considerando $m_{0} = 4.5$ e $b = 1.5$, usando \texttt{set.seed(123)}. Dois cenários de tamanho de amostra foram explorados, primeiramente usando \texttt{T_max = 3650}, e posteriormente usando \texttt{T_max = 5000}, para verificar se o tamanho de catálogo influencia no resultado final.
+
+Duas metodologias são usadas para variar os parâmetros: **OAT** e **LHS**. No primeiro método, todos os parâmetros são mantidos no valor verdadeiro (especificado anteriormente), e cada um é perturbado de maneira individual separadamente (por isso **OAT** - *One At Time*). Cada parâmetro varia entre $\frac{1}{4}$ do valor real até 2 vezes o valor real, ao longo de uma sequência igualmente espaçada com 10 valores (menos os parâmetros $p$ e $q$ que precisam ser maiores do que 1, de modo que seus valores são determinados por $\theta_{variavel} = 1 + (\theta_{verdadeiro} - 1) \times \mathrm{multiplicador}$). Assim, são criados 70 pontos de partida distintos, cada um variando apenas um parâmetro dentre os 7 possíveis.
+
+Porém, não é usual que todos os parâmetros sejam conhecidos a menos de um deles. Para isso um segundo método foi implementado, em que os valores de todos os parâmetros são perturbados conjuntamente usando amostragem por hipercubo latino (**LHS** - *Latin Hypercube Sampling*), que funciona da seguinte forma: para $n$ pontos de partida em $k$ parâmetros, cada uma das $k$ dimensões é dividida em $n$ faixas e cada uma é usada exatamente uma vez, garantindo cobertura equilibrada do espaço paramétrico multidimensional com menos pontos do que um fatorial completo. Aqui, foram utilizadas 50 pontos de partida distintos.
+
+Para fins de visualização, as primeiras e as últimas entradas da matriz de *design* dos pontos iniciais é dada por:
+
+```{r matrix_design_sens, echo = F}
+theta_matrix_design[c(1:10, 111:120), ]
+```
+
+Note que nas primeiras 10 linhas, todos os parâmetros são fixos, e muda-se apenas o valor de $A$, enquanto que nas 10 últimas, todos os parâmetros variam conjuntamente.
+
+## Resultados para \texttt{T_max = 3650}
+
+Primeiramente, considerando um catálogo de 10 anos (3.650 dias), vejamos os valores sumarizados de cada uma das colunas, sua amplitude e desvios-padrão associados, para os 70 valores amostrados via **OAT**:
+
+```{r est_desc_oat_1, echo = F}
+print("Sumário:")
+theta_matrix_final_1[1:70, ] %>% apply(2, summary)
+print("Amplitude:")
+theta_matrix_final_1[1:70, ] %>% apply(2, function(x) {diff(range(x))})
+print("Desvios-Padrão:")
+theta_matrix_final_1[1:70, ] %>% apply(2, sd)
+```
+
+E para os 50 valores amostrados via **LHS**:
+
+```{r est_desc_lhs_1, echo = F}
+print("Sumário:")
+theta_matrix_final_1[71:120, ] %>% apply(2, summary)
+print("Amplitude:")
+theta_matrix_final_1[71:120, ] %>% apply(2, function(x) {diff(range(x))})
+print("Desvios-Padrão:")
+theta_matrix_final_1[71:120, ] %>% apply(2, sd)
+```
+
+Podemos notar que, essencialmente, todos os valores iniciais resultaram em valores finais extremamente semelhantes, com uma variabilidade muito baixa, em ambos os métodos de amostragem. Assim, podemos constatar que o método proposto não é sensível à escolha de parâmetros iniciais. Além disso, é possível verificar o quanto cada parâmetro foi estimado de maneira errônea, por meio do erro relativo médio (dado por $\frac{\theta_{est} - \theta_{ver}}{\theta_{ver}}$) de cada parâmetro:
+
+```{r erros_1, echo = F}
+print("Erro relativo médio:")
+erro_relativo_1 %>% colMeans()
+```
+
+Podemos verificar também, além disso, o erro quadrático médio de cada um dos parâmetros:
+
+```{r eqm_1, echo = F}
+print("Erro quadrático médio:")
+(theta_matrix_final_1 - matrix(theta_verdadeiro[colnames(theta_matrix_final_1)], nrow = 120,ncol=7,byrow = T))%>% apply(2,function(x){mean(x^(2))})
+```
+
+Apesar do erro quadrático médio baixo, o erro relativo médio mostra que alguns parâmetros sofrem desvios significativos de suas estimativas verdadeiras (notadamente $c$, $D$ e $\gamma$, com desvios próximos a 50% do valor original).
+
+## Resultados para \texttt{T_max = 5000}
+
+Vejamos se o aumento no tamanho do catálogo tem influência nos resultados da sensibilidade. Primeiramente, para os 70 valores amostrados via **OAT**:
+
+```{r est_desc_oat_2, echo = F}
+print("Sumário:")
+theta_matrix_final_2[1:70, ] %>% apply(2, summary)
+print("Amplitude:")
+theta_matrix_final_2[1:70, ] %>% apply(2, function(x) {diff(range(x))})
+print("Desvios-Padrão:")
+theta_matrix_final_2[1:70, ] %>% apply(2, sd)
+```
+
+E para os 50 valores amostrados via **LHS**:
+
+```{r est_desc_lhs_2, echo = F}
+print("Sumário:")
+theta_matrix_final_2[71:120, ] %>% apply(2, summary)
+print("Amplitude:")
+theta_matrix_final_2[71:120, ] %>% apply(2, function(x) {diff(range(x))})
+print("Desvios-Padrão:")
+theta_matrix_final_2[71:120, ] %>% apply(2, sd)
+```
+
+Aqui, temos o comportamento semelhante aos resultados obtidos com um catálogo de 10 anos, de alta consistência na estimação de todos os parâmetros, não sendo sensível à escolha do chute inicial. Vejamos porém, seu comportamento em relação aos erros de estimação:
+
+```{r erros_2, echo = F}
+print("Erro relativo médio:")
+erro_relativo_2 %>% colMeans()
+print("Erro quadrático médio:")
+(theta_matrix_final_2 - matrix(theta_verdadeiro[colnames(theta_matrix_final_2)], nrow = 120,ncol=7,byrow = T))%>% apply(2,function(x){mean(x^(2))})
+```
+
+É possível perceber que os erros relativos de $A$ e $\alpha$ mantiveram-se pequenos, os de $c$ e $p$ diminuíram consideravelmente e que os de $D$ e $q$ reduziram drasticamente. O único que aumentou significativamente o erro relativo foi $\gamma$, com quase 80% de erro relativo. Porém, esses parâmetros ($D,q$ e $\gamma$) são altamente correlacionados, e a estimação conjunta de todos é complicada. A nível de comparação, vejamos-os conjuntamente:
+
+```{r comp_erro, echo = F}
+comp_erro <- rbind(erro_relativo_1 %>% colMeans(),
+                   erro_relativo_2 %>% colMeans())
+row.names(comp_erro) <- c("T = 3650", "T = 5000")
+comp_erro %>% round(3)
+```
+
+Dito isso, o ajuste foi extremamente satisfatório, e mostrou-se consistente independentemente do tamanho amostral, com melhora no erro conforme o tamanho do catálogo aumenta. Podemos comprovar isso observando o *background rate* médio estimado em cada caso:
+
+```{r backgrounds_medios, echo = F}
+max_back_medio <- max(background_medio_1, background_medio_2, rasters_iran[[length(rasters_iran)]])
+par(mfrow = c(1, 2))
+fields::quilt.plot(grid_iran$x, grid_iran$y, as.vector(background_medio_1), nx = 128, ny = 128, main = "T_max = 3650", zlim = c(0, max_back_medio), asp = T)
+maps::map("world", add = T, col = "grey50")
+fields::quilt.plot(grid_iran$x, grid_iran$y, as.vector(background_medio_2), nx = 128, ny = 128, main = "T_max = 5000", zlim = c(0, max_back_medio), asp = T)
+maps::map("world", add = T, col = "grey50")
+```
+
+Quando comparamos com o *background rate* verdadeiro usado para a simulação, que é:
+
+```{r background_real, echo = F, fig.align = "center"}
+par(mfrow = c(1, 1))
+fields::quilt.plot(grid_iran$x, grid_iran$y, as.vector(rasters_iran[[length(rasters_iran)]]), nx = 128, ny = 128, main = "Background Rate Verdadeiro", zlim = c(0, max_back_medio), asp = T)
+maps::map("world", add = T, col = "grey50")
+```
+
+Vemos que o *background rate* médio do catálogo maior é mais semelhante ao real, o que pode justificar o menor erro nos estimadores.

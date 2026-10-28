@@ -234,7 +234,6 @@ convergiu_em <- function(novo, antigo, tol_rel = 1e-3, tol_abs = 1e-6) {
     all(abs(novo - antigo) <= limite)
 }
 
-
 #----Extração dos dados----
 
 # Transformações necessárias nos dados:

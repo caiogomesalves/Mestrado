@@ -1106,3 +1106,37 @@ for (k in 1:10) {
     thetas_ajustados_iran[[k]] <- thetas_iran_temp[[length(thetas_iran_temp)]]
     backgrounds_iran[[k]] <- rasters_iran_temp[[length(rasters_iran_temp)]]
 }
+
+#====Final====
+x_grid <- seq(range(peru.quakes$region.poly$long)[1], range(peru.quakes$region.poly$long)[2], length.out = 128)
+y_grid <- seq(range(peru.quakes$region.poly$lat)[1], range(peru.quakes$region.poly$lat)[2], length.out = 128)
+
+theta_verdadeiro <- c("A" = 0.5, "alpha" = 1.5, "c" = 0.25,
+                      "p" = 1.5, "D" = 0.1, "q" = 2, "gamma" = 1)
+
+lower_full <- c(1e-6, 1e-6, 1e-6, 1.001, 1e-6, 1.001, 1e-6)
+upper_full <- c(15, 10, 15, 15, 15, 15, 10)
+names(lower_full) <- names(upper_full) <- names(theta_verdadeiro)
+
+cat_sim <- simular_catalogo_etas(
+    theta = theta_verdadeiro, M0 = 4.5, b = 1.5, Mmax = 10,
+    T_max = 1000, mu_type = "raster", mu_raster = aj_peru$raster,
+    x_grid = x_grid, y_grid = y_grid,
+    checar_criticidade = T, semente = 123
+)
+
+cat_obj <- catalog(
+    cat_sim %>% mutate(t = ddays(time), data = POSIXct(1) + t,
+                       long = x, lat = y, date = date(data),
+                       time = format(data, format = "%H:%M:%S"))
+)
+
+n_eventos_b <- nrow(cat_obj$revents)
+
+aj <- ajustar_etas_proprio(
+    catalogo = cat_obj, theta0 = theta_verdadeiro, M0 = 4.5,
+    x_grid = x_grid, y_grid = y_grid,
+    num_cores = 6, max_iter_em = 100,
+    lower = lower_full, upper = upper_full,
+    guardar_historico = T
+)
