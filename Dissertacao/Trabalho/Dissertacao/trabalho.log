@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.10.20)  28 OCT 2026 13:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.10.20)  4 NOV 2026 13:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1382,19 +1382,19 @@ Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/10'
 (microtype)             (new value: 10.0pt) on input line 5.
 Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/7'
 (microtype)             (new value: 7.0pt) on input line 5.
-) [16
+ [16
 
-]
+]) [17]
 \openout2 = `introducao.aux'.
 
- (./introducao.tex) [17
+ (./introducao.tex) [18
 
 
 
 ]
 \openout2 = `point_processes.aux'.
 
- (./point_processes.tex [18
+ (./point_processes.tex [19
 
 
 
@@ -1402,51 +1402,41 @@ Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/7'
 ]
 Chapter 1.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 30.
+(Font)              <5> on input line 29.
 Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/5'
-(microtype)             (new value: 5.0pt) on input line 30.
-[19
+(microtype)             (new value: 5.0pt) on input line 29.
+[20
 
 ]
-Overfull \hbox (41.48409pt too wide) in paragraph at lines 52--53
+Overfull \hbox (41.48409pt too wide) in paragraph at lines 51--52
 []\T1/lmr/m/it/12 (-20) For any $\OML/lmm/m/it/12 n$ \T1/lmr/m/it/12 (-20) dis-joint win-dows $\OML/lmm/m/it/12 W[]; W[]; [] ; W[]$\T1/lmr/m/it/12 (-20) , the ran-dom vari-ables $\OML/lmm/m/it/12 N\U/matha/m/n/12 p\OML/lmm/m/it/12 W[]\U/matha/m/n/12 q\OML/lmm/m/it/12 ; N\U/matha/m/n/12 p\OML/lmm/m/it/12 W[]\U/matha/m/n/12 q\OML/lmm/m/it/12 ; [] ; N\U/matha/m/n/12 p\OML/lmm/m/it/12 W[]\U/matha/m/n/12 q$
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 82.
-[20]
-<Images/branching_process.pdf, id=257, 429.4506pt x 215.0217pt>
+Package cleveref Info: loaded `english' language definitions on input line 81.
+[21]
+<Images/branching_process.pdf, id=283, 429.4506pt x 215.0217pt>
 File: Images/branching_process.pdf Graphic file (type pdf)
 <use Images/branching_process.pdf>
-Package pdftex.def Info: Images/branching_process.pdf  used on input line 88.
+Package pdftex.def Info: Images/branching_process.pdf  used on input line 87.
 (pdftex.def)             Requested size: 429.44955pt x 215.02116pt.
-Package cleveref Info: loaded `english' language definitions on input line 105.
- [21 <./Images/branching_process.pdf>]
-Package cleveref Info: loaded `english' language definitions on input line 141.
- [22]
-
-LaTeX Warning: Reference `eq-model-etas-marks' on page 23 undefined on input line 153.
-
-Package cleveref Info: loaded `english' language definitions on input line 178.
-[23]
-Overfull \hbox (9.49977pt too wide) detected at line 191
+Package cleveref Info: loaded `english' language definitions on input line 104.
+ [22 <./Images/branching_process.pdf>]
+Package cleveref Info: loaded `english' language definitions on input line 140.
+ [23]
+Package cleveref Info: loaded `english' language definitions on input line 177.
+ [24]
+Overfull \hbox (9.49977pt too wide) detected at line 190
 []
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 206.
-[24]
-Package cleveref Info: loaded `english' language definitions on input line 216.
- [25] [26
+Package cleveref Info: loaded `english' language definitions on input line 205.
+[25]
+Package cleveref Info: loaded `english' language definitions on input line 215.
+ [26] [27
 
 ]
 Chapter 2.
-) [27
-
-]
-\openout2 = `considfinais.aux'.
-
- (./considfinais.tex
-Chapter 3.
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 7.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 231.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1454,7 +1444,76 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-) [28
+ [28
+
+]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 250.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 250.
+
+! Misplaced alignment tab character &.
+l.257 ...\Delta t_{ij})f(s_{j} - s_{i};m_{i})) = &
+                                                  \underbrace{\log(\kappa(m_...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
+
+Package cleveref Info: loaded `english' language definitions on input line 275.
+[29]
+Package cleveref Info: loaded `english' language definitions on input line 303.
+ [30]
+
+Class memoir Warning: The \bf font command is deprecated. 
+(memoir)              Use \textbf{...} or {\bfseries... } instead on input line 343.
+
+Package cleveref Info: loaded `english' language definitions on input line 385.
+[31]
+Overfull \vbox (25.04185pt too high) has occurred while \output is active []
+
+Package cleveref Info: loaded `english' language definitions on input line 385.
+ [32]
+Package cleveref Info: loaded `english' language definitions on input line 404.
+ [33]
+Chapter 3.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <17.28> on input line 407.
+Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/17.28'
+(microtype)             (new value: 17.28pt) on input line 407.
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 407.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\theta' on input line 407.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `superscript' on input line 407.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 407.
+
+[34
+
+]
+Chapter 4.
+) [35
+
+]
+\openout2 = `considfinais.aux'.
+
+ (./considfinais.tex
+Chapter 5.
+) [36
 
 
 
@@ -1465,13 +1524,15 @@ Package microtype Info: Loading generic protrusion settings for font family
 
 
 bibitemlist
-[29
+[37
 
 
 
-])
+]
+Package cleveref Info: loaded `english' language definitions on input line 150.
+ [38])
 Package cleveref Info: loaded `english' language definitions on input line 266.
- [30] [31
+ [39] [40
 
 
 ]
@@ -1483,14 +1544,10 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <24.88> on input line 1.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <20.74> on input line 1.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <17.28> on input line 1.
 Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/24.88'
 (microtype)             (new value: 24.88pt) on input line 1.
 Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/20.74'
 (microtype)             (new value: 20.74pt) on input line 1.
-Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/17.28'
-(microtype)             (new value: 17.28pt) on input line 1.
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 1.
@@ -1507,18 +1564,18 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 1.
 
-[32
+[41
 
 
 ]
 Package cleveref Info: loaded `english' language definitions on input line 36.
- [33]
+ [42]
 APPENDIX B.
 
 Package lipsum Warning: Unknown language 'latin'. Hyphenation patterns for
 (lipsum)                'english' will be used instead.
 
-[34
+[43
 
 ]
 APPENDIX C.
@@ -1527,9 +1584,9 @@ Overfull \hbox (0.76364pt too wide) in paragraph at lines 266--266
 []\T1/lmr/m/n/12 (-20) Morbi tin-cidunt po-suere arcu. Cras ve-ne-natis est vi-tae do-lor. Vi-va-mus scelerisque
  []
 
-[35
+[44
 
-] [36
+] [45
 
 
 
@@ -1539,16 +1596,16 @@ Overfull \hbox (0.76364pt too wide) in paragraph at lines 266--266
 
  (./anexos.tex
 ANNEX A.
-[37
+[46
 
 
 ]
 ANNEX B.
-[38
+[47
 
 ]
 ANNEX C.
-) [39
+) [48
 
 ]
 \tf@lof=\write6
@@ -1569,33 +1626,29 @@ ANNEX C.
  
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./trabalho.aux
-Package cleveref Info: loaded `english' language definitions on input line 15.
-Package cleveref Info: loaded `english' language definitions on input line 16.
+Package cleveref Info: loaded `english' language definitions on input line 17.
+Package cleveref Info: loaded `english' language definitions on input line 18.
  (./resumos.aux) (./introducao.aux) (./point_processes.aux) (./considfinais.aux) (./apendices.aux) (./anexos.aux))
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2020/03/25>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `trabalho.brf' has not changed.
-(rerunfilecheck)             Checksum: 4E780638ECD04E672FEB6E71D9DC5CC7;1358.
+(rerunfilecheck)             Checksum: F17EBFCBFB6F674422955F349349B5E2;1652.
  ) 
 Here is how much of TeX's memory you used:
- 36207 strings out of 468997
- 665614 string characters out of 5455098
- 1378284 words of memory out of 5000000
- 64279 multiletter control sequences out of 15000+600000
- 775055 words of font info for 282 fonts, out of 8000000 for 9000
+ 36353 strings out of 468997
+ 667784 string characters out of 5455098
+ 1380360 words of memory out of 5000000
+ 64377 multiletter control sequences out of 15000+600000
+ 784589 words of font info for 292 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 117i,18n,121p,1598b,866s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha10.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha12.1244pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/mathx10.720pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha12.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha8.600pk></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/doublestroke/dsrom12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
-Output written on trabalho.pdf (39 pages, 639077 bytes).
+ 117i,23n,121p,1598b,1001s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha10.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha12.1244pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha6.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/mathx10.720pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha12.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha8.600pk></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/doublestroke/dsrom12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
+Output written on trabalho.pdf (48 pages, 673802 bytes).
 PDF statistics:
- 754 PDF objects out of 1000 (max. 8388607)
- 604 compressed objects within 7 object streams
- 148 named destinations out of 1000 (max. 500000)
- 82738 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 904 PDF objects out of 1000 (max. 8388607)
+ 727 compressed objects within 8 object streams
+ 178 named destinations out of 1000 (max. 500000)
+ 86914 words of extra memory for PDF output out of 89155 (max. 10000000)
 

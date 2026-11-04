@@ -5,17 +5,17 @@
 % Configurações do pacote BACKREF
 % ----------------------------------------------------------
 % Usado sem a opção hyperpageref de backref
-\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+\renewcommand{\backrefpagesname}{Cited on page(s):~}
 % Texto padrão antes do número das páginas
 \renewcommand{\backref}{}
 % Define os textos da citação
 \renewcommand*{\backrefalt}[4]{
 	\ifcase #1 %
-		Nenhuma citação no texto.%
+		No text citation.%
 	\or
-		Citado na página #2.%
+		Cited in page #2.%
 	\else
-		Citado #1 vezes nas páginas #2.%
+		Cited #1 times in pages #2.%
 	\fi}%
 % ---
 
@@ -104,6 +104,8 @@
 \renewcommand{\tan}{\mathrm{tg}}
 \renewcommand{\csc}{\mathrm{cossec}}
 \renewcommand{\cot}{\mathrm{cotg}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 % ---
 % \DeclareMathOperator{\posto}{\mathrm{posto}}
 % \DeclareMathOperator{\conv}{\mathrm{conv}}

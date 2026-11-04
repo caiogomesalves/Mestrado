@@ -1,18 +1,18 @@
 \part{Theoretical foundations}
 
-\chapter{Point Processes}
+\chapter{Spatio-Temporal Point Processes}
 \label{chap-point_proc}
 
 \section{Marked Spatio-Temporal Point Processes}
 \label{sec-mark_point}
 
-A spatio-temporal point process $\mathcal{X}$ is a sequence of random variables on $\{S \subset \mathds{R}^{2} \times [0,T]\}$ in which the number of points in $S \times T$ has a counting measure $N(S \times T)$ who is almost surely finite, when $S \times T$ is bounded. Usually $\mathcal{X}$ is observed in a spatio-temporal window $W = S \times T$, and a realization of $\mathcal{X}$ in $W$ is a set $\mathbf{x} = \{(s_{i},t_{i}), i = 1,2,\ldots,n\}$, where $s_{i} = (x_{i},y_{i})$ and $t_{i}$ represent the spatial coordinates and times of occurrence of the i-th event, respectively.
+A spatio-temporal point process $\mathcal{X}$ is a sequence of random variables on $\{S \subset \mathds{R}^{2} \times [0,T]\}$ in which the number of points in $S \times T$ has a counting measure $N(S \times T)$ which is almost surely finite, when $S \times T$ is bounded. Usually $\mathcal{X}$ is observed in a spatio-temporal window $W = S \times T$, and a realization of $\mathcal{X}$ in $W$ is a set $\mathbf{x} = \{(s_{i},t_{i}), i = 1,2,\ldots,n\}$, where $s_{i} = (x_{i},y_{i})$ and $t_{i}$ represent the spatial coordinates and times of occurrence of the i-th event, respectively.
 
 A marked spatio-temporal point process incorporates a uniquely associated component $m_{i}$ with each event of $\mathcal{X}$. In earthquake's catalogs, the marks $m_{i}$ usually denote the magnitude of each event, while $(s_{i},t_{i})$ represents the longitude/latitude of the earthquake's epicenter and the ordered times of occurrence.
 
 \begin{table}[htb]
 \IBGEtab{%
-  \caption{Example of a earthquake catalog.}%
+  \caption{Example of an earthquake catalog.}%
   \label{tab-catalog-example}
 }{%
 \begin{tabular}{ccccc}
@@ -26,7 +26,6 @@ A marked spatio-temporal point process incorporates a uniquely associated compon
   \bottomrule
 \end{tabular}
 }{%
-  \fonte{The author.}
   }
 \end{table}
 
@@ -36,7 +35,7 @@ Consider the event history $\mathcal{H}_{t} = \left\{(x_{i},y_{i},t_{i},m_{i}) \
   \lambda(s,t|\mathcal{H}_{t}) = \lim_{\delta s,\delta t \to 0}\frac{\mathds{E}\left[N(\delta s \times \delta t)|\mathcal{H}_{t}\right]}{\delta s\, \delta t},
 \end{equation}
 
-\noindent that represents the expected number of events observed in an infinitesimal region of volume $(\delta s \times \delta t)$ centered around $(s, t)$, conditional in the observed history of the process up to time $t$. With it, we can define the process's associated compensator $\Lambda(t)$
+\noindent that represents the expected number of events observed in an infinitesimal region of volume $(\delta s \times \delta t)$ centered around $(s, t)$, conditional on the observed history of the process up to time $t$. With it, we can define the process's associated compensator $\Lambda(t)$
 \begin{equation}
   \label{eq-compensator}
   \Lambda(t|\mathcal{H}_{u}) = \int_{0}^{t}\int_{S}\lambda(s,u|\mathcal{H}_{u})ds\,du,
@@ -53,7 +52,7 @@ Consider the event history $\mathcal{H}_{t} = \left\{(x_{i},y_{i},t_{i},m_{i}) \
   \end{itemize}
 \end{definition}
 
-The Poisson Process have two properties that makes it very versatile for modeling point processes in general: \textbf{Superposition} and \textbf{Thinning}:
+The Poisson Process has two properties that makes it very versatile for modeling point processes in general: \textbf{Superposition} and \textbf{Thinning}:
 
 \begin{theorem}[Superposition of Poisson Processes]
   \label{teo-superposition}
@@ -70,7 +69,7 @@ With these two results, many point processes can have their intensity function m
 \section{Hawkes Processes and the ETAS Model}
 \label{sec-hawkes_proc}
 
-In many pontual phenomena, the ocurrence of events increases the probability of further events occuring, such as the spread of diseases, urban violence (\citeonline{mohler_2011}, \citeonline{ludwig_2025}) and earthquakes. For these kinds of processes, the intensity function must change dynamically, in order to accommodate the increase in probability triggered by a previous event.
+In many point phenomena, the ocurrence of events increases the probability of further events occuring, such as the spread of diseases, urban violence (\citeonline{mohler_2011}, \citeonline{ludwig_2025}) and earthquakes. For these kinds of processes, the intensity function must change dynamically, in order to accommodate the increase in probability triggered by a previous event.
 
 A self-exciting point process (occuring in time) was proposed by \citeonline{hawkes_1971a}, having intensity function given by
 \begin{equation}
@@ -80,10 +79,10 @@ A self-exciting point process (occuring in time) was proposed by \citeonline{haw
 
 \noindent where $\mu > 0$ is the baseline intensity of the process, and $\sum_{i:t_{i} < t}g(t - t_{i})$ represents the contribution of past events to the increase in the conditional intensity up to time $t$, with $g(v) \ge 0$ for nonnegative $v$ and 0 otherwise. To guarantee stationarity for this process (\citeonline{hawkes_1971b}), is necessary that $\int_{0}^{\infty}g(v)dv < 1$, otherwise the process can have infinite events in finite time.
 
-The \textbf{ETAS} (\textit{Epidemic-Type Aftershock Sequence}) Model was proposed by \citeonline{ogata_1988}, and is the most used to describe earthquake occurrences. The initial model was only concerned with the event times and was a particular case of a marked point process, for it's inclusion of the earthquake's magnitudes. This model assumes that any earthquake can come from one of two sources: the \textbf{background} events come from a Inhomogeneous Poisson Process, independent of time, and the \textbf{offspring} were triggered by a previous event (either a background, or another offspring). Another way to call these events are \textbf{aftershocks}, and have a more geological interpretation.  \autoref{fig-branching-process} shows the branching structure of a temporal \textbf{ETAS}, with events beign parents if they come from generation 0, and offsprings if they come from any other generation.
+The \textbf{ETAS} (\textit{Epidemic-Type Aftershock Sequence}) Model was proposed by \citeonline{ogata_1988}, and is the most used to describe earthquake occurrences. The initial model was only concerned with the event times and was a particular case of a marked point process, for it's inclusion of the earthquake's magnitudes. This model assumes that any earthquake can come from one of two sources: the \textbf{background} events come from a Inhomogeneous Poisson Process, independent of time, and the \textbf{offspring} were triggered by a previous event (either a background, or another offspring). Another way to call these events are \textbf{aftershocks}, and have a more geological interpretation.  \autoref{fig-branching-process} shows the branching structure of a temporal \textbf{ETAS}, with events being parents if they come from generation 0, and offsprings if they come from any other generation.
 
 \begin{figure}[htb]
-	\caption{\label{fig-branching-process}Branching of an self-exciting point process.}
+	\caption{\label{fig-branching-process}Branching of a self-exciting point process.}
 	\begin{center}
 	    \includegraphics[scale=1]{Images/branching_process.pdf}
 	\end{center}
@@ -122,7 +121,7 @@ In a later work, \citeonline{ogata_1998} extended the ETAS model to accommodate 
 
 Other parametrizations for $\lambda_{\theta}(x,y,t|\mathcal{H}_{t})$ were proposed by Ogata, but this one offers great flexibility by allowing the times of triggered events to be independent of the magnitudes, and by having separated parameters that control different aspects of the earthquake's intensity function behavior (temporal decay rate, influence of magnitudes in the number of expected offspring, spatial clustering, etc). The model can also incorporate the distribution of the marks/magnitudes
 \begin{equation}
-  \label{eq-model-eta-marks}
+  \label{eq-model-etas-marks}
   \lambda_{\theta,\beta}(x,y,t,m|\mathcal{H}_{t}) = \nu(m)\lambda_{\theta}(x,y,t|\mathcal{H}_{t}),
 \end{equation}
 
@@ -137,7 +136,7 @@ The expected number of offsprings generated from any event, regardless of its ma
   e_{\text{off}} = \int_{m_{0}}^{\infty}\kappa(m)\nu(m)dm = \frac{A\beta}{\beta - \alpha}.
 \end{equation}
 
-If $e_{\text{off}} < 1$, the model is stable (\citeonline{daley_jones_2003}), and has agglomerate size of $\frac{1}{(1 - e_{\text{off}})} = \frac{\beta - \alpha}{\beta(1 - A) - \alpha}$. Because the marks distribution is independent of the other parameters (as the complete intensity $\lambda_{\theta,\beta}(x,y,t,m|\mathcal{H}_{t})$ is the product of $\nu(v)$ and $\lambda_{\theta}(x,y,t|\mathcal{H}_{t})$), the estimation of $\beta$ can be done without the need to estimate the other parameters.
+If $e_{\text{off}} < 1$, the model is stable (\citeonline{daley_jones_2003}), and has cluster size of $\frac{1}{(1 - e_{\text{off}})} = \frac{\beta - \alpha}{\beta(1 - A) - \alpha}$. Because the marks distribution is independent of the other parameters (as the complete intensity $\lambda_{\theta,\beta}(x,y,t,m|\mathcal{H}_{t})$ is the product of $\nu(v)$ and $\lambda_{\theta}(x,y,t|\mathcal{H}_{t})$), the estimation of $\beta$ can be done without the need to estimate the other parameters.
 
 \section{Likelihood and Stochastic Declustering}
 \label{sec-likelihood-etas}
@@ -150,7 +149,7 @@ For this, maximum likelihood methods for estimating the vector parameters have m
   l(\theta,\beta|\mathcal{H}_{t}) = \sum_{i = 1}^{n}\log(\lambda_{\theta,\beta}(x_{i},y_{i},t_{i},m_{i}|\mathcal{H}_{t})) - \int_{m_{0}}^{\infty}\int_{0}^{T}\int\int_{S}\lambda_{\theta,\beta}(x,y,t,m|\mathcal{H}_{t})dx\, dy\, dt\, dm,
 \end{equation}
 
-\noindent where $T$ is the time of the last event in the catalog (the time integral starts at 0 because we can re-scale the event times $(t_{1},t_{2}, \ldots, t_{n})$ such that we have the fist event occur at time 0 with $(t_{1} - t_{1}, t_{2} - t_{1}, \ldots, t_{n} - t_{1}) = (0, t_{2}^{\ast}, \ldots, T)$). As seen in \autoref{eq-model-etas-marks}, $\beta$ and $\theta$ are separable, and $\int_{m_{0}}^{\infty}\nu(m)dm = 1$ (because it is a probability density function), we can decompose the previous log-likelihood as
+\noindent where $T$ is the time of the last event in the catalog (the time integral starts at 0 because we can re-scale the event times $(t_{1},t_{2}, \ldots, t_{n})$ such that we have the fist event occur at time 0 with $(t_{1} - t_{1}, t_{2} - t_{1}, \ldots, t_{n} - t_{1}) = (0, t_{2}^{\ast}, \ldots, T)$). As seen in Equation; \eqref{eq-model-etas-marks}, $\beta$ and $\theta$ are separable, and $\int_{m_{0}}^{\infty}\nu(m)dm = 1$ (because it is a probability density function), we can decompose the previous log-likelihood as
 \begin{equation*}
   l(\theta,\beta|\mathcal{H}_{t}) = l_{1}(\beta|\mathcal{H}_{t}) + l_{2}(\theta|\mathcal{H}_{t})
 \end{equation*}
@@ -202,24 +201,191 @@ Consider that each event $j$ has a parent $u_{j} \in \{0,1,\ldots,j-1\}$, in whi
   \rho_{j} = \frac{\mu(x_{j},y_{j})}{\lambda_{\theta}(x_{j},y_{j},t_{j}|\mathcal{H}_{t_{j}})} = 1 - \sum_{i<j}\rho_{ij}.
 \end{equation}
 
-Thus, the correct estimation of $\theta$ should in turn help estimate wheter an earthquake was triggerred by the background rate, or if it is an aftershock of another previous event in the catalog. When all the events in the catalog are far from the spatio-temporal border of the observed window $W$, we can consider the approximation $G(T - t_{i}) = F(S - s_{i};m_{i}) \approx 1$, and with the results from Equations \eqref{eq-rho-j} and \eqref{eq-rho-ij}, we can substitute the indicator function for the unobserved $u_{j}$'s in Equation \eqref{eq-sep-loglik} for their estimated probabilities as such
+Thus, the correct estimation of $\theta$ should in turn help estimate whether an earthquake was triggered by the background rate, or if it is an aftershock of another previous event in the catalog. When all the events in the catalog are far from the spatio-temporal border of the observed window $W$, we can consider the approximation $G(T - t_{i}) = F(S - s_{i};m_{i}) \approx 1$, and with the results from Equations \eqref{eq-rho-j} and \eqref{eq-rho-ij}, we can substitute the indicator function for the unobserved $u_{j}$'s in Equation \eqref{eq-sep-loglik} for their estimated probabilities as such
 \begin{align}
   \begin{split}
     \label{eq-loglik-simp}
-    l_{2}(\theta|\mathcal{H}_{t}) = &\sum_{j = 1}^{n}\rho_{j}\log\Big(\mu(x_{j},y_{j})\Big) + \sum_{i=1}^{n}\sum_{i < j}(1 - \rho_{j})\log\Big(\kappa(m_{i})g(t_{j} - t_{i})f(s_{j} - s_{i};m_{i})\Big) - \\
+    l_{2}(\theta|\mathcal{H}_{t}) = &\sum_{j = 1}^{n}\rho_{j}\log\Big(\mu(x_{j},y_{j})\Big) + \sum_{i=1}^{n}\sum_{i < j}\rho_{ij}\log\Big(\kappa(m_{i})g(t_{j} - t_{i})f(s_{j} - s_{i};m_{i})\Big) - \\
                                     &T\int\int_{S}\mu(x,y)dx\, dy + \sum_{i:t_{i} < t}\kappa(m_{i}).
   \end{split}
 \end{align}
 
 This form for the log-likelihood is easier to maximize given it's additive terms, but requires the calculated probabilities $\rho_{ij}$. The computational cost remains $\mathcal{O}(n^{2})$,
 
-\part{Materials and Methods}
+\part{Proposed Methodology}
 
-\chapter{Methods}
-\label{chap-methods}
+\chapter{Parameter Estimation}
+\label{chap-param-estim}
 
-\section{Parameter Estimation}
-\label{sec-parameter-estimation}
+TODO explicitar o pipeline do processo: apresentação de uma base de dados, uso do pacote ETAS, etc.
+
+\section{EM-Type Algorithm}
+\label{sec-em-type-alg}
+
+For the estimation of the parameter vector $\theta$, \citeonline{veen_2008} propose an EM-type approach, in which the probabilities $\rho_{j}$ are updated in the E-step and the simplified complete log-likelihood (as shown in Equation \eqref{eq-loglik-simp}) is maximized in the M-step. Since the $\beta$ parameter, who controls the distribution of the magnitudes, can be estimated analytically without interfering in the estimation of $\theta$, it will be not included in the EM scheme.
+
+Consider a catalog containing $n$ earthquakes above a specified cutoff magnitude $m_{0}$, arranged by event times, and for each event $i \in \{1,2,\ldots,n\}$, the catalog contains their longitudes and latitudes, magnitudes and time (in days) since the start of the monitoring $T_{0}$ (as presented in \autoref{tab-catalog-example}). Let $\Delta t_{ij} = (t_{j} - t_{i}), i<j,$ and $\Delta m_{i} = (m_{i} - m_{0})$.
+
+To initiate the algorithm, an initial guess for $\theta$ must be given, as well as an initial guess for $\mu(x,y)$ in all the study region. In their work, \citeonline{veen_2008} separate $S$ in arbitrary blocks and treat $\mu(x,y)$ as different constants in each block, but for this work, we divide $S$ in a grid, in which every cell will be the discretization of the function rate evaluated in it's centroid. For the initial guess, we assume that the background rate function is constant in all the region, in a way that $\mu^{(0)}(x,y) = \frac{1}{N_{grid}}$ , where $N_{grid}$ is the number of cells in which $S$ were divided.
+
+In \citeonline{jalilian_2019}, the author cautions that when using the \texttt{etasfit()} function from the package \texttt{ETAS}, the algorithm used for the parameter estimation is very sensitive for the initial guess of $\theta^{(0)}$, to the point of warning the user when running the function. The sensitivity to the initial guess of the proposed EM-type algorithm will be further explored in \autoref{sec-sensiv-theta-0}.
+
+\subsection{E-Step}
+\label{subsec-e-step}
+
+The estimation of the probabilities that event $i$ triggered event $j$ is done using the expression given by Equation \eqref{eq-rho-ij}
+
+\subsection{M-Step}
+\label{subsec-m-step}
+
+The $Q$ function to be maximized is
+\begin{equation}
+  \begin{split}
+  \label{eq-q-func}
+    Q(\theta,\mu|\theta^{(k)},\mu^{(k)}) = &\underbrace{\sum_{j}\rho_{j}\log\left(\mu^{(k)}(x,y)\right) - T \int\int_{S}\mu^{(k)}(x,y)dx\, dy}_{Q_{\mu}} + \\
+                                           &\underbrace{\sum_{j}\sum_{i < j}\rho_{ij}\log\left(\kappa(m_{i})g(\Delta t_{ij})f(s_{j} - s_{i};m_{i})\right) - \sum_{i}\kappa(m_{i})}_{Q_{\theta}}
+  \end{split}
+\end{equation}
+
+\subsubsection{Analytical Gradient for $Q$}
+\label{subsubsec-gradient-q}
+
+In most computational maximization routines based in Newton/quasi-Newton methods, providing the gradient of the objective function eliminates the need to estimate it by finite differences methods, improving significantly the computational time necessary for the convergence of the method.
+
+The logarithmic part of the $Q_{\theta}$ function can be separated into independent blocks that depend only on some of the parameters, due to the parametrization of $\lambda_{\theta}$, as such
+\begin{equation*}
+  l_{Q_{\theta}} = \log(\kappa(m_{i})g(\Delta t_{ij})f(s_{j} - s_{i};m_{i})) = &\underbrace{\log(\kappa(m_{i}))}_{A,\alpha} + \underbrace{\log(g(\Delta t_{ij}))}_{c,p} + \underbrace{\log(f(s_{j} - s_{i};m_{i}))}_{D,\gamma,q},
+\end{equation*}
+
+\noindent where $A$ and $\alpha$ are responsible for the productivity, $c$ and $p$ for the temporal aspects of the process and $D$, $\gamma$ and $q$ for the spatial distribution. This makes the derivatives in relation to each variable in $\theta$ to be dependent only of itself and the other variables in it's block, in a way that the parameters only interfere on the aspects they are supposed to control. If approximation methods for the gradient based in finite differences were used, the resulting hessian matrix would have crossed terms close to 0, but not really 0.
+
+Let $r_{ij}^{2} = \left[(x_{j} - x_{i})^{2} + (y_{j} - y_{i})^{2}\right]$, $S_{i} = D\exp(\gamma\Delta m_{i})$, $V_{ij} = \frac{r_{ij}^{2}}{S_{i}}$, $U_{ij} = 1 + V_{ij}$ and $W_{ij} = q\frac{V_{ij}}{U_{ij}} - 1$, for any events $i$ and $j$ such that $i < j$. With these expressions, the derivatives of $l_{Q_{\theta}}$ with relation to each variable are
+\begin{align}
+  \label{eq-grad-lq}
+    &\frac{\partial l_{Q_{\theta}}}{\partial A} = \frac{1}{A}, &\frac{\partial l_{Q_{\theta}}}{\partial \alpha} &= \Delta m_{i}, \notag \\
+    &\frac{\partial l_{Q_{\theta}}}{\partial c} = \frac{p - 1}{c} - \frac{p}{\Delta t_{ij} + c}, &\frac{\partial l_{Q_{\theta}}}{\partial p} &= \frac{1}{p - 1} + \log\left(\frac{c}{\Delta t_{ij} + c}\right), \notag \\
+    &\frac{\partial l_{Q_{\theta}}}{\partial D} = \frac{W_{ij}}{D}, &\frac{\partial l_{Q_{\theta}}}{\partial \gamma} &= \Delta m_{i}W_{ij}, \notag \\
+  &\frac{\partial l_{Q_{\theta}}}{\partial q} = \frac{1}{q- 1} - \log(U_{ij}).
+\end{align}
+
+The compensator term for $Q_{\theta}$, given by $\sum_{i}\kappa(m_{i})$, depends only of $A$ and $\alpha$, and has derivatives given by
+\begin{align}
+  \label{eq-grad-comp}
+    &\frac{\partial}{\partial A}\sum_{i}\kappa(m_{i}) = \sum_{i}\exp(\alpha\Delta m_{i}), &\frac{\partial}{\partial \alpha}\sum_{i}\kappa(m_{i}) = \sum_{i}A\Delta m_{i}\exp(\alpha\Delta m_{i}).
+\end{align}
+
+When we combine the expressions in Equations \eqref{eq-grad-lq} and \eqref{eq-grad-comp}, with the probabilities calculated in the E-Step $\rho_{ij}$, we have an complete expresion for the gradient of the $Q_{\theta}$ function, given by
+\begin{equation}
+  \label{eq-grad-q}
+  \begin{split}
+    \frac{\partial Q_{\theta}}{\partial A} &= \frac{1}{A}\sum_{i < j}\rho_{ij} - \sum_{i}\exp(\alpha\Delta m_{i}), \\
+    \frac{\partial Q_{\theta}}{\partial \alpha} &= \sum_{i < j}\rho_{ij}\Delta m_{i} - A\sum_{i}\Delta m_{i}\exp(\alpha\Delta m_{i}), \\
+    \frac{\partial Q_{\theta}}{\partial c} &= \sum_{i < j}\rho_{ij}\left(\frac{p - 1}{c} - \frac{p}{\Delta t_{ij} + c}\right), \\
+    \frac{\partial Q_{\theta}}{\partial p} &= \sum_{i < j}\rho_{ij}\left(\frac{1}{p - 1} + \log\left(\frac{c}{\Delta t_{ij} + c}\right)\right), \\
+    \frac{\partial Q_{\theta}}{\partial D} &= \frac{1}{D}\sum_{i < j}\rho_{ij}W_{ij}, \\
+    \frac{\partial Q_{\theta}}{\partial \gamma} &= \sum_{i < j}\rho_{ij}\Delta m_{i}W_{ij}, \\
+    \frac{\partial Q_{\theta}}{\partial q} &= \sum_{i < j}\rho_{ij}\left(\frac{1}{q - 1} - \log(U_{ij})\right).
+  \end{split}
+\end{equation}
+
+\subsubsection{Smoothing Step}
+\label{subsubsec-smoothing}
+
+The unrestricted maximizer for $Q_{\mu}$ is the sum of the pontual masses with weights $\frac{\rho_{j}}{T}$ in each of the cells in the study region, becoming degenerated and thus needing some form of smoothing. For that, we use the adaptative bandwidth gaussian kernel density estimator (KDE) for $\mu(x,y)$, given by
+\begin{equation}
+  \label{eq-smoothing-mu}
+  \hat{\mu}(x,y) = \frac{1}{T}\sum_{j}\rho_{j}\frac{1}{2\pi h_{j}^{2}}\exp\left\{-\frac{(x - x_{j})^{2} + (y - y_{j})^{2}}{2h_{j}^{2}}\right\},
+\end{equation}
+
+\noindent where $h_{j} = \max\left(d_{j}^{(n_{p})}, d_{\text{min}}\right)$ is the adaptative bandwidth size around the $j$-th event. It is given by the maximum between some designated minimum distance $d_{\text{min}}$, and the distance from that event to it's $n_{p}$-th nearest neighbor. This form is proposed by \citeonline{zhuang_2002}, and in it the authors find that the values for $n_{p}$ and $d_{\text{min}}$ are not sensitive and do not interfere significantly in the final estimate of $\mu(x,y)$, when their values remains in the ranges 15-100 for $n_{p}$ and 0.01-0.1 for $d_{\text{min}}$. We adopt the values $n_{p} = 20$ and $d_{\text{min}} = 0.02$ as suggested by the authors.
+
+Each kernel integrates 1 in $\mathds{R}^{2}$, so $T\int\int_{S}\hat{\mu}(x,y)dx\,dy$ is equal to the sum of $\rho_{j}$, except the mass that escapes the study region $S$. Because of this, it is important to assure that the border capture most events and few occur outside $S$. Another important consideration to be done is the resolution of the grid, because $\hat{\mu}(x,y)$ for some event occurring in $(x^{\ast},y^{\ast})$ is evaluated as the value in the centroid of it's nearest cell. With that in mind, a finer grid improves the pontual evaluation of the background rate, but is prone to under/overestimate $\mu(x,y)$, while a coarser grid captures better the behavior of the mean of $\mu(x,y)$, but fails to capture the unique seismological aspects of the study region.
+
+Given some fixed $\mu(x,y)$, the M-step in $\theta$ is a real M-step in the sense that if $Q\left(\theta^{(k + 1)},\mu^{(k)}|\theta^{(k)},\mu^{(k)}\right) \ge Q\left(\theta^{(k)},\mu^{(k)}|\theta^{(k)},\mu^{(k)}\right)$, then the observed log-likelihood does not decrease. However, this smoothing step does not maximize $Q_{\mu}$, so the complete scheme is an EM-algorithm with a smoothing step along the lines of the EMS algorithm (\citeonline{silverman_1990}), with no guarantee for joint monotonicity.
+
+\begin{algorithm}[H]
+% \SetAlgoLined
+% \LinesNumbered
+\caption{EMS Algorithm for the Estimation of ETAS Model}
+\label{alg-em-etas}
+\KwData{Catalog with $n$ events $\{(x_i, y_i, t_i, m_i)\}_{i=1}^n$, cutoff magnitude $m_0$, final time $T$, grid $S$ with $N_{grid}$ cells, tolerances $\epsilon_{Q},\epsilon_{\mu},\epsilon_{\theta}$, hyperparameters $n_p = 20$ and $d_{min} = 0.02$.}
+\KwResult{Estimates of $\hat{\theta} = (A, \alpha, c, p, D, \gamma, q)$ and $\hat{\mu}(x,y)$.}
+Estimate $\beta$ analytically\;
+Initialize $\theta^{(0)}$ with some viable guess\;
+\For{each cell in $S$}{
+    $\mu^{(0)}(x,y) \gets \frac{1}{N_{grid}}$\;
+}
+$k \gets 0$\;
+$\text{Convergence} \gets \text{False}$\;
+\While{$\neg \text{Convergence}$}{
+    \tcp{E Step}
+    \For{$j \gets 1$ \KwTo $n$}{
+        Evaluate $\lambda_{\theta^{(k)}}(x_j, y_j, t_j | \mathcal{H}_{t_j})$ using $\theta^{(k)}$ e $\mu^{(k)}$\;
+        \For{$i \gets 1$ \KwTo $j-1$}{
+            $\rho_{ij}^{(k)} \gets \frac{\kappa(m_i)g(t_j - t_i)f(s_j - s_i; m_i)}{\lambda_{\theta^{(k)}}(x_j, y_j, t_j | \mathcal{H}_{t_j})}$\;
+        }
+        $\rho_j^{(k)} \gets 1 - \sum_{i<j} \rho_{ij}^{(k)}$\;
+    }
+    \tcp{M Step (with Smoothing)}
+    $\theta^{(k+1)} \gets \arg\max_{\theta} Q_\theta(\theta | \theta^{(k)}, \mu^{(k)})$ \tcp*{using quasi-Newton method and $\nabla Q_\theta$}
+    \For{each cell with centroid $(x,y)$ in grid $S$}{
+        \For{$j \gets 1$ \KwTo $n$}{
+            $h_j \gets \max(d_j^{(n_p)}, d_{min})$\;
+        }
+        $\mu^{(k+1)}(x,y) \gets \frac{1}{T}\sum_{j=1}^n \rho_j^{(k)} \frac{1}{2\pi h_j^2} \exp\left\{-\frac{(x-x_j)^2 + (y-y_j)^2}{2h_j^2}\right\}$\;
+    }
+    \eIf{$|Q(\theta^{(k+1)}, \mu^{(k+1)}) - Q(\theta^{(k)}, \mu^{(k)})| < \epsilon_{Q}$ {\bf and} $|\mu^{(k + 1)}(x,y) - \mu^{(k)}(x,y)| < \epsilon_{\mu}$ {\bf and} $|\theta^{(k+1)} - \theta^{(k)}| < \epsilon_{\theta}$}{
+        $\text{Convergence} \gets \text{True}$\;
+    }{
+        $k \gets k + 1$\;
+    }
+}
+\Return $\hat{\theta} \gets \theta^{(k+1)}$, $\hat{\mu}(x,y) \gets \mu^{(k+1)}(x,y)$\;
+\end{algorithm}
+
+% \begin{algorithm}
+% \caption{Algorithmic scheme of the EM-type estimation of $\theta$ and $\mu(x,y)$.\label{alg-em-type}}
+% \KwData{An earthquake catalog $\mathcal{X}$, $\theta^{(0)}$.}
+% % \KwResult{$G'=(X,V)$ with $V\subseteq U$ such that $G'^{tc}$ is an interval order.}
+% \Begin{
+%     $\mu^{(0)}(x,y) \longleftarrow \frac{1}{N_{grid}}$\;
+%     Calculate $\rho_{ij}$ and $\rho_{j}$ using Equations \eqref{eq-rho-ij} and \eqref{eq-rho-j}, conditional in $\theta^{(0)}$\;
+%     $\theta^{(1)} \longleftarrow \argmax_{\theta}\left(Q\left(\theta,\mu|\theta^{(0)},\mu^{(0)},\rho_{ij},\rho_{j}\right)\right)$\;
+%     Estimate $\mu^{(1)}(x,y)$\;
+%     $k = 0$\;
+%     \While{$k = 1,2,\ldots,$}{
+% 	$NbPredNotInMin(x) \longleftarrow |ImPred(x)|$\;
+%     }
+%     \For{$x \in X$}{
+% 	\If{$NbPredInMin(x) = 0$ \textnormal{\textbf{and}} $NbPredNotInMin(x) = 0$}{$AppendToMin(x)$}
+%     }
+%     \While{$S \neq \emptyset$}{\label{InRes1}
+% 	remove $x$ from the list of $T$ of maximal index\;\label{InResR}
+% 	\While{$|S \cap  ImSucc(x)| \neq |S|$}{
+% 	    \For{$ y \in  S-ImSucc(x)$}{
+% 		\{ remove from $V$ all the arcs $zy$ : \}\;
+% 		\For{$z \in  ImPred(y) \cap  Min$}{
+% 		    remove the arc $zy$ from $V$\;
+% 		    $NbSuccInS(z) \longleftarrow NbSuccInS(z) - 1$\;
+% 		    move $z$ in $T$ to the list preceding its present list\;
+% 		    \{i.e. If $z \in T[k]$, move $z$ from $T[k]$ to
+% 		    $T[k-1]$\}\;
+% 		}
+% 		$NbPredInMin(y) \longleftarrow 0$\;
+% 		$NbPredNotInMin(y) \longleftarrow 0$\;
+% 		$S \longleftarrow S - \{y\}$\;
+% 		$AppendToMin(y)$\;
+% 	    }
+% 	}
+% 	$RemoveFromMin(x)$\;
+%     }
+% }
+% \end{algorithm}
+
+\section{Computational Implementation}
+\label{sec-comput-impl}
+
+The proposed method was implemented in the R programming language, version 4.6.1 (\citeonline{R_lang})
 
 \section{Goodness of fit tests}
 \label{sec-goodness_test}
@@ -234,3 +400,18 @@ This form for the log-likelihood is easier to maximize given it's additive terms
 \end{theorem}
 
 This theorem holds for spatio-temporal point processes, and it is used for goodness of fit tests.
+
+\chapter{Simulation Studies}
+\label{chap-simulation-studies}
+
+\section{Sensitivity to Initial Guess of $\theta^{(0)}$}
+\label{sec-sensiv-theta-0}
+
+\chapter{Case Studies}
+\label{chap-case-studies}
+
+\section{Iran Catalog}
+\label{sec-iran-cat}
+
+\section{Peru Catalog}
+\label{sec-peru-cat}

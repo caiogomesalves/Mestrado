@@ -1,27 +1,37 @@
 \changetocdepth {4}
 \babel@toc {english}{}\relax 
 \babel@toc {english}{}\relax 
-\contentsline {chapter}{Introdução}{17}{chapter*.25}%
-\contentsline {part}{\partnumberline {I}Theoretical foundations}{18}{part.1}%
-\contentsline {chapter}{\chapternumberline {1}Point Processes}{19}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Marked Spatio-Temporal Point Processes}{19}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Hawkes Processes and the ETAS Model}{20}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Likelihood and Stochastic Declustering}{23}{section.1.3}%
-\contentsline {part}{\partnumberline {II}Materials and Methods}{26}{part.2}%
-\contentsline {chapter}{\chapternumberline {2}Methods}{27}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Parameter Estimation}{27}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Goodness of fit tests}{27}{section.2.2}%
-\contentsline {chapter}{\chapternumberline {3}Considerações Finais}{28}{chapter.3}%
+\contentsline {chapter}{Introduction}{18}{chapter*.25}%
+\contentsline {part}{\partnumberline {I}Theoretical foundations}{19}{part.1}%
+\contentsline {chapter}{\chapternumberline {1}Spatio-Temporal Point Processes}{20}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Marked Spatio-Temporal Point Processes}{20}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Hawkes Processes and the ETAS Model}{21}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Likelihood and Stochastic Declustering}{24}{section.1.3}%
+\contentsline {part}{\partnumberline {II}Proposed Methodology}{27}{part.2}%
+\contentsline {chapter}{\chapternumberline {2}Parameter Estimation}{28}{chapter.2}%
+\contentsline {section}{\numberline {2.1}EM-Type Algorithm}{28}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}E-Step}{28}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}M-Step}{29}{subsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.2.1}Analytical Gradient for $Q$}{29}{subsubsection.2.1.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.2.2}Smoothing Step}{30}{subsubsection.2.1.2.2}%
+\contentsline {section}{\numberline {2.2}Computational Implementation}{33}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Goodness of fit tests}{33}{section.2.3}%
+\contentsline {chapter}{\chapternumberline {3}Simulation Studies}{34}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Sensitivity to Initial Guess of $\theta ^{(0)}$}{34}{section.3.1}%
+\contentsline {chapter}{\chapternumberline {4}Case Studies}{35}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Iran Catalog}{35}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Peru Catalog}{35}{section.4.2}%
+\contentsline {chapter}{\chapternumberline {5}Final Considerations}{36}{chapter.5}%
 \vspace {\cftbeforepartskip }
-\contentsline {chapter}{\uppercase {Bibliography}}{29}{section*.29}%
+\contentsline {chapter}{\uppercase {Bibliography}}{37}{section*.29}%
 \renewcommand *{\cftappendixname }{APPENDIX \space }
-\contentsline {part}{Appendix}{31}{section*.30}%
-\contentsline {appendix}{\chapternumberline {A}Cumulative distributions of $g(t)$ and $f(x,y)$}{32}{appendix.A}%
-\contentsline {appendix}{\chapternumberline {B}Quisque libero justo}{34}{appendix.B}%
-\contentsline {appendix}{\chapternumberline {C}Nullam elementum urna vel imperdiet sodales elit ipsum pharetra ligula ac pretium ante justo a nulla curabitur tristique arcu eu metus}{35}{appendix.C}%
+\contentsline {part}{Appendix}{40}{section*.30}%
+\contentsline {appendix}{\chapternumberline {A}Cumulative distributions of $g(t)$ and $f(x,y)$}{41}{appendix.A}%
+\contentsline {appendix}{\chapternumberline {B}Quisque libero justo}{43}{appendix.B}%
+\contentsline {appendix}{\chapternumberline {C}Nullam elementum urna vel imperdiet sodales elit ipsum pharetra ligula ac pretium ante justo a nulla curabitur tristique arcu eu metus}{44}{appendix.C}%
 \cftinsert {AAA}
 \renewcommand *{\cftappendixname }{ANNEX \space }
-\contentsline {part}{Annex}{36}{section*.31}%
-\contentsline {appendix}{\chapternumberline {A}Morbi ultrices rutrum lorem.}{37}{appendix.anexochapback.1}%
-\contentsline {appendix}{\chapternumberline {B}Cras non urna sed feugiat cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus}{38}{appendix.anexochapback.2}%
-\contentsline {appendix}{\chapternumberline {C}Fusce facilisis lacinia dui}{39}{appendix.anexochapback.3}%
+\contentsline {part}{Annex}{45}{section*.31}%
+\contentsline {appendix}{\chapternumberline {A}Morbi ultrices rutrum lorem.}{46}{appendix.anexochapback.1}%
+\contentsline {appendix}{\chapternumberline {B}Cras non urna sed feugiat cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus}{47}{appendix.anexochapback.2}%
+\contentsline {appendix}{\chapternumberline {C}Fusce facilisis lacinia dui}{48}{appendix.anexochapback.3}%

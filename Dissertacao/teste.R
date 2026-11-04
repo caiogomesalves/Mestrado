@@ -357,3 +357,17 @@ sim_data <- simulate_hawkes_etas_jss(
   A = 0.2, alpha = 1.1, c_par = 0.02, p_par = 1.2,
   D_par = 0.05, gamma = 0.8, q_par = 1.5, beta = 2.0, m_min = 2.5
 )
+
+fun_rosen <- function(x, a = 1, b = 200) {
+    return((a - x[1])^(2) + b * (x[2] - x[1]^(2))^(2))
+}
+
+grid_teste <- expand.grid(x = seq(-2, 2, length.out = 100),
+                          y = seq(-2, 2, length.out = 100))
+
+z <- matrix(apply(grid_teste, 1, fun_rosen),
+            nrow = 100, ncol = 100)
+
+image(x = seq(-2, 2, length.out = 100),
+      y = seq(-2, 2, length.out = 100),
+      z = z)
