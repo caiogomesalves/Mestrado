@@ -10,28 +10,32 @@
 \contentsline {part}{\partnumberline {II}Proposed Methodology}{27}{part.2}%
 \contentsline {chapter}{\chapternumberline {2}Parameter Estimation}{28}{chapter.2}%
 \contentsline {section}{\numberline {2.1}EM-Type Algorithm}{28}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}E-Step}{28}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.1.2}M-Step}{29}{subsection.2.1.2}%
-\contentsline {subsubsection}{\numberline {2.1.2.1}Analytical Gradient for $Q$}{29}{subsubsection.2.1.2.1}%
-\contentsline {subsubsection}{\numberline {2.1.2.2}Smoothing Step}{30}{subsubsection.2.1.2.2}%
-\contentsline {section}{\numberline {2.2}Computational Implementation}{33}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Goodness of fit tests}{33}{section.2.3}%
-\contentsline {chapter}{\chapternumberline {3}Simulation Studies}{34}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Sensitivity to Initial Guess of $\theta ^{(0)}$}{34}{section.3.1}%
-\contentsline {chapter}{\chapternumberline {4}Case Studies}{35}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Iran Catalog}{35}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Peru Catalog}{35}{section.4.2}%
-\contentsline {chapter}{\chapternumberline {5}Final Considerations}{36}{chapter.5}%
+\contentsline {subsection}{\numberline {2.1.1}E-Step}{29}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}M-Step}{30}{subsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.2.1}Analytical Gradient for $Q$}{31}{subsubsection.2.1.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.2.2}Smoothing Step}{32}{subsubsection.2.1.2.2}%
+\contentsline {section}{\numberline {2.2}Quantification of Uncertainty}{32}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Computational Implementation}{33}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Residual Analysis and Goodness of Fit}{34}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Temporal Residues}{34}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Spatial Residues}{35}{subsection.2.4.2}%
+\contentsline {section}{\numberline {2.5}Catalog Simulation}{35}{section.2.5}%
+\contentsline {part}{\partnumberline {III}Results}{37}{part.3}%
+\contentsline {chapter}{\chapternumberline {3}Simulation Studies}{38}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Sensitivity to Initial Guess of $\theta ^{(0)}$ and $\mu ^{(0)}(x,y)$}{39}{section.3.1}%
+\contentsline {chapter}{\chapternumberline {4}Case Studies}{41}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Iran Catalog}{41}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Peru Catalog}{41}{section.4.2}%
+\contentsline {chapter}{\chapternumberline {5}Final Considerations}{42}{chapter.5}%
 \vspace {\cftbeforepartskip }
-\contentsline {chapter}{\uppercase {Bibliography}}{37}{section*.29}%
+\contentsline {chapter}{\uppercase {Bibliography}}{43}{section*.29}%
 \renewcommand *{\cftappendixname }{APPENDIX \space }
-\contentsline {part}{Appendix}{40}{section*.30}%
-\contentsline {appendix}{\chapternumberline {A}Cumulative distributions of $g(t)$ and $f(x,y)$}{41}{appendix.A}%
-\contentsline {appendix}{\chapternumberline {B}Quisque libero justo}{43}{appendix.B}%
-\contentsline {appendix}{\chapternumberline {C}Nullam elementum urna vel imperdiet sodales elit ipsum pharetra ligula ac pretium ante justo a nulla curabitur tristique arcu eu metus}{44}{appendix.C}%
+\contentsline {part}{Appendix}{46}{section*.30}%
+\contentsline {appendix}{\chapternumberline {A}Cumulative distributions of $g(t)$ and $f(x,y)$}{47}{appendix.A}%
+\contentsline {appendix}{\chapternumberline {B}Non-decreasing log-likelihood in smoothing step}{49}{appendix.B}%
 \cftinsert {AAA}
 \renewcommand *{\cftappendixname }{ANNEX \space }
-\contentsline {part}{Annex}{45}{section*.31}%
-\contentsline {appendix}{\chapternumberline {A}Morbi ultrices rutrum lorem.}{46}{appendix.anexochapback.1}%
-\contentsline {appendix}{\chapternumberline {B}Cras non urna sed feugiat cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus}{47}{appendix.anexochapback.2}%
-\contentsline {appendix}{\chapternumberline {C}Fusce facilisis lacinia dui}{48}{appendix.anexochapback.3}%
+\contentsline {part}{Annex}{51}{section*.31}%
+\contentsline {appendix}{\chapternumberline {A}Morbi ultrices rutrum lorem.}{52}{appendix.anexochapback.1}%
+\contentsline {appendix}{\chapternumberline {B}Cras non urna sed feugiat cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus}{53}{appendix.anexochapback.2}%
+\contentsline {appendix}{\chapternumberline {C}Fusce facilisis lacinia dui}{54}{appendix.anexochapback.3}%

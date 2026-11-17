@@ -83,15 +83,14 @@ The \textbf{ETAS} (\textit{Epidemic-Type Aftershock Sequence}) Model was propose
 
 \begin{figure}[htb]
 	\caption{\label{fig-branching-process}Branching of a self-exciting point process.}
-	\begin{center}
-	    \includegraphics[scale=1]{Images/branching_process.pdf}
+	\begin{center}	    \includegraphics[scale=1]{Images/branching_process.pdf}
 	\end{center}
 \end{figure}
 
 In a later work, \citeonline{ogata_1998} extended the ETAS model to accommodate the spatio-temporal distribution of earthquakes, in the form
 \begin{equation}
   \label{eq-mod-etas}
-  \lambda_{\theta}(x,y,t|\mathcal{H}_{t}) = \mu(x,y) + \sum_{i: t_{i} < t}\kappa(m_{i})g(t - t_{i};m_{i})f(x - x_{i}, y - y_{i};m_{i}),
+  \lambda_{\theta}(x,y,t|\mathcal{H}_{t}) = \mu(x,y) + \sum_{i: t_{i} < t}\kappa(m_{i})g(t - t_{i})f(x - x_{i}, y - y_{i};m_{i}),
 \end{equation}
 
 \noindent with it's components being:
@@ -112,7 +111,7 @@ In a later work, \citeonline{ogata_1998} extended the ETAS model to accommodate 
     \end{cases},
   \end{equation*}
   with $c > 0$ and $p > 1$ being unknown parameters.
-\item $f(x - x_{i}, y - y_{i};m_{i})$ is the probability density function of the location in space of a event triggered from a event occurred in $(x_{i}, y_{i})$ and magnitude $m_{i}$. The distances are considered to be in $\text{degrees}^{2}$ ($x$ is the longitude and $y$ is the latitude), and this can cause some considerable distortion in areas with big latitudes. An isotropic density function is considered
+\item $f(x - x_{i}, y - y_{i};m_{i})$ is the probability density function of the location in space of a event triggered from a event occurred in $(x_{i}, y_{i})$ and magnitude $m_{i}$. The distances are considered to be in $(\text{degrees}\times\text{degrees})$ ($x$ is the longitude and $y$ is the latitude), and this can cause some considerable distortion in areas with big latitudes. An isotropic density function is considered
   \begin{equation*}
     f(x - x_{i}, y - y_{i};m_{i}) = \frac{q - 1}{\pi D \exp[\gamma(m_{i} - m_{0})]}\left(1 + \frac{(x - x_{i})^{2} + (y - y_{i})^{2}}{D \exp[\gamma(m_{i} - m_{0})]}\right)^{-q},
   \end{equation*}
@@ -133,10 +132,10 @@ Other parametrizations for $\lambda_{\theta}(x,y,t|\mathcal{H}_{t})$ were propos
 The expected number of offsprings generated from any event, regardless of its magnitude is given by
 \begin{equation}
   \label{eq-expect-triggered}
-  e_{\text{off}} = \int_{m_{0}}^{\infty}\kappa(m)\nu(m)dm = \frac{A\beta}{\beta - \alpha}.
+  e_{\mathrm{off}} = \int_{m_{0}}^{\infty}\kappa(m)\nu(m)dm = \frac{A\beta}{\beta - \alpha}.
 \end{equation}
 
-If $e_{\text{off}} < 1$, the model is stable (\citeonline{daley_jones_2003}), and has cluster size of $\frac{1}{(1 - e_{\text{off}})} = \frac{\beta - \alpha}{\beta(1 - A) - \alpha}$. Because the marks distribution is independent of the other parameters (as the complete intensity $\lambda_{\theta,\beta}(x,y,t,m|\mathcal{H}_{t})$ is the product of $\nu(v)$ and $\lambda_{\theta}(x,y,t|\mathcal{H}_{t})$), the estimation of $\beta$ can be done without the need to estimate the other parameters.
+If $e_{\mathrm{off}} < 1$, the model is stable (\citeonline{daley_jones_2003}), and has cluster size of $\frac{1}{(1 - e_{\mathrm{off}})} = \frac{\beta - \alpha}{\beta(1 - A) - \alpha}$. Because the marks distribution is independent of the other parameters (as the complete intensity $\lambda_{\theta,\beta}(x,y,t,m|\mathcal{H}_{t})$ is the product of $\nu(v)$ and $\lambda_{\theta}(x,y,t|\mathcal{H}_{t})$), the estimation of $\beta$ can be done without the need to estimate the other parameters.
 
 \section{Likelihood and Stochastic Declustering}
 \label{sec-likelihood-etas}
@@ -219,6 +218,14 @@ This form for the log-likelihood is easier to maximize given it's additive terms
 
 TODO explicitar o pipeline do processo: apresentação de uma base de dados, uso do pacote ETAS, etc.
 
+As seen in the previous section, the estimation of $\beta$ has closed form and does not interfere in the estimation of $\theta$ and $\mu(x,y)$. In many cases the magnitudes in the earthquake catalog is not continuous, and is discretized in bins of size $\Delta m$ (usually 0.1), and in such cases it is better to estimate the b-value using the Aki-Utsu maximum likelihood estimator with discretization correction (\citeonline{utsu_1966}), given by
+\begin{equation}
+  \label{eq-b-hat}
+  \hat{b} = \frac{\log_{10}(e)}{\bar{m} - \left(m_{0} - \frac{\Delta m}{2}\right)},
+\end{equation}
+
+\noindent where $\bar{m} = \frac{\sum_{i = 1}^{n}m_{i}}{n}$, and using the relation $\hat{\beta} = \hat{b}\log(10)$, we have the estimation of $\hat{\beta}$, which is considered a fixed value for the estimation of $\hat{\theta}$.
+
 \section{EM-Type Algorithm}
 \label{sec-em-type-alg}
 
@@ -226,38 +233,74 @@ For the estimation of the parameter vector $\theta$, \citeonline{veen_2008} prop
 
 Consider a catalog containing $n$ earthquakes above a specified cutoff magnitude $m_{0}$, arranged by event times, and for each event $i \in \{1,2,\ldots,n\}$, the catalog contains their longitudes and latitudes, magnitudes and time (in days) since the start of the monitoring $T_{0}$ (as presented in \autoref{tab-catalog-example}). Let $\Delta t_{ij} = (t_{j} - t_{i}), i<j,$ and $\Delta m_{i} = (m_{i} - m_{0})$.
 
-To initiate the algorithm, an initial guess for $\theta$ must be given, as well as an initial guess for $\mu(x,y)$ in all the study region. In their work, \citeonline{veen_2008} separate $S$ in arbitrary blocks and treat $\mu(x,y)$ as different constants in each block, but for this work, we divide $S$ in a grid, in which every cell will be the discretization of the function rate evaluated in it's centroid. For the initial guess, we assume that the background rate function is constant in all the region, in a way that $\mu^{(0)}(x,y) = \frac{1}{N_{grid}}$ , where $N_{grid}$ is the number of cells in which $S$ were divided.
+To initiate the algorithm, an initial guess for $\theta$ must be given, as well as an initial guess for $\mu(x,y)$ in all the study region. In their work, \citeonline{veen_2008} separate $S$ in arbitrary blocks and treat $\mu(x,y)$ as different constants in each block, but for this work, we consider it to be a continuous function in $S$. For the initial guess, we assume that the background rate function is constant in all the region, in a way that $\mu^{(0)}(x,y) = \frac{n}{T|S|}$ , where $n$ is the number of events and $|S|$ is the size of the region (this initial guess consider that all events are background, making $\rho_{j} = 1$ for all $j$ and consequently $\sum_{j}\rho_{j} = n$). This is evaluated in a rectangular grid along $S$, in which each cell receives the exact mass value of the intensity function inside it.
 
 In \citeonline{jalilian_2019}, the author cautions that when using the \texttt{etasfit()} function from the package \texttt{ETAS}, the algorithm used for the parameter estimation is very sensitive for the initial guess of $\theta^{(0)}$, to the point of warning the user when running the function. The sensitivity to the initial guess of the proposed EM-type algorithm will be further explored in \autoref{sec-sensiv-theta-0}.
 
 \subsection{E-Step}
 \label{subsec-e-step}
 
-The estimation of the probabilities that event $i$ triggered event $j$ is done using the expression given by Equation \eqref{eq-rho-ij}
+The estimation of the probabilities that event $i$ triggered event $j$ in the iteration $k$ is done using the expression given by Equation \eqref{eq-rho-ij}, considering $(\theta^{(k)},\tilde{\mu}^{(k)}(x,y))$, where $\tilde{\mu}^{(k)}(x_{j},y_{j})$ is the value of $\hat{\mu}^{(k)}(x,y)$ evaluated in the coordinates of event $j$. To ensure the background rate is estimated continuously, a smoothing step is included after the maximization step. For it, we consider a adaptative bandwidth isotropic gaussian kernel density estimator given by
+\begin{equation}
+  \label{eq-kernel-smoothing}
+  K_{h_{j}}(u) = \frac{1}{2\pi h_{j}^{2}}\exp\left\{-\frac{|u|^{2}}{2h_{j}^{2}}\right\},
+\end{equation}
+
+\noindent where $|u|$ is the size of $u \in \mathds{R}^{2}$, $h_{j} = \max\left(d_{j}^{(n_{p})}, d_{\text{min}}\right)$ is the adaptative bandwidth size around the $j$-th event and $c_{j} = \int_{S}K_{h_{j}}(u - (x_{j},y_{j}))\, du$ is the mass of the kernel $j$ in the observed window. The value of $h_{j}$ is given by the maximum between some designated minimum distance $d_{\text{min}}$, and the distance from that event to it's $n_{p}$-th nearest neighbor. This form is proposed by \citeonline{zhuang_2002}, and in it the authors find that the values for $n_{p}$ and $d_{\text{min}}$ are not sensitive and do not interfere significantly in the final estimate of $\mu(x,y)$, when their values remains in the ranges 15-100 for $n_{p}$ and 0.01-0.1 for $d_{\text{min}}$. We adopt the values $n_{p} = 20$ and $d_{\text{min}} = 0.02$ as suggested by the authors.
+
+Each kernel integrates 1 in $\mathds{R}^{2}$, so $T\int\int_{S}\mu(x,y)dx\,dy$ is equal to the sum of $\rho_{j}$, except the mass that escapes the study region $S$. To correct this, the value of $c_{j}$ is calculated in such a way that each kernel divided by $c_{j}$ integrates 1 in the observed window $S$, and because of this, the value of $T \int\int_{S}\mu(x,y)dx\,dy$ is exactly $\sum_{j}\rho_{j}$. For a rectangular window with limits $[X_{0},X_{1}]$ and $[Y_{0},Y_{1}]$, the value of $c_{j}$ has closed form, given by the product of cumulative standard Normal distributions
+\begin{equation}
+  \label{eq-c-j}
+  c_{j} = \left[\Phi\left(\frac{X_{1} - x_{j}}{h_{j}}\right) - \Phi\left(\frac{X_{0} - x_{j}}{h_{j}}\right)\right]\left[\Phi\left(\frac{Y_{1} - y_{j}}{h_{j}}\right) - \Phi\left(\frac{Y_{0} - y_{j}}{h_{j}}\right)\right].
+\end{equation}
+
+Using this, each kernel has weight $w_{j} = \frac{\rho_{j}}{T\,c_{j}}$. Each event $j$ contributes to $\hat{\mu}(x,y)$ with $\frac{\rho_{j}}{2\pi Th_{j}^{2}}$, and if $h_{j}$ is small (as the cases in which $h_{j} = d_{\text{min}}$) this contribution may exceed the value of $\hat{\mu}$ and feeds back $\rho_{j}$ in the next iteration. To mitigate this, we consider a leave-one-out scheme for the estimation of $\tilde{\mu}(x_{j},y_{j})$, which is given by
+\begin{equation}
+  \label{eq-tilde-mu}
+  \begin{split}
+    \tilde\mu_{j}^{(k + 1)} &= \sum_{l \neq j}w_l^{(k)}K_{h_{l}}\left((x_{j}, y_{j}) - (x_{l}, y_{l})\right), \\
+                            &= \frac{1}{T}\sum_{l \neq j}\frac{\rho_{l}^{(k)}}{c_{l}}\frac{1}{2\pi h_{l}^{2}}\exp\left\{-\frac{(x_{j} - x_{l})^{2} + (y_{j} - y_{l})^{2}}{2h_{l}^{2}}\right\}.
+    \end{split}
+\end{equation}
+
+In the $k$-th iteration of the algorithm, the E-Step uses $\tilde{\mu}^{(k)}(x,y)$ calculated at the end of the previous iteration using $\rho^{(k - 1)}$, and the value for the conditional intensity function is calculated as
+\begin{equation*}
+    \lambda_{j}^{(k)} = \tilde{\mu}_{j}^{(k)}(x_{j},y_{j}) + \sum_{i<j}\kappa(m_{i})g(t_{j} - t_{i})f(x_{j} - x_{i}, y_{j} - y_{i}; m_{i}),
+\end{equation*}
+
+\noindent and it is used to calculate $\rho_{ij}^{(k)}$ and $\rho_{j}^{(k)}$ as
+\begin{equation*}
+  \begin{split}
+    \rho_{j}^{(k)} &= \frac{\tilde{\mu}_{j}^{(k)}(x_{j}, y_{j})}{\lambda_{j}^{(k)}}, \\
+    \rho_{ij}^{(k)} &= \frac{\kappa(m_{i})g(t_{j} - t_{i})f(x_{j} - x_{i}, y_{j} - y_{i}; m_{i})}{\lambda_{j}^{(k)}}.
+    \end{split}
+\end{equation*}
+
+These values are then provided for the M-Step as the latent probabilities that event $j$ is a background event. In the first iteration (when $k = 0$) the value for $\tilde{\mu}^{(0)}(x_{j},y_{j})$ is $\frac{n}{T|S|}$ for all events.
 
 \subsection{M-Step}
 \label{subsec-m-step}
 
-The $Q$ function to be maximized is
+The $Q$ function to be maximized (considering the approximation $G(T - t_{i}) = F(S - s_{i}) = 1$) is
 \begin{equation}
   \begin{split}
   \label{eq-q-func}
-    Q(\theta,\mu|\theta^{(k)},\mu^{(k)}) = &\underbrace{\sum_{j}\rho_{j}\log\left(\mu^{(k)}(x,y)\right) - T \int\int_{S}\mu^{(k)}(x,y)dx\, dy}_{Q_{\mu}} + \\
-                                           &\underbrace{\sum_{j}\sum_{i < j}\rho_{ij}\log\left(\kappa(m_{i})g(\Delta t_{ij})f(s_{j} - s_{i};m_{i})\right) - \sum_{i}\kappa(m_{i})}_{Q_{\theta}}
+    Q(\theta,\mu|\theta^{(k)},\mu^{(k)}) = &\underbrace{\sum_{j}\rho_{j}\log\left(\mu^{(k)}(x_{j},y_{j})\right) - T \int\int_{S}\mu^{(k)}(x,y)dx\, dy}_{Q_{\mu}} + \\
+                                           &\underbrace{\sum_{j}\sum_{i < j}\rho_{ij}\log\left(\kappa(m_{i})g(\Delta t_{ij})f(s_{j} - s_{i};m_{i})\right) - \sum_{i}\kappa(m_{i})}_{Q_{\theta}}.
   \end{split}
 \end{equation}
-
-\subsubsection{Analytical Gradient for $Q$}
-\label{subsubsec-gradient-q}
-
-In most computational maximization routines based in Newton/quasi-Newton methods, providing the gradient of the objective function eliminates the need to estimate it by finite differences methods, improving significantly the computational time necessary for the convergence of the method.
 
 The logarithmic part of the $Q_{\theta}$ function can be separated into independent blocks that depend only on some of the parameters, due to the parametrization of $\lambda_{\theta}$, as such
 \begin{equation*}
   l_{Q_{\theta}} = \log(\kappa(m_{i})g(\Delta t_{ij})f(s_{j} - s_{i};m_{i})) = &\underbrace{\log(\kappa(m_{i}))}_{A,\alpha} + \underbrace{\log(g(\Delta t_{ij}))}_{c,p} + \underbrace{\log(f(s_{j} - s_{i};m_{i}))}_{D,\gamma,q},
 \end{equation*}
 
-\noindent where $A$ and $\alpha$ are responsible for the productivity, $c$ and $p$ for the temporal aspects of the process and $D$, $\gamma$ and $q$ for the spatial distribution. This makes the derivatives in relation to each variable in $\theta$ to be dependent only of itself and the other variables in it's block, in a way that the parameters only interfere on the aspects they are supposed to control. If approximation methods for the gradient based in finite differences were used, the resulting hessian matrix would have crossed terms close to 0, but not really 0.
+\noindent where $A$ and $\alpha$ are responsible for the productivity, $c$ and $p$ for the temporal aspects of the process and $D$, $\gamma$ and $q$ for the spatial distribution. This makes the derivatives in relation to each variable in $\theta$ to be dependent only of itself and the other variables in it's block, in a way that the parameters only interfere on the aspects they are supposed to control. If approximation methods for the gradient based in finite differences are used, the resulting hessian matrix will have crossed terms close to 0, but not really 0.
+
+\subsubsection{Analytical Gradient for $Q$}
+\label{subsubsec-gradient-q}
+
+In most computational maximization routines based in Newton/quasi-Newton methods, providing the gradient of the objective function eliminates the need to estimate it by finite differences methods, improving significantly the computational time necessary for the convergence of the method.
 
 Let $r_{ij}^{2} = \left[(x_{j} - x_{i})^{2} + (y_{j} - y_{i})^{2}\right]$, $S_{i} = D\exp(\gamma\Delta m_{i})$, $V_{ij} = \frac{r_{ij}^{2}}{S_{i}}$, $U_{ij} = 1 + V_{ij}$ and $W_{ij} = q\frac{V_{ij}}{U_{ij}} - 1$, for any events $i$ and $j$ such that $i < j$. With these expressions, the derivatives of $l_{Q_{\theta}}$ with relation to each variable are
 \begin{align}
@@ -294,101 +337,129 @@ When we combine the expressions in Equations \eqref{eq-grad-lq} and \eqref{eq-gr
 The unrestricted maximizer for $Q_{\mu}$ is the sum of the pontual masses with weights $\frac{\rho_{j}}{T}$ in each of the cells in the study region, becoming degenerated and thus needing some form of smoothing. For that, we use the adaptative bandwidth gaussian kernel density estimator (KDE) for $\mu(x,y)$, given by
 \begin{equation}
   \label{eq-smoothing-mu}
-  \hat{\mu}(x,y) = \frac{1}{T}\sum_{j}\rho_{j}\frac{1}{2\pi h_{j}^{2}}\exp\left\{-\frac{(x - x_{j})^{2} + (y - y_{j})^{2}}{2h_{j}^{2}}\right\},
+  \hat\mu^{(k+1)}(x,y)=\sum_{j = 1}^{n}w_{j}^{(k)}K_{h_{j}}\left((x,y)-(x_{j},y_{j})\right),
 \end{equation}
 
-\noindent where $h_{j} = \max\left(d_{j}^{(n_{p})}, d_{\text{min}}\right)$ is the adaptative bandwidth size around the $j$-th event. It is given by the maximum between some designated minimum distance $d_{\text{min}}$, and the distance from that event to it's $n_{p}$-th nearest neighbor. This form is proposed by \citeonline{zhuang_2002}, and in it the authors find that the values for $n_{p}$ and $d_{\text{min}}$ are not sensitive and do not interfere significantly in the final estimate of $\mu(x,y)$, when their values remains in the ranges 15-100 for $n_{p}$ and 0.01-0.1 for $d_{\text{min}}$. We adopt the values $n_{p} = 20$ and $d_{\text{min}} = 0.02$ as suggested by the authors.
+Given some fixed $\mu(x,y)$, the M-step in $\theta$ is a real M-step in the sense that if $Q\left(\theta^{(k + 1)},\mu^{(k)}|\theta^{(k)},\mu^{(k)}\right) \ge Q\left(\theta^{(k)},\mu^{(k)}|\theta^{(k)},\mu^{(k)}\right)$, then the observed log-likelihood does not decrease (see \autoref{append-non-decreasing}). However, this smoothing step does not maximize $Q_{\mu}$, so the complete scheme is an EM-algorithm with a smoothing step along the lines of the EMS algorithm (\citeonline{silverman_1990}), with no guarantee for joint monotonicity.
 
-Each kernel integrates 1 in $\mathds{R}^{2}$, so $T\int\int_{S}\hat{\mu}(x,y)dx\,dy$ is equal to the sum of $\rho_{j}$, except the mass that escapes the study region $S$. Because of this, it is important to assure that the border capture most events and few occur outside $S$. Another important consideration to be done is the resolution of the grid, because $\hat{\mu}(x,y)$ for some event occurring in $(x^{\ast},y^{\ast})$ is evaluated as the value in the centroid of it's nearest cell. With that in mind, a finer grid improves the pontual evaluation of the background rate, but is prone to under/overestimate $\mu(x,y)$, while a coarser grid captures better the behavior of the mean of $\mu(x,y)$, but fails to capture the unique seismological aspects of the study region.
+% \section{Border Effect Correction}
+% \label{sec-bord-corr}
+%
+% Using the approximation $G(T - t_{i}) = F(S - s_{i}) \approx 1$, the mass of the spatial and temporal densities that lies outside the spatio-temporal region is neglected, and this overestimate the productivity near the borders. Besides that, events that occurred near the borders could be triggered by events outside it (i.e. events ouside the observed spatial region $S$ or before the initial time $T_{0}$), being classified as triggered by the background rate, when in reality they were triggered by a previous non-observed event. A border effect correction method is developed to mitigate these problems.
+%
+% Let $P$ be the target spatial polygon, $[T_{0},T]$ the temporal window, $\mathcal{T}$ the target events, that occur in $P \times [T_{0},T]$ and $\mathcal{C}$ the complimentary events (the ones that happened outside of $P$ or before $T_{0}$). Using this formulation, the log-likelihood $l$ for the ETAS model can be written as
+% \begin{equation}
+%   \label{eq-lik-corrected}
+%     l(\theta|\mathcal{H}_{t}) &= \sum_{j \in \mathcal{T}}\log(\lambda_{\theta}(x_{j},y_{j},t_{j}|\mathcal{H_{t}})) - \int_{T_{0}}^{T}\int\int_{P}\lambda_{\theta}(x,y,t|\mathcal{H}_{t})dx\, dy\, dt,
+% \end{equation}
+%
+% \noindent where
+% \begin{equation*}
+%   \begin{split}
+%     \int_{T_{0}}^{T}\int\int_{P}\lambda_{\theta}(x,y,t|\mathcal{H}_{t}) dx\, dy\, dt = &(T - T_{0})\int\int_{P}\mu(x,y)dx\, dy + \\
+%                                                                                        &\sum_{i \in \mathcal{T} \cup \mathcal{C}}\kappa(m_{i})\left[G(T - t_{i}) - G(T_{0} - t_{i})\right]\int\int_{P}f(s - s_{i};m_{i})ds.
+%     \end{split}
+% \end{equation*}
+%
+% Using it in the expression for the Q function in Equation \eqref{eq-q-func}, we have
+% \begin{equation}
+% Q_{\theta} = \sum_{j \in \mathcal{T}}\sum_{i < j} \rho_{ij}\log\left[\kappa(m_{i})g(t_{j} - t_{i})f(x_{j} - x_{i}, y_{j} - y_{i}; m_{i})\right] - \sum_{i \in \mathcal{A}}\kappa(m_{i})H_{i}F_{i},
+% \end{equation}
+%
+% \noindent where $H_{i} = G(T - t_{i}) - G(\max(T_{0} - t_{i}, 0))$
+%
+% \begin{align*}
+%   \frac{\partial Q}{\partial A}=\frac{N}{A}-\sum_{i}e^{\alpha(m_i-M_0)}H_iF_i,\\
+%   \frac{\partial Q}{\partial \alpha}=\sum_{ij}p_{ij}(m_i-M_0)-\sum_i (m_i-M_0)\,\kappa_iH_iF_i\\
+%   \frac{\partial Q}{\partial c}=\sum_{ij}p_{ij}\left[\frac{p-1}{c}-\frac{p}{t_{ji}+c}\right]-\sum_i\kappa_iF_i\,\frac{\partial H_i}{\partial c},\\
+%   \frac{\partial Q}{\partial p}=\sum_{ij}p_{ij}\left[\frac1{p-1}+\log\left(\frac{c}{t_{ji}+c}\right)\right]-\sum_i\kappa_iF_i\,\frac{\partial H_i}{\partial p}\\
+%   \frac{\partial Q}{\partial D}=\sum_{ij}p_{ij}\frac{W_{ij}}{D}-\sum_i\kappa_iH_i\frac{\partial F_i}{\partial D},\\
+%   \frac{\partial Q}{\partial \gamma}=\sum_{ij}p_{ij}W_{ij}(m_i-M_0)-\sum_i\kappa_iH_i\frac{\partial F_i}{\partial \gamma},\\
+%   \frac{\partial Q}{\partial q}=\sum_{ij}p_{ij}\left[\frac1{q-1}-\log\!\left(1+\frac{r_{ij}^2}{S_i}\right)\right]-\sum_i\kappa_iH_i\frac{\partial F_i}{\partial q}
+% \end{align*}
 
-Given some fixed $\mu(x,y)$, the M-step in $\theta$ is a real M-step in the sense that if $Q\left(\theta^{(k + 1)},\mu^{(k)}|\theta^{(k)},\mu^{(k)}\right) \ge Q\left(\theta^{(k)},\mu^{(k)}|\theta^{(k)},\mu^{(k)}\right)$, then the observed log-likelihood does not decrease. However, this smoothing step does not maximize $Q_{\mu}$, so the complete scheme is an EM-algorithm with a smoothing step along the lines of the EMS algorithm (\citeonline{silverman_1990}), with no guarantee for joint monotonicity.
+\section{Quantification of Uncertainty}
+\label{sec-uncertainty}
 
-\begin{algorithm}[H]
-% \SetAlgoLined
-% \LinesNumbered
-\caption{EMS Algorithm for the Estimation of ETAS Model}
-\label{alg-em-etas}
-\KwData{Catalog with $n$ events $\{(x_i, y_i, t_i, m_i)\}_{i=1}^n$, cutoff magnitude $m_0$, final time $T$, grid $S$ with $N_{grid}$ cells, tolerances $\epsilon_{Q},\epsilon_{\mu},\epsilon_{\theta}$, hyperparameters $n_p = 20$ and $d_{min} = 0.02$.}
-\KwResult{Estimates of $\hat{\theta} = (A, \alpha, c, p, D, \gamma, q)$ and $\hat{\mu}(x,y)$.}
-Estimate $\beta$ analytically\;
-Initialize $\theta^{(0)}$ with some viable guess\;
-\For{each cell in $S$}{
-    $\mu^{(0)}(x,y) \gets \frac{1}{N_{grid}}$\;
-}
-$k \gets 0$\;
-$\text{Convergence} \gets \text{False}$\;
-\While{$\neg \text{Convergence}$}{
-    \tcp{E Step}
-    \For{$j \gets 1$ \KwTo $n$}{
-        Evaluate $\lambda_{\theta^{(k)}}(x_j, y_j, t_j | \mathcal{H}_{t_j})$ using $\theta^{(k)}$ e $\mu^{(k)}$\;
-        \For{$i \gets 1$ \KwTo $j-1$}{
-            $\rho_{ij}^{(k)} \gets \frac{\kappa(m_i)g(t_j - t_i)f(s_j - s_i; m_i)}{\lambda_{\theta^{(k)}}(x_j, y_j, t_j | \mathcal{H}_{t_j})}$\;
-        }
-        $\rho_j^{(k)} \gets 1 - \sum_{i<j} \rho_{ij}^{(k)}$\;
-    }
-    \tcp{M Step (with Smoothing)}
-    $\theta^{(k+1)} \gets \arg\max_{\theta} Q_\theta(\theta | \theta^{(k)}, \mu^{(k)})$ \tcp*{using quasi-Newton method and $\nabla Q_\theta$}
-    \For{each cell with centroid $(x,y)$ in grid $S$}{
-        \For{$j \gets 1$ \KwTo $n$}{
-            $h_j \gets \max(d_j^{(n_p)}, d_{min})$\;
-        }
-        $\mu^{(k+1)}(x,y) \gets \frac{1}{T}\sum_{j=1}^n \rho_j^{(k)} \frac{1}{2\pi h_j^2} \exp\left\{-\frac{(x-x_j)^2 + (y-y_j)^2}{2h_j^2}\right\}$\;
-    }
-    \eIf{$|Q(\theta^{(k+1)}, \mu^{(k+1)}) - Q(\theta^{(k)}, \mu^{(k)})| < \epsilon_{Q}$ {\bf and} $|\mu^{(k + 1)}(x,y) - \mu^{(k)}(x,y)| < \epsilon_{\mu}$ {\bf and} $|\theta^{(k+1)} - \theta^{(k)}| < \epsilon_{\theta}$}{
-        $\text{Convergence} \gets \text{True}$\;
-    }{
-        $k \gets k + 1$\;
-    }
-}
-\Return $\hat{\theta} \gets \theta^{(k+1)}$, $\hat{\mu}(x,y) \gets \mu^{(k+1)}(x,y)$\;
-\end{algorithm}
+At the end of the M-Step, the hessian matrix is the information of the complete data, conditional in the estimated probabilities $\rho_{j}$. According to \citeonline{louis_1982}, the observed information underestimates the uncertainty, because it does not take in consideration the loss in information the estimation of the latent quantities cause. Using the author's method, we can subtract the information lost by the latent quantities using
+\begin{equation}
+  \label{eq-inf-obser}
+  I_{\text{obs}}(\hat{\theta}) = \mathds{E}\left[- \nabla^{2}\log(L_{c})\, | \, \text{data}\right] - \text{Var}\left[\nabla\log(L_{c})\, | \,\text{data}\right],
+\end{equation}
 
-% \begin{algorithm}
-% \caption{Algorithmic scheme of the EM-type estimation of $\theta$ and $\mu(x,y)$.\label{alg-em-type}}
-% \KwData{An earthquake catalog $\mathcal{X}$, $\theta^{(0)}$.}
-% % \KwResult{$G'=(X,V)$ with $V\subseteq U$ such that $G'^{tc}$ is an interval order.}
-% \Begin{
-%     $\mu^{(0)}(x,y) \longleftarrow \frac{1}{N_{grid}}$\;
-%     Calculate $\rho_{ij}$ and $\rho_{j}$ using Equations \eqref{eq-rho-ij} and \eqref{eq-rho-j}, conditional in $\theta^{(0)}$\;
-%     $\theta^{(1)} \longleftarrow \argmax_{\theta}\left(Q\left(\theta,\mu|\theta^{(0)},\mu^{(0)},\rho_{ij},\rho_{j}\right)\right)$\;
-%     Estimate $\mu^{(1)}(x,y)$\;
-%     $k = 0$\;
-%     \While{$k = 1,2,\ldots,$}{
-% 	$NbPredNotInMin(x) \longleftarrow |ImPred(x)|$\;
-%     }
-%     \For{$x \in X$}{
-% 	\If{$NbPredInMin(x) = 0$ \textnormal{\textbf{and}} $NbPredNotInMin(x) = 0$}{$AppendToMin(x)$}
-%     }
-%     \While{$S \neq \emptyset$}{\label{InRes1}
-% 	remove $x$ from the list of $T$ of maximal index\;\label{InResR}
-% 	\While{$|S \cap  ImSucc(x)| \neq |S|$}{
-% 	    \For{$ y \in  S-ImSucc(x)$}{
-% 		\{ remove from $V$ all the arcs $zy$ : \}\;
-% 		\For{$z \in  ImPred(y) \cap  Min$}{
-% 		    remove the arc $zy$ from $V$\;
-% 		    $NbSuccInS(z) \longleftarrow NbSuccInS(z) - 1$\;
-% 		    move $z$ in $T$ to the list preceding its present list\;
-% 		    \{i.e. If $z \in T[k]$, move $z$ from $T[k]$ to
-% 		    $T[k-1]$\}\;
-% 		}
-% 		$NbPredInMin(y) \longleftarrow 0$\;
-% 		$NbPredNotInMin(y) \longleftarrow 0$\;
-% 		$S \longleftarrow S - \{y\}$\;
-% 		$AppendToMin(y)$\;
-% 	    }
-% 	}
-% 	$RemoveFromMin(x)$\;
-%     }
-% }
-% \end{algorithm}
+\noindent where $\mathds{E}\left[- \nabla^{2}\log(L_{c})\, | \, \text{data}\right] = -\nabla^{2}Q$, the hessian matrix returned at the end of the M-Step. Conditional in the data, the variables $u_{j}$ are independent, with $P(u_{j} = 0) = \rho_{j}$ and $P(u_{j} = i) = \rho_{ij}$. Let $\pi_{ji}$ be that probability and $s_{jk}$ the score of the k-th term of the event $j$. The variance term of the observed information become
+\begin{equation}
+  \label{eq-var-latent}
+  \mathrm{Var}\big[\nabla\log L_c | \text{data}\big] = \sum_{j}\left[\sum_{k}\pi_{jk}\,s_{jk}s_{jk}^{\top} - \left(\sum_{k}\pi_{jk}s_{jk}\right)\left(\sum_{k}\pi_{jk}s_{jk}\right)^{\top}\right],
+\end{equation}
+
+\noindent which is a pairwise sum that can be calculated using the gradients given by Equation \eqref{eq-grad-q}. The estimated covariance matrix is the inverse of the observed information matrix, and the standard errors for $\hat{\theta}$ is the square root of the diagonal of the inversed information matrix, and are conditional in $\hat{\mu}(x,y)$, $\hat{b}$ and $M_{0}$.
+
+Two other strategies to estimate the standard errors can be used: the first one is to consider directly the hessian matrix returned by the M-Step, calculated using the analytical gradient of $Q$ and some finite differences method. This underestimates the variability of $\hat{\theta}$, but is less noticeable as the number of observations grow, making the estimation of the errors for big catalogs more reliable and direct. The other is to simulate $B$ catalogs using the estimated values of $\hat{\theta}$ and $\hat{\mu}(x,y)$, use them to estimate again the parameters, and using these bootstrap estimates to estimate the empirical standard errors and percentiles.
 
 \section{Computational Implementation}
 \label{sec-comput-impl}
 
-The proposed method was implemented in the R programming language, version 4.6.1 (\citeonline{R_lang})
+The proposed method was implemented in the R programming language, version 4.6.1 (\citeonline{R_lang}). The maximization step uses the \texttt{optim()} function supplied with the analytical gradient in the argument \texttt{gr}. The default option for \texttt{optim()} is to minimize the target function, so the implementation returns the value of $-Q(\theta,\mu|\theta^{(k)},\mu^{(k)})$, and it's minimization is equivalent to the maximization of $Q(\theta, \mu|\theta^{(k)}, \mu^{(k)})$.
 
-\section{Goodness of fit tests}
-\label{sec-goodness_test}
+As the parametric space of $\theta$ have restrictions ($A, \alpha, c, D, \gamma$ must be greater than 0, and $p, q$ must be greater than 1), the optimization method chosen was the L-BFGS-B (Limited-memory Broyden-Fletcher-Goldfarb-Shanno with Box constraints), as it uses the analytical gradient of the objective function, and allows the imposition of box constraints that restrict the search space. In the \texttt{ETAS} package there are no restrictions to the search space, and in some cases the algorithm can give estimates outside the possible range, making so that the optimization never stops and needing to terminate the process manually.
+
+The EMS algorithm has a compound stopping criterion, wich evaluates a relative plus absolute change in both $\hat{\mu}^{(k)}(x,y)$ and $\hat{\theta}^{(k)}$ that preserves the difference in scale that the parameters may have, verifying if $|\hat{\mu}^{(k+1)}(x,y) - \hat{\mu}^{(k)}(x,y)| < \epsilon_{\mu}$ and $|\hat{\theta}^{(k+1)} - \hat{\theta}^{(k)}| < \epsilon_{\theta}$, with $\epsilon_{\theta} = \epsilon_{\mathrm{abs}} + \epsilon_{\mathrm{rel}}|\theta^{(k)}|$ where $\epsilon_{\mathrm{abs}}$ and $\epsilon_{\mathrm{rel}}$ are the absolute and relative tolerances set. If both criteria have been met, the algorithm stops (with a safeguard of at maximum 100 iterations). The implementation uses the \texttt{parallel} package to parallelize the E-Step, in which it automatically allocates the computations to a designated number of cores to be processed simultaneously. It's worth noting that this is done only in Linux machines, and does not work natively in Windows.
+
+% \begin{algorithm}[H]
+% % \SetAlgoLined
+% % \LinesNumbered
+% \caption{EMS Algorithm for the Estimation of ETAS Model}
+% \label{alg-em-etas}
+% \KwData{Catalog with $n$ events $\{(x_i, y_i, t_i, m_i)\}_{i=1}^n$, cutoff magnitude $m_0$, final time $T$, grid $S$ with $N_{grid}$ cells, grid limits $[X_{0},X_{1}]$ and $[Y_{0},Y_{1}]$, tolerances $\epsilon_{\mu},\epsilon_{\theta}$, hyperparameters $n_p = 20$ and $d_{min} = 0.02$.}
+% \KwResult{Estimates of $\hat{\theta} = (A, \alpha, c, p, D, \gamma, q)$ and $\hat{\mu}(x,y)$.}
+% Estimate $\beta$ analytically\;
+% Initialize $\theta^{(0)}$ with some viable guess\;
+% \For{each cell in $S$}{
+%     $\mu^{(0)}(x,y) \gets \frac{1}{N_{grid}}$\;
+% }
+% $k \gets 0$\;
+% $\text{Convergence} \gets \text{False}$\;
+% \While{$\neg \text{Convergence}$}{
+%     \For{$j \gets 1$ \KwTo $n$}{
+%         Evaluate $\lambda_{\theta^{(k)}}(x_j, y_j, t_j | \mathcal{H}_{t_j})$ using $\theta^{(k)}$ e $\mu^{(k)}$\;
+%         \For{$i \gets 1$ \KwTo $j-1$}{
+%             $\rho_{ij}^{(k)} \gets \frac{\kappa(m_i)g(t_j - t_i)f(s_j - s_i; m_i)}{\lambda_{\theta^{(k)}}(x_j, y_j, t_j | \mathcal{H}_{t_j})}$\;
+%         }
+%         $\rho_j^{(k)} \gets 1 - \sum_{i<j} \rho_{ij}^{(k)}$\;
+%       }
+%     $\theta^{(k+1)} \gets \arg\max_{\theta} Q_\theta(\theta | \theta^{(k)}, \mu^{(k)})$\;
+%     \For{each cell with centroid $(x,y)$ in grid $S$}{
+%         \For{$j \gets 1$ \KwTo $n$}{
+%           $h_j \gets \max(d_j^{(n_p)}, d_{min})$\;
+%           $c_{j} \gets \left[\Phi\left(\frac{X_{1} - x_{j}}{h_{j}}\right) - \Phi\left(\frac{X_{0} - x_{j}}{h_{j}}\right)\right]\left[\Phi\left(\frac{Y_{1} - y_{j}}{h_{j}}\right) - \Phi\left(\frac{Y_{0} - y_{j}}{h_{j}}\right)\right]$
+%         }
+%         $\mu^{(k+1)}(x,y) \gets \frac{1}{T}\sum_{j=1}^n \frac{\rho_{j}^{(k)}}{c_{j}} \frac{1}{2\pi h_j^2} \exp\left\{-\frac{(x-x_j)^2 + (y-y_j)^2}{2h_j^2}\right\}$\;
+%     }
+%     \eIf{$|Q(\theta^{(k+1)}, \mu^{(k+1)}) - Q(\theta^{(k)}, \mu^{(k)})| < \epsilon_{Q}$ {\bf and} $|\mu^{(k + 1)}(x,y) - \mu^{(k)}(x,y)| < \epsilon_{\mu}$ {\bf and} $|\theta^{(k+1)} - \theta^{(k)}| < \epsilon_{\theta}$}{
+%         $\text{Convergence} \gets \text{True}$\;
+%     }{
+%         $k \gets k + 1$\;
+%     }
+% }
+% \Return $\hat{\theta}$, $\hat{\mu}(x,y)$\;
+% \end{algorithm}
+
+\section{Residual Analysis and Goodness of Fit}
+\label{sec-residue-analysis}
+
+To evaluate the quality of the estimated quantities $\hat{\theta}$ and $\hat{\mu}(x,y)$, we use residue analysis for the temporal and spatial aspects of the ETAS model.
+
+\subsection{Temporal Residues}
+\label{subsec-temporal-resid}
+
+The estimated compensator for the process is given by
+\begin{equation}
+  \label{eq-est-compensator}
+  \hat{\Lambda}(t) = \frac{t}{T}\sum_{j}\rho_{j} + \sum_{i: t_{i} < t}\kappa(m_{i})G(t - t_{i})F(S - s_{i};m_{i}),
+\end{equation}
+
+\noindent and with it, we resort to the random time change theorem, defined as such:
 
 \begin{theorem}[Random time change]
   \label{teo-mudanca-tempo}
@@ -399,13 +470,116 @@ The proposed method was implemented in the R programming language, version 4.6.1
   are the points of a unidimensional unit rate Poisson Process, if $\Lambda(t|\mathcal{H}_{t})$ is almost surely finite for all $t \in [0,T]$.
 \end{theorem}
 
-This theorem holds for spatio-temporal point processes, and it is used for goodness of fit tests.
+This theorem holds for spatio-temporal point processes, and can be used to verify if $\hat{c}$ and $\hat{p}$ have been well estimated. Let $\tau_{j} = \hat{\Lambda}(t_{j})$ be the transformed times of the catalog, then
+\begin{equation*}
+U_{j} = 1 - \exp\left\{-(\tau_{j} - \tau_{j - 1})\right\},
+\end{equation*}
+
+\noindent are independent and identically distributed random variables, with $U_{j} \sim U(0,1)$. With this, we can use classical methods to verify goodness of fit, such as the Kolmogorov-Smirnov test and graphical validation methods (such as if the graphic of $N(\tau)$ versus $\tau$ is near the identity line, or if the QQ-plot of $U_{j}$ is well behaved). For the evaluation in intervals, we can consider the temporal Pearson residuals. Let $I_{b} = [t_{b}^{-}, t_{b}^{+}], \, t_{b}^{-} < t_{b}^{+}$ be a temporal interval, with the observed number of events in $I_{b}$ to be $O_{b} = N(I_{b})$ (the counting of events in which $t_{j} \in I_{b}$), and the expected number of events in $I_{b}$ to be $E_{b} = \hat{\Lambda}(t_{b}^{+}) - \hat{\Lambda}(t_{b}^{-})$. Then, the temporal Pearson residuals for the interval $I_{b}$ are given by
+\begin{equation}
+  \label{eq-pearson-resid}
+  R_{b} = \frac{O_{b} - E_{b}}{\sqrt{E_{b}}}.
+\end{equation}
+
+With them, we can see if there are time periods with poor adjustment, in which the values for the residues become faily big (usually, $R_{b} > 2$ is considered to be an indication of a poor fit). For these methods to be applicable, the times of events must be in chronological order, and we must choose an viable size for the intervals, because temporal windows in which $E_{b}$ is faily small will have unstable Pearson residuals.
+
+\subsection{Spatial Residues}
+\label{subsec-spatial-resid}
+
+For the spatial residues, we calculate the expected spatial density, in events by area unit along $[0,T]$, given by
+\begin{equation}
+  \label{eq-expec-spatial-dens}
+  \hat{\lambda}_{E}(x,y) = T\hat{\mu}(x,y) + \sum_{i}\kappa(m_{i})G(T - t_{i})f(x - x_{i}, y - y_{i};m_{i}),
+\end{equation}
+
+\noindent and is used in the smoothed residuals, comparing the observed and expected values in the same spatial kernel $K_{h}$
+\begin{equation}
+  \label{eq-smooth-spatial-resid}
+  \hat{s}_{h}(x,y) = \sum_{j}K_{h}((x,y) - (x_{j},y_{j})) - \int\int_{S}K_{h}((x,y) - u)\hat{\lambda}_{E}(u)du.
+\end{equation}
+
+For the evaluation in a rectangular grid formed by pixels with limits $(x^{-},y^{-})$ and $(x^{+}, y^{+})$, we can resort to spatial Pearson residuals defined in Equation \eqref{eq-pearson-resid}, where $O_{b}$ are the counting of events that occurred inside the pixel (i.e., $O_{b} = \sum_{i}\mathds{1}(x_{i} \in [x^{-},x^{+}] \cup y_{i} \in [y^{-}, y^{+}])$), and $E_{b} = \int_{y^{-}}^{y^{+}}\int_{x^{-}}^{x^{+}}\hat{\lambda}_{E}(x,y)dx\, dy$. With them, we can evaluate if some region has problems with the estimation, mainly from the background rate. Another forms of residual analysis such as thinning residuals and Voronoi residuals can be used, in cases where the objective region is not rectangular.
+
+\section{Catalog Simulation}
+\label{sec-cat-simulation}
+
+In order to investigate whether the proposed method is well suited for the fit of the ETAS model, we must be able to control different aspects of some catalogs, and for that a catalog simulator must be constructed. We consider a ramification scheme, where the background events are simulated first, and the offspring are simulated sequentially for every event previously in the catalog.
+
+First, provided the real values for $\theta$ and the function $\mu(x,y)$, the number of parents $N_{0}$ is simulated considering that $N_{0} \sim \mathrm{Pois}\left(T\int\int_{S}\mu(x,y)dx\, dy\right)$, with times uniformly distributed in $(0,T)$, and locations simulated from the Inhomogeneous Poisson Process with intensity function $\mu(x,y)$. The magnitudes follow the Gutenberg-Richter law, with truncation in $M_{\text{max}}$ in order to not generate earthquakes above some limit value (for example, 0.1 degrees above the maximum magnitude in the catalog), defined as such
+\begin{equation}
+  \label{eq-sim-magnitudes}
+  m = m_{0} - \frac{1}{\beta}\log\left[1 - u_{m}(1 - \exp(- \beta(M_{\text{max}} - m_{0})))\right],
+\end{equation}
+
+\noindent where $u_{m} \sim U(0,1)$. Then, the offspring for each event $i$ in generation 0 generates $N_{i}$ offsprings, with $N_{i} \sim \mathrm{Pois}(\kappa(m_{i}))$, times given by $t = t_{i} + c\left[(1 - u_{t})^{-\frac{1}{p - 1}} - 1\right]$, and spatial dislocation with radius $r = \sqrt{S_{i}\left[(1 - u_{r})^{-\frac{1}{q-1}}-1\right]}$ and angle $\phi \sim U(0,2\pi)$, with $u_{t},u_{r} \sim U(0,1)$. If the event simulated time is bigger than the maximum time $T$ or if the simulated location lies outside the target region $S$, the point is discarded. All these events are then added to the catalog, and the process repeats for all the generations. If there are no more generations or if there are no more events with times $t < T$, the algorithm stops and the catalog is complete.
+
+With this scheme we are able to control all the aspects of the seismological activity of some region. The expected number of events is given by
+\begin{equation*}
+  \mathds{E}(N) \approx \frac{T \int \int_{S}\mu(x,y)dx\, dy}{1 - e_{\mathrm{off}}},
+\end{equation*}
+
+\noindent where $e_{\mathrm{off}} = \frac{A\beta}{\beta - \alpha}$ is the expected number of offspring generated from any event, as defined in Equation \eqref{eq-expect-triggered}.
+
+With the proposed method well defined (which includes the EMS algorithm, the analytical gradient of the $Q$ function, the quantification of the uncertainty and the means to diagnose the quality of fit) and the simulator that permits testing the model under known circumstances, we can explore how the model performs under different scenarios.
+
+\part{Results}
+\label{part-results}
 
 \chapter{Simulation Studies}
 \label{chap-simulation-studies}
 
-\section{Sensitivity to Initial Guess of $\theta^{(0)}$}
+For the simulation studies, three main questions were explored: can the proposed method recover the real parameters used for the simulation, is the method sensitive to changes in the initial guesses for $\theta^{(0)}$ and $\mu^{(0)}(x,y)$, and how the estimated values behave as the size of the catalogs increase (and does the estimation take a feasible time to be computed)?
+
+All the simulations consider some characteristics who are common between all the experiments: the spatial window $W$ is the square in $[0,8] \times [0,8]$, the background rate function is the rescalated sum of radial exponentials with a floor, such that the integral of the $\mu(x,y)$ in the window to be $\mu_{\mathrm{tot}}$ events/day. The $\mu(x,y)$ function is given by
+\begin{equation}
+  \label{eq-mu-simulado}
+  \mu(x,y) = s\left[\epsilon + \sum_{k = 1}^{K}a_{k}\exp\left(- \frac{||(x,y) - (x_{k},y_{k})||}{l_{k}}\right)\right],
+\end{equation}
+
+\noindent where $\epsilon$ is the floor value that controls the minimal intensity, $k = 1,2,\ldots,K$ is the number of center points of the radial exponentials, $a_{k}$ are the amplitudes and $l_{k}$ the scale of such exponentials and $s$ is the scaling factor, given by
+\begin{equation*}
+  s = \frac{\mu_{\mathrm{tot}}}{\int\int_{W}\left[\epsilon + \sum_{k = 1}^{K}a_{k}\exp\left(- \frac{||(x,y) - (x_{k},y_{k})||}{l_{k}}\right)\right]dx\, dy}.
+\end{equation*}
+
+For this study, we consider $K = 2$, with coordinates $(2.5,5)$ and $(5.5,2)$, amplitudes $a_{1} = 1$ and $a_{2} = 0.6$, scales $l_{1} = 0.8$ and $l_{2} = 1.2$, $\mu_{\mathrm{tot}} = 0.11$ and $\epsilon = 0.05$. The true background rate used for the simulations is presented in \autoref{fig-true-background}. The true value for the parameters is $\theta = (A = 0.5, \alpha = 1.5, c = 0.25, p = 1.5, D = 0.1, q = 2, \gamma = 1)$, the threshold magnitude is $m_{0} = 4.5$, the $b$ value used for the simulation of the magnitudes was $b = 1.5$, and consequently, $\beta = b\log(10) \approx 3.45$. With that, we can calculate the $e_{\mathrm{off}}$ ratio and see that $e_{\mathrm{off}} = 0.8839 < 1$, making the process be subcritical.
+
+\begin{figure}[tb]
+	\caption{\label{fig-true-background}True background rate used in simulations.}
+	\begin{center}	    \includegraphics[scale=1]{Images/real_background.pdf}
+	\end{center}
+\end{figure}
+
+If we want to achieve a certain number of observations $n_{\mathrm{targ}}$, the time period chosen to construct the catalogs must be choose considering that $\mathds{E}(N) \approx \frac{T\mu_{\mathrm{tot}}}{(1 - e_{\mathrm{off}})} \rightarrow T \approx \frac{n_{\mathrm{targ}}(1 - e_{\mathrm{off}})}{\mu_{\mathrm{tot}}}$. The EMS algorithm stopping criterion was set to a relative change in the order $10^{-3}$ and an absolute change of $10^{-6}$, both in the grid cells that evaluate $\hat{\mu}(x,y)$ and in $\hat{\theta}$.
+
+Consider $B$ different fits, the metrics used for evaluating $\hat{\theta}$ are the bias, RMSE (square root of mean squared error) and the coverage, given by
+\begin{equation}
+  \label{eq-metrics-theta}
+  \begin{split}
+    \mathrm{Bias}_{l} &= \frac{1}{B}\sum_{b}\hat{\theta}_{l}^{(b)} - \theta_{l},\\
+    \mathrm{RSME}_{l} &= \sqrt{\mathrm{Bias}_{l}^{2} + \widehat{\mathrm{Var}}(\hat{\theta}_{l})}, \\
+    \mathrm{Cover}_{l} &= \frac{1}{B}\sum_{b}\mathds{1}\left\{|\hat{\theta}_{l}^{(b)} - \theta_{l}| \le 1.96\widehat{\mathrm{SE}}_{l}^{(b)}\right\},
+  \end{split}
+\end{equation}
+
+\noindent and the metrics used to evaluate $\hat{\mu}(x,y)$ are the L1 difference and the Brier Score, defined as
+
+\begin{equation}
+  \label{eq-metrics-mu}
+  \begin{split}
+    L_{1} &= \frac{\int\int_{W}|\hat{\mu}(x,y) - \mu(x,y)|dx\, dy}{\int\int_{W}\mu(x,y)dx\, dy}, \\
+    \mathrm{Brier} &= \frac{1}{N}\sum_{j = 1}^{N}\left(\hat{\rho}_{j} - \mathds{1}\left\{u_{j} = 0\right\}\right).
+  \end{split}
+\end{equation}
+
+\section{Sensitivity to Initial Guess of $\theta^{(0)}$ and $\mu^{(0)}(x,y)$}
 \label{sec-sensiv-theta-0}
+
+For the sensitivity study, we ought to check three different scenarios and their impact on the final estimates of $\hat{\theta}$ and $\hat{\mu}(x,y)$:
+\begin{itemize}
+\item What's the impact of changing one of the parameters from the true value, while the others remain at the true?
+\item What's the impact when all the parameters are changed simultaneously?
+\item What's the impact of changing the initial guess for the background rate?
+\end{itemize}
 
 \chapter{Case Studies}
 \label{chap-case-studies}

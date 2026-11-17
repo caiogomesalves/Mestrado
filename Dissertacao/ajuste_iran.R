@@ -207,10 +207,10 @@ t3_iran <- Sys.time()
 #====Análise de Resíduos====
 
 # Taxa global de background (Eventos/dia em toda a região):
-mu_global_iran <- sum(pmax(0, 1 - prob_total_iran)) / max(df_temp_iran$time)
+mu_global_iran <- sum(pmax(0, 1 - prob_total_iran)) / aj_iran$T_total
 
 # Tau_j para os tempos dos eventos:
-tau_j_iran <- calcular_tau(df_temp_iran$time, df_temp_iran, thetas_iran[[length(thetas_iran)]], mu_global_iran, M0 = 4.5)
+tau_j_iran <- calcular_tau(df_temp_iran$time, df_temp_iran, aj_iran$theta, mu_global_iran, M0 = 4.5)
 
 # Calcular U_j:
 delta_tau_iran <- diff(c(0, tau_j_iran))
@@ -241,7 +241,7 @@ janelas_tempo_iran <- seq(0, max(df_temp_iran$time), length.out = n_temp_iran + 
 obs_temp_iran <- hist(df_temp_iran$time, breaks = janelas_tempo_iran, plot = FALSE)$counts
 
 # Contagens esperadas pela diferença do tau nos limites da janela:
-tau_limites_iran <- calcular_tau(janelas_tempo_iran, df_temp_iran, thetas_iran[[length(thetas_iran)]], mu_global_iran, M0 = 4.5)
+tau_limites_iran <- calcular_tau(janelas_tempo_iran, df_temp_iran, aj_iran$theta, mu_global_iran, M0 = 4.5)
 esp_temp_iran <- diff(tau_limites_iran)
 
 # Resíduos de Pearson Temporais:
@@ -265,15 +265,15 @@ pontos_iran <- ppp(df_temp_iran$x, df_temp_iran$y,
 
 # Criar a densidade espacial esperada pelo Background:
 cell_area_iran <- diff(x_grid_iran)[1] * diff(y_grid_iran)[1]
-matriz_esperada_iran <- (rasters_iran[[length(rasters_iran)]] / (sum(rasters_iran[[length(rasters_iran)]]) * cell_area_iran)) * (mu_global_iran * max(df_temp_iran$time))
+matriz_esperada_iran <- (aj_iran$raster / (sum(aj_iran$raster) * cell_area_iran)) * (mu_global_iran * max(df_temp_iran$time))
 # matriz_esperada_iran <- (rasters_iran[[length(rasters_iran)]] / sum(rasters_iran[[length(rasters_iran)]])) * (mu_global_iran * max(df_temp_iran$time))
 
 # Extrair os 7 parâmetros do modelo convergido
-A_iran <- thetas_iran[[length(thetas_iran)]]["A"]
-alpha_iran <- thetas_iran[[length(thetas_iran)]]["alpha"]
-D_iran <- thetas_iran[[length(thetas_iran)]]["D"]
-q_par_iran <- thetas_iran[[length(thetas_iran)]]["q"]
-gamma_par_iran <- thetas_iran[[length(thetas_iran)]]["gamma"]
+A_iran <- aj_iran$theta["A"]
+alpha_iran <- aj_iran$theta["alpha"]
+D_iran <- aj_iran$theta["D"]
+q_par_iran <- aj_iran$theta["q"]
+gamma_par_iran <- aj_iran$theta["gamma"]
 
 M0 <- 4.5 # Ajuste para o limiar de magnitude correto do seu catálogo atual
 

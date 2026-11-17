@@ -75,6 +75,13 @@ Dispon{\'\i}vel em: \url{https://academic.oup.com/biomet/article-lookup/doi/10.1
 ISSN 1548-7660.
 Dispon{\'\i}vel em: \url{http://www.jstatsoft.org/v88/c01/}.}
 
+\bibitem[Louis 1982]{louis_1982}
+\abntrefinfo{Louis}{LOUIS}{1982}
+{LOUIS, T.~A. Finding the {Observed} {Information} {Matrix} {When} {Using} the \textit{{EM}} {Algorithm}.
+\emph{Journal of the Royal Statistical Society Series B: Statistical Methodology}, v.~44, n.~2, p. 226--233, jan. 1982.
+ISSN 1369-7412, 1467-9868.
+Dispon{\'\i}vel em: \url{https://academic.oup.com/jrsssb/article/44/2/226/7027638}.}
+
 \bibitem[Ludwig et al. 2025]{ludwig_2025}
 \abntrefinfo{Ludwig et al.}{LUDWIG et al.}{2025}
 {LUDWIG, G.; WANG, Y.; CHU, T.; WANG, H.; ZHU, J. Bayesian analysis and variable selection for spatial count data with an application to {Rio} de {Janeiro} gun violence.
@@ -121,6 +128,13 @@ Vienna, Austria, 2026. Dispon{\'\i}vel em: \url{https://www.R-project.org/}.}
 \emph{Journal of the Royal Statistical Society Series B: Statistical Methodology}, v.~52, n.~2, p. 271--303, jan. 1990.
 ISSN 1369-7412, 1467-9868.
 Dispon{\'\i}vel em: \url{https://academic.oup.com/jrsssb/article/52/2/271/7027865}.}
+
+\bibitem[Utsu 1966]{utsu_1966}
+\abntrefinfo{Utsu}{UTSU}{1966}
+{UTSU, T. A {Statistical} {Significance} {Test} of the {Difference} in b-value between {Two} {Earthquake} {Groups}.
+\emph{Journal of Physics of the Earth}, v.~14, n.~2, p. 37--40, 1966.
+ISSN 1884-2305, 0022-3743.
+Dispon{\'\i}vel em: \url{http://www.jstage.jst.go.jp/article/jpe1952/14/2/14\_2\_37/\_article}.}
 
 \bibitem[Utsu et al. 1995]{utsu_1995}
 \abntrefinfo{Utsu et al.}{UTSU et al.}{1995}

@@ -1,774 +1,387 @@
-#====Pacotes====
-
-library(dplyr)
-library(ETAS)
-library(spatstat)
-library(lubridate)
-library(parallel)
-library(readxl)
-
-#====Funções====
-
-# Calculador de distâncias adaptativas:
-d_j <- function(X, np = 20, dmin = 0.02) {
-    distancias <- nndist(X, k = np)
-    return(pmax(distancias, dmin))
-}
-
-# Produtividade:
-kappa_func <- function(m, m0, A, alpha) {
-    return(A * exp(alpha * (m - m0)))
-}
-
-# Densidade de probabilidade do tempo de ocorrência (Lei de Omori modificada):
-g_func <- function(t_diff, c, p) {
-    val <- rep(0, length(t_diff))
-    idx <- t_diff > 0
-    val[idx] <- (p - 1) * (c^(p - 1)) * (t_diff[idx] + c)^(-p)
-    return(val)
-}
-
-# Densidade de resposta espacial (Pareto/Lei de Potência - Pacote ETAS):
-f_spatial <- function(dist2, mag, M0, D_par, q_par, gamma_par) {
-    # S_i é o fator de escala espacial dependente da magnitude:
-    S_i <- D_par * exp(gamma_par * (mag - M0))
-    # f(x,y) = ((q-1) / (pi * S_i)) * (1 + dist2 / S_i)^(-q)
-    term1 <- (q_par - 1) / (pi * S_i)
-    term2 <- (1 + (dist2 / S_i))^(-q_par)
-    return(term1 * term2)
-}
-
-# Extrator de valores de raster:
-func_nu <- function(matriz_background, dados, x_grid, y_grid) {
-    # Encontra o índice do grid mais próximo para cada ponto x e y:
-    idx_x <- sapply(dados$x, function(val){which.min(abs(x_grid - val))})
-    idx_y <- sapply(dados$y, function(val){which.min(abs(y_grid - val))})
-    # Extrai os valores correspondentes da matriz:
-    valores <- mapply(function(r, c) matriz_background[r, c], idx_x, idx_y)
-    return(data.frame(lyr.1 = valores))
-}
-
-# Intensidade Total:
-lambda_total <- function(t, long, lat, mag, M0, catalog, params, matriz_background, x_grid, y_grid) {
-    # mu_val <- func_nu(matriz_background, catalog[, c("x", "y")], x_grid, y_grid)
-    mu_val <- func_nu(matriz_background, data.frame(x = long, y = lat), x_grid, y_grid)
-    ancestors <- catalog %>% filter(time < t)
-    if(nrow(ancestors) == 0){
-        return(mu_val)
-    }
-    clustering <- ancestors %>%
-        mutate(
-            dt = t - time,
-            dist2 = (long - x)^2 + (lat - y)^2,
-            contribution = kappa_func(mag, M0, params["A"], params["alpha"]) *
-                g_func(dt, params["c"], params["p"]) *
-                f_spatial(dist2, mag, M0, params["D"], params["q"], params["gamma"])
-        ) %>%
-        summarise(total = sum(contribution))
-    return(mu_val$lyr.1[nrow(clustering)] + clustering$total[nrow(clustering)])
-}
-
-# Calcula as probabilidades p_ij (passo E do EM):
-calcular_probabilidades <- function(df_eventos, theta, M0, raster_mu, x_grid, y_grid, num_cores = 1) {
-    n <- nrow(df_eventos)
-    # Valores de fundo (mu) para todos os eventos, calculados de uma só vez:
-    mu_vals <- func_nu(raster_mu, df_eventos, x_grid, y_grid)$lyr.1
-    probabilidades <- mclapply(1:n, function(j) {
-        # Primeiro evento tem probabilidade 0 de ser descendente:
-        if (j == 1) return(numeric(0))
-        i_indices <- 1:(j - 1)
-        numeradores <- kappa_func(df_eventos$mag[i_indices], M0, theta["A"], theta["alpha"]) *
-            g_func(df_eventos$time[j] - df_eventos$time[i_indices], theta["c"], theta["p"]) *
-            f_spatial(
-            (df_eventos$x[j] - df_eventos$x[i_indices])^2 + (df_eventos$y[j] - df_eventos$y[i_indices])^2,
-            df_eventos$mag[i_indices], M0, theta["D"], theta["q"], theta["gamma"]
-            )
-        denom <- mu_vals[j] + sum(numeradores)
-        return(numeradores / denom)
-    }, mc.cores = num_cores)
-    prob_total <- vapply(probabilidades, sum, numeric(1))
-    list(probabilidades = probabilidades, prob_total = prob_total)
-}
-
-# Log-verossimilhança do modelo ajustada:
-log_lik_etas <- function(params, df_eventos, matriz_p_ij, prob_total, raster_mu, x_grid, y_grid, M0 = 4.5, T_max = 10) {
-    n <- nrow(df_eventos)
-    log_disparo_total <- 0
-    mu_base_valores <- func_nu(raster_mu, df_eventos, x_grid, y_grid)[, 1]
-    for (j in 1:n) {
-        rho_j <- pmax(0, 1 - prob_total[j])
-        mu_j <- mu_base_valores[j]
-        log_contrib_j <- rho_j * log(pmax(mu_j, 1e-15))
-        if (j > 1) {
-            p_ij <- matriz_p_ij[[j]]
-            if (length(p_ij) > 0 && sum(p_ij) > 0) {
-                i_indices <- 1:(j - 1)
-                g_val <- g_func(df_eventos$time[j] - df_eventos$time[i_indices], params["c"], params["p"])
-                kappa_val <- kappa_func(df_eventos$mag[i_indices], M0, params["A"], params["alpha"])
-                f_val <- f_spatial(
-                (df_eventos$x[j] - df_eventos$x[i_indices])^2 + (df_eventos$y[j] - df_eventos$y[i_indices])^2,
-                df_eventos$mag[i_indices], M0, params["D"], params["q"], params["gamma"]
-                )
-                intensidade_ij <- kappa_val * g_val * f_val
-                log_contrib_j <- log_contrib_j + sum(p_ij * log(pmax(intensidade_ij, 1e-15)))
-            }
-        }
-        log_disparo_total <- log_disparo_total + log_contrib_j
-    }
-    integral_background <- sum(pmax(0, 1 - prob_total))
-    integral_clustering <- sum(kappa_func(df_eventos$mag, M0, params["A"], params["alpha"]))
-    log_lik_completa <- log_disparo_total - (integral_background + integral_clustering)
-    return(-log_lik_completa)
-}
-
-# Gradiente Analítico Exato (incluindo q e gamma):
-gradiente_etas_completo <- function(params, df_eventos, matriz_p_ij, prob_total, T_max = 10, M0 = 4.5, ...) {
-    A      <- params["A"]
-    alpha  <- params["alpha"]
-    cc     <- params["c"]
-    pp     <- params["p"]
-    D      <- params["D"]
-    qq     <- params["q"]
-    gamma  <- params["gamma"]
-    n <- nrow(df_eventos)
-    sum_p_ij <- 0
-    sum_alpha_term <- 0
-    sum_c_term <- 0
-    sum_p_term <- 0
-    sum_D_term <- 0
-    sum_q_term <- 0
-    sum_gamma_term <- 0
-    for (j in 2:n) {
-        p_ij <- matriz_p_ij[[j]]
-        if (length(p_ij) == 0 || sum(p_ij) == 0){
-            next
-        }
-        i_indices <- 1:(j - 1)
-        # Diferenças nos tempos:
-        dt <- df_eventos$time[j] - df_eventos$time[i_indices]
-        # Distâncias espaciais:
-        dist2 <- (df_eventos$x[j] - df_eventos$x[i_indices])^2 + (df_eventos$y[j] - df_eventos$y[i_indices])^2
-        # Diferenças nas magnitudes:
-        dm <- df_eventos$mag[i_indices] - M0
-        sum_p_ij <- sum_p_ij + sum(p_ij)
-        # Derivada de Produtividade (alpha):
-        sum_alpha_term <- sum_alpha_term + sum(p_ij * dm)
-        # Derivadas Temporais:
-        deriv_c <- ((pp - 1) / cc) - (pp / (dt + cc))
-        sum_c_term <- sum_c_term + sum(p_ij * deriv_c)
-        deriv_p <- (1 / (pp - 1)) + log(cc) - log(dt + cc)
-        sum_p_term <- sum_p_term + sum(p_ij * deriv_p)
-        # Derivadas Espaciais (Kernel de Pareto):
-        S_i <- D * exp(gamma * dm)
-        V_ij <- dist2 / S_i
-        U_ij <- 1 + V_ij
-        # Fator de escala comum das derivadas em D e gamma:
-        W_ij <- qq * (V_ij / U_ij) - 1
-        deriv_D <- W_ij / D
-        sum_D_term <- sum_D_term + sum(p_ij * deriv_D)
-        deriv_gamma <- dm * W_ij
-        sum_gamma_term <- sum_gamma_term + sum(p_ij * deriv_gamma)
-        deriv_q <- (1 / (qq - 1)) - log(U_ij)
-        sum_q_term <- sum_q_term + sum(p_ij * deriv_q)
-    }
-    dm_all <- df_eventos$mag - M0
-    exp_alpha_all <- exp(alpha * dm_all)
-    int_A <- sum(exp_alpha_all)
-    int_alpha <- sum(A * dm_all * exp_alpha_all)
-    grad_A     <- - (sum_p_ij / A) + int_A
-    grad_alpha <- - sum_alpha_term + int_alpha
-    grad_c     <- - sum_c_term
-    grad_p     <- - sum_p_term
-    grad_D     <- - sum_D_term
-    grad_q     <- - sum_q_term
-    grad_gamma <- - sum_gamma_term
-    return(c("A" = grad_A, "alpha" = grad_alpha,
-             "c" = grad_c, "p" = grad_p, "D" = grad_D,
-             "q" = grad_q, "gamma" = grad_gamma))
-}
-
-# Estimação do background rate:
-estimate_background_kernel <- function(x_grid, y_grid, catalog, bw_vec, T_total) {
-    # Inicializa a matriz de densidade:
-    z <- matrix(0, nrow = length(x_grid), ncol = length(y_grid))
-    # Peso para cada evento: (1 - rho_j) / T:
-    weights <- (1 - catalog$rho) / T_total
-    # Loop sobre cada evento:
-    for(i in 1:nrow(catalog)) {
-        xi <- catalog$x[i]
-        yi <- catalog$y[i]
-        di <- bw_vec[i]
-        wi <- weights[i]
-        dx2 <- (x_grid - xi)^2
-        dy2 <- (y_grid - yi)^2
-        contribution <- (wi / (2 * pi * di^2)) * exp(-outer(dx2, dy2, "+") / (2 * di^2))
-        z <- z + contribution
-    }
-    return(z)
-}
-
-# Estimação do efeito de clustering relativo:
-estimate_relative_clustering <- function(x_grid, y_grid, catalog, bw_vec) {
-    # Inicializa as matrizes para o numerador e denominador:
-    numerator_gamma <- matrix(0, nrow = length(x_grid), ncol = length(y_grid))
-    denominator_m1  <- matrix(0, nrow = length(x_grid), ncol = length(y_grid))
-    # Loop sobre cada evento para acumular as superfícies:
-    for(i in 1:nrow(catalog)) {
-        xi <- catalog$x[i]
-        yi <- catalog$y[i]
-        di <- bw_vec[i]
-        rho_i <- catalog$rho[i]
-        dx2 <- (x_grid - xi)^2
-        dy2 <- (y_grid - yi)^2
-        # Kernel Gaussiano base avaliado no grid para o evento i:
-        kernel_base <- (1 / (2 * pi * di^2)) * exp(-outer(dx2, dy2, "+") / (2 * di^2))
-        # Acumula o denominador:
-        denominator_m1 <- denominator_m1 + kernel_base
-        # Acumula o numerador:
-        numerator_gamma <- numerator_gamma + (rho_i * kernel_base)
-    }
-    # Calcula a razão ponto a ponto para obter C(x,y)
-    C_xy <- ifelse(denominator_m1 > 0, numerator_gamma / denominator_m1, 0)
-    return(list(C = C_xy, m1 = denominator_m1, gamma = numerator_gamma))
-}
-
-# Critério de convergência do EM: combina tolerância absoluta e relativa
-# (no estilo atol + rtol*|valor anterior|).
-# Isso evita dois problemas do critério puramente absoluto (|novo - antigo| > 1e-3):
-#   (a) para o raster de background, cujos valores costumam ser pequenos
-#       (~1e-4 a 1e-2), uma diferença absoluta de 1e-3 já parece "convergida"
-#       mesmo representando uma mudança relativa enorme -- isso fazia o loop
-#       parar cedo demais, deixando o raster mais próximo do chute inicial
-#       uniforme do que deveria (aparência de "suavização excessiva");
-#   (b) para os parâmetros theta, que têm escalas muito diferentes entre si
-#       (c, D, gamma ~ 0.01-0.03 vs. alpha, p ~ 1-3), a mesma tolerância
-#       absoluta é frouxa demais para uns e apertada demais para outros.
-convergiu_em <- function(novo, antigo, tol_rel = 1e-3, tol_abs = 1e-6) {
-    limite <- tol_abs + tol_rel * abs(antigo)
-    all(abs(novo - antigo) <= limite)
-}
-
-# Verifica criticidade do processo:
-verificar_criticidade <- function(theta, b) {
-    A <- unname(theta["A"]); alpha <- unname(theta["alpha"])
-    beta <- b * log(10)
-    if (beta <= alpha) {
-        warning(sprintf(
-            "beta (%.3f) <= alpha (%.3f): razão de ramificação é infinita/mal definida.",
-            beta, alpha),
-            "A distribuição de magnitudes tem cauda mais pesada que o decaimento ",
-            "da produtividade -- catálogo pode explodir numericamente.")
-        return(invisible(NULL))
-    }
-    n_bar <- A * beta / (beta - alpha)
-    msg <- sprintf("Razão de ramificação estimada: n = %.4f", n_bar)
-    if (n_bar >= 1) {
-        warning(msg, " -- processo SUPERCRITICO (n >= 1). ",
-                "O número esperado de eventos é infinito/instável; a simulação ",
-                "provavelmente vai bater no limite de gerações ou demorar muito.")
-    } else {
-        message(msg, " (subcrítico, processo estável)")
-    }
-    invisible(n_bar)
-}
-
-# Funcao principal de simulação:
-simular_catalogo_etas <- function(
-                                  theta,                          # Vetor nomeado: A, alpha, c, p, D, q, gamma
-                                  M0      = 4.5,                  # Magnitude de corte
-                                  b       = 1.0,                  # Valor-b de Gutenberg-Richter
-                                  Mmax    = NULL,                 # Magnitude máxima (NULL = sem truncamento)
-                                  T_max,                          # Janela temporal de simulação [0, T_max]
-                                  mu_type = c("constant", "raster"),
-                                  mu_const  = NULL,               # Usado se mu_type == "constant" (eventos/dia/grau^2)
-                                  mu_raster = NULL,               # Usado se mu_type == "raster" (matriz nx x ny)
-                                  x_grid = NULL, y_grid = NULL,   # Necessários se mu_type == "raster"
-                                  xlim = NULL, ylim = NULL,       # Janela espacial (usada se mu_type == "constant")
-                                  max_geracoes = 75,              # Trava de segurança contra explosão
-                                  checar_criticidade = TRUE,
-                                  semente = NULL
-                                  ) {
-    # Controle de seed para reprodutibilidade:
-    if (!is.null(semente)){
-        set.seed(semente)
-    }
-    mu_type <- match.arg(mu_type)
-    # Checagem de criticidade do processo:
-    if (checar_criticidade){
-        verificar_criticidade(theta, b)
-    }
-    # Parâmetros:
-    A     <- unname(theta["A"])
-    alpha <- unname(theta["alpha"])
-    cc    <- unname(theta["c"])
-    pp    <- unname(theta["p"])
-    D     <- unname(theta["D"])
-    q     <- unname(theta["q"])
-    gamma <- unname(theta["gamma"])
-    # Garante que valores sejam próprios para densidades:
-    stopifnot(pp > 1, q > 1)
-    # ---- Magnitudes: Gutenberg-Richter (truncada se Mmax fornecido) ----
-    simular_magnitudes <- function(n) {
-        if (n == 0){
-            return(numeric(0))
-        }
-        beta <- b * log(10)
-        if (is.null(Mmax)) {
-            M0 - log(runif(n)) / beta
-        } else {
-            u <- runif(n)
-            Fmax <- 1 - exp(-beta * (Mmax - M0))
-            M0 - log(1 - u * Fmax) / beta
-        }
-    }
-    # ---- Localização de background a partir de um raster (grid) ----
-    amostrar_local_raster <- function(n) {
-        # Caso nenhuma observação retorna data frame vazio:
-        if (n == 0){
-            return(data.frame(x = numeric(0),
-                              y = numeric(0)))
-        }
-        n_x <- length(x_grid)
-        n_y <- length(y_grid)
-        # Probabilidade de cada pixel:
-        probs <- as.vector(mu_raster)
-        probs <- probs / sum(probs)
-        idx <- sample.int(length(probs), size = n, replace = TRUE, prob = probs)
-        col_idx <- ((idx - 1) %/% n_x) + 1
-        row_idx <- ((idx - 1) %% n_x) + 1
-        dx <- diff(x_grid)[1]
-        dy <- diff(y_grid)[1]
-        x <- x_grid[row_idx] + runif(n, -dx / 2, dx / 2)
-        y <- y_grid[col_idx] + runif(n, -dy / 2, dy / 2)
-        data.frame(x = x, y = y)
-    }
-    # ---- Deslocamento espacial de réplicas: kernel de Pareto isotrópico ----
-    # CDF do raio (obtida integrando f(x,y) em coordenadas polares):
-    #   F(r) = 1 - (1 + r^2/S)^{-(q-1)}   =>   r^2 = S * [(1-u)^{-1/(q-1)} - 1]
-    simular_offset_espacial <- function(mag) {
-        n <- length(mag)
-        if (n == 0) {
-            return(data.frame(dx = numeric(0),
-                              dy = numeric(0)))
-        }
-        S_i <- D * exp(gamma * (mag - M0))
-        u   <- runif(n)
-        r2  <- S_i * ((1 - u)^(-1 / (q - 1)) - 1)
-        r   <- sqrt(r2)
-        ang <- runif(n, 0, 2 * pi)
-        data.frame(dx = r * cos(ang), dy = r * sin(ang))
-    }
-    # ---- Deslocamento temporal: Omori-Utsu (CDF inversa) ----
-    # F(t) = 1 - (c/(t+c))^{p-1}   =>   t = c * [(1-u)^{-1/(p-1)} - 1]
-    simular_offset_temporal <- function(n) {
-        if (n == 0){
-            return(numeric(0))
-        }
-        u <- runif(n)
-        cc * ((1 - u)^(-1 / (pp - 1)) - 1)
-    }
-    # ---- Passo 1: Eventos de background ----
-    # Caso raster não seja passado:
-    if (mu_type == "constant") {
-        stopifnot(!is.null(mu_const), !is.null(xlim), !is.null(ylim))
-        area <- diff(xlim) * diff(ylim)
-        n_bg <- rpois(1, mu_const * area * T_max)
-        x0 <- runif(n_bg, xlim[1], xlim[2])
-        y0 <- runif(n_bg, ylim[1], ylim[2])
-    } else {
-        stopifnot(!is.null(mu_raster), !is.null(x_grid), !is.null(y_grid))
-        dxg <- diff(x_grid)[1]
-        dyg <- diff(y_grid)[1]
-        # Integral aproximada de mu(x,y):
-        mu_total <- sum(mu_raster) * dxg * dyg
-        # Número de observações amostradas do background:
-        n_bg <- rpois(1, mu_total * T_max)
-        # Localizações dos pontos:
-        loc <- amostrar_local_raster(n_bg)
-        x0 <- loc$x
-        y0 <- loc$y
-    }
-    t0 <- runif(n_bg, 0, T_max)
-    m0 <- simular_magnitudes(n_bg)
-    catalogo <- data.frame(
-        id = seq_len(n_bg), parent = 0L, geracao = 0L,
-        time = t0, x = x0, y = y0, mag = m0
-    )
-    # ---- Passo 2: Processar réplicas geração por geração (fila / BFS) ----
-    proximo_id <- n_bg + 1L
-    fila <- catalogo
-    g_final <- 0L
-    if (n_bg > 0) {
-        for (g in seq_len(max_geracoes)) {
-            g_final <- g
-            # Critério de parada (todas as gerações finalizaram):
-            if (nrow(fila) == 0){
-                break
-            }
-            # Produtividade:
-            kappa_vals <- A * exp(alpha * (fila$mag - M0))
-            # Número de filhos produzidos:
-            n_filhos   <- rpois(nrow(fila), kappa_vals)
-            if (sum(n_filhos) == 0){
-                break
-            }
-            idx_pais <- rep(seq_len(nrow(fila)), times = n_filhos)
-            pais <- fila[idx_pais, , drop = FALSE]
-            # Magnitudes dos filhos:
-            mags_filhos <- simular_magnitudes(nrow(pais))
-            # Diferenças temporais dos filhos:
-            dt          <- simular_offset_temporal(nrow(pais))
-            # Distâncias espaciais dos filhos:
-            off_esp     <- simular_offset_espacial(pais$mag)
-            filhos <- data.frame(
-                id      = proximo_id + seq_len(nrow(pais)) - 1L,
-                parent  = pais$id,
-                geracao = g,
-                time    = pais$time + dt,
-                x       = pais$x + off_esp$dx,
-                y       = pais$y + off_esp$dy,
-                mag     = mags_filhos
-            )
-            proximo_id <- proximo_id + nrow(filhos)
-            # Descarta filhos fora da janela temporal:
-            filhos <- filhos[filhos$time <= T_max, , drop = FALSE]
-            catalogo <- rbind(catalogo, filhos)
-            fila <- filhos
-        }
-        if (g_final == max_geracoes && nrow(fila) > 0) {
-            warning("Número máximo de gerações atingido -- verifique a razão de ",
-                    "ramificação (verificar_criticidade) antes de confiar no catálogo.")
-        }
-    }
-    # Ordena o catálogo temporalmente:
-    catalogo <- catalogo[order(catalogo$time), ]
-    rownames(catalogo) <- NULL
-    # Atributos invisíveis do catálogo:
-    attr(catalogo, "theta_verdadeiro") <- theta
-    attr(catalogo, "M0") <- M0
-    attr(catalogo, "b")  <- b
-    catalogo
-}
-
-# Função principal de ajuste:
-ajustar_etas_proprio <- function(
-                                 catalogo,
-                                 theta0,
-                                 M0 = 4.5,
-                                 x_grid, y_grid,
-                                 d_j_pre = NULL,
-                                 r0 = NULL,
-                                 num_cores = 1,
-                                 max_iter_em = 100,
-                                 tol_rel_theta  = 1e-3, tol_abs_theta  = 1e-6,
-                                 tol_rel_raster = 1e-3, tol_abs_raster = 1e-6,
-                                 lower = c(1e-6, 1e-6, 1e-6, 1.001, 1e-6, 1.001, 1e-6),
-                                 upper = c(15, 10, 15, 15, 15, 15, 10),
-                                 guardar_historico = FALSE
-                                 ) {
-    df_eventos <- extrair_eventos_catalog(catalogo, M0)
-    df_eventos$time <- df_eventos$time - min(df_eventos$time)
-    if (is.null(d_j_pre)) d_j_pre <- d_j(df_eventos[, c("x", "y")])
-    if (is.null(r0))      r0      <- matrix(1, nrow = length(x_grid), ncol = length(y_grid))
-    thetas_hist  <- list(theta0)
-    rasters_hist <- list(r0)
-    theta_atual  <- theta0
-    r_atual      <- r0
-    conv_codes   <- integer(0)
-    # ---- Primeira iteração do EM (sempre executada, sem checagem prévia) ----
-    passo_e <- calcular_probabilidades(df_eventos, theta_atual, M0, r_atual, x_grid, y_grid, num_cores)
-    r_atual <- estimate_background_kernel(x_grid, y_grid,
-                                          data.frame(x = df_eventos$x, y = df_eventos$y, rho = passo_e$prob_total),
-                                          d_j_pre, T_total = max(df_eventos$time))
-    otim <- optim(theta_atual, log_lik_etas, gr = gradiente_etas_completo,
-                  df_eventos = df_eventos, matriz_p_ij = passo_e$probabilidades,
-                  prob_total = passo_e$prob_total, raster_mu = r_atual,
-                  x_grid = x_grid, y_grid = y_grid, M0 = M0,
-                  method = "L-BFGS-B", lower = lower, upper = upper,
-                  control = list(maxit = 1000), hessian = TRUE)
-    conv_codes  <- c(conv_codes, otim$convergence)
-    theta_atual <- otim$par
-    hessiana_final <- otim$hessian
-    thetas_hist[[2]]  <- theta_atual
-    rasters_hist[[2]] <- r_atual
-    # ---- Iterações seguintes, até convergir ou atingir max_iter_em ----
-    i <- 2
-    repeat {
-        if (convergiu_em(rasters_hist[[i]], rasters_hist[[i - 1]], tol_rel_raster, tol_abs_raster) &&
-            convergiu_em(thetas_hist[[i]], thetas_hist[[i - 1]], tol_rel_theta, tol_abs_theta)) {
-            break
-        }
-        if (i >= max_iter_em) {
-            warning(sprintf("ajustar_etas_proprio: max_iter_em = %d atingido sem convergir.", max_iter_em))
-            break
-        }
-        passo_e <- calcular_probabilidades(df_eventos, theta_atual, M0, r_atual, x_grid, y_grid, num_cores)
-        r_atual <- estimate_background_kernel(x_grid, y_grid,
-                                              data.frame(x = df_eventos$x, y = df_eventos$y, rho = passo_e$prob_total),
-                                              d_j_pre, T_total = max(df_eventos$time))
-        otim <- optim(theta_atual, log_lik_etas, gr = gradiente_etas_completo,
-                      df_eventos = df_eventos, matriz_p_ij = passo_e$probabilidades,
-                      prob_total = passo_e$prob_total, raster_mu = r_atual,
-                      x_grid = x_grid, y_grid = y_grid, M0 = M0,
-                      method = "L-BFGS-B", lower = lower, upper = upper,
-                      control = list(maxit = 1000), hessian = TRUE)
-        conv_codes  <- c(conv_codes, otim$convergence)
-        theta_atual <- otim$par
-        hessiana_final <- otim$hessian
-        cat("====Iteração", i, "finalizada====")
-        cat(sprintf("\n"))
-        i <- i + 1
-        thetas_hist[[i]]  <- theta_atual
-        rasters_hist[[i]] <- r_atual
-    }
-    list(
-        theta              = theta_atual,
-        raster             = r_atual,
-        hessiana           = hessiana_final,
-        n_iter_em          = i,
-        convergence_codes  = conv_codes,
-        convergiu          = all(conv_codes == 0) && i < max_iter_em,
-        thetas_hist        = if (guardar_historico) thetas_hist  else NULL,
-        rasters_hist       = if (guardar_historico) rasters_hist else NULL
-    )
-}
-
-# Converte um objeto catalog (pacote ETAS) ou data.frame:
-extrair_eventos_catalog <- function(catalogo_historico, M0) {
-    if (inherits(catalogo_historico, "catalog")) {
-        idx <- catalogo_historico$revents[, "flag"] %in% c(0, 1)
-        df <- data.frame(
-            time = catalogo_historico$revents[idx, "tt"],
-            x    = catalogo_historico$longlat.coord$long[idx],
-            y    = catalogo_historico$longlat.coord$lat[idx],
-            mag  = catalogo_historico$revents[idx, "mm"] + M0
-        )
-    } else if (is.data.frame(catalogo_historico)) {
-        obrigatorias <- c("time", "x", "y", "mag")
-        faltando <- setdiff(obrigatorias, names(catalogo_historico))
-        if (length(faltando) > 0) {
-            stop(sprintf("catalogo_historico está sem a(s) coluna(s): %s", paste(faltando, collapse = ", ")))
-        }
-        df <- catalogo_historico[, obrigatorias, drop = FALSE]
-    } else {
-        stop("catalogo_historico deve ser um data.frame (colunas time, x, y, mag) ou um objeto 'catalog' do pacote ETAS.")
-    }
-    if (!"id" %in% names(df)) df$id <- seq_len(nrow(df))
-    df <- df[order(df$time), ]
-    rownames(df) <- NULL
-    df
-}
-
-perturbar_theta <- function(theta_verdadeiro, multiplicadores) {
-    stopifnot(all(names(multiplicadores) == names(theta_verdadeiro)))
-    theta_novo <- theta_verdadeiro
-    params_excesso <- c("p", "q")
-    for (nome in names(theta_verdadeiro)) {
-        if (nome %in% params_excesso) {
-            theta_novo[nome] <- 1 + (theta_verdadeiro[nome] - 1) * multiplicadores[nome]
-        } else {
-            theta_novo[nome] <- theta_verdadeiro[nome] * multiplicadores[nome]
-        }
-    }
-    theta_novo
-}
-
-#====Estudo de simulação: consistência e não-viés assintótico====
-# Pressupõe que theta_verdadeiro, raster_final, x_grid, y_grid, e as funções
-# simular_catalogo_etas(), ajustar_etas_proprio(), extrair_eventos_catalog(),
-# perturbar_theta() já estão definidas/carregadas no ambiente (mesmas usadas
-# nos estudos anteriores).
+# =============================================================================
+# Consistência assintótica do método (EM com suavização do background)
+# Refeito a partir de estudo_consistencia.R com as correções acumuladas.
 #
-# Lógica: para cada nível de T_max (tamanho crescente da janela de
-# observação), simula B réplicas INDEPENDENTES do catálogo a partir do MESMO
-# theta_verdadeiro, ajusta cada réplica, e compara a distribuição das
-# estimativas com a verdade. Diferente do estudo de sensibilidade (catálogo
-# fixo, chute variando) -- aqui o chute é fixo e o catálogo varia, para medir
-# o comportamento do ESTIMADOR (não do otimizador) conforme a amostra cresce.
+# Desenho: janela temporal crescente (n cresce com T), janela espacial fixa.
+# Para cada cenário e cada nível de n, simula B catálogos INDEPENDENTES do mesmo
+# theta verdadeiro, ajusta cada um a partir de um chute inicial fixo e resume
+# viés, desvio-padrão, RMSE, cobertura de IC de Wald e recuperação do background.
+#
+# O que mudou em relação ao script antigo
+#  1. Background verdadeiro paramétrico (exponenciais radiais + piso), em vez do
+#     raster de outro ajuste (aj_peru$raster). Sem dependência de Inst_Peru.xlsx.
+#  2. Funções atualizadas (patch_background.R): KDE por massa de célula com correção
+#     de borda, mu nos eventos sem grade e com leave-one-out, raster inicial constante.
+#  3. Catálogo simulado entra como data.frame (sem ETAS::catalog, POSIXct, nem
+#     mag.threshold implícito); janela retangular aplicada explicitamente.
+#  4. Seleção das réplicas por em_convergiu (EM atingiu o critério), não por
+#     all(conv_codes == 0) && i < max_iter_em, que descartava réplicas só porque o
+#     optim() falhou numa iteração intermediária (viés de seleção). A taxa de
+#     convergência é reportada por nível.
+#  5. Erros-padrão por dois métodos: Hessiana do passo M (subestima a incerteza)
+#     e informação observada de Louis (informação completa menos a variância da
+#     latente). Cobertura e razão SE/SD empírico para ambos.
+#  6. Vazamento de borda medido em cada réplica (fração dos filhos de eventos
+#     dentro da janela que caem fora). Com G = F = 1 na verossimilhança, esse
+#     vazamento gera um viés assintótico em A que NÃO desaparece com T crescente
+#     e janela fixa; o script o reporta e o compara ao viés observado.
+#  7. Dois cenários: 'base' e 'borda_reduzida' (D menor => menos vazamento), para
+#     separar viés de borda da consistência do restante do algoritmo.
+#  8. Checagem de criticidade com o MESMO b da simulação.
+#  9. Níveis definidos por n alvo (não por T), com paralelismo ajustado à memória
+#     (cada processo guarda a lista de p_ij, n^2/2 valores) e retomada por checkpoint.
+# 10. Métricas adicionais: erro L1 do background estimado e Brier de rho_j contra a
+#     latente verdadeira.
+#
+# Requer functions.R e patch_background.R. Escrito sem execução em R no ambiente de
+# redação: rode antes com NIVEIS_N pequeno, B_REPLICAS = 4 e NUM_CORES = 2.
+# =============================================================================
 
-#====Configuração do estudo====
-
-load("ajuste_peru.RData")
-
-raster_final <- aj_peru$raster
-
-# Transformações necessárias nos dados:
-peru <- read_xlsx("Inst_Peru.xlsx") %>%
-    select(date = `fecha UTC`, time = `hora UTC`,
-           lat = `latitud (º)`, long = `longitud (º)`,
-           prof = `profundidad (km)`,
-           mag = `magnitud (M)`) %>%
-    mutate(
-        date = as.Date(date),
-        lat = as.numeric(lat),
-        long = as.numeric(long),
-        prof = as.numeric(prof),
-        mag = as.numeric(mag)
-    ) %>%
-    filter(mag >= 4.5)
-
-# Catálogo para pacote ETAS:
-peru.quakes <- catalog(peru)
-
-# Sequências do grid:
-x_grid <- seq(range(peru.quakes$region.poly$long)[1], range(peru.quakes$region.poly$long)[2], length.out = 128)
-y_grid <- seq(range(peru.quakes$region.poly$lat)[1], range(peru.quakes$region.poly$lat)[2], length.out = 128)
-
-theta_verdadeiro <- c("A" = 0.5, "alpha" = 1.5, "c" = 0.25,
-                      "p" = 1.5, "D" = 0.1, "q" = 2, "gamma" = 1)
-
-niveis_T_max <- c(1000, 2000, 3650, 5000, 8000)
-B_replicas    <- 50                                      # réplicas por nível (reduzir p/ niveis grandes se o custo ficar proibitivo)
-M0            <- 4.5
-b_gr          <- 2.0
-Mmax          <- 10
-num_cores_replicas <- 15
-
-# Ponto de partida:
-mult_partida_fixa <- setNames(rep(1.4, length(theta_verdadeiro)), names(theta_verdadeiro))
-theta0_fixo <- perturbar_theta(theta_verdadeiro, mult_partida_fixa)
-
-lower_full <- c(1e-6, 1e-6, 1e-6, 1.001, 1e-6, 1.001, 1e-6)
-upper_full <- c(15, 10, 15, 15, 15, 15, 10)
-names(lower_full) <- names(upper_full) <- names(theta_verdadeiro)
-
-# ---- Loop principal: nível de T_max x réplicas ----
-resultados_consistencia <- vector("list", length(niveis_T_max))
-
-for (idx_nivel in seq_along(niveis_T_max)) {
-    T_max_nivel <- niveis_T_max[idx_nivel]
-    cat(sprintf("\n==== Nível T_max = %d (réplica 1 a %d) ====\n", T_max_nivel, B_replicas))
-
-    ajustes_nivel <- mclapply(seq_len(B_replicas), function(b) {
-        semente_b <- 100000 * idx_nivel + b   # semente única por (nível, réplica), reprodutível
-
-        resultado_b <- tryCatch({
-            cat_sim <- simular_catalogo_etas(
-                theta = theta_verdadeiro, M0 = M0, b = b_gr, Mmax = Mmax,
-                T_max = T_max_nivel, mu_type = "raster", mu_raster = raster_final,
-                x_grid = x_grid, y_grid = y_grid,
-                checar_criticidade = FALSE, semente = semente_b
-            )
-            cat_obj <- catalog(
-                cat_sim %>% mutate(t = ddays(time), data = POSIXct(1) + t,
-                                   long = x, lat = y, date = date(data),
-                                   time = format(data, format = "%H:%M:%S"))
-            )
-            n_eventos_b <- nrow(cat_obj$revents)
-
-            aj <- ajustar_etas_proprio(
-                catalogo = cat_obj, theta0 = theta0_fixo, M0 = M0,
-                x_grid = x_grid, y_grid = y_grid,
-                num_cores = 1, max_iter_em = 100,
-                lower = lower_full, upper = upper_full,
-                guardar_historico = F
-            )
-
-            list(theta_hat = aj$theta, hessiana = aj$hessiana, convergiu = aj$convergiu,
-                n_eventos = n_eventos_b, erro = NULL)
-        }, error = function(e) {
-            list(theta_hat = NA, hessiana = NA, convergiu = FALSE, n_eventos = NA, erro = conditionMessage(e))
-        })
-
-        resultado_b
-    }, mc.cores = num_cores_replicas)
-
-    resultados_consistencia[[idx_nivel]] <- list(T_max = T_max_nivel, ajustes = ajustes_nivel)
-
-    if (idx_nivel %% 1 == 0) {
-        save(resultados_consistencia, idx_nivel,
-             file = "checkpoint_consistencia.RData", compress = TRUE)
-    }
-}
-
-#----Análise: viés, MSE e cobertura por nível----
-
-nomes_theta <- names(theta_verdadeiro)
-resumo_consistencia <- data.frame()
-
-for (nivel in resultados_consistencia) {
-    ajustes_validos <- Filter(function(x) is.null(x$erro) && isTRUE(x$convergiu), nivel$ajustes)
-    if (length(ajustes_validos) == 0) {
-        warning(sprintf("Nenhuma réplica válida em T_max = %d.", nivel$T_max))
-        next
-    }
-    theta_matrix <- do.call(rbind, lapply(ajustes_validos, function(x) x$theta_hat))
-    colnames(theta_matrix) <- nomes_theta
-    n_medio <- mean(vapply(ajustes_validos, function(x) x$n_eventos, numeric(1)))
-    vies      <- colMeans(theta_matrix) - theta_verdadeiro
-    variancia <- apply(theta_matrix, 2, var)
-    mse       <- vies^2 + variancia
-    # Cobertura do IC de Wald 95% (SE via Hessiana do M-step final -- ver
-    # nota abaixo sobre por que essa SE tende a SUBESTIMAR a incerteza real
-    # num contexto de EM):
-    cobertura <- sapply(nomes_theta, function(par) {
-        indicadores <- sapply(ajustes_validos, function(x) {
-            if (is.null(x$hessiana) || any(!is.finite(x$hessiana))) return(NA)
-            se_hat <- tryCatch(sqrt(diag(solve(x$hessiana)))[par], error = function(e) NA)
-            if (is.na(se_hat)) return(NA)
-            ic <- x$theta_hat[par] + c(-1.96, 1.96) * se_hat
-            theta_verdadeiro[par] >= ic[1] && theta_verdadeiro[par] <= ic[2]
-        })
-        mean(indicadores, na.rm = TRUE)
-    })
-    resumo_consistencia <- rbind(resumo_consistencia, data.frame(
-        T_max = nivel$T_max,
-        n_replicas_validas = length(ajustes_validos),
-        n_eventos_medio = n_medio,
-        parametro = nomes_theta,
-        vies = vies,
-        sd_empirico = sqrt(variancia),
-        mse = mse,
-        cobertura_IC95 = cobertura
-    ))
-}
-
-cat("\n---- Resumo: viés, MSE e cobertura por nível de T_max e parâmetro ----\n")
-print(resumo_consistencia, row.names = FALSE)
-
-#----Checagem quantitativa da taxa de convergência----
-# Se o estimador é consistente à taxa paramétrica usual, MSE deve cair
-# aproximadamente proporcional a 1/n (n = número de eventos observados) --
-# equivalente a um coeficiente angular próximo de -1 numa regressão de
-# log(MSE) contra log(n_eventos_medio). Ajustado por parâmetro:
-taxas_convergencia <- sapply(nomes_theta, function(par) {
-    dados_par <- subset(resumo_consistencia, parametro == par)
-    if (nrow(dados_par) < 3) return(NA)
-    coef(lm(log(mse) ~ log(n_eventos_medio), data = dados_par))[2]
+suppressPackageStartupMessages({
+    library(spatstat)   # nndist (d_j)
+    library(parallel)
+    library(dplyr)
 })
-cat("\n---- Coeficiente angular de log(MSE) ~ log(n_eventos) por parâmetro ----\n")
-cat("(próximo de -1 é consistente com a taxa paramétrica usual de convergência)\n")
-print(round(taxas_convergencia, 2))
 
-#----Gráficos: viés e MSE em função do tamanho da amostra----
-pdf("consistencia_etas.pdf", width = 10, height = 7)
-par(mfrow = c(3, 3))
-for (par in nomes_theta) {
-    dados_par <- subset(resumo_consistencia, parametro == par)
-    if ((min(dados_par$vies) < 0) & (max(dados_par$vies) > 0)) {
-        plot(dados_par$n_eventos_medio, dados_par$vies, type = "b",
-             xlab = "n° médio de eventos", ylab = "viés", main = par)
-        abline(h = 0, lty = 2, col = "gray50")
+#====Configurações====
+ARQ_FUNCOES  <- "functions.R"
+ARQ_PATCH    <- "patch_background.R"
+ARQ_CHECK    <- "checkpoint_consistencia_novo.RData"
+ARQ_SAIDA    <- "resultados_consistencia_novo.RData"
+ARQ_PDF      <- "consistencia_assintotica.pdf"
+RETOMAR      <- TRUE
+
+M0           <- 4.5
+B_GR         <- 2.0                       # valor-b da simulação (mesmo do script antigo)
+MMAX         <- 10
+XLIM         <- c(0, 8); YLIM <- c(0, 8)  # janela espacial fixa (graus)
+N_GRID       <- 64                        # grade de análise (centros de célula)
+N_GRID_SIM   <- 256                       # grade fina só para sortear o background
+MU_TOT_DIA   <- 0.11                      # taxa total de background (eventos/dia na janela)
+NIVEIS_N     <- c(500, 1000, 2000, 4000, 8000)   # n alvo (T é calculado a partir dele)
+B_REPLICAS   <- c(100, 100, 60, 40, 20)          # réplicas por nível (reduza nos níveis grandes)
+NUM_CORES    <- 15
+RAM_GB       <- 64                        # memória disponível, para limitar o paralelismo
+MULT_PARTIDA <- 1.4                       # chute inicial: theta0 = perturbação de 1.4 em todos os parâmetros
+CALCULAR_SE  <- TRUE                      # Hessiana e Louis (exige guardar a lista de p_ij)
+MAX_ITER_EM  <- 100
+
+theta_base <- c("A" = 0.5, "alpha" = 1.5, "c" = 0.25,
+                "p" = 1.5, "D" = 0.1, "q" = 2, "gamma" = 1)
+theta_borda_reduzida <- replace(theta_base, "D", 0.01)
+CENARIOS <- list(base = theta_base, borda_reduzida = theta_borda_reduzida)
+nomes_theta <- names(theta_base)
+
+lower_full <- c(A = 1e-6, alpha = 1e-6, c = 1e-6, p = 1.001, D = 1e-6, q = 1.001, gamma = 1e-6)
+upper_full <- c(A = 15, alpha = 10, c = 15, p = 15, D = 15, q = 15, gamma = 10)
+
+source(ARQ_FUNCOES)
+source(ARQ_PATCH)
+stopifnot(exists("simular_catalogo_etas"), exists("ajustar_etas_proprio"),
+          exists("estimate_background_kernel_celula"), exists("log_lik_etas"),
+          exists("gradiente_etas_completo"))
+
+#====Background verdadeiro: exponenciais radiais + piso====
+CENTROS    <- rbind(c(2.5, 5.5), c(5.5, 2.0))
+AMPLITUDES <- c(1.0, 0.6)
+ESCALAS    <- c(0.8, 1.2)
+PISO_REL   <- 0.05
+mu_forma <- function(x, y) {
+    v <- rep(PISO_REL, length(x))
+    for (k in seq_len(nrow(CENTROS))) {
+        r <- sqrt((x - CENTROS[k, 1])^2 + (y - CENTROS[k, 2])^2)
+        v <- v + AMPLITUDES[k] * exp(-r / ESCALAS[k])
     }
-    else {
-        plot(dados_par$n_eventos_medio, dados_par$vies, type = "b",
-             xlab = "n° médio de eventos", ylab = "viés", main = par,
-             ylim = c(min(0, min(dados_par$vies)), max(0, max(dados_par$vies))))
-        abline(h = 0, lty = 2, col = "gray50")
+    v
+}
+centros_celula <- function(lim, N) lim[1] + (seq_len(N) - 0.5) * diff(lim) / N
+raster_celula <- function(fun, lim_x, lim_y, Nx, Ny, sub = 5) {
+    dx <- diff(lim_x) / Nx; dy <- diff(lim_y) / Ny
+    off <- (seq_len(sub) - 0.5) / sub - 0.5
+    xc <- centros_celula(lim_x, Nx); yc <- centros_celula(lim_y, Ny)
+    Z <- matrix(0, Nx, Ny)
+    for (a in off) for (b in off) Z <- Z + outer(xc + a * dx, yc + b * dy, fun)
+    Z / sub^2
+}
+dxs <- diff(XLIM) / N_GRID_SIM; dys <- diff(YLIM) / N_GRID_SIM
+I0  <- sum(raster_celula(mu_forma, XLIM, YLIM, N_GRID_SIM, N_GRID_SIM, sub = 2)) * dxs * dys
+ESC <- MU_TOT_DIA / I0                              # integral de mu = MU_TOT_DIA eventos/dia
+x_grid <- centros_celula(XLIM, N_GRID); y_grid <- centros_celula(YLIM, N_GRID)
+raster_verd <- ESC * raster_celula(mu_forma, XLIM, YLIM, N_GRID, N_GRID)
+x_sim <- centros_celula(XLIM, N_GRID_SIM); y_sim <- centros_celula(YLIM, N_GRID_SIM)
+raster_sim <- ESC * raster_celula(mu_forma, XLIM, YLIM, N_GRID_SIM, N_GRID_SIM, sub = 2)
+
+#====Funções auxiliares====
+perturbar_theta <- function(theta, mult) {
+    out <- theta
+    for (nm in names(theta)) {
+        out[nm] <- if (nm %in% c("p", "q")) 1 + (theta[nm] - 1) * mult else theta[nm] * mult
+    }
+    out
+}
+
+razao_ramificacao <- function(theta, b) {
+    beta <- b * log(10)
+    unname(theta["A"] * beta / (beta - theta["alpha"]))
+}
+
+# T que produz, em média, n_alvo eventos (regime estacionário: N ~ mu_tot * T / (1 - n))
+T_para_n <- function(n_alvo, theta) n_alvo * (1 - razao_ramificacao(theta, B_GR)) / MU_TOT_DIA
+
+# Nº de processos que cabem na memória (lista de p_ij: n^2/2 doubles, ~6 cópias em uso)
+cores_para_n <- function(n) {
+    max(1, min(NUM_CORES, floor(RAM_GB * 1e9 / (6 * 8 * n^2 / 2))))
+}
+
+# Vazamento de borda: fração dos filhos (já válidos no tempo) de eventos DENTRO da janela
+# que caem FORA dela. Aproxima 1 - F_S médio ponderado pela produtividade.
+na_janela <- function(x, y) x >= XLIM[1] & x <= XLIM[2] & y >= YLIM[1] & y <= YLIM[2]
+vazamento_borda <- function(cat_full) {
+    dentro <- na_janela(cat_full$x, cat_full$y)
+    filhos <- which(cat_full$parent > 0)
+    idp <- match(cat_full$parent[filhos], cat_full$id)
+    pai_dentro <- dentro[idp]
+    if (sum(pai_dentro) == 0) return(NA_real_)
+    sum(pai_dentro & !dentro[filhos]) / sum(pai_dentro)
+}
+
+# Variância condicional do escore completo dada a latente (método de Louis).
+# Condicional nos dados, u_j independentes com P(u_j = i) = p_ij e P(u_j = 0) = rho_j;
+# o escore do termo de background em theta é zero.
+var_escore_latente <- function(th, df, pij) {
+    A <- unname(th["A"]); cc <- unname(th["c"]); pp <- unname(th["p"])
+    D <- unname(th["D"]); qq <- unname(th["q"]); gam <- unname(th["gamma"])
+    V <- matrix(0, 7, 7)
+    for (j in 2:nrow(df)) {
+        p <- pij[[j]]
+        if (length(p) == 0) next
+        i  <- 1:(j - 1)
+        dt <- df$time[j] - df$time[i]
+        d2 <- (df$x[j] - df$x[i])^2 + (df$y[j] - df$y[i])^2
+        dm <- df$mag[i] - M0
+        S_i <- D * exp(gam * dm); Vv <- d2 / S_i; U <- 1 + Vv; W <- qq * Vv / U - 1
+        S <- cbind(rep(1 / A, length(i)), dm, (pp - 1) / cc - pp / (dt + cc),
+                   1 / (pp - 1) + log(cc) - log(dt + cc), W / D, 1 / (qq - 1) - log(U), dm * W)
+        m <- colSums(S * p)
+        V <- V + crossprod(S * sqrt(p)) - tcrossprod(m)
+    }
+    dimnames(V) <- list(names(th), names(th))
+    V
+}
+
+# Erros-padrão: (a) Hessiana do passo M; (b) informação observada de Louis
+erros_padrao <- function(aj, df_ord) {
+    th <- aj$theta
+    Hc <- optimHess(th, log_lik_etas, gr = gradiente_etas_completo,
+                    df_eventos = df_ord, matriz_p_ij = aj$probabilidades,
+                    prob_total = aj$eventos$prob_disparo, raster_mu = aj$raster,
+                    x_grid = x_grid, y_grid = y_grid, M0 = M0,
+                    mu_eventos = aj$mu_eventos, integral_bg = sum(aj$rho_bg))
+    dimnames(Hc) <- list(names(th), names(th))
+    se_de <- function(I) {
+        cv <- tryCatch(solve(I), error = function(e) NULL)
+        if (is.null(cv) || any(!is.finite(diag(cv))) || any(diag(cv) <= 0)) return(rep(NA_real_, length(th)))
+        setNames(sqrt(diag(cv)), names(th))
+    }
+    V <- var_escore_latente(th, df_ord, aj$probabilidades)
+    list(se_hess = se_de(Hc), se_louis = se_de(Hc - V))
+}
+
+#====Uma réplica====
+replica <- function(cen, idx_nivel, b) {
+    theta_v <- CENARIOS[[cen]]
+    T_niv   <- T_para_n(NIVEIS_N[idx_nivel], theta_v)
+    semente <- 1e6 * match(cen, names(CENARIOS)) + 1e4 * idx_nivel + b
+    t_ini <- Sys.time()
+    tryCatch({
+        cat_full <- simular_catalogo_etas(
+            theta = theta_v, M0 = M0, b = B_GR, Mmax = MMAX, T_max = T_niv,
+            mu_type = "raster", mu_raster = raster_sim, x_grid = x_sim, y_grid = y_sim,
+            checar_criticidade = FALSE, semente = semente)
+        leak <- vazamento_borda(cat_full)
+        cat_w <- cat_full[na_janela(cat_full$x, cat_full$y), ]
+        cat_w <- cat_w[order(cat_w$time), ]
+        df <- data.frame(x = cat_w$x, y = cat_w$y, mag = cat_w$mag, time = cat_w$time)
+        is_bg <- cat_w$parent == 0
+        aj <- ajustar_etas_proprio(
+            df, theta0 = perturbar_theta(theta_v, MULT_PARTIDA), M0 = M0,
+            x_grid = x_grid, y_grid = y_grid, num_cores = 1, max_iter_em = MAX_ITER_EM,
+            lower = lower_full, upper = upper_full, calcular_hessiana = FALSE,
+            retornar_pij = CALCULAR_SE, verbose = FALSE)
+        se <- if (CALCULAR_SE) erros_padrao(aj, aj$eventos[, c("x", "y", "mag", "time")]) else
+            list(se_hess = rep(NA_real_, 7), se_louis = rep(NA_real_, 7))
+        list(theta_hat = aj$theta, se_hess = se$se_hess, se_louis = se$se_louis,
+             em_convergiu = aj$em_convergiu, todos_optim_ok = aj$todos_optim_ok,
+             n_iter = aj$n_iter_em, n_eventos = nrow(df), T_max = T_niv, leak = leak,
+             brier_rho = mean((aj$rho_bg - as.numeric(is_bg))^2),
+             L1_bg = sum(abs(aj$raster - raster_verd)) / sum(raster_verd),
+             tempo_min = as.numeric(difftime(Sys.time(), t_ini, units = "mins")), erro = NULL)
+    }, error = function(e) list(erro = conditionMessage(e)))
+}
+
+#====Execução====
+for (cen in names(CENARIOS)) verificar_criticidade(CENARIOS[[cen]], b = B_GR)
+cat(sprintf("Razão de ramificação verdadeira: %.3f\n", razao_ramificacao(theta_base, B_GR)))
+
+resultados <- setNames(lapply(names(CENARIOS), function(x) vector("list", length(NIVEIS_N))), names(CENARIOS))
+if (RETOMAR && file.exists(ARQ_CHECK)) {
+    load(ARQ_CHECK)
+    cat("Retomando de", ARQ_CHECK, "\n")
+}
+
+for (cen in names(CENARIOS)) {
+    for (l in seq_along(NIVEIS_N)) {
+        if (!is.null(resultados[[cen]][[l]])) next
+        nc <- cores_para_n(NIVEIS_N[l])
+        cat(sprintf("\n==== Cenário %s | n alvo = %d (T = %.0f dias) | %d réplicas em %d processos ====\n",
+                    cen, NIVEIS_N[l], T_para_n(NIVEIS_N[l], CENARIOS[[cen]]), B_REPLICAS[l], nc))
+        ajustes <- mclapply(seq_len(B_REPLICAS[l]), function(b) replica(cen, l, b),
+                            mc.cores = nc, mc.preschedule = FALSE)
+        resultados[[cen]][[l]] <- list(n_alvo = NIVEIS_N[l], ajustes = ajustes)
+        save(resultados, file = ARQ_CHECK, compress = TRUE)
     }
 }
-for (par in nomes_theta) {
-    dados_par <- subset(resumo_consistencia, parametro == par)
-    plot(log(dados_par$n_eventos_medio), log(dados_par$mse), type = "b",
-        xlab = "log(n° médio de eventos)", ylab = "log(MSE)", main = par)
+
+#====Análise====
+falhou <- function(x) is.null(x) || inherits(x, "try-error") || !is.null(x$erro)
+resumo <- do.call(rbind, lapply(names(CENARIOS), function(cen) {
+    theta_v <- CENARIOS[[cen]]
+    do.call(rbind, lapply(seq_along(NIVEIS_N), function(l) {
+        aj_all <- resultados[[cen]][[l]]$ajustes
+        sem_erro <- Filter(function(x) !falhou(x), aj_all)
+        ok <- Filter(function(x) isTRUE(x$em_convergiu), sem_erro)
+        if (length(ok) < 3) {
+            warning(sprintf("Cenário %s, n = %d: menos de 3 réplicas válidas.", cen, NIVEIS_N[l]))
+            return(NULL)
+        }
+        TH  <- do.call(rbind, lapply(ok, function(x) x$theta_hat)); colnames(TH) <- nomes_theta
+        SEH <- do.call(rbind, lapply(ok, function(x) x$se_hess));   colnames(SEH) <- nomes_theta
+        SEL <- do.call(rbind, lapply(ok, function(x) x$se_louis));  colnames(SEL) <- nomes_theta
+        Bv  <- nrow(TH)
+        vies <- colMeans(TH) - theta_v
+        sdv  <- apply(TH, 2, sd)
+        cob <- function(SE) sapply(nomes_theta, function(par) {
+            ok_se <- is.finite(SE[, par])
+            if (!any(ok_se)) return(NA_real_)
+            mean(abs(TH[ok_se, par] - theta_v[par]) <= 1.96 * SE[ok_se, par])
+        })
+        razao <- function(SE) sapply(nomes_theta, function(par) mean(SE[, par], na.rm = TRUE) / sdv[par])
+        data.frame(
+            cenario = cen, nivel = l, n_alvo = NIVEIS_N[l],
+            n_medio = mean(vapply(ok, function(x) x$n_eventos, numeric(1))),
+            B_total = length(aj_all), B_valido = Bv,
+            taxa_em_convergiu = length(ok) / length(sem_erro),
+            frac_falhas = 1 - length(sem_erro) / length(aj_all),
+            leak_medio = mean(vapply(ok, function(x) x$leak, numeric(1)), na.rm = TRUE),
+            L1_bg_mediano = median(vapply(ok, function(x) x$L1_bg, numeric(1))),
+            brier_mediano = median(vapply(ok, function(x) x$brier_rho, numeric(1))),
+            parametro = nomes_theta, verdade = as.numeric(theta_v),
+            vies = as.numeric(vies), vies_rel = as.numeric(vies / theta_v),
+            sd = as.numeric(sdv), rmse = sqrt(as.numeric(vies)^2 + as.numeric(sdv)^2),
+            z_vies = as.numeric(vies / (sdv / sqrt(Bv))),
+            cob_hess = as.numeric(cob(SEH)), cob_louis = as.numeric(cob(SEL)),
+            razao_se_hess = as.numeric(razao(SEH)), razao_se_louis = as.numeric(razao(SEL)),
+            row.names = NULL)
+    }))
+}))
+
+cat("\n===== Resumo por cenário, nível e parâmetro =====\n")
+print(resumo, digits = 3, row.names = FALSE)
+
+# Taxas de convergência: SD ~ n^(-1/2) (inclinação -0.5 em log-log) vale mesmo com viés persistente;
+# MSE ~ 1/n só se o viés desaparecer. Reportar as duas separa variância de viés.
+taxas <- do.call(rbind, lapply(split(resumo, list(resumo$cenario, resumo$parametro), drop = TRUE), function(d) {
+    if (nrow(d) < 3) return(NULL)
+    data.frame(cenario = d$cenario[1], parametro = d$parametro[1],
+               inclinacao_sd = unname(coef(lm(log(sd) ~ log(n_medio), data = d))[2]),
+               inclinacao_mse = unname(coef(lm(log(rmse^2) ~ log(n_medio), data = d))[2]),
+               vies_rel_no_maior_n = d$vies_rel[which.max(d$n_medio)],
+               z_vies_no_maior_n = d$z_vies[which.max(d$n_medio)])
+}))
+cat("\n===== Inclinações em log-log (esperado: SD ~ -0.5; MSE ~ -1 se viés -> 0) =====\n")
+print(taxas, digits = 3, row.names = FALSE)
+
+# Viés de A previsto pelo vazamento de borda (ordem de grandeza: -leak)
+cat("\n===== Viés relativo de A observado vs. previsto pelo vazamento (-leak) =====\n")
+print(subset(resumo, parametro == "A")[, c("cenario", "n_alvo", "vies_rel", "leak_medio", "z_vies")], digits = 3, row.names = FALSE)
+
+#====Figuras====
+pdf(ARQ_PDF, width = 11, height = 8)
+cores_cob <- c(hess = "#B2182B", louis = "#2166AC")
+for (cen in names(CENARIOS)) {
+    dc <- subset(resumo, cenario == cen)
+    if (nrow(dc) == 0) next
+    # Viés relativo com IC de Monte Carlo
+    par(mfrow = c(3, 3), mar = c(4, 4.2, 3, 1), oma = c(0, 0, 2, 0))
+    for (par_nome in nomes_theta) {
+        d <- subset(dc, parametro == par_nome)
+        ep <- 1.96 * d$sd / sqrt(d$B_valido) / abs(d$verdade)
+        plot(d$n_medio, d$vies_rel, type = "b", pch = 16, log = "x", xlab = "n médio de eventos",
+             ylab = "Viés relativo", main = par_nome, ylim = range(c(d$vies_rel - ep, d$vies_rel + ep, 0)))
+        arrows(d$n_medio, d$vies_rel - ep, d$n_medio, d$vies_rel + ep, angle = 90, code = 3, length = 0.03)
+        abline(h = 0, lty = 2, col = "grey50")
+        if (par_nome == "A") lines(d$n_medio, -d$leak_medio, col = 2, lty = 3, lwd = 2)
+    }
+    plot.new(); legend("center", c("Viés relativo (IC 95% de Monte Carlo)", "-vazamento de borda (previsão p/ A)"),
+                       lty = c(1, 3), col = c(1, 2), bty = "n")
+    mtext(sprintf("Cenário %s: viés relativo", cen), outer = TRUE, font = 2)
+
+    # RMSE e SD em log-log
+    par(mfrow = c(3, 3), mar = c(4, 4.2, 3, 1), oma = c(0, 0, 2, 0))
+    for (par_nome in nomes_theta) {
+        d <- subset(dc, parametro == par_nome)
+        plot(d$n_medio, d$rmse, type = "b", pch = 16, log = "xy", xlab = "n médio de eventos",
+             ylab = "RMSE (preto) e SD (azul)", main = par_nome, ylim = range(c(d$rmse, d$sd)))
+        lines(d$n_medio, d$sd, type = "b", pch = 1, col = "#2166AC")
+        lines(d$n_medio, d$sd[1] * (d$n_medio / d$n_medio[1])^(-0.5), lty = 2, col = "grey40")
+    }
+    plot.new(); legend("center", c("RMSE", "SD empírico", "referência n^(-1/2)"),
+                       lty = c(1, 1, 2), pch = c(16, 1, NA), col = c(1, "#2166AC", "grey40"), bty = "n")
+    mtext(sprintf("Cenário %s: RMSE e SD", cen), outer = TRUE, font = 2)
+
+    # Cobertura e razão SE/SD
+    par(mfrow = c(3, 3), mar = c(4, 4.2, 3, 1), oma = c(0, 0, 2, 0))
+    for (par_nome in nomes_theta) {
+        d <- subset(dc, parametro == par_nome)
+        plot(d$n_medio, d$cob_hess, type = "b", pch = 16, col = cores_cob["hess"], log = "x", ylim = c(0, 1),
+             xlab = "n médio de eventos", ylab = "Cobertura do IC 95%", main = par_nome)
+        lines(d$n_medio, d$cob_louis, type = "b", pch = 17, col = cores_cob["louis"])
+        abline(h = 0.95, lty = 2)
+    }
+    plot.new(); legend("center", c("Hessiana do passo M", "Louis", "nominal 0.95"),
+                       lty = c(1, 1, 2), pch = c(16, 17, NA), col = c(cores_cob, "black"), bty = "n")
+    mtext(sprintf("Cenário %s: cobertura de Wald", cen), outer = TRUE, font = 2)
+
+    par(mfrow = c(3, 3), mar = c(4, 4.2, 3, 1), oma = c(0, 0, 2, 0))
+    for (par_nome in nomes_theta) {
+        d <- subset(dc, parametro == par_nome)
+        plot(d$n_medio, d$razao_se_hess, type = "b", pch = 16, col = cores_cob["hess"], log = "x",
+             ylim = range(c(d$razao_se_hess, d$razao_se_louis, 1), na.rm = TRUE),
+             xlab = "n médio de eventos", ylab = "SE médio / SD empírico", main = par_nome)
+        lines(d$n_medio, d$razao_se_louis, type = "b", pch = 17, col = cores_cob["louis"])
+        abline(h = 1, lty = 2)
+    }
+    plot.new(); legend("center", c("Hessiana do passo M", "Louis", "calibrado = 1"),
+                       lty = c(1, 1, 2), pch = c(16, 17, NA), col = c(cores_cob, "black"), bty = "n")
+    mtext(sprintf("Cenário %s: calibração dos erros-padrão", cen), outer = TRUE, font = 2)
+}
+
+# Convergência, vazamento, background e latente por nível
+par(mfrow = c(2, 2), mar = c(4, 4.2, 3, 1), oma = c(0, 0, 0, 0))
+dn <- unique(resumo[, c("cenario", "n_medio", "taxa_em_convergiu", "leak_medio", "L1_bg_mediano", "brier_mediano")])
+cc <- c(base = "black", borda_reduzida = "#D95F02")
+for (campo in c("taxa_em_convergiu", "leak_medio", "L1_bg_mediano", "brier_mediano")) {
+    plot(NA, xlim = range(dn$n_medio), ylim = range(dn[[campo]], na.rm = TRUE), log = "x",
+         xlab = "n médio de eventos", ylab = campo, main = campo)
+    for (cen in names(CENARIOS)) {
+        d <- subset(dn, cenario == cen)
+        if (nrow(d)) lines(d$n_medio, d[[campo]], type = "b", pch = 16, col = cc[cen])
+    }
+    legend("topright", names(cc), col = cc, pch = 16, bty = "n")
 }
 dev.off()
 
-#----Salvando os resultados----
-save(
-    resultados_consistencia, resumo_consistencia, taxas_convergencia,
-    theta0_fixo, niveis_T_max, B_replicas,
-    file = "resultados_consistencia.RData", compress = TRUE
-)
-
-print("Estudo de consistência finalizado. Resultados e gráfico salvos.")
+#====Salvar====
+save(resultados, resumo, taxas, CENARIOS, NIVEIS_N, B_REPLICAS, MULT_PARTIDA, raster_verd,
+     file = ARQ_SAIDA, compress = TRUE)
+cat("\nResultados em", ARQ_SAIDA, "| figuras em", ARQ_PDF, "\n")

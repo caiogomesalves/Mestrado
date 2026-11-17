@@ -33,11 +33,73 @@ Let $u = 1 + \frac{r^{2}}{Q}$, so that $du = \frac{2r}{Q}dr$ and $r\, dr = \frac
 
 \noindent that is a valid cumulative probability function, as $\lim_{R^{2} \to 0} = 0$ and $\lim_{R^{2} \to \infty} = 1$.
 
-\chapter{Quisque libero justo}
+\chapter{Non-decreasing log-likelihood in smoothing step}
+\label{append-non-decreasing}
 
-\lipsum[50]
+Consider events in the target region $\mathcal{T}$ to be the observed events, and the complimentary events happening in $\mathcal{C}$. By hypothesis, we have that $\mu(x,y)$ is fixed and that $\mu(x_{i},y_{i}) > 0$ for all events $j \in \mathcal{T}$, and that the parent events come from $\mathcal{A}_{j} = \{i \in \mathcal{T} \cup \mathcal{C} : t_{i} < t_{j}\}$. We consider the simple case, when $\mathcal{C} = \emptyset$.
 
-\chapter{Nullam elementum urna vel imperdiet sodales elit ipsum pharetra ligula
-ac pretium ante justo a nulla curabitur tristique arcu eu metus}
+Let $u_{j} \in \{0\} \cup A_{j}$ be the parent of event $j$, where $u_{j} = 0$ indicates that the event is a background event. For each event $j$, we have the contribution $h_{j0}$ of the background, the contribution $h_{ji}(\theta)$ from event $i$ given $\theta$ and the conditional intensity function $\lambda_{j}(\theta)$ to be defined as
+\begin{align*}
+  h_{j0} &= \mu(x_{j},y_{j}), \\
+  h_{ji}(\theta) &= \kappa(m_{i})g(t_{j} - t_{i})f(x_{j} - x_{i}, y_{j} - y_{i};m_{i}), \\
+  \lambda_{j}(\theta) &= h_{j0} + \sum_{i \in \mathcal{A_{j}}}h_{ji}(\theta).
+\end{align*}
 
-\lipsum[55-57]
+The associated compensator for the process in the observed spatio-temporal window $W$ is given by $\Lambda_{W}(\theta) = \int_{T_{0}}^{T}\int_{S}\lambda(\theta)\, ds \, dt$, and the model likelihood is
+\begin{equation}
+  \label{eq-likelihood-hj}
+  L_{c}(\theta;z,u) = \left[\prod_{j \in \mathcal{T}}h_{j,u_{j}}(\theta)\right]\exp\left(-\Lambda_{W}(\theta)\right).
+\end{equation}
+
+\begin{lemma}
+  \label{lem-marginalization-likelihood}
+  The marginalization of the likelihood on $u$ is given by
+  \begin{equation*}
+    \sum_{u}L_{c}(\theta;z,u) = L(\theta;z).
+  \end{equation*}
+\end{lemma}
+
+\begin{proof}
+  The set of elements of $u$ is a cartesian product, so the sum of the products can be factorized, in a way that
+  \begin{equation*}
+    \sum_{u}\prod_{j}h_{j,u_{j}} = \prod_{j}\sum_{k}h_{j,k} = \prod_{j}\lambda_{j},
+  \end{equation*}
+
+  \noindent and multiplying this result by $\exp\left(- \Lambda_{W}(\theta)\right)$ we achieve the likelihood given by Equation \eqref{eq-likelihood-hj}.
+\end{proof}
+
+\begin{lemma}
+  \label{lem-prob-u}
+  For any fixed $\theta'$ we have
+  \begin{equation*}
+    P(u|z,\theta') = \frac{L_{c}(\theta';z,u)}{L(\theta';z)} = \prod_{j}\pi_{j,u_{j}}(\theta'),
+  \end{equation*}
+
+  \noindent where $\pi_{jk}(\theta') = \frac{h_{jk}(\theta')}{\lambda_{j}(\theta')}$.
+\end{lemma}
+
+Hence, the $u_{j}$ are independent given z, with $\pi_{j0} = \rho_{j}$ and $\pi_{ji} = \rho_{ij}$ .As $\mathds{E}(\mathds{1}(u_{j} = k|z,\theta')) = \pi_{jk}(\theta')$, we have that the Q function can be written as
+\begin{align*}
+  Q(\theta|\theta') &= \mathds{E}_{u|z,\theta'}\left[\log(L_{c}(\theta;z,u))\right], \\
+                    &= \sum_{j}\left[\rho_{j}\log\left(\mu(x_{j},y_{j})\right) + \sum_{i \in \mathcal{A}_{j}}\rho_{ij}\log(h_{ji}(\theta))\right] - \Lambda_{W}(\theta).
+\end{align*}
+
+With a fixed $\mu(x,y)$, the $\sum_{j}\rho_{j}\log(\mu(x_{j},y_{j}))$ and the part of $\Lambda_{W}(\theta)$ that depends only of $\mu(x,y)$, don't depend of $\theta$, in a way that the Q function can be expressed as $Q(\theta|\theta') = Q_{\theta}(\theta|\theta') + Q_{\mu}$. With that, to maximize $Q(\theta|\theta')$ in relation to $\theta$, it is only necessary to maximize $Q_{\theta}(\theta|\theta')$.
+
+\begin{proposition}
+  For every $\theta$, $\theta'$ in the parametric space $\Theta$, we have
+  \begin{equation*}
+    \log(L(\theta)) - \log(L(\theta')) \ge Q(\theta|\theta') - Q(\theta'|\theta')
+  \end{equation*}
+\end{proposition}
+
+\begin{proof}
+  Let $q(u) = P(u|z,\theta')$. Using \autoref{lem-marginalization-likelihood} and the Jensen Inequality, we have
+  \begin{equation*}
+    \log(L(\theta)) = \log\sum_{u}q(u)\frac{L_{c}(\theta;z,u)}{q(u)} \ge \sum_{u}q(u)\log\left(\frac{L_{c}(\theta;z,u)}{q(u)}\right) = Q(\theta|\theta') + H(\theta')
+  \end{equation*}
+  \noindent in which $H(\theta') = - \sum_{u}q(u)\log(q(u))$, a term that does not depend of $\theta$. By \autoref{lem-prob-u}, $\frac{L_{c}(\theta';z,u)}{q(u)} = L(\theta')$ for all $u$, so $\log(L(\theta')) = Q(\theta'|\theta') + H(\theta')$. With that, we can subtract $\log(L(\theta'))$ from both sides and have
+  \begin{equation*}
+    \log(L(\theta)) \ge Q(\theta|\theta') + H(\theta') \Longrightarrow \log(L(\theta)) - \log(L(\theta')) \ge Q(\theta|\theta') - Q(\theta'|\theta')
+  \end{equation*}
+\end{proof}

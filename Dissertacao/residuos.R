@@ -43,10 +43,10 @@ calcular_tau <- function(tempos_eval, df_cat, params, mu_global, M0 = 4) {
 #====Tempos Transformados====
 
 # Taxa global de background (Eventos/dia em toda a região):
-mu_global <- sum(pmax(0, 1 - prob_total)) / max(df_temp$time)
+mu_global <- sum(aj_peru$rho_bg) / max(aj_peru$T_total)
 
 # Tau_j para os tempos dos eventos:
-tau_j <- calcular_tau(df_temp$time, df_temp, thetas[[length(thetas)]], mu_global, M0 = 4.5)
+tau_j <- calcular_tau(aj_peru$eventos$time, aj_peru$eventos, aj_peru$theta, mu_global, M0 = 4.5)
 
 # Calcular U_j:
 delta_tau <- diff(c(0, tau_j))
@@ -71,13 +71,13 @@ abline(a = 0, b = 1, col = "red", lty = 2)
 
 # Número de caixas (bins) de tempo
 n_temp <- 100
-janelas_tempo <- seq(0, max(df_temp$time), length.out = n_temp + 1)
+janelas_tempo <- seq(0, aj_peru$T_total, length.out = n_temp + 1)
 
 # Contagem de eventos em cada janela:
-obs_temp <- hist(df_temp$time, breaks = janelas_tempo, plot = FALSE)$counts
+obs_temp <- hist(aj_peru$eventos$time, breaks = janelas_tempo, plot = FALSE)$counts
 
 # Contagens esperadas pela diferença do tau nos limites da janela:
-tau_limites <- calcular_tau(janelas_tempo, df_temp, thetas[[length(thetas)]], mu_global, M0 = 4.5)
+tau_limites <- calcular_tau(janelas_tempo, aj_peru$eventos, aj_peru$theta, mu_global, M0 = 4.5)
 esp_temp <- diff(tau_limites)
 
 # Resíduos de Pearson Temporais:
@@ -94,21 +94,21 @@ abline(h = c(-2, 2), col = "red", lty = 2)
 #====Espaciais====
 
 # Definir os pontos observados:
-pontos <- ppp(df_temp$x, df_temp$y,
+pontos <- ppp(aj_peru$eventos$x, aj_peru$eventos$y,
               window = owin(x_grid[c(1, length(x_grid))], y_grid[c(1, length(y_grid))]),
-              marks = pmax(0, 1 - prob_total))
+              marks = aj_peru$rho_bg)
 
 # Criar a densidade espacial esperada:
 # matriz_esperada <- (rasters[[length(rasters)]] / sum(rasters[[length(rasters)]])) * (mu_global * max(df_temp$time)
 cell_area <- diff(x_grid)[1] * diff(y_grid)[1]
-matriz_esperada <- (rasters[[length(rasters)]] / (sum(rasters[[length(rasters)]]) * cell_area)) * (mu_global * max(df_temp$time))
+matriz_esperada <- (aj_peru$raster / (sum(aj_peru$raster) * cell_area)) * (mu_global * aj_peru$T_total)
 # matriz_esperada <- rasters[[length(rasters)]]
 
-A <- thetas[[length(thetas)]]["A"]
-alpha <- thetas[[length(thetas)]]["alpha"]
-D <- thetas[[length(thetas)]]["D"]
-q_par <- thetas[[length(thetas)]]["q"]
-gamma_par <- thetas[[length(thetas)]]["gamma"]
+A <- aj_peru$theta["A"]
+alpha <- aj_peru$theta["alpha"]
+D <- aj_peru$theta["D"]
+q_par <- aj_peru$theta["q"]
+gamma_par <- aj_peru$theta["gamma"]
 
 M0 <- 4.5 # Ajuste para o limiar de magnitude correto do seu catálogo atual
 

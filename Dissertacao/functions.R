@@ -29,13 +29,45 @@ f_spatial <- function(dist2, mag, M0, D_par, q_par, gamma_par) {
     return(term1 * term2)
 }
 
-# Extrator de valores de raster:
+# # Extrator de valores de raster:
+# func_nu <- function(matriz_background, dados, x_grid, y_grid) {
+#     # Encontra o índice do grid mais próximo para cada ponto x e y:
+#     idx_x <- sapply(dados$x, function(val){which.min(abs(x_grid - val))})
+#     idx_y <- sapply(dados$y, function(val){which.min(abs(y_grid - val))})
+#     # Extrai os valores correspondentes da matriz:
+#     valores <- mapply(function(r, c) matriz_background[r, c], idx_x, idx_y)
+#     return(data.frame(lyr.1 = valores))
+# }
+
 func_nu <- function(matriz_background, dados, x_grid, y_grid) {
-    # Encontra o índice do grid mais próximo para cada ponto x e y:
-    idx_x <- sapply(dados$x, function(val){which.min(abs(x_grid - val))})
-    idx_y <- sapply(dados$y, function(val){which.min(abs(y_grid - val))})
-    # Extrai os valores correspondentes da matriz:
-    valores <- mapply(function(r, c) matriz_background[r, c], idx_x, idx_y)
+    x <- dados$x
+    y <- dados$y
+    i <- findInterval(x, x_grid)
+    j <- findInterval(y, y_grid)
+    # Evita que pontos fora do grid estourem o índice
+    i[i == 0] <- 1
+    j[j == 0] <- 1
+    i_next <- pmin(i + 1, length(x_grid))
+    j_next <- pmin(j + 1, length(y_grid))
+    dx <- x_grid[i_next] - x_grid[i]
+    dy <- y_grid[j_next] - y_grid[j]
+    dx[dx == 0] <- 1
+    dy[dy == 0] <- 1
+    # As travas (pmax/pmin) garantem a extrapolação constante na borda,
+    # prevenindo interpolações negativas que causam NaN no log(intensidade)
+    wx <- pmax(0, pmin(1, (x - x_grid[i]) / dx))
+    wy <- pmax(0, pmin(1, (y - y_grid[j]) / dy))
+    # O R indexa matrizes por coluna: idx = linha + (coluna - 1) * n_linhas
+    # (Mantém a lógica original onde x mapeia para linhas e y para colunas)
+    nr <- nrow(matriz_background)
+    idx_00 <- i      + (j - 1)      * nr
+    idx_10 <- i_next + (j - 1)      * nr
+    idx_01 <- i      + (j_next - 1) * nr
+    idx_11 <- i_next + (j_next - 1) * nr
+    valores <- (1 - wx) * (1 - wy) * matriz_background[idx_00] +
+                     wx * (1 - wy) * matriz_background[idx_10] +
+               (1 - wx) *      wy  * matriz_background[idx_01] +
+                     wx *      wy  * matriz_background[idx_11]
     return(data.frame(lyr.1 = valores))
 }
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.10.20)  4 NOV 2026 13:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.10.20)  17 NOV 2026 14:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1414,29 +1414,29 @@ Overfull \hbox (41.48409pt too wide) in paragraph at lines 51--52
 
 Package cleveref Info: loaded `english' language definitions on input line 81.
 [21]
-<Images/branching_process.pdf, id=283, 429.4506pt x 215.0217pt>
+<Images/branching_process.pdf, id=289, 429.4506pt x 215.0217pt>
 File: Images/branching_process.pdf Graphic file (type pdf)
 <use Images/branching_process.pdf>
-Package pdftex.def Info: Images/branching_process.pdf  used on input line 87.
+Package pdftex.def Info: Images/branching_process.pdf  used on input line 86.
 (pdftex.def)             Requested size: 429.44955pt x 215.02116pt.
-Package cleveref Info: loaded `english' language definitions on input line 104.
+Package cleveref Info: loaded `english' language definitions on input line 103.
  [22 <./Images/branching_process.pdf>]
-Package cleveref Info: loaded `english' language definitions on input line 140.
+Package cleveref Info: loaded `english' language definitions on input line 139.
  [23]
-Package cleveref Info: loaded `english' language definitions on input line 177.
+Package cleveref Info: loaded `english' language definitions on input line 176.
  [24]
-Overfull \hbox (9.49977pt too wide) detected at line 190
+Overfull \hbox (9.49977pt too wide) detected at line 189
 []
  []
 
-Package cleveref Info: loaded `english' language definitions on input line 205.
+Package cleveref Info: loaded `english' language definitions on input line 204.
 [25]
-Package cleveref Info: loaded `english' language definitions on input line 215.
+Package cleveref Info: loaded `english' language definitions on input line 214.
  [26] [27
 
 ]
 Chapter 2.
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 231.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 238.
 (/home/caiogomesalves/.TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1447,16 +1447,10 @@ Package microtype Info: Loading generic protrusion settings for font family
  [28
 
 ]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 250.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 250.
-
+Package cleveref Info: loaded `english' language definitions on input line 264.
+ [29]
 ! Misplaced alignment tab character &.
-l.257 ...\Delta t_{ij})f(s_{j} - s_{i};m_{i})) = &
+l.295 ...\Delta t_{ij})f(s_{j} - s_{i};m_{i})) = &
                                                   \underbrace{\log(\kappa(m_...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -1465,55 +1459,89 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-Package cleveref Info: loaded `english' language definitions on input line 275.
-[29]
-Package cleveref Info: loaded `english' language definitions on input line 303.
- [30]
+Package cleveref Info: loaded `english' language definitions on input line 299.
+[30]
 
-Class memoir Warning: The \bf font command is deprecated. 
-(memoir)              Use \textbf{...} or {\bfseries... } instead on input line 343.
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 300.
 
-Package cleveref Info: loaded `english' language definitions on input line 385.
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 300.
+
+Package cleveref Info: loaded `english' language definitions on input line 332.
 [31]
-Overfull \vbox (25.04185pt too high) has occurred while \output is active []
-
-Package cleveref Info: loaded `english' language definitions on input line 385.
+Package cleveref Info: loaded `english' language definitions on input line 391.
  [32]
-Package cleveref Info: loaded `english' language definitions on input line 404.
+Package cleveref Info: loaded `english' language definitions on input line 408.
  [33]
-Chapter 3.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <17.28> on input line 407.
-Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/17.28'
-(microtype)             (new value: 17.28pt) on input line 407.
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 407.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\theta' on input line 407.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `superscript' on input line 407.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 407.
-
-[34
+Package cleveref Info: loaded `english' language definitions on input line 482.
+ [34]
+Package cleveref Info: loaded `english' language definitions on input line 509.
+ [35]
+Package cleveref Info: loaded `english' language definitions on input line 525.
+ [36] [37
 
 ]
+Chapter 3.
+<Images/real_background.pdf, id=469, 289.08pt x 289.08pt>
+File: Images/real_background.pdf Graphic file (type pdf)
+<use Images/real_background.pdf>
+Package pdftex.def Info: Images/real_background.pdf  used on input line 548.
+(pdftex.def)             Requested size: 289.07928pt x 289.07928pt.
+[38
+
+]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <17.28> on input line 574.
+Package microtype Info: Fixing zero \fontdimen 6 for font `U/dsrom/m/n/17.28'
+(microtype)             (new value: 17.28pt) on input line 574.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 574.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\theta' on input line 574.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `superscript' on input line 574.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 574.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 574.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\mu' on input line 574.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `superscript' on input line 574.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 574.
+
+Package cleveref Info: loaded `english' language definitions on input line 580.
+[39 <./Images/real_background.pdf>]
+Package cleveref Info: loaded `english' language definitions on input line 584.
+ [40]
 Chapter 4.
-) [35
+) [41
 
 ]
 \openout2 = `considfinais.aux'.
 
  (./considfinais.tex
 Chapter 5.
-) [36
+) [42
 
 
 
@@ -1524,15 +1552,15 @@ Chapter 5.
 
 
 bibitemlist
-[37
+[43
 
 
 
 ]
-Package cleveref Info: loaded `english' language definitions on input line 150.
- [38])
+Package cleveref Info: loaded `english' language definitions on input line 152.
+ [44])
 Package cleveref Info: loaded `english' language definitions on input line 266.
- [39] [40
+ [45] [46
 
 
 ]
@@ -1564,29 +1592,18 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 1.
 
-[41
+[47
 
 
 ]
 Package cleveref Info: loaded `english' language definitions on input line 36.
- [42]
+ [48]
 APPENDIX B.
+[49
 
-Package lipsum Warning: Unknown language 'latin'. Hyphenation patterns for
-(lipsum)                'english' will be used instead.
-
-[43
-
-]
-APPENDIX C.
-)
-Overfull \hbox (0.76364pt too wide) in paragraph at lines 266--266
-[]\T1/lmr/m/n/12 (-20) Morbi tin-cidunt po-suere arcu. Cras ve-ne-natis est vi-tae do-lor. Vi-va-mus scelerisque
- []
-
-[44
-
-] [45
+])
+Package cleveref Info: loaded `english' language definitions on input line 266.
+ [50] [51
 
 
 
@@ -1596,16 +1613,20 @@ Overfull \hbox (0.76364pt too wide) in paragraph at lines 266--266
 
  (./anexos.tex
 ANNEX A.
-[46
+
+Package lipsum Warning: Unknown language 'latin'. Hyphenation patterns for
+(lipsum)                'english' will be used instead.
+
+[52
 
 
 ]
 ANNEX B.
-[47
+[53
 
 ]
 ANNEX C.
-) [48
+) [54
 
 ]
 \tf@lof=\write6
@@ -1634,21 +1655,21 @@ LaTeX2e <2026-06-01>
 L3 programming layer <2020/03/25>
  ***********
 Package rerunfilecheck Info: File `trabalho.brf' has not changed.
-(rerunfilecheck)             Checksum: F17EBFCBFB6F674422955F349349B5E2;1652.
+(rerunfilecheck)             Checksum: ABE464EBC8FF9954DEDDBE668EACE91B;1739.
  ) 
 Here is how much of TeX's memory you used:
- 36353 strings out of 468997
- 667784 string characters out of 5455098
- 1380360 words of memory out of 5000000
- 64377 multiletter control sequences out of 15000+600000
- 784589 words of font info for 292 fonts, out of 8000000 for 9000
+ 36456 strings out of 468997
+ 669519 string characters out of 5455098
+ 1380351 words of memory out of 5000000
+ 64445 multiletter control sequences out of 15000+600000
+ 776196 words of font info for 294 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 117i,23n,121p,1598b,1001s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha10.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha12.1244pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha6.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/mathx10.720pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha12.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha8.600pk></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/doublestroke/dsrom12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
-Output written on trabalho.pdf (48 pages, 673802 bytes).
+ 117i,23n,121p,1351b,1000s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha10.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha12.1244pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha12.864pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha6.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/mathx10.720pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha12.600pk> </home/caiogomesalves/.TinyTeX/texmf-var/fonts/pk/ljfour/public/mathabx/matha8.600pk></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/doublestroke/dsrom12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss12.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss17.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></home/caiogomesalves/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
+Output written on trabalho.pdf (54 pages, 733781 bytes).
 PDF statistics:
- 904 PDF objects out of 1000 (max. 8388607)
- 727 compressed objects within 8 object streams
- 178 named destinations out of 1000 (max. 500000)
- 86914 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 1034 PDF objects out of 1200 (max. 8388607)
+ 817 compressed objects within 9 object streams
+ 207 named destinations out of 1000 (max. 500000)
+ 82855 words of extra memory for PDF output out of 89155 (max. 10000000)
 
